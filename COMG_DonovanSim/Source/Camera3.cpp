@@ -54,7 +54,7 @@ void Camera3::Update(double dt, std::vector<Node>&objsMaxMin)
             }
             else
             {
-                canMove = false;
+                canMove = true;
                 break;
             }
         }
@@ -83,7 +83,7 @@ void Camera3::Update(double dt, std::vector<Node>&objsMaxMin)
             }
             else
             {
-                canMove = false;
+                canMove = true;
                 break;
             }
         }
@@ -113,7 +113,7 @@ void Camera3::Update(double dt, std::vector<Node>&objsMaxMin)
             }
             else
             {
-                canMove = false;
+                canMove = true;
                 break;
             }
         }
@@ -199,7 +199,7 @@ void Camera3::Update(double dt, std::vector<Node>&objsMaxMin)
             }
             else
             {
-                canMove = false;
+                canMove = true;
                 break;
             }
         }
@@ -217,7 +217,7 @@ void Camera3::Update(double dt, std::vector<Node>&objsMaxMin)
     }
 
     // -------------------------------------- Mouse Controls ------------------------------------------------------------- //
-    mouseSensitivty = 3;
+    mouseSensitivty = 2;
     float yaw = 0;
     float pitch = 0;
 
@@ -262,8 +262,22 @@ void Camera3::Update(double dt, std::vector<Node>&objsMaxMin)
     }
     if (Application::IsKeyPressed(VK_SPACE)) // Move Up
     {
-        position.y += (float)(CAMERA_SPEED * dt);
-        target.y += (float)(CAMERA_SPEED * dt);
+		if (position.y < 10)
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				position.y += (float)(i * dt);
+				target.y += (float)(i * dt);
+			}
+			if (position.y >= 10)
+			{
+				for (int i = 0; i < 10; i++)
+				{
+					position.y -= (float)(i * dt);
+					target.y -= (float)(i * dt);
+				}
+			}
+		}
     }
 
     if (Application::IsKeyPressed('R'))
