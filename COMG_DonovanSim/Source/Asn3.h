@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Camera2.h"
 #include "Camera3.h"
+#include "Camera5.h"
 #include "Mesh.h"
 #include "vertex.h"
 #include "MatrixStack.h"
@@ -166,6 +167,8 @@ private:
 
     Camera2 camera;
     Camera3 camera3;
+	Camera5 camera5;
+
 
     MS modelStack, viewStack, projectionStack;
 
