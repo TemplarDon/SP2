@@ -1312,7 +1312,6 @@ void Asn3::Render()
 	RenderMesh(meshList[GEO_QUAD], false, toggleLight);
 	modelStack.PopMatrix();
 
-<<<<<<< HEAD
 	std::ostringstream ss;
 
 	ss.str("");

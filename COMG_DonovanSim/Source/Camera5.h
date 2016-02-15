@@ -21,8 +21,8 @@ public:
 	virtual void Reset();
 	float horizontalAngle = 0;
 	float verticalAngle = 0;
-	float mouseSpeed = 2.5;
-	float speed = 6.0;
+	float mouseSpeed;
+	float speed;
 };
 
 #endif

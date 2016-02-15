@@ -26,6 +26,9 @@ void Camera5::Update(double dt)
 	Vector3 boundary(1000, 1000, 1000);
 	/*Vector3 boundary = (-50, -50, -50);*/
 
+	speed = 30;
+	mouseSpeed = 10;
+
 	static const float CAMERA_SPEED = 50.f;
 	if (Application::IsKeyPressed('R'))
 	{
