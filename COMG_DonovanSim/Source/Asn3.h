@@ -175,6 +175,7 @@ private:
 
     void RenderSkybox();
     void createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* verticeNum, std::vector<Position>& MaxMinPos, std::vector<Position>& offSets);
+    void RenderRoom(Vector3 size, unsigned groundMeshSize = 100);
 
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

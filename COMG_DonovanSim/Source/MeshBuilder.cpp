@@ -739,7 +739,7 @@ Mesh* MeshBuilder::GenerateHair(const std::string &meshName, Color color)
     return mesh;
 }
 
-Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &file_path, std::vector<Node>&objsMaxMin, std::vector<Position>&MaxMinPos, std::vector<Position>* verticeNum, Position* &maxPtr, Position* &minPtr)
+Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &file_path)
 {
     //Read vertices, texcoords & normals from OBJ
     std::vector<Position> vertices;
@@ -807,15 +807,6 @@ Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &f
     minPos.y -= 0.1f;
     minPos.z -= 0.1f;
 
-
-    // Push back a new Node with the maxPos and minPos
-    //Node someNode = Node(maxPos, minPos);
-    //objsMaxMin.push_back(someNode);
-
-
-    //MaxMinPos.push_back(maxPos);
-    //MaxMinPos.push_back(minPos);
-
     IndexVBO(vertices, uvs, normals, index_buffer_data, vertex_buffer_data);
 
     //Create the mesh and call glBindBuffer, glBufferData
@@ -879,3 +870,4 @@ Mesh* MeshBuilder::GenerateText(const std::string &meshName, unsigned numRow, un
 
     return mesh;
 }
+

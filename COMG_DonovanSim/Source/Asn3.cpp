@@ -269,7 +269,7 @@ void Asn3::Init()
 
 
     // ------------------------------------------------------------------------- WALLS ---------------------------------------------------------------------------------------//
-    meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall.obj");
     meshList[GEO_WALL]->textureID = LoadTGA("Image//wallUV.tga");
 
     meshList[GEO_WALL]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
@@ -297,7 +297,7 @@ void Asn3::Init()
     // ------------------------------------------------------------------------- WALLS ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- WALLS 2 ---------------------------------------------------------------------------------------//
-    meshList[GEO_WALL2] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall2.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_WALL2] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall2.obj");
     meshList[GEO_WALL2]->textureID = LoadTGA("Image//wallUV.tga");
 
     meshList[GEO_WALL2]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
@@ -322,7 +322,7 @@ void Asn3::Init()
     // ------------------------------------------------------------------------- WALLS 2 ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- GATE TOP ---------------------------------------------------------------------------------------//
-    meshList[GEO_GATETOP] = MeshBuilder::GenerateOBJ("wall", "OBJ//gateTop.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_GATETOP] = MeshBuilder::GenerateOBJ("wall", "OBJ//gateTop.obj");
     meshList[GEO_GATETOP]->textureID = LoadTGA("Image//gateTopUV.tga");
     meshList[GEO_GATETOP]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
     meshList[GEO_GATETOP]->material.kDiffuse.Set(0.6, 0.6, 0.6);
@@ -334,7 +334,7 @@ void Asn3::Init()
     // ------------------------------------------------------------------------- GATE TOP ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- GATE ---------------------------------------------------------------------------------------//
-    meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("wall", "OBJ//gate.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("wall", "OBJ//gate.obj");
     meshList[GEO_GATE]->textureID = LoadTGA("Image//gateUV.tga");
     meshList[GEO_GATE]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
     meshList[GEO_GATE]->material.kDiffuse.Set(0.6, 0.6, 0.6);
@@ -346,7 +346,7 @@ void Asn3::Init()
     // ------------------------------------------------------------------------- GATE ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- SWITCH ---------------------------------------------------------------------------------------//
-    meshList[GEO_SWITCH] = MeshBuilder::GenerateOBJ("wall", "OBJ//switch.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_SWITCH] = MeshBuilder::GenerateOBJ("wall", "OBJ//switch.obj");
     meshList[GEO_SWITCH]->textureID = LoadTGA("Image//switchUV.tga");
     meshList[GEO_SWITCH]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
     meshList[GEO_SWITCH]->material.kDiffuse.Set(0.6, 0.6, 0.6);
@@ -358,7 +358,7 @@ void Asn3::Init()
     // ------------------------------------------------------------------------- SWITCH ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- THWUMP ---------------------------------------------------------------------------------------//
-    meshList[GEO_THWUMP] = MeshBuilder::GenerateOBJ("wall", "OBJ//thwump.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_THWUMP] = MeshBuilder::GenerateOBJ("wall", "OBJ//thwump.obj");
     meshList[GEO_THWUMP]->textureID = LoadTGA("Image//thwumpUV.tga");
     meshList[GEO_THWUMP]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
     meshList[GEO_THWUMP]->material.kDiffuse.Set(0.6, 0.6, 0.6);
@@ -376,7 +376,7 @@ void Asn3::Init()
     // ------------------------------------------------------------------------- THWUMP ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- THRONE ---------------------------------------------------------------------------------------//
-    meshList[GEO_THRONE] = MeshBuilder::GenerateOBJ("wall", "OBJ//throne.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_THRONE] = MeshBuilder::GenerateOBJ("wall", "OBJ//throne.obj");
     meshList[GEO_THRONE]->textureID = LoadTGA("Image//wallUV.tga");
     meshList[GEO_THRONE]->material.kSpecular.Set(0.5,0.5,0.5);
     meshList[GEO_THRONE]->material.kShininess = 12.f; 
@@ -386,7 +386,7 @@ void Asn3::Init()
     // ------------------------------------------------------------------------- THRONE ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- PEDESTAL ---------------------------------------------------------------------------------------//
-    meshList[GEO_PEDESTAL] = MeshBuilder::GenerateOBJ("wall", "OBJ//pedastal.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_PEDESTAL] = MeshBuilder::GenerateOBJ("wall", "OBJ//pedastal.obj");
     meshList[GEO_PEDESTAL]->textureID = LoadTGA("Image//pedestalUV.tga");
     meshList[GEO_PEDESTAL]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
     meshList[GEO_PEDESTAL]->material.kDiffuse.Set(0.6, 0.6, 0.6);
@@ -401,7 +401,7 @@ void Asn3::Init()
     // ------------------------------------------------------------------------- PEDESTAL ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- PILLAR ---------------------------------------------------------------------------------------//
-    meshList[GEO_PILLAR] = MeshBuilder::GenerateOBJ("wall", "OBJ//pillar.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_PILLAR] = MeshBuilder::GenerateOBJ("wall", "OBJ//pillar.obj");
     meshList[GEO_PILLAR]->textureID = LoadTGA("Image//pillarUV.tga");
     meshList[GEO_PILLAR]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
     meshList[GEO_PILLAR]->material.kDiffuse.Set(0.6, 0.6, 0.6);
@@ -431,17 +431,17 @@ void Asn3::Init()
     // ------------------------------------------------------------------------- LAVA ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- PEACH ---------------------------------------------------------------------------------------//
-    meshList[GEO_PEACH] = MeshBuilder::GenerateOBJ("peach", "OBJ//peach.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_PEACH] = MeshBuilder::GenerateOBJ("peach", "OBJ//peach.obj");
     meshList[GEO_PEACH]->textureID = LoadTGA("Image//peachUV.tga");
     // ------------------------------------------------------------------------- PEACH ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- KEY ---------------------------------------------------------------------------------------//
-    meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("key", "OBJ//key.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("key", "OBJ//key.obj");
     meshList[GEO_KEY]->textureID = LoadTGA("Image//keyUV.tga");
     // ------------------------------------------------------------------------- KEY ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- DOOR ---------------------------------------------------------------------------------------//
-    meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("door", "OBJ//door.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("door", "OBJ//door.obj");
     meshList[GEO_DOOR]->textureID = LoadTGA("Image//doorUV.tga");
 
     Node door = Node(meshList[GEO_DOOR]->maxPos, meshList[GEO_DOOR]->minPos, Position(-45, 0, 0), 10, 0, Vector3(0, 0, 0), "door");
@@ -450,7 +450,7 @@ void Asn3::Init()
 
 
     // ------------------------------------------------------------------------- PIPE ---------------------------------------------------------------------------------------//
-    meshList[GEO_PIPE] = MeshBuilder::GenerateOBJ("pipe", "OBJ//pipe.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
+    meshList[GEO_PIPE] = MeshBuilder::GenerateOBJ("pipe", "OBJ//pipe.obj");
     meshList[GEO_PIPE]->textureID = LoadTGA("Image//pipeUV.tga");
 
     Node pipe = Node(meshList[GEO_PIPE]->maxPos, meshList[GEO_PIPE]->minPos, Position(335, -2, 300), 5, 0, Vector3(0, 0, 0), "pipe");
@@ -1131,6 +1131,11 @@ void Asn3::RenderSkybox()
     modelStack.Scale(1000, 1000, 1000);
     RenderMesh(meshList[GEO_TOP], false, toggleLight);
     modelStack.PopMatrix();
+}
+
+void Asn3::RenderRoom(Vector3 size, unsigned groundMeshSize)
+{
+
 }
 
 void Asn3::createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* verticeNum, std::vector<Position>& MaxMinPos, std::vector<Position>& offSets)

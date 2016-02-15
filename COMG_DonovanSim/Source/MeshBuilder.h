@@ -28,8 +28,9 @@ public:
     static Mesh* GenerateCone(const std::string &meshName, Color color, unsigned numSlices = 36);
     static Mesh* GenerateHair(const std::string &meshName, Color color);
 
-    static Mesh* GenerateOBJ(const std::string &meshName, const std::string &file_path, std::vector<Node>&objsMaxMin, std::vector<Position>&MaxMinPos, std::vector<Position>* verticeNum, Position* &maxPtr, Position* &minPtr);
+    static Mesh* GenerateOBJ(const std::string &meshName, const std::string &file_path);
     static Mesh* GenerateText(const std::string &meshName, unsigned numRow, unsigned numCol);
+
 };
 
 #endif
