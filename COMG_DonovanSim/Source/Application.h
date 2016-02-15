@@ -17,6 +17,7 @@ public:
     // Variables for mouse controls
     static double mouseX;
     static double mouseY;
+
 private:
 
 	//Declare a window object

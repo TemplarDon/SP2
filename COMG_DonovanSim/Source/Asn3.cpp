@@ -234,6 +234,7 @@ void Asn3::Init()
     completedMsg = false;
 
     //Initialize camera settings
+
     camera5.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
     meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
@@ -501,6 +502,7 @@ void Asn3::Update(double dt)
     pipeInteractions(dt);
 
     camera5.Update(dt);
+
     ifDead(dt);
     
 
@@ -682,6 +684,7 @@ void Asn3::thwumpMovement(double dt)
             if (objsMaxMin[i].name == "thwump3") // -
             {
                 objsMaxMin[i].offSet.z -= (float)(5.5 * dt);
+
                 if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
                 {
                     thwump3Dropping = true;
@@ -712,6 +715,7 @@ void Asn3::thwumpMovement(double dt)
             if (objsMaxMin[i].name == "thwump4") // +
             {
                 objsMaxMin[i].offSet.z += (float)(5.5 * dt);
+
                 if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
                 {
                     thwump4Dropping = true;
@@ -765,6 +769,7 @@ void Asn3::thwumpMovement(double dt)
             if (objsMaxMin[i].name == "thwump3")
             {
                 objsMaxMin[i].offSet.z += (float)(5.5 * dt);
+
                 if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
                 {
                     thwump3Dropping = true;
@@ -796,6 +801,7 @@ void Asn3::thwumpMovement(double dt)
             if (objsMaxMin[i].name == "thwump4")
             {
                 objsMaxMin[i].offSet.z -= (float)(5.5 * dt);
+
                 if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
                 {
                     thwump4Dropping = true;
@@ -837,6 +843,7 @@ void Asn3::thwumpMovement(double dt)
 void Asn3::peachInteractions(double dt)
 {
     // 230, -2, -25
+
     if ((camera5.position.x <= 245 && camera5.position.x >= 215) && (camera5.position.z <= -20 && camera5.position.z >= -30) && peachTaken == false)
     {
         peachMsg = true;
@@ -855,14 +862,18 @@ void Asn3::peachInteractions(double dt)
 
 void Asn3::ifDead(double dt)
 {
+
     Vector3 view = (camera5.target - camera5.position).Normalized();
+
     for (int i = 0; i < objsMaxMin.size(); ++i)
     {
         if (objsMaxMin[i].name == "thwump1" || objsMaxMin[i].name == "thwump2")
         {
+
             if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
             {
                 camera5.Reset();
+
                 gateOffSet = 0.f;
                 gateMsg = false;
 
@@ -879,9 +890,11 @@ void Asn3::ifDead(double dt)
         }
         else if (objsMaxMin[i].name == "thwump3" || objsMaxMin[i].name == "thwump4")
         {
+
             if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3) && (camera5.position.y <= objsMaxMin[i].maxPos.y + objsMaxMin[i].offSet.y && camera5.position.y >= objsMaxMin[i].minPos.y + objsMaxMin[i].offSet.y))
             {
                 camera5.Reset();
+
  
                 gateOpened = false;
                 gateLocked = false;
@@ -899,7 +912,9 @@ void Asn3::ifDead(double dt)
 
 void Asn3::keyInteractions(double dt)
 {
+
     if ((camera5.position.x <= 245 && camera5.position.x >= 215) && (camera5.position.z <= 30 && camera5.position.z >= 20) && keyTaken == false)
+
     {
         keyMsg = true;
         if (Application::IsKeyPressed('E'))
@@ -916,13 +931,17 @@ void Asn3::keyInteractions(double dt)
 
 void Asn3::doorInteractions(double dt)
 {
+
     if (camera5.position.x <= -25 && camera5.position.x >= -35 && camera5.position.z <= 10 && camera5.position.z >= -10)
+
     {
         doorEnterMsg = true;
         if (peachTaken == true && Application::IsKeyPressed('E'))
         {
+
             camera5.position.Set(300, 3, 300);
             camera5.target.Set(315, 3, 315);
+
         }
         else if (Application::IsKeyPressed('E'))
         {
@@ -940,12 +959,16 @@ void Asn3::doorInteractions(double dt)
 void Asn3::pipeInteractions(double dt)
 {
     //335, -2, 300
+
     if (camera5.position.x <= 345 && camera5.position.x >= 325 && camera5.position.z <= 310 && camera5.position.z >= 290)
+
     {
         pipeMsg = true;
         if (Application::IsKeyPressed('E'))
         {
+
             camera5.Reset();
+
             completedMsg = true;
             peachTaken = false;
             keyTaken = false;
@@ -1136,7 +1159,9 @@ void Asn3::RenderSkybox()
 void Asn3::createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* verticeNum, std::vector<Position>& MaxMinPos, std::vector<Position>& offSets)
 {
 
+<<<<<<< HEAD
     Vector3 view = (camera5.target - camera5.position).Normalized();
+
     Position maxPos;
     Position minPos;
 
@@ -1144,9 +1169,11 @@ void Asn3::createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* v
 
     for (int i = 0; i < objsMaxMin.size(); ++i)
     {
+
             cameraPos.x = camera5.position.x + view.x;
             cameraPos.y = camera5.position.y + view.y;
             cameraPos.z = camera5.position.z + view.z;
+
 
             maxPos.x = objsMaxMin[i].maxPos.x;
             maxPos.y = objsMaxMin[i].maxPos.y;
@@ -1630,9 +1657,7 @@ void Asn3::Render()
     ////std::ostringstream target;
     //std::ostringstream position;
     ////ss << "FPS: " << FramesPerSecond;
-    ////target << "Camera Target: " << (int)camera5.target.x << " " << (int)camera5.target.y << " " << (int)camera5.target.z;
-    //Vector3 boundsCheck = camera5.position + (camera5.target - camera5.position).Normalized();
-    //position << "Position: " << (int)camera5.position.x << " " << (int)camera5.position.y << " " << (int)camera5.position.z;
+
     ////position << "Bounds: " << (int)boundsCheck.x << " " << (int)boundsCheck.y << " " << (int)boundsCheck.z;
     ////RenderTextOnScreen(meshList[GEO_TEXT], target.str(), Color(0, 1, 0), 3, 0, 2);
     //RenderTextOnScreen(meshList[GEO_TEXT], position.str(), Color(0, 1, 0), 3, 0, 3);
