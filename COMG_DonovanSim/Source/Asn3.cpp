@@ -234,30 +234,31 @@ void Asn3::Init()
     completedMsg = false;
 
     //Initialize camera settings
-    camera4.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 0, 0), Vector3(0, 1, 0), 20);
+
+    camera5.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
     meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
     meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_QUAD]->textureID = LoadTGA("Image//bird.tga");
+    meshList[GEO_QUAD]->textureID = LoadTGA("Image//spaceground.tga");
 
     meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_FRONT]->textureID = LoadTGA("Image//newFront.tga");
+    meshList[GEO_FRONT]->textureID = LoadTGA("Image//spacefront.tga");
 
     meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_BACK]->textureID = LoadTGA("Image//newBack.tga");
+    meshList[GEO_BACK]->textureID = LoadTGA("Image//spaceback.tga");
 
     meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_TOP]->textureID = LoadTGA("Image//newTop.tga");
+    meshList[GEO_TOP]->textureID = LoadTGA("Image//spacetop.tga");
 
     meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//newBottom.tga");
+    meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//spacebottom.tga");
 
     meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_LEFT]->textureID = LoadTGA("Image//newLeft.tga");
+    meshList[GEO_LEFT]->textureID = LoadTGA("Image//spaceleft.tga");
 
     meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_RIGHT]->textureID = LoadTGA("Image//newRight.tga");
+    meshList[GEO_RIGHT]->textureID = LoadTGA("Image//spaceright.tga");
 
     meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("ground", Color(1, 1, 1), objsMaxMin);
     meshList[GEO_GROUND]->textureID = LoadTGA("Image//castleFloor.tga");
@@ -498,13 +499,15 @@ void Asn3::Update(double dt)
     doorInteractions(dt);
     pipeInteractions(dt);
 
-    camera4.Update(dt, objsMaxMin);
+    camera5.Update(dt);
+
+
     ifDead(dt);
     
 
 
     rotateAngle += (float)(15 * dt);
-
+	
     if (Application::IsKeyPressed('I'))
     {
         light[0].position.z -= (float)(10 * dt);
@@ -575,7 +578,7 @@ void Asn3::gateInteractions(double dt)
     if (gateLocked == false)
     {
         // Button Input
-        if (camera4.position.x <= 60 && camera4.position.x >= 15 && camera4.position.z <= 25 && camera4.position.z >= -25)
+        if (camera5.position.x <= 60 && camera5.position.x >= 15 && camera5.position.z <= 25 && camera5.position.z >= -25)
         {
             gateMsg = true;
             if (Application::IsKeyPressed('E'))
@@ -613,7 +616,7 @@ void Asn3::gateInteractions(double dt)
     else
     {
         // Button Input
-        if (camera4.position.x <= 60 && camera4.position.x >= 15 && camera4.position.z <= 25 && camera4.position.z >= -25)
+        if (camera5.position.x <= 60 && camera5.position.x >= 15 && camera5.position.z <= 25 && camera5.position.z >= -25)
         {
             if (keyTaken == true)
             {
@@ -680,7 +683,8 @@ void Asn3::thwumpMovement(double dt)
             if (objsMaxMin[i].name == "thwump3") // -
             {
                 objsMaxMin[i].offSet.z -= (float)(5.5 * dt);
-                if ((camera4.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera4.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera4.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera4.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
+
+                if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
                 {
                     thwump3Dropping = true;
                     if (thwump3Drop <= 5 && thwump3Dropping == true)
@@ -710,7 +714,8 @@ void Asn3::thwumpMovement(double dt)
             if (objsMaxMin[i].name == "thwump4") // +
             {
                 objsMaxMin[i].offSet.z += (float)(5.5 * dt);
-                if ((camera4.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera4.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera4.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera4.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
+
+                if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
                 {
                     thwump4Dropping = true;
                     if (thwump4Drop <= 5 && thwump4Dropping == true)
@@ -763,7 +768,8 @@ void Asn3::thwumpMovement(double dt)
             if (objsMaxMin[i].name == "thwump3")
             {
                 objsMaxMin[i].offSet.z += (float)(5.5 * dt);
-                if ((camera4.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera4.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera4.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera4.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
+
+                if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
                 {
                     thwump3Dropping = true;
                     if (thwump3Drop <= 5 && thwump3Dropping == true)
@@ -794,7 +800,8 @@ void Asn3::thwumpMovement(double dt)
             if (objsMaxMin[i].name == "thwump4")
             {
                 objsMaxMin[i].offSet.z -= (float)(5.5 * dt);
-                if ((camera4.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera4.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera4.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera4.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
+
+                if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
                 {
                     thwump4Dropping = true;
                     if (thwump4Drop <= 5 && thwump4Dropping == true)
@@ -835,7 +842,8 @@ void Asn3::thwumpMovement(double dt)
 void Asn3::peachInteractions(double dt)
 {
     // 230, -2, -25
-    if ((camera4.position.x <= 245 && camera4.position.x >= 215) && (camera4.position.z <= -20 && camera4.position.z >= -30) && peachTaken == false)
+
+    if ((camera5.position.x <= 245 && camera5.position.x >= 215) && (camera5.position.z <= -20 && camera5.position.z >= -30) && peachTaken == false)
     {
         peachMsg = true;
         if (Application::IsKeyPressed('E'))
@@ -853,14 +861,18 @@ void Asn3::peachInteractions(double dt)
 
 void Asn3::ifDead(double dt)
 {
-    Vector3 view = (camera4.target - camera4.position).Normalized();
+
+    Vector3 view = (camera5.target - camera5.position).Normalized();
+
     for (int i = 0; i < objsMaxMin.size(); ++i)
     {
         if (objsMaxMin[i].name == "thwump1" || objsMaxMin[i].name == "thwump2")
         {
-            if ((camera4.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera4.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera4.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera4.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
+
+            if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3))
             {
-                camera4.Reset();
+                camera5.Reset();
+
                 gateOffSet = 0.f;
                 gateMsg = false;
 
@@ -877,9 +889,11 @@ void Asn3::ifDead(double dt)
         }
         else if (objsMaxMin[i].name == "thwump3" || objsMaxMin[i].name == "thwump4")
         {
-            if ((camera4.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera4.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera4.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera4.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3) && (camera4.position.y <= objsMaxMin[i].maxPos.y + objsMaxMin[i].offSet.y && camera4.position.y >= objsMaxMin[i].minPos.y + objsMaxMin[i].offSet.y))
+
+            if ((camera5.position.x <= objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3 && camera5.position.x >= objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3) && (camera5.position.z <= objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3 && camera5.position.z >= objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3) && (camera5.position.y <= objsMaxMin[i].maxPos.y + objsMaxMin[i].offSet.y && camera5.position.y >= objsMaxMin[i].minPos.y + objsMaxMin[i].offSet.y))
             {
-                camera4.Reset();
+                camera5.Reset();
+
  
                 gateOpened = false;
                 gateLocked = false;
@@ -897,7 +911,9 @@ void Asn3::ifDead(double dt)
 
 void Asn3::keyInteractions(double dt)
 {
-    if ((camera4.position.x <= 245 && camera4.position.x >= 215) && (camera4.position.z <= 30 && camera4.position.z >= 20) && keyTaken == false)
+
+    if ((camera5.position.x <= 245 && camera5.position.x >= 215) && (camera5.position.z <= 30 && camera5.position.z >= 20) && keyTaken == false)
+
     {
         keyMsg = true;
         if (Application::IsKeyPressed('E'))
@@ -914,13 +930,17 @@ void Asn3::keyInteractions(double dt)
 
 void Asn3::doorInteractions(double dt)
 {
-    if (camera4.position.x <= -25 && camera4.position.x >= -35 && camera4.position.z <= 10 && camera4.position.z >= -10)
+
+    if (camera5.position.x <= -25 && camera5.position.x >= -35 && camera5.position.z <= 10 && camera5.position.z >= -10)
+
     {
         doorEnterMsg = true;
         if (peachTaken == true && Application::IsKeyPressed('E'))
         {
-            camera4.position.Set(300, 3, 300);
-            camera4.target.Set(315, 3, 315);
+
+            camera5.position.Set(300, 3, 300);
+            camera5.target.Set(315, 3, 315);
+
         }
         else if (Application::IsKeyPressed('E'))
         {
@@ -938,12 +958,16 @@ void Asn3::doorInteractions(double dt)
 void Asn3::pipeInteractions(double dt)
 {
     //335, -2, 300
-    if (camera4.position.x <= 345 && camera4.position.x >= 325 && camera4.position.z <= 310 && camera4.position.z >= 290)
+
+    if (camera5.position.x <= 345 && camera5.position.x >= 325 && camera5.position.z <= 310 && camera5.position.z >= 290)
+
     {
         pipeMsg = true;
         if (Application::IsKeyPressed('E'))
         {
-            camera4.Reset();
+
+            camera5.Reset();
+
             completedMsg = true;
             peachTaken = false;
             keyTaken = false;
@@ -1081,60 +1105,61 @@ void Asn3::RenderSkybox()
 {
     // FRONT
     modelStack.PushMatrix();
-    modelStack.Translate(0, 0, -495);
+	modelStack.Translate(camera5.position.x, camera5.position.y, -249.5 + camera5.position.z);
     modelStack.Rotate(90, 1, 0, 0);
     modelStack.Rotate(-90, 0, 1, 0);
-    modelStack.Scale(1000, 1000, 1000);
+    modelStack.Scale(500, 500, 500);
     RenderMesh(meshList[GEO_FRONT], false, toggleLight);
     modelStack.PopMatrix();
 
     // BACK
     modelStack.PushMatrix();
-    modelStack.Translate(0, 0, 495);
+    modelStack.Translate(camera5.position.x, camera5.position.y, 249.5 + camera5.position.z);
     modelStack.Rotate(-90, 1, 0, 0);
     modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(1000, 1000, 1000);
+    modelStack.Scale(500, 500, 500);
     RenderMesh(meshList[GEO_BACK], false, toggleLight);
     modelStack.PopMatrix();
 
     // LEFT
     modelStack.PushMatrix();
-    modelStack.Translate(-495, 0, 0);
+	modelStack.Translate(-249.5 + camera5.position.x, camera5.position.y, camera5.position.z);
     modelStack.Rotate(-90, 0, 0, 1);
     modelStack.Rotate(0, 0, 1, 0);
-    modelStack.Scale(1000, 1000, 1000);
+    modelStack.Scale(500, 500, 500);
     RenderMesh(meshList[GEO_LEFT], false, toggleLight);
     modelStack.PopMatrix();
 
     // RIGHT
     modelStack.PushMatrix();
-    modelStack.Translate(495, 0, 0);
+	modelStack.Translate(249.5 + camera5.position.x, camera5.position.y, camera5.position.z);
     modelStack.Rotate(90, 0, 0, 1);
     modelStack.Rotate(180, 0, 1, 0);
-    modelStack.Scale(1000, 1000, 1000);
+    modelStack.Scale(500, 500, 500);
     RenderMesh(meshList[GEO_RIGHT], false, toggleLight);
     modelStack.PopMatrix();
 
     // BOTTOM
     modelStack.PushMatrix();
-    modelStack.Translate(0, -495, 0);
-    modelStack.Scale(1000, 1000, 1000);
+	modelStack.Translate(camera5.position.x, -249.5 + camera5.position.y, camera5.position.z);
+    modelStack.Scale(500, 500, 500);
     RenderMesh(meshList[GEO_BOTTOM], false, toggleLight);
     modelStack.PopMatrix();
 
     // TOP
     modelStack.PushMatrix();
-    modelStack.Translate(0, 495, 0);
+	modelStack.Translate(camera5.position.x, 249.5 + camera5.position.y, camera5.position.z);
     modelStack.Rotate(180, 1, 0, 0);
-    modelStack.Scale(1000, 1000, 1000);
+	modelStack.Rotate(180, 0, 1, 0);
+    modelStack.Scale(500, 500, 500);
     RenderMesh(meshList[GEO_TOP], false, toggleLight);
     modelStack.PopMatrix();
 }
 
-void Asn3::createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* verticeNum, std::vector<Position>& MaxMinPos, std::vector<Position>& offSets)
+ void Asn3::createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* verticeNum, std::vector<Position>& MaxMinPos, std::vector<Position>& offSets)
 {
+    Vector3 view = (camera5.target - camera5.position).Normalized();
 
-    Vector3 view = (camera4.target - camera4.position).Normalized();
     Position maxPos;
     Position minPos;
 
@@ -1142,9 +1167,11 @@ void Asn3::createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* v
 
     for (int i = 0; i < objsMaxMin.size(); ++i)
     {
-            cameraPos.x = camera4.position.x + view.x;
-            cameraPos.y = camera4.position.y + view.y;
-            cameraPos.z = camera4.position.z + view.z;
+
+            cameraPos.x = camera5.position.x + view.x;
+            cameraPos.y = camera5.position.y + view.y;
+            cameraPos.z = camera5.position.z + view.z;
+
 
             maxPos.x = objsMaxMin[i].maxPos.x;
             maxPos.y = objsMaxMin[i].maxPos.y;
@@ -1232,9 +1259,9 @@ void Asn3::Render()
     //Set view matrix using camera settings
     viewStack.LoadIdentity();
     viewStack.LookAt(
-        camera4.position.x, camera4.position.y, camera4.position.z,
-        camera4.target.x, camera4.target.y, camera4.target.z,
-        camera4.up.x, camera4.up.y, camera4.up.z
+        camera5.position.x, camera5.position.y, camera5.position.z,
+        camera5.target.x, camera5.target.y, camera5.target.z,
+        camera5.up.x, camera5.up.y, camera5.up.z
         );
 
     modelStack.LoadIdentity();
@@ -1279,528 +1306,19 @@ void Asn3::Render()
 
 
     RenderSkybox();
+	
+	modelStack.PushMatrix();
+	modelStack.Scale(1000, 1000, 1000);
+	RenderMesh(meshList[GEO_QUAD], false, toggleLight);
+	modelStack.PopMatrix();
+
+<<<<<<< HEAD
+	std::ostringstream ss;
+
+	ss.str("");
+	ss << " X:" << camera3.position.x << "|| Y:" << camera3.position.y<< "|| Z:" << camera3.position.z;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
 
-    // GROUND
-    modelStack.PushMatrix();
-    modelStack.Translate(0, -2, 0);
-    modelStack.Scale(100, 100, 100);
-    RenderMesh(meshList[GEO_GROUND], false, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(1, 0, 0);
-    RenderMesh(meshList[GEO_GROUND], false, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(1, 0, 0);
-    RenderMesh(meshList[GEO_GROUND], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-
-    // CEILIING
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 35, 0);
-    modelStack.Rotate(180, 1, 0, 0);
-    modelStack.Scale(100, 100, 100);
-    RenderMesh(meshList[GEO_GROUND], false, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(1, 0, 0);
-    RenderMesh(meshList[GEO_GROUND], false, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(1, 0, 0);
-    RenderMesh(meshList[GEO_GROUND], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-
-
-    // WAllS
-
-    // Left
-    modelStack.PushMatrix();
-
-    modelStack.Translate(5, 0, -50);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-            
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-
-    modelStack.Translate(150, 0, -50);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-
-    modelStack.Translate(290, 0, -50);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-
-    // Right
-    modelStack.PushMatrix();
-
-    modelStack.Translate(5, 0, 50);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-
-    modelStack.Translate(150, 0, 50);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-
-    modelStack.Translate(290, 0, 50);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-
-
-    // ------------------------- WALL W/ GATE ----------------------------//
-    modelStack.PushMatrix();
-
-    modelStack.Translate(50, 0, -85);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-
-    modelStack.Translate(50, 0, 85);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-// ------------------------- WALL W/ GATE ----------------------------//
-    modelStack.PushMatrix();
-
-    modelStack.Translate(-50, 0, 0);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 0, 1);
-    modelStack.Scale(1, 3, 1);
-    RenderMesh(meshList[GEO_DOOR], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-
-    modelStack.Translate(250, 0, 0);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    // GATE TOP
-    modelStack.PushMatrix();
-    modelStack.Translate(45, -2 , 0);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(5, 8, 5);
-    RenderMesh(meshList[GEO_GATETOP], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 2 + gateOffSet, 1);
-    modelStack.Rotate(-90, 0, 1, 0);
-    RenderMesh(meshList[GEO_GATE], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    // SWITCH
-    modelStack.PushMatrix();
-    modelStack.Translate(45, 8, 15);
-    modelStack.Rotate(-90, 0, 1, 0);
-    modelStack.Scale(6, 6, 6);
-    RenderMesh(meshList[GEO_SWITCH], true, toggleLight);
-    modelStack.PopMatrix();
-    
-    //THWUMP
-    modelStack.PushMatrix();
-    modelStack.Translate(70, -10, 30 - thwumpOffset);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(7, 7, 7);
-    RenderMesh(meshList[GEO_THWUMP], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(100, -10, -30 + thwumpOffset);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(7, 7, 7);
-    RenderMesh(meshList[GEO_THWUMP], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(130, 5 - thwump3Drop, 30 - thwumpOffset);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(7, 7, 7);
-    RenderMesh(meshList[GEO_THWUMP], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(160, 5 - thwump4Drop, -30 + thwumpOffset);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(7, 7, 7);
-    RenderMesh(meshList[GEO_THWUMP], true, toggleLight);
-    modelStack.PopMatrix();
-
-
-    //THRONE
-    modelStack.PushMatrix();
-    modelStack.Translate(230, -2, 0);
-    modelStack.Rotate(-90, 0, 1, 0);
-    modelStack.Scale(2, 2, 2);
-    RenderMesh(meshList[GEO_THRONE], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(-13, 15, 0);
-    modelStack.Scale(2, 2, 2);
-    RenderText(meshList[GEO_TEXT], "Bawser's Throne", Color(1, 1, 0));
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    //Pedestal (Peach)
-    modelStack.PushMatrix();
-    modelStack.Translate(230, -2, -25);
-    modelStack.Scale(5, 8, 5);
-    RenderMesh(meshList[GEO_PEDESTAL], true, toggleLight);
-
-    if (peachTaken == false)
-    {
-        modelStack.PushMatrix();
-
-        modelStack.Translate(0, 1.5, 0);
-        modelStack.Scale(1, 1, 1);
-        RenderMesh(meshList[GEO_PEACH], false, toggleLight);
-
-        modelStack.PushMatrix();
-        modelStack.Translate(0, 1, -2.5);
-        modelStack.Rotate(-90, 0, 1, 0);
-        modelStack.Scale(0.4, 0.4, 0.4);
-        RenderText(meshList[GEO_TEXT], "Princess 'Peach'", Color(1, 1, 0));
-        modelStack.PopMatrix();
-
-        modelStack.PopMatrix();
-    }
-
-    modelStack.PopMatrix();
-
-    //Pedestal (Key)
-    modelStack.PushMatrix();
-    modelStack.Translate(230, -2, 25); 
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(5, 8, 5);
-    RenderMesh(meshList[GEO_PEDESTAL], true, toggleLight);
-
-
-    if (keyTaken == false)
-    {
-        modelStack.PushMatrix();
-
-        modelStack.Translate(-0.75, 1.5, 0);
-        modelStack.Scale(0.8, 0.8, 0.8);
-        RenderMesh(meshList[GEO_KEY], true, toggleLight);
-
-        modelStack.PushMatrix();
-        modelStack.Translate(1, 1, 0);
-        modelStack.Rotate(180, 0, 1, 0);
-        modelStack.Scale(0.4, 0.4, 0.4);
-        RenderText(meshList[GEO_TEXT], "Key", Color(1, 1, 0));
-        modelStack.PopMatrix();
-
-        modelStack.PopMatrix();
-    }
-
-    modelStack.PopMatrix();
-
-    //Lava
-    //modelStack.PushMatrix();
-    //modelStack.Translate(150, -2, 0);
-    //modelStack.Scale(2, 2, 2);
-    //RenderMesh(meshList[GEO_LAVA], true, toggleLight);
-    //modelStack.PopMatrix();
-
-    //Pillar
-    modelStack.PushMatrix();
-    modelStack.Translate(40, -2, 40);
-    modelStack.Scale(5, 6.5, 5);
-    RenderMesh(meshList[GEO_PILLAR], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(40, -2, -40);
-    modelStack.Scale(5, 6.5, 5);
-    RenderMesh(meshList[GEO_PILLAR], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(-40, -2, 40);
-    modelStack.Scale(5, 6.5, 5);
-    RenderMesh(meshList[GEO_PILLAR], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(-40, -2, -40);
-    modelStack.Scale(5, 6.5, 5);
-    RenderMesh(meshList[GEO_PILLAR], true, toggleLight);
-    modelStack.PopMatrix();
-
-    // On screen text
-    ////std::ostringstream target;
-    //std::ostringstream position;
-    ////ss << "FPS: " << FramesPerSecond;
-    ////target << "Camera Target: " << (int)camera4.target.x << " " << (int)camera4.target.y << " " << (int)camera4.target.z;
-    //Vector3 boundsCheck = camera4.position + (camera4.target - camera4.position).Normalized();
-    //position << "Position: " << (int)camera4.position.x << " " << (int)camera4.position.y << " " << (int)camera4.position.z;
-    ////position << "Bounds: " << (int)boundsCheck.x << " " << (int)boundsCheck.y << " " << (int)boundsCheck.z;
-    ////RenderTextOnScreen(meshList[GEO_TEXT], target.str(), Color(0, 1, 0), 3, 0, 2);
-    //RenderTextOnScreen(meshList[GEO_TEXT], position.str(), Color(0, 1, 0), 3, 0, 3);
-
-    //std::stringstream thwump;
-    //std::stringstream thwump1;
-    //std::stringstream thwump2;
-    //for (int i = 0; i < objsMaxMin.size(); ++i)
-    //{
-    //    if (objsMaxMin[i].name == "thwump3")
-    //    {
-    //        //thwump << "Bounds: " << (float)objsMaxMin[i].maxPos.z << " " << (float)objsMaxMin[i].minPos.z;
-    //        thwump << "Bounds(z): " << (int)(objsMaxMin[i].maxPos.z + objsMaxMin[i].offSet.z + 3) << " " << (int)(objsMaxMin[i].minPos.z + objsMaxMin[i].offSet.z - 3);
-    //        thwump1 << "Bounds(x): " << (int)(objsMaxMin[i].maxPos.x + objsMaxMin[i].offSet.x + 3) << " " << (int)(objsMaxMin[i].minPos.x + objsMaxMin[i].offSet.x - 3);
-    //        thwump2 << "Bounds(y): " << (int)(objsMaxMin[i].maxPos.y + objsMaxMin[i].offSet.y) << " " << (int)(objsMaxMin[i].minPos.y + objsMaxMin[i].offSet.y);
-    //    }
-    //}
-    //RenderTextOnScreen(meshList[GEO_TEXT], thwump.str(), Color(0, 1, 0), 3, 0, 8);
-    //RenderTextOnScreen(meshList[GEO_TEXT], thwump1.str(), Color(0, 1, 0), 3, 0, 7);
-    //RenderTextOnScreen(meshList[GEO_TEXT], thwump2.str(), Color(0, 1, 0), 3, 0, 6);
-
-    std::stringstream ss;
-    ss << "FPS: " << FramesPerSecond;
-    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 28, 28);
-
-    if (gateMsg == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Message: Press 'E' to open gate", Color(0, 1, 0), 2, 0, 2);
-    }
-
-    if (gateLockedMsg == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Message: Gate is locked!", Color(0, 1, 0), 3, 0, 5);
-    }
-
-    if (gateUnlockMsg == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Message: Press 'E' to unlock gate", Color(0, 1, 0), 2, 0, 2);
-    }
-
-    if (peachMsg == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Message: Press 'E' to save 'Peach'", Color(0, 1, 0), 2, 0, 2);
-    }
-
-    if (peachTaken == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Message: Get 'Peach' out!", Color(0, 1, 0), 2, 0, 3);
-    }
-
-    if (keyMsg == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Message: Press 'E' get a Key", Color(0, 1, 0), 2, 0, 2);
-    }
-
-    if (doorEnterMsg == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Message: Press 'E' to escape!", Color(0, 1, 0), 2, 0, 2);
-    }
-
-    if (doorErrorMsg == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Get 'Peach' first!", Color(0, 1, 0), 2, 0, 3);
-    }
-
-    // ADD HTHWUMP COLLSION
-
-    // ------------------------------------------------------------ ESCAPE ROOM ------------------------------------------------------------ //
-    // Floor
-    modelStack.PushMatrix();
-    modelStack.Translate(300, -2, 300);
-    modelStack.Scale(100, 100, 100);
-    RenderMesh(meshList[GEO_GROUND], true, toggleLight);
-    modelStack.PopMatrix();
-
-    // Ceiling
-    modelStack.PushMatrix();
-    modelStack.Translate(300, 35, 300);
-    modelStack.Rotate(180, 1, 0, 0);
-    modelStack.Scale(100, 100, 100);
-    RenderMesh(meshList[GEO_GROUND], true, toggleLight);
-    modelStack.PopMatrix();
-
-    // Left
-    modelStack.PushMatrix();
-
-    modelStack.Translate(300, 0, 250);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    // Right
-    modelStack.PushMatrix();
-
-    modelStack.Translate(300, 0, 350);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
- 
-    // Front
-    modelStack.PushMatrix();
-
-    modelStack.Translate(350, 0, 300);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    // Back
-    modelStack.PushMatrix();
-
-    modelStack.Translate(250, 0, 300);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(10, 5, 10);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 0, 1);
-    modelStack.Scale(1, 3, 1);
-    RenderMesh(meshList[GEO_DOOR], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 6, 0);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(335, -2, 300);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 10, -3);
-    modelStack.Rotate(-90, 0, 1, 0);
-    RenderText(meshList[GEO_TEXT], "ESCAPE", Color(1, 1, 0));
-    modelStack.PopMatrix();
-
-    modelStack.Scale(5, 5, 5);
-    RenderMesh(meshList[GEO_PIPE], true, toggleLight);
-    modelStack.PopMatrix();
-
-    if (pipeMsg == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Message: Press 'E' to escape!", Color(0, 1, 0), 2, 0, 2);
-    }
-
-    if (completedMsg == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "COMPLETED", Color(0, 1, 0), 3, 0, 5);
-    }
-    // ------------------------------------------------------------ ESCAPE ROOM ------------------------------------------------------------ //
 }
 
 void Asn3::Exit()
