@@ -1,0 +1,41 @@
+﻿Build started 15/2/2016 3:32:17 PM.
+     1>Project "C:\Users\Shania\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Shania\Desktop\SP2\\Common\Source /IC:\Users\Shania\Desktop\SP2\\glfw\include /IC:\Users\Shania\Desktop\SP2\\glew\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Application.cpp Source\Asn3.cpp Source\Camera5.cpp
+         Application.cpp
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         Camera5.cpp
+         Asn3.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Shania\Desktop\SP2\Debug /LIBPATH:"C:\Users\Shania\Desktop\SP2\\glfw\lib-msvc120" /LIBPATH:C:\Users\Shania\Desktop\SP2\\glew\lib glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.lib" /MACHINE:X86 Debug\Application.obj
+         Debug\Asn1.obj
+         Debug\Asn2.obj
+         Debug\Asn3.obj
+         Debug\Camera.obj
+         Debug\Camera2.obj
+         Debug\Camera3.obj
+         Debug\Camera5.obj
+         Debug\LoadOBJ.obj
+         Debug\LoadTGA.obj
+         Debug\main.obj
+         Debug\Mesh.obj
+         Debug\MeshBuilder.obj
+         Debug\Scene1.obj
+         Debug\Scene2.obj
+         Debug\Scene3.obj
+         Debug\Scene4.obj
+         Debug\SceneLight.obj
+         Debug\SceneLight2.obj
+         Debug\SceneModel.obj
+         Debug\SceneSkybox.obj
+         Debug\SceneText.obj
+         Debug\SceneTexture.obj
+         Debug\shader.obj
+         Debug\Utility.obj
+         COMG_DonovanSim.vcxproj -> C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.exe
+     1>Done Building Project "C:\Users\Shania\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.37
