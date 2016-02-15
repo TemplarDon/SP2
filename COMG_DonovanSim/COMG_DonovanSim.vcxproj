@@ -95,6 +95,9 @@
     <None Include="Shader\TransformVertexShader.vertexshader" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\(SP2)Building.cpp" />
+    <ClCompile Include="Source\(SP2)InteractableOBJs.cpp" />
+    <ClCompile Include="Source\(SP2)Player.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Asn1.cpp" />
     <ClCompile Include="Source\Asn2.cpp" />
@@ -103,6 +106,9 @@
     <ClCompile Include="Source\Camera2.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\%28SP2%29GameObject.cpp" />
+    <ClCompile Include="Source\%28SP2%29CollisionOBJs.cpp" />
+    <ClCompile Include="Source\Camera4.cpp" />
+    <ClCompile Include="Source\Camera5.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -119,17 +125,25 @@
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\SceneTexture.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\SP2.cpp" />
+    <ClCompile Include="Source\ThirdPersonCamera.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\(SP2)CollisionOBJs.h" />
+    <ClInclude Include="Source\(SP2)InteractableOBJs.h" />
+    <ClInclude Include="Source\(SP2)Inventory.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Asn1.h" />
     <ClInclude Include="Source\Asn2.h" />
     <ClInclude Include="Source\Asn3.h" />
+    <ClInclude Include="Source\%28SP2%29Building.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera2.h" />
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\%28SP2%29GameObject.h" />
+    <ClInclude Include="Source\Camera4.h" />
+    <ClInclude Include="Source\Camera5.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
     <ClInclude Include="Source\LoadTGA.h" />
@@ -137,6 +151,7 @@
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Node.h" />
+    <ClInclude Include="Source\%28SP2%29Player.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Scene1.h" />
     <ClInclude Include="Source\Scene2.h" />
@@ -145,10 +160,13 @@
     <ClInclude Include="Source\SceneLight2.h" />
     <ClInclude Include="Source\SceneModel.h" />
     <ClInclude Include="Source\SceneSkybox.h" />
+    <ClInclude Include="Source\SceneSP2.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\SceneTexture.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SceneLight.h" />
+    <ClInclude Include="Source\SP2.h" />
+    <ClInclude Include="Source\ThirdPersonCamera.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\vertex.h" />
   </ItemGroup>

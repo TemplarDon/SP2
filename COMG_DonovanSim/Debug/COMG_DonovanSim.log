@@ -1,36 +1,10 @@
-﻿Build started 2/15/2016 2:53:02 PM.
+﻿Build started 2/16/2016 1:36:02 AM.
      1>Project "C:\Users\donov_000\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\donov_000\Desktop\SP2\\Common\Source /IC:\Users\donov_000\Desktop\SP2\\glfw\include /IC:\Users\donov_000\Desktop\SP2\\glew\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\MeshBuilder.cpp
-         MeshBuilder.cpp
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(458): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(459): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(461): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(462): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(474): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(485): warning C4244: 'argument' : conversion from 'unsigned int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(670): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(671): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(675): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(679): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(682): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(683): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(688): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(689): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(691): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(707): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(709): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(710): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(714): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(715): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(716): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(718): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(719): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(720): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(756): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\meshbuilder.cpp(768): warning C4018: '<' : signed/unsigned mismatch
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\donov_000\Desktop\SP2\Debug /LIBPATH:"C:\Users\donov_000\Desktop\SP2\\glfw\lib-msvc120" /LIBPATH:C:\Users\donov_000\Desktop\SP2\\glew\lib glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.lib" /MACHINE:X86 Debug\Application.obj
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\donov_000\Desktop\SP2\Debug /LIBPATH:"C:\Users\donov_000\Desktop\SP2\\glfw\lib-msvc120" /LIBPATH:C:\Users\donov_000\Desktop\SP2\\glew\lib glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.lib" /MACHINE:X86 "Debug\(SP2)Building.obj"
+         "Debug\(SP2)InteractableOBJs.obj"
+         "Debug\(SP2)Player.obj"
+         Debug\Application.obj
          Debug\Asn1.obj
          Debug\Asn2.obj
          Debug\Asn3.obj
@@ -38,6 +12,9 @@
          Debug\Camera2.obj
          Debug\Camera3.obj
          "Debug\(SP2)GameObject.obj"
+         "Debug\(SP2)CollisionOBJs.obj"
+         Debug\Camera4.obj
+         Debug\Camera5.obj
          Debug\LoadOBJ.obj
          Debug\LoadTGA.obj
          Debug\main.obj
@@ -54,10 +31,15 @@
          Debug\SceneText.obj
          Debug\SceneTexture.obj
          Debug\shader.obj
+         Debug\SP2.obj
+         Debug\ThirdPersonCamera.obj
          Debug\Utility.obj
-         COMG_DonovanSim.vcxproj -> C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.exe
-     1>Done Building Project "C:\Users\donov_000\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" (Build target(s)).
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+     1>(SP2)Player.obj : error LNK2019: unresolved external symbol "public: __thiscall Inventory::Inventory(void)" (??0Inventory@@QAE@XZ) referenced in function "public: __thiscall Player::Player(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (??0Player@@QAE@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z)
+     1>(SP2)Player.obj : error LNK2019: unresolved external symbol "public: __thiscall Inventory::~Inventory(void)" (??1Inventory@@QAE@XZ) referenced in function "public: virtual __thiscall Player::~Player(void)" (??1Player@@UAE@XZ)
+     1>C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.exe : fatal error LNK1120: 2 unresolved externals
+     1>Done Building Project "C:\Users\donov_000\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.79
+Time Elapsed 00:00:00.53

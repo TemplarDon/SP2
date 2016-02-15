@@ -5,7 +5,7 @@
 class Inventory
 {
 public:
-    Inventory();
+    Inventory(int moneyAmount);
     ~Inventory();
 
     int moneyAmount;
