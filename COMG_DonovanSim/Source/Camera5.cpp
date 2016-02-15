@@ -23,7 +23,7 @@ void Camera5::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 void Camera5::Update(double dt)
 {
-	Vector3 boundary(500, 500, 500);
+	Vector3 boundary(1000, 1000, 1000);
 	/*Vector3 boundary = (-50, -50, -50);*/
 
 	static const float CAMERA_SPEED = 50.f;
