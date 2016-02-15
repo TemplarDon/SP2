@@ -1158,8 +1158,6 @@ void Asn3::RenderSkybox()
 
 void Asn3::createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* verticeNum, std::vector<Position>& MaxMinPos, std::vector<Position>& offSets)
 {
-
-<<<<<<< HEAD
     Vector3 view = (camera5.target - camera5.position).Normalized();
 
     Position maxPos;

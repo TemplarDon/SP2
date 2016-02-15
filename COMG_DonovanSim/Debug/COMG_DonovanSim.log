@@ -1,12 +1,19 @@
-﻿Build started 15/2/2016 3:32:17 PM.
+﻿Build started 15/2/2016 4:15:49 PM.
      1>Project "C:\Users\Shania\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Shania\Desktop\SP2\\Common\Source /IC:\Users\Shania\Desktop\SP2\\glfw\include /IC:\Users\Shania\Desktop\SP2\\glew\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Application.cpp Source\Asn3.cpp Source\Camera5.cpp
-         Application.cpp
-         Generating Code...
-         Skipping... (no relevant changes detected)
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Shania\Desktop\SP2\\Common\Source /IC:\Users\Shania\Desktop\SP2\\glfw\include /IC:\Users\Shania\Desktop\SP2\\glew\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Camera5.cpp
          Camera5.cpp
-         Asn3.cpp
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(39): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(42): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(50): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(59): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(66): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(75): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(82): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(90): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(98): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(107): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(113): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Shania\Desktop\SP2\Debug /LIBPATH:"C:\Users\Shania\Desktop\SP2\\glfw\lib-msvc120" /LIBPATH:C:\Users\Shania\Desktop\SP2\\glew\lib glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.lib" /MACHINE:X86 Debug\Application.obj
          Debug\Asn1.obj
@@ -32,6 +39,7 @@
          Debug\SceneText.obj
          Debug\SceneTexture.obj
          Debug\shader.obj
+         Debug\SP2.obj
          Debug\Utility.obj
          COMG_DonovanSim.vcxproj -> C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.exe
      1>Done Building Project "C:\Users\Shania\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" (Build target(s)).
