@@ -19,6 +19,12 @@
     <Filter Include="Image">
       <UniqueIdentifier>{d0968c9d-35a4-4c4d-8ecd-6db1b10aaa08}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\StudioProject2">
+      <UniqueIdentifier>{de2cdcae-734d-4537-9df8-b87d42cff8a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\StudioProject2">
+      <UniqueIdentifier>{a8577eb7-7ab9-4929-815c-310c6800bf69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\SimpleVertexShader.vertexshader">
@@ -125,6 +131,9 @@
     <ClCompile Include="Source\Asn3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Camera4.cpp">
+      <Filter>Source Files\StudioProject2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -210,6 +219,12 @@
     </ClInclude>
     <ClInclude Include="Source\Asn3.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera4.h">
+      <Filter>Header Files\StudioProject2</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneSP2.h">
+      <Filter>Header Files\StudioProject2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

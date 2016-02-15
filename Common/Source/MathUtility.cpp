@@ -14,13 +14,13 @@ int factorial(int n)
 
 int nCr(int n, int r)
 {
-    float ans = (factorial(n) / (factorial(n - r) * factorial(r)));
+    int ans = (factorial(n) / (factorial(n - r) * factorial(r)));
 	return ans;
 }
 
 int nPr(int n, int r)
 {
-    float ans = (factorial(n) / factorial(n - r));
+    int ans = (factorial(n) / factorial(n - r));
     return ans;
 }
 

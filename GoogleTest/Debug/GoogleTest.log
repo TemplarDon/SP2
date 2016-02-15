@@ -1,9 +1,9 @@
-﻿Build started 1/30/2016 11:14:41 PM.
-     1>Project "C:\Users\donov_000\Desktop\Poly Stuffz\COMG\(My copy) COMG_DonovanSim\COMG_DonovanSim\GoogleTest\GoogleTest.vcxproj" on node 3 (Build target(s)).
+﻿Build started 15/2/2016 1:33:22 PM.
+     1>Project "C:\Users\GaryGoh\Desktop\SP2Project\GoogleTest\GoogleTest.vcxproj" on node 2 (Build target(s)).
      1>Lib:
-         GoogleTest.vcxproj -> C:\Users\donov_000\Desktop\Poly Stuffz\COMG\(My copy) COMG_DonovanSim\COMG_DonovanSim\Debug\GoogleTest.lib
-     1>Done Building Project "C:\Users\donov_000\Desktop\Poly Stuffz\COMG\(My copy) COMG_DonovanSim\COMG_DonovanSim\GoogleTest\GoogleTest.vcxproj" (Build target(s)).
+         GoogleTest.vcxproj -> C:\Users\GaryGoh\Desktop\SP2Project\Debug\GoogleTest.lib
+     1>Done Building Project "C:\Users\GaryGoh\Desktop\SP2Project\GoogleTest\GoogleTest.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.50
+Time Elapsed 00:00:00.04

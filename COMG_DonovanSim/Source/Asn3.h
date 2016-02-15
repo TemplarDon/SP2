@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Camera2.h"
 #include "Camera3.h"
+#include "Camera4.h"
 #include "Mesh.h"
 #include "vertex.h"
 #include "MatrixStack.h"
@@ -113,6 +114,8 @@ public:
     virtual void Render();
     virtual void Exit();
 private:
+	Position charPos;
+
     unsigned m_vertexArrayID;
     unsigned m_vertexBuffer[NUM_GEOMETRY];
     unsigned m_colorBuffer[NUM_GEOMETRY];
@@ -166,6 +169,7 @@ private:
 
     Camera2 camera;
     Camera3 camera3;
+	Camera4 camera4;
 
     MS modelStack, viewStack, projectionStack;
 
