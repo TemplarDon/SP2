@@ -1,50 +1,28 @@
-﻿Build started 15/2/2016 3:51:07 PM.
-     1>Project "C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" on node 2 (Build target(s)).
+﻿Build started 15/2/2016 4:49:50 PM.
+     1>Project "C:\Users\Shania\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\New folder\VC\bin\CL.exe /c /I"C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\\Common\Source" /I"C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\\glfw\include" /I"C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\\glew\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Asn3.cpp
-         Asn3.cpp
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(116): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(142): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(143): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(168): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(266): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(267): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(276): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(277): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(304): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(305): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(328): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(329): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(340): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(341): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(352): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(353): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(364): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(365): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(392): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(393): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(407): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(408): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(481): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(583): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(685): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(768): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(874): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(1101): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(1110): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(1119): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(1128): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(1137): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(1144): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\beckham\documents\visual studio 2013\projects\sp2\comg_donovansim\source\asn3.cpp(1161): warning C4018: '<' : signed/unsigned mismatch
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Shania\Desktop\SP2\\Common\Source /IC:\Users\Shania\Desktop\SP2\\glfw\include /IC:\Users\Shania\Desktop\SP2\\glew\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Camera5.cpp
+         Camera5.cpp
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(42): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(45): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(53): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(62): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(69): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(78): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(85): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(93): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(101): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(110): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\shania\desktop\sp2\comg_donovansim\source\camera5.cpp(116): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
        Link:
-         D:\New folder\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\Debug\COMG_DonovanSim.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\Debug" /LIBPATH:"C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\\glfw\lib-msvc120" /LIBPATH:"C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\\glew\lib" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\Debug\COMG_DonovanSim.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\Debug\COMG_DonovanSim.lib" /MACHINE:X86 Debug\Application.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Shania\Desktop\SP2\Debug /LIBPATH:"C:\Users\Shania\Desktop\SP2\\glfw\lib-msvc120" /LIBPATH:C:\Users\Shania\Desktop\SP2\\glew\lib glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.lib" /MACHINE:X86 Debug\Application.obj
          Debug\Asn1.obj
          Debug\Asn2.obj
          Debug\Asn3.obj
          Debug\Camera.obj
          Debug\Camera2.obj
          Debug\Camera3.obj
+         Debug\Camera5.obj
          Debug\LoadOBJ.obj
          Debug\LoadTGA.obj
          Debug\main.obj
@@ -61,10 +39,11 @@
          Debug\SceneText.obj
          Debug\SceneTexture.obj
          Debug\shader.obj
+         Debug\SP2.obj
          Debug\Utility.obj
-         COMG_DonovanSim.vcxproj -> C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\Debug\COMG_DonovanSim.exe
-     1>Done Building Project "C:\Users\Beckham\Documents\Visual Studio 2013\Projects\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" (Build target(s)).
+         COMG_DonovanSim.vcxproj -> C:\Users\Shania\Desktop\SP2\Debug\COMG_DonovanSim.exe
+     1>Done Building Project "C:\Users\Shania\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.05
+Time Elapsed 00:00:01.37
