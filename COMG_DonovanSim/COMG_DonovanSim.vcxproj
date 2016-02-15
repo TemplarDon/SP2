@@ -97,6 +97,7 @@
   <ItemGroup>
     <ClCompile Include="Source\(SP2)Building.cpp" />
     <ClCompile Include="Source\(SP2)InteractableOBJs.cpp" />
+    <ClCompile Include="Source\(SP2)Inventory.cpp" />
     <ClCompile Include="Source\(SP2)Player.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Asn1.cpp" />

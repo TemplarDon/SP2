@@ -20,7 +20,7 @@ public:
     bool canMove;
 
     CollisionOBJs(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis);
-    virtual ~CollisionOBJs() = 0;
+    ~CollisionOBJs() = 0;
 };
 
 #endif

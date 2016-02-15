@@ -1,7 +1,8 @@
 #include "(SP2)Player.h"
 
-Player::Player(string name, string race) : GameObject(name), race(race)
+Player::Player(string name, string race, int moneyAmount) : GameObject(name), race(race), health(100)
 {
+    playerInventory.addMoney(moneyAmount);
 }
 
 Player::~Player()
@@ -25,5 +26,27 @@ void Player::removeItem(string itemName)
         {
             ++it;
         }
+    }
+}
+
+void Player::takeDamage(int damageTaken)
+{
+    this->health -= damageTaken;
+}
+
+void Player::healHealth(int amountHealed)
+{
+    this->health += amountHealed;
+}
+
+bool Player::ifDead()
+{
+    if (this->health <= 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }

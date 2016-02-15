@@ -13,10 +13,10 @@ using std::list;
 class GameObject
 {
 private:
-
+    GameObject(std::string name);
 
 protected:
-    GameObject(std::string name);
+    
     string name;
 public:
     

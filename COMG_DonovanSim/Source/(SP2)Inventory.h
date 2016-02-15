@@ -5,12 +5,16 @@
 class Inventory
 {
 public:
-    Inventory(int moneyAmount);
+    Inventory();
     ~Inventory();
 
     int moneyAmount;
     list<string> itemList;
+
+    void addMoney(int money);
+    
 private:
+
 
 };
 
