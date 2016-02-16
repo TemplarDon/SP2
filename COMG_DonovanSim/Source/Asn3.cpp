@@ -499,7 +499,7 @@ void Asn3::Update(double dt)
     doorInteractions(dt);
     pipeInteractions(dt);
 
-    camera5.Update(dt);
+    
 
 
     ifDead(dt);

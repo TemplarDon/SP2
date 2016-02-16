@@ -24,6 +24,7 @@
 #include "Asn1.h"
 #include "Asn2.h"
 #include "Asn3.h"
+#include "SP2.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -117,7 +118,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new Asn3();
+	Scene *scene = new SP2();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame

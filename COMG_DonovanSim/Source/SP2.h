@@ -13,7 +13,8 @@
 #include "Light.h"
 #include "Node.h"
 
-#include "(SP2)CollisionOBJs.h"
+#include "(SP2)InteractableOBJs.h"
+#include "(SP2)Building.h"
 #include "(SP2)Player.h"
 
 #include <vector>
@@ -136,7 +137,10 @@ private:
     Position* maxPtr;
     Position* minPtr;
 
-    std::vector<Node>objsMaxMin; // Vector for storing min and max values of objs createdt
+    std::vector<Node>objsMaxMin; // Vector for storing min and max values of objs created
+
+    vector<InteractableOBJs>InteractablesList;
+    vector<Building>BuildingsList;
 
     Camera2 camera;
     Camera3 camera3;
@@ -152,7 +156,7 @@ private:
     void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
     void RenderSkybox();
-    void createBoundBox(std::vector<Node>&objsMaxMin);
+    void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
     void RenderRoom(Vector3 size, unsigned groundMeshSize = 100);
 
     void RenderText(Mesh* mesh, std::string text, Color color);

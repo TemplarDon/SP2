@@ -247,24 +247,6 @@ void SP2::Init()
     meshList[GEO_WALL]->material.kDiffuse.Set(0.6, 0.6, 0.6);
     meshList[GEO_WALL]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_WALL]->material.kShininess = 10;
-
-    // Left & Right
-    Node wall_1 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(0, 0, -50), 10, 0, Vector3(0, 0, 0), "rm1_wall_1");
-    Node wall_2 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(0, 0, 50), 10, 0, Vector3(0, 0, 0), "rm1_wall_2");
-
-    // Room2 Left & Right
-    Node rm2_wall_1 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(120, 0, -50), 10, 0, Vector3(0, 0, 0), "rm2_wall_1");
-    Node rm2_wall_2 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(120, 0, 50), 10, 0, Vector3(0, 0, 0), "rm2_wall_2");
-    Node rm2_wall_3 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(220, 0, -50), 10, 0, Vector3(0, 0, 0), "rm2_wall_3");
-    Node rm2_wall_4 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(220, 0, 50), 10, 0, Vector3(0, 0, 0), "rm2_wall_4");
-
-    objsMaxMin.push_back(wall_1);
-    objsMaxMin.push_back(wall_2);
-
-    objsMaxMin.push_back(rm2_wall_1);
-    objsMaxMin.push_back(rm2_wall_2);
-    objsMaxMin.push_back(rm2_wall_3);
-    objsMaxMin.push_back(rm2_wall_4);
     // ------------------------------------------------------------------------- WALLS ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- WALLS 2 ---------------------------------------------------------------------------------------//
@@ -275,21 +257,6 @@ void SP2::Init()
     meshList[GEO_WALL2]->material.kDiffuse.Set(0.6, 0.6, 0.6);
     meshList[GEO_WALL2]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_WALL2]->material.kShininess = 10;
-
-    // Front w/ Gate
-    Node wall_3 = Node(meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(50, 0, -85), 10, 0, Vector3(0, 0, 0), "rm1_wall_3");
-    Node wall_4 = Node(meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(50, 0, 85), 10, 0, Vector3(0, 0, 0), "rm1_wall_4");
-    //Back
-    Node wall_5 = Node(meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(-50, 0, 0), 10, 0, Vector3(0, 0, 0), "rm1_back_wall");
-
-    // Throne Room Back Wall
-    Node wall_6 = Node(meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(250, 0, 0), 10, 0, Vector3(0, 0, 0), "rm2_back_wall");
-
-    objsMaxMin.push_back(wall_3);
-    objsMaxMin.push_back(wall_4);
-    objsMaxMin.push_back(wall_5);
-    objsMaxMin.push_back(wall_6);
-
     // ------------------------------------------------------------------------- WALLS 2 ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- GATE TOP ---------------------------------------------------------------------------------------//
@@ -299,9 +266,6 @@ void SP2::Init()
     meshList[GEO_GATETOP]->material.kDiffuse.Set(0.6, 0.6, 0.6);
     meshList[GEO_GATETOP]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_GATETOP]->material.kShininess = 10;
-
-    Node gateTop = Node(meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(45, -2, 0), 6, 90, Vector3(0, 1, 0), "gatetop");
-    objsMaxMin.push_back(gateTop);
     // ------------------------------------------------------------------------- GATE TOP ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- GATE ---------------------------------------------------------------------------------------//
@@ -311,9 +275,6 @@ void SP2::Init()
     meshList[GEO_GATE]->material.kDiffuse.Set(0.6, 0.6, 0.6);
     meshList[GEO_GATE]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_GATE]->material.kShininess = 10;
-
-    Node gate = Node(meshList[GEO_GATE]->maxPos, meshList[GEO_GATE]->minPos, Position(45, 0, 1), 10, 0, Vector3(0, 0, 0), "gate");
-    objsMaxMin.push_back(gate);
     // ------------------------------------------------------------------------- GATE ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- SWITCH ---------------------------------------------------------------------------------------//
@@ -323,9 +284,6 @@ void SP2::Init()
     meshList[GEO_SWITCH]->material.kDiffuse.Set(0.6, 0.6, 0.6);
     meshList[GEO_SWITCH]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_SWITCH]->material.kShininess = 10;
-
-    Node switch1 = Node(meshList[GEO_SWITCH]->maxPos, meshList[GEO_SWITCH]->minPos, Position(45, 8, 15), 6, 0, Vector3(0, 0, 0), "switch");
-    objsMaxMin.push_back(switch1);
     // ------------------------------------------------------------------------- SWITCH ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- THWUMP ---------------------------------------------------------------------------------------//
@@ -335,15 +293,6 @@ void SP2::Init()
     meshList[GEO_THWUMP]->material.kDiffuse.Set(0.6, 0.6, 0.6);
     meshList[GEO_THWUMP]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_THWUMP]->material.kShininess = 10;
-
-    Node thwump1 = Node(meshList[GEO_THWUMP]->maxPos, meshList[GEO_THWUMP]->minPos, Position(70, -10, 30), 6, 0, Vector3(0, 0, 0), "thwump1");
-    Node thwump2 = Node(meshList[GEO_THWUMP]->maxPos, meshList[GEO_THWUMP]->minPos, Position(100, -10, -30), 6, 0, Vector3(0, 0, 0), "thwump2");
-    Node thwump3 = Node(meshList[GEO_THWUMP]->maxPos, meshList[GEO_THWUMP]->minPos, Position(130, 5, 30), 6, 0, Vector3(0, 0, 0), "thwump3");
-    Node thwump4 = Node(meshList[GEO_THWUMP]->maxPos, meshList[GEO_THWUMP]->minPos, Position(160, 5, -30), 6, 0, Vector3(0, 0, 0), "thwump4");
-    objsMaxMin.push_back(thwump1);
-    objsMaxMin.push_back(thwump2);
-    objsMaxMin.push_back(thwump3);
-    objsMaxMin.push_back(thwump4);
     // ------------------------------------------------------------------------- THWUMP ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- THRONE ---------------------------------------------------------------------------------------//
@@ -351,9 +300,6 @@ void SP2::Init()
     meshList[GEO_THRONE]->textureID = LoadTGA("Image//wallUV.tga");
     meshList[GEO_THRONE]->material.kSpecular.Set(0.5, 0.5, 0.5);
     meshList[GEO_THRONE]->material.kShininess = 12.f;
-
-    Node throne = Node(meshList[GEO_THRONE]->maxPos, meshList[GEO_THRONE]->minPos, Position(230, -2, 0), 2, 0, Vector3(0, 0, 0), "throne");
-    objsMaxMin.push_back(throne);
     // ------------------------------------------------------------------------- THRONE ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- PEDESTAL ---------------------------------------------------------------------------------------//
@@ -363,12 +309,6 @@ void SP2::Init()
     meshList[GEO_PEDESTAL]->material.kDiffuse.Set(0.6, 0.6, 0.6);
     meshList[GEO_PEDESTAL]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_PEDESTAL]->material.kShininess = 10;
-
-    Node pedastal1 = Node(meshList[GEO_PEDESTAL]->maxPos, meshList[GEO_PEDESTAL]->minPos, Position(230, -2, -25), 5, 0, Vector3(0, 0, 0), "pedestal1");
-    objsMaxMin.push_back(pedastal1);
-
-    Node pedastal2 = Node(meshList[GEO_PEDESTAL]->maxPos, meshList[GEO_PEDESTAL]->minPos, Position(230, -2, 25), 5, 0, Vector3(0, 0, 0), "pedestal2");
-    objsMaxMin.push_back(pedastal2);
     // ------------------------------------------------------------------------- PEDESTAL ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- PILLAR ---------------------------------------------------------------------------------------//
@@ -378,19 +318,6 @@ void SP2::Init()
     meshList[GEO_PILLAR]->material.kDiffuse.Set(0.6, 0.6, 0.6);
     meshList[GEO_PILLAR]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_PILLAR]->material.kShininess = 10;
-
-    Node pillar1 = Node(meshList[GEO_PILLAR]->maxPos, meshList[GEO_PILLAR]->minPos, Position(40, -2, 40), 5, 0, Vector3(0, 0, 0), "pillar1");
-    objsMaxMin.push_back(pillar1);
-
-    Node pillar2 = Node(meshList[GEO_PILLAR]->maxPos, meshList[GEO_PILLAR]->minPos, Position(40, -2, -40), 5, 0, Vector3(0, 0, 0), "pillar2");
-    objsMaxMin.push_back(pillar2);
-
-    Node pillar3 = Node(meshList[GEO_PILLAR]->maxPos, meshList[GEO_PILLAR]->minPos, Position(-40, -2, 40), 5, 0, Vector3(0, 0, 0), "pillar3");
-    objsMaxMin.push_back(pillar3);
-
-    Node pillar4 = Node(meshList[GEO_PILLAR]->maxPos, meshList[GEO_PILLAR]->minPos, Position(-40, -2, -40), 5, 0, Vector3(0, 0, 0), "pillar4");
-    objsMaxMin.push_back(pillar4);
-
     // ------------------------------------------------------------------------- PILLAR ---------------------------------------------------------------------------------------//
 
     // ------------------------------------------------------------------------- LAVA ---------------------------------------------------------------------------------------//
@@ -414,9 +341,6 @@ void SP2::Init()
     // ------------------------------------------------------------------------- DOOR ---------------------------------------------------------------------------------------//
     meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("door", "OBJ//door.obj");
     meshList[GEO_DOOR]->textureID = LoadTGA("Image//doorUV.tga");
-
-    Node door = Node(meshList[GEO_DOOR]->maxPos, meshList[GEO_DOOR]->minPos, Position(-45, 0, 0), 10, 0, Vector3(0, 0, 0), "door");
-    objsMaxMin.push_back(door);
     // ------------------------------------------------------------------------- DOOR ---------------------------------------------------------------------------------------//
 
 
@@ -460,8 +384,8 @@ void SP2::Update(double dt)
 
 
 
-    createBoundBox(objsMaxMin);
-    camera5.Update(dt);
+    createBoundBox(InteractablesList, BuildingsList);
+    camera5.Update(dt, InteractablesList, BuildingsList);
     //thirdPersonCamera.Update(dt);
 
 
@@ -705,7 +629,7 @@ void SP2::RenderRoom(Vector3 size, unsigned groundMeshSize)
 
 }
 
-void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
+void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)
 {
     Vector3 view = (camera5.target - camera5.position).Normalized();
 
@@ -714,7 +638,7 @@ void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
 
     Position cameraPos;
 
-    for (int i = 0; i < objsMaxMin.size(); ++i)
+    for (int i = 0; i < InteractablesList.size(); ++i)
     {
 
         cameraPos.x = camera5.position.x + view.x;
@@ -722,22 +646,22 @@ void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
         cameraPos.z = camera5.position.z + view.z;
 
 
-        maxPos.x = objsMaxMin[i].maxPos.x;
-        maxPos.y = objsMaxMin[i].maxPos.y;
-        maxPos.z = objsMaxMin[i].maxPos.z;
+        maxPos.x = InteractablesList[i].maxPos.x;
+        maxPos.y = InteractablesList[i].maxPos.y;
+        maxPos.z = InteractablesList[i].maxPos.z;
 
-        minPos.x = objsMaxMin[i].minPos.x;
-        minPos.y = objsMaxMin[i].minPos.y;
-        minPos.z = objsMaxMin[i].minPos.z;
+        minPos.x = InteractablesList[i].minPos.x;
+        minPos.y = InteractablesList[i].minPos.y;
+        minPos.z = InteractablesList[i].minPos.z;
 
         // Scaling
-        maxPos.x = maxPos.x * objsMaxMin[i].scaleOffSet;
-        maxPos.y = maxPos.y * objsMaxMin[i].scaleOffSet;
-        maxPos.z = maxPos.z * objsMaxMin[i].scaleOffSet;
+        maxPos.x = maxPos.x * InteractablesList[i].scaleOffSet;
+        maxPos.y = maxPos.y * InteractablesList[i].scaleOffSet;
+        maxPos.z = maxPos.z * InteractablesList[i].scaleOffSet;
 
-        minPos.x = minPos.x * objsMaxMin[i].scaleOffSet;
-        minPos.y = minPos.y * objsMaxMin[i].scaleOffSet;
-        minPos.z = minPos.z * objsMaxMin[i].scaleOffSet;
+        minPos.x = minPos.x * InteractablesList[i].scaleOffSet;
+        minPos.y = minPos.y * InteractablesList[i].scaleOffSet;
+        minPos.z = minPos.z * InteractablesList[i].scaleOffSet;
 
         // Rotation
         Mtx44 rotation;
@@ -751,21 +675,21 @@ void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
         tempMin.x = minPos.x;
         tempMin.y = minPos.y;
         tempMin.z = minPos.z;
-        if (objsMaxMin[i].rotateAxis.x == 1)
+        if (InteractablesList[i].rotateAxis.x == 1)
         {
-            rotation.SetToRotation(objsMaxMin[i].rotateAngle, 1, 0, 0);
+            rotation.SetToRotation(InteractablesList[i].rotateAngle, 1, 0, 0);
             tempMax = rotation * tempMax;
             tempMin = rotation * tempMin;
         }
-        if (objsMaxMin[i].rotateAxis.y == 1)
+        if (InteractablesList[i].rotateAxis.y == 1)
         {
-            rotation.SetToRotation(objsMaxMin[i].rotateAngle, 0, 1, 0);
+            rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 1, 0);
             tempMax = rotation * tempMax;
             tempMin = rotation * tempMin;
         }
-        if (objsMaxMin[i].rotateAxis.z == 1)
+        if (InteractablesList[i].rotateAxis.z == 1)
         {
-            rotation.SetToRotation(objsMaxMin[i].rotateAngle, 0, 0, 1);
+            rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 0, 1);
             tempMax = rotation * tempMax;
             tempMin = rotation * tempMin;
         }
@@ -779,21 +703,105 @@ void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
         minPos.z = tempMin.z;
 
         // Translating
-        maxPos.x += objsMaxMin[i].offSet.x;
-        maxPos.y += objsMaxMin[i].offSet.y;
-        maxPos.z += objsMaxMin[i].offSet.z;
+        maxPos.x += InteractablesList[i].offSet.x;
+        maxPos.y += InteractablesList[i].offSet.y;
+        maxPos.z += InteractablesList[i].offSet.z;
 
-        minPos.x += objsMaxMin[i].offSet.x;
-        minPos.y += objsMaxMin[i].offSet.y;
-        minPos.z += objsMaxMin[i].offSet.z;
+        minPos.x += InteractablesList[i].offSet.x;
+        minPos.y += InteractablesList[i].offSet.y;
+        minPos.z += InteractablesList[i].offSet.z;
 
         if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
         {
-            objsMaxMin[i].canMove = true;
+            InteractablesList[i].canMove = true;
         }
         else
         {
-            objsMaxMin[i].canMove = true;
+            InteractablesList[i].canMove = false;
+        }
+    }
+
+
+    for (int i = 0; i < BuildingsList.size(); ++i)
+    {
+
+        cameraPos.x = camera5.position.x + view.x;
+        cameraPos.y = camera5.position.y + view.y;
+        cameraPos.z = camera5.position.z + view.z;
+
+
+        maxPos.x = BuildingsList[i].maxPos.x;
+        maxPos.y = BuildingsList[i].maxPos.y;
+        maxPos.z = BuildingsList[i].maxPos.z;
+
+        minPos.x = BuildingsList[i].minPos.x;
+        minPos.y = BuildingsList[i].minPos.y;
+        minPos.z = BuildingsList[i].minPos.z;
+
+        // Scaling
+        maxPos.x = maxPos.x * BuildingsList[i].scaleOffSet;
+        maxPos.y = maxPos.y * BuildingsList[i].scaleOffSet;
+        maxPos.z = maxPos.z * BuildingsList[i].scaleOffSet;
+
+        minPos.x = minPos.x * BuildingsList[i].scaleOffSet;
+        minPos.y = minPos.y * BuildingsList[i].scaleOffSet;
+        minPos.z = minPos.z * BuildingsList[i].scaleOffSet;
+
+        // Rotation
+        Mtx44 rotation;
+        Vector3 tempMax;
+        Vector3 tempMin;
+
+        tempMax.x = maxPos.x;
+        tempMax.y = maxPos.y;
+        tempMax.z = maxPos.z;
+
+        tempMin.x = minPos.x;
+        tempMin.y = minPos.y;
+        tempMin.z = minPos.z;
+        if (BuildingsList[i].rotateAxis.x == 1)
+        {
+            rotation.SetToRotation(BuildingsList[i].rotateAngle, 1, 0, 0);
+            tempMax = rotation * tempMax;
+            tempMin = rotation * tempMin;
+        }
+        if (BuildingsList[i].rotateAxis.y == 1)
+        {
+            rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 1, 0);
+            tempMax = rotation * tempMax;
+            tempMin = rotation * tempMin;
+        }
+        if (BuildingsList[i].rotateAxis.z == 1)
+        {
+            rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 0, 1);
+            tempMax = rotation * tempMax;
+            tempMin = rotation * tempMin;
+        }
+
+        maxPos.x = tempMax.x;
+        maxPos.y = tempMax.y;
+        maxPos.z = tempMax.z;
+
+        minPos.x = tempMin.x;
+        minPos.y = tempMin.y;
+        minPos.z = tempMin.z;
+
+        // Translating
+        maxPos.x += BuildingsList[i].offSet.x;
+        maxPos.y += BuildingsList[i].offSet.y;
+        maxPos.z += BuildingsList[i].offSet.z;
+
+        minPos.x += BuildingsList[i].offSet.x;
+        minPos.y += BuildingsList[i].offSet.y;
+        minPos.z += BuildingsList[i].offSet.z;
+
+        if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
+        {
+            BuildingsList[i].canMove = true;
+        }
+        else
+        {
+            BuildingsList[i].canMove = false;
         }
 
     }
@@ -859,6 +867,22 @@ void SP2::Render()
     modelStack.PushMatrix();
     modelStack.Scale(1000, 1000, 1000);
     RenderMesh(meshList[GEO_QUAD], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(0, 5, 0);
+    modelStack.Scale(4, 4, 4);
+    RenderMesh(meshList[GEO_WALL], true, toggleLight);
+    Building test_wall = Building("wall", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, (0, 5, 0), 4, 0, (0, 0, 0));
+    BuildingsList.push_back(test_wall);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(0, 5, -5);
+    modelStack.Scale(4, 4, 4);
+    RenderMesh(meshList[GEO_SWITCH], true, toggleLight);
+    InteractableOBJs test_switch = InteractableOBJs("switch", meshList[GEO_SWITCH]->maxPos, meshList[GEO_SWITCH]->minPos, (0, 5, -5), 4, 0, (0, 0, 0));
+    InteractablesList.push_back(test_switch);
     modelStack.PopMatrix();
 
     std::ostringstream ss;
