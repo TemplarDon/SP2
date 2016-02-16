@@ -105,6 +105,22 @@ class Asn3 : public Scene
 
         U_TOTAL,
     };
+
+	enum LIGHTS_UNIFORM_TYPE
+	{
+		U_LIGHT_POSITION,
+		U_LIGHT_COLOR,
+		U_LIGHT_POWER,
+		U_LIGHT_KC,
+		U_LIGHT_KL,
+		U_LIGHT_KQ,
+		U_LIGHT_TYPE,
+		U_LIGHT_SPOTDIRECTION,
+		U_LIGHT_COSCUTOFF,
+		U_LIGHT_COSINNER,
+		U_LIGHT_EXPONENT,
+	};
+
 public:
     Asn3();
     ~Asn3();
