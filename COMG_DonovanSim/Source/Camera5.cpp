@@ -21,10 +21,9 @@ void Camera5::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	this->up = defaultUp = right.Cross(view).Normalized();
 }
 
-void Camera5::Update(double dt)
+void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)
 {
 	Vector3 boundary(1000, 1000, 1000);
-	/*Vector3 boundary = (-50, -50, -50);*/
 
 	speed = 30;
 	mouseSpeed = 10;
@@ -54,67 +53,162 @@ void Camera5::Update(double dt)
 
 	up = Right.Cross(Direction);
 
-
+    Vector3 view = (target - position).Normalized();
 	if (Application::IsKeyPressed('W'))
 	{
-		if (position.x + Direction.x * dt * speed < boundary.x && position.x + Direction.x * dt * speed > -boundary.x)
-		{
-			position.x += Direction.x * dt * speed;
-		}
+        view = (target - position).Normalized();
+        int offSetCount = 0;
+        for (int i = 0; i < InteractablesList.size(); ++i)
+        {
+            if (InteractablesList[i].canMove == true)
+            {
+                canMove = true;
+            }
+            else
+            {
+                canMove = false;
+                break;
+            }
+        }
 
-		//position.y += Direction.y * dt * speed;
+        for (int i = 0; i < BuildingsList.size(); ++i)
+        {
+            if (BuildingsList[i].canMove == true)
+            {
+                canMove = true;
+            }
+            else
+            {
+                canMove = false;
+                break;
+            }
+        }
 
-		if (position.z + Direction.z * dt * speed < boundary.z && position.z + Direction.z * dt * speed > -boundary.z)
-		{
-			position.z += Direction.z * dt * speed;
-		}
+        if (canMove == true)
+        {
+            position.x = position.x + view.x; // position = position + view
+            position.z = position.z + view.z; // position = position + view
+            target.x = target.x + view.x; // target = target + view
+            target.z = target.z + view.z; // target = target + view
+        }
 
 	}
 
 	if (Application::IsKeyPressed('S'))
 	{
-		if (position.x - Direction.x * dt * speed < boundary.x && position.x - Direction.x * dt * speed > -boundary.x)
-		{
-			position.x -= Direction.x * dt * speed;
-		}
+        view = (target - position).Normalized();
+        int offSetCount = 0;
+        for (int i = 0; i < InteractablesList.size(); ++i)
+        {
+            if (InteractablesList[i].canMove == true)
+            {
+                canMove = true;
+            }
+            else
+            {
+                canMove = false;
+                break;
+            }
+        }
 
-		//position.y -= Direction.y * dt * speed;
+        for (int i = 0; i < BuildingsList.size(); ++i)
+        {
+            if (BuildingsList[i].canMove == true)
+            {
+                canMove = true;
+            }
+            else
+            {
+                canMove = false;
+                break;
+            }
+        }
 
-		if (position.z - Direction.z * dt * speed < boundary.z && position.z - Direction.z * dt * speed > -boundary.z)
-		{
-			position.z -= Direction.z * dt * speed;
-		}
+        if (canMove == true)
+        {
+            position.x = position.x - (target - position).Normalized().x; 
+            position.z = position.z - (target - position).Normalized().z; 
+            target.x = target.x - (target - position).Normalized().x; 
+            target.z = target.z - (target - position).Normalized().z; 
+        }
 	}
 
 	if (Application::IsKeyPressed('D'))
 	{
-		if (position.x + Right.x * dt * speed < boundary.x && position.x + Right.x * dt * speed > -boundary.x)
-		{
-			position.x += Right.x * dt * speed;
-		}
+        Vector3 right = view.Cross(up);
+        right.Normalize();
+        view = (target - position).Normalized();
+        int offSetCount = 0;
+        for (int i = 0; i < InteractablesList.size(); ++i)
+        {
+            if (InteractablesList[i].canMove == true)
+            {
+                canMove = true;
+            }
+            else
+            {
+                canMove = false;
+                break;
+            }
+        }
 
+        for (int i = 0; i < BuildingsList.size(); ++i)
+        {
+            if (BuildingsList[i].canMove == true)
+            {
+                canMove = true;
+            }
+            else
+            {
+                canMove = false;
+                break;
+            }
+        }
 
-		//position += Right * dt * speed;
-
-		if (position.z + Direction.z * dt * speed < boundary.z && position.z + Direction.z * dt * speed > -boundary.z)
-		{
-			position.z += Right.z * dt * speed;
-
-		}
+        if (canMove == true)
+        {
+            position += right.Normalized();
+            target += right.Normalized();
+        }
 	}
 
 	if (Application::IsKeyPressed('A'))
 	{
-		if (position.x - Direction.x * dt * speed < boundary.x && position.x - Direction.x * dt * speed > -boundary.x)
-		{
-			position.x -= Right.x * dt * speed;
-		}
-		//position -= Right * dt * speed;
+        Vector3 right = view.Cross(up);
+        right.Normalize();
+        view = (target - position).Normalized();
+        int offSetCount = 0;
+        for (int i = 0; i < InteractablesList.size(); ++i)
+        {
+            if (InteractablesList[i].canMove == true)
+            {
+                canMove = true;
+            }
+            else
+            {
+                canMove = false;
+                break;
+            }
+        }
 
-		if (position.z - Direction.z * dt * speed < boundary.z && position.z - Direction.z * dt * speed > -boundary.z)
-		{
-			position.z -= Right.z * dt * speed;
-		}
+        for (int i = 0; i < BuildingsList.size(); ++i)
+        {
+            if (BuildingsList[i].canMove == true)
+            {
+                canMove = true;
+            }
+            else
+            {
+                canMove = false;
+                break;
+            }
+        }
+
+        if (canMove == true)
+        {
+            position -= right.Normalized();
+            target -= right.Normalized();
+        }
 	}
 
 	target = position + Direction;

@@ -271,8 +271,8 @@ void SP2::Update(double dt)
 
 
 
-    createBoundBox(objsMaxMin);
-    camera5.Update(dt);
+    createBoundBox(InteractablesList, BuildingsList);
+    camera5.Update(dt, InteractablesList, BuildingsList);
     //thirdPersonCamera.Update(dt);
 
 
@@ -523,7 +523,7 @@ void SP2::RenderRoom(Vector3 size, unsigned groundMeshSize)
 
 }
 
-void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
+void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)
 {
     Vector3 view = (camera5.target - camera5.position).Normalized();
 
@@ -532,7 +532,7 @@ void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
 
     Position cameraPos;
 
-    for (int i = 0; i < objsMaxMin.size(); ++i)
+    for (int i = 0; i < InteractablesList.size(); ++i)
     {
 
         cameraPos.x = camera5.position.x + view.x;
@@ -540,22 +540,22 @@ void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
         cameraPos.z = camera5.position.z + view.z;
 
 
-        maxPos.x = objsMaxMin[i].maxPos.x;
-        maxPos.y = objsMaxMin[i].maxPos.y;
-        maxPos.z = objsMaxMin[i].maxPos.z;
+        maxPos.x = InteractablesList[i].maxPos.x;
+        maxPos.y = InteractablesList[i].maxPos.y;
+        maxPos.z = InteractablesList[i].maxPos.z;
 
-        minPos.x = objsMaxMin[i].minPos.x;
-        minPos.y = objsMaxMin[i].minPos.y;
-        minPos.z = objsMaxMin[i].minPos.z;
+        minPos.x = InteractablesList[i].minPos.x;
+        minPos.y = InteractablesList[i].minPos.y;
+        minPos.z = InteractablesList[i].minPos.z;
 
         // Scaling
-        maxPos.x = maxPos.x * objsMaxMin[i].scaleOffSet;
-        maxPos.y = maxPos.y * objsMaxMin[i].scaleOffSet;
-        maxPos.z = maxPos.z * objsMaxMin[i].scaleOffSet;
+        maxPos.x = maxPos.x * InteractablesList[i].scaleOffSet;
+        maxPos.y = maxPos.y * InteractablesList[i].scaleOffSet;
+        maxPos.z = maxPos.z * InteractablesList[i].scaleOffSet;
 
-        minPos.x = minPos.x * objsMaxMin[i].scaleOffSet;
-        minPos.y = minPos.y * objsMaxMin[i].scaleOffSet;
-        minPos.z = minPos.z * objsMaxMin[i].scaleOffSet;
+        minPos.x = minPos.x * InteractablesList[i].scaleOffSet;
+        minPos.y = minPos.y * InteractablesList[i].scaleOffSet;
+        minPos.z = minPos.z * InteractablesList[i].scaleOffSet;
 
         // Rotation
         Mtx44 rotation;
@@ -569,21 +569,21 @@ void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
         tempMin.x = minPos.x;
         tempMin.y = minPos.y;
         tempMin.z = minPos.z;
-        if (objsMaxMin[i].rotateAxis.x == 1)
+        if (InteractablesList[i].rotateAxis.x == 1)
         {
-            rotation.SetToRotation(objsMaxMin[i].rotateAngle, 1, 0, 0);
+            rotation.SetToRotation(InteractablesList[i].rotateAngle, 1, 0, 0);
             tempMax = rotation * tempMax;
             tempMin = rotation * tempMin;
         }
-        if (objsMaxMin[i].rotateAxis.y == 1)
+        if (InteractablesList[i].rotateAxis.y == 1)
         {
-            rotation.SetToRotation(objsMaxMin[i].rotateAngle, 0, 1, 0);
+            rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 1, 0);
             tempMax = rotation * tempMax;
             tempMin = rotation * tempMin;
         }
-        if (objsMaxMin[i].rotateAxis.z == 1)
+        if (InteractablesList[i].rotateAxis.z == 1)
         {
-            rotation.SetToRotation(objsMaxMin[i].rotateAngle, 0, 0, 1);
+            rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 0, 1);
             tempMax = rotation * tempMax;
             tempMin = rotation * tempMin;
         }
@@ -597,21 +597,105 @@ void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
         minPos.z = tempMin.z;
 
         // Translating
-        maxPos.x += objsMaxMin[i].offSet.x;
-        maxPos.y += objsMaxMin[i].offSet.y;
-        maxPos.z += objsMaxMin[i].offSet.z;
+        maxPos.x += InteractablesList[i].offSet.x;
+        maxPos.y += InteractablesList[i].offSet.y;
+        maxPos.z += InteractablesList[i].offSet.z;
 
-        minPos.x += objsMaxMin[i].offSet.x;
-        minPos.y += objsMaxMin[i].offSet.y;
-        minPos.z += objsMaxMin[i].offSet.z;
+        minPos.x += InteractablesList[i].offSet.x;
+        minPos.y += InteractablesList[i].offSet.y;
+        minPos.z += InteractablesList[i].offSet.z;
 
         if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
         {
-            objsMaxMin[i].canMove = true;
+            InteractablesList[i].canMove = true;
         }
         else
         {
-            objsMaxMin[i].canMove = true;
+            InteractablesList[i].canMove = false;
+        }
+    }
+
+
+    for (int i = 0; i < BuildingsList.size(); ++i)
+    {
+
+        cameraPos.x = camera5.position.x + view.x;
+        cameraPos.y = camera5.position.y + view.y;
+        cameraPos.z = camera5.position.z + view.z;
+
+
+        maxPos.x = BuildingsList[i].maxPos.x;
+        maxPos.y = BuildingsList[i].maxPos.y;
+        maxPos.z = BuildingsList[i].maxPos.z;
+
+        minPos.x = BuildingsList[i].minPos.x;
+        minPos.y = BuildingsList[i].minPos.y;
+        minPos.z = BuildingsList[i].minPos.z;
+
+        // Scaling
+        maxPos.x = maxPos.x * BuildingsList[i].scaleOffSet;
+        maxPos.y = maxPos.y * BuildingsList[i].scaleOffSet;
+        maxPos.z = maxPos.z * BuildingsList[i].scaleOffSet;
+
+        minPos.x = minPos.x * BuildingsList[i].scaleOffSet;
+        minPos.y = minPos.y * BuildingsList[i].scaleOffSet;
+        minPos.z = minPos.z * BuildingsList[i].scaleOffSet;
+
+        // Rotation
+        Mtx44 rotation;
+        Vector3 tempMax;
+        Vector3 tempMin;
+
+        tempMax.x = maxPos.x;
+        tempMax.y = maxPos.y;
+        tempMax.z = maxPos.z;
+
+        tempMin.x = minPos.x;
+        tempMin.y = minPos.y;
+        tempMin.z = minPos.z;
+        if (BuildingsList[i].rotateAxis.x == 1)
+        {
+            rotation.SetToRotation(BuildingsList[i].rotateAngle, 1, 0, 0);
+            tempMax = rotation * tempMax;
+            tempMin = rotation * tempMin;
+        }
+        if (BuildingsList[i].rotateAxis.y == 1)
+        {
+            rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 1, 0);
+            tempMax = rotation * tempMax;
+            tempMin = rotation * tempMin;
+        }
+        if (BuildingsList[i].rotateAxis.z == 1)
+        {
+            rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 0, 1);
+            tempMax = rotation * tempMax;
+            tempMin = rotation * tempMin;
+        }
+
+        maxPos.x = tempMax.x;
+        maxPos.y = tempMax.y;
+        maxPos.z = tempMax.z;
+
+        minPos.x = tempMin.x;
+        minPos.y = tempMin.y;
+        minPos.z = tempMin.z;
+
+        // Translating
+        maxPos.x += BuildingsList[i].offSet.x;
+        maxPos.y += BuildingsList[i].offSet.y;
+        maxPos.z += BuildingsList[i].offSet.z;
+
+        minPos.x += BuildingsList[i].offSet.x;
+        minPos.y += BuildingsList[i].offSet.y;
+        minPos.z += BuildingsList[i].offSet.z;
+
+        if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
+        {
+            BuildingsList[i].canMove = true;
+        }
+        else
+        {
+            BuildingsList[i].canMove = false;
         }
 
     }
@@ -684,6 +768,22 @@ void SP2::Render()
     modelStack.PushMatrix();
     modelStack.Scale(1000, 1000, 1000);
     RenderMesh(meshList[GEO_QUAD], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(0, 5, 0);
+    modelStack.Scale(4, 4, 4);
+    RenderMesh(meshList[GEO_WALL], true, toggleLight);
+    Building test_wall = Building("wall", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, (0, 5, 0), 4, 0, (0, 0, 0));
+    BuildingsList.push_back(test_wall);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(0, 5, -5);
+    modelStack.Scale(4, 4, 4);
+    RenderMesh(meshList[GEO_SWITCH], true, toggleLight);
+    InteractableOBJs test_switch = InteractableOBJs("switch", meshList[GEO_SWITCH]->maxPos, meshList[GEO_SWITCH]->minPos, (0, 5, -5), 4, 0, (0, 0, 0));
+    InteractablesList.push_back(test_switch);
     modelStack.PopMatrix();
 
     std::ostringstream ss;
