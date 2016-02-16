@@ -24,12 +24,15 @@
 #include "Asn1.h"
 #include "Asn2.h"
 #include "Asn3.h"
+#include "SP2.h"
+
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 double Application::mouseX = 0;
 double Application::mouseY = 0;
+double Application::mouseZ = 0;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -117,7 +120,7 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
-	Scene *scene = new Asn3();
+	Scene *scene = new SP2();
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
@@ -131,7 +134,7 @@ void Application::Run()
 		glfwPollEvents();
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 
-        glfwGetCursorPos(m_window, &mouseX, &mouseY);
+        glfwGetCursorPos(m_window, &mouseX, &mouseY, &mouseZ);
         glfwSetCursorPos(m_window, 800 / 2, 600 / 2);
 
 	} //Check if the ESC key had been pressed or if the window had been closed

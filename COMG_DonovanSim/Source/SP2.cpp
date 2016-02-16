@@ -208,8 +208,14 @@ void SP2::Init()
     camera5.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 0, 0), Vector3(0, 1, 0)); 
     //thirdPersonCamera.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 1, 0), Vector3(0, 0, 0), 5);
 
+	//HANDS
+	meshList[GEO_HANDS] = MeshBuilder::GenerateOBJ("Hands", "OBJ//Hands.obj");
+	meshList[GEO_HANDS]->textureID = LoadTGA("Image//handsTexture.tga");
+
+	//AXES
     meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
+	//SKYBOX
     meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), objsMaxMin);
     meshList[GEO_QUAD]->textureID = LoadTGA("Image//spaceground.tga");
 
@@ -230,7 +236,8 @@ void SP2::Init()
 
     meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), objsMaxMin);
     meshList[GEO_RIGHT]->textureID = LoadTGA("Image//spaceright.tga");
-
+	
+	//GROUND MESH
     meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("ground", Color(1, 1, 1), objsMaxMin);
     meshList[GEO_GROUND]->textureID = LoadTGA("Image//castleFloor.tga");
 
@@ -238,202 +245,6 @@ void SP2::Init()
     meshList[GEO_GROUND]->material.kDiffuse.Set(0.6, 0.6, 0.6);
     meshList[GEO_GROUND]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_GROUND]->material.kShininess = 10;
-
-    // ------------------------------------------------------------------------- WALLS ---------------------------------------------------------------------------------------//
-    meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall.obj");
-    meshList[GEO_WALL]->textureID = LoadTGA("Image//wallUV.tga");
-
-    meshList[GEO_WALL]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
-    meshList[GEO_WALL]->material.kDiffuse.Set(0.6, 0.6, 0.6);
-    meshList[GEO_WALL]->material.kSpecular.Set(0.4, 0.4, 0.4);
-    meshList[GEO_WALL]->material.kShininess = 10;
-
-    // Left & Right
-    Node wall_1 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(0, 0, -50), 10, 0, Vector3(0, 0, 0), "rm1_wall_1");
-    Node wall_2 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(0, 0, 50), 10, 0, Vector3(0, 0, 0), "rm1_wall_2");
-
-    // Room2 Left & Right
-    Node rm2_wall_1 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(120, 0, -50), 10, 0, Vector3(0, 0, 0), "rm2_wall_1");
-    Node rm2_wall_2 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(120, 0, 50), 10, 0, Vector3(0, 0, 0), "rm2_wall_2");
-    Node rm2_wall_3 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(220, 0, -50), 10, 0, Vector3(0, 0, 0), "rm2_wall_3");
-    Node rm2_wall_4 = Node(meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(220, 0, 50), 10, 0, Vector3(0, 0, 0), "rm2_wall_4");
-
-    objsMaxMin.push_back(wall_1);
-    objsMaxMin.push_back(wall_2);
-
-    objsMaxMin.push_back(rm2_wall_1);
-    objsMaxMin.push_back(rm2_wall_2);
-    objsMaxMin.push_back(rm2_wall_3);
-    objsMaxMin.push_back(rm2_wall_4);
-    // ------------------------------------------------------------------------- WALLS ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- WALLS 2 ---------------------------------------------------------------------------------------//
-    meshList[GEO_WALL2] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall2.obj");
-    meshList[GEO_WALL2]->textureID = LoadTGA("Image//wallUV.tga");
-
-    meshList[GEO_WALL2]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
-    meshList[GEO_WALL2]->material.kDiffuse.Set(0.6, 0.6, 0.6);
-    meshList[GEO_WALL2]->material.kSpecular.Set(0.4, 0.4, 0.4);
-    meshList[GEO_WALL2]->material.kShininess = 10;
-
-    // Front w/ Gate
-    Node wall_3 = Node(meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(50, 0, -85), 10, 0, Vector3(0, 0, 0), "rm1_wall_3");
-    Node wall_4 = Node(meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(50, 0, 85), 10, 0, Vector3(0, 0, 0), "rm1_wall_4");
-    //Back
-    Node wall_5 = Node(meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(-50, 0, 0), 10, 0, Vector3(0, 0, 0), "rm1_back_wall");
-
-    // Throne Room Back Wall
-    Node wall_6 = Node(meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(250, 0, 0), 10, 0, Vector3(0, 0, 0), "rm2_back_wall");
-
-    objsMaxMin.push_back(wall_3);
-    objsMaxMin.push_back(wall_4);
-    objsMaxMin.push_back(wall_5);
-    objsMaxMin.push_back(wall_6);
-
-    // ------------------------------------------------------------------------- WALLS 2 ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- GATE TOP ---------------------------------------------------------------------------------------//
-    meshList[GEO_GATETOP] = MeshBuilder::GenerateOBJ("wall", "OBJ//gateTop.obj");
-    meshList[GEO_GATETOP]->textureID = LoadTGA("Image//gateTopUV.tga");
-    meshList[GEO_GATETOP]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
-    meshList[GEO_GATETOP]->material.kDiffuse.Set(0.6, 0.6, 0.6);
-    meshList[GEO_GATETOP]->material.kSpecular.Set(0.4, 0.4, 0.4);
-    meshList[GEO_GATETOP]->material.kShininess = 10;
-
-    Node gateTop = Node(meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(45, -2, 0), 6, 90, Vector3(0, 1, 0), "gatetop");
-    objsMaxMin.push_back(gateTop);
-    // ------------------------------------------------------------------------- GATE TOP ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- GATE ---------------------------------------------------------------------------------------//
-    meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("wall", "OBJ//gate.obj");
-    meshList[GEO_GATE]->textureID = LoadTGA("Image//gateUV.tga");
-    meshList[GEO_GATE]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
-    meshList[GEO_GATE]->material.kDiffuse.Set(0.6, 0.6, 0.6);
-    meshList[GEO_GATE]->material.kSpecular.Set(0.4, 0.4, 0.4);
-    meshList[GEO_GATE]->material.kShininess = 10;
-
-    Node gate = Node(meshList[GEO_GATE]->maxPos, meshList[GEO_GATE]->minPos, Position(45, 0, 1), 10, 0, Vector3(0, 0, 0), "gate");
-    objsMaxMin.push_back(gate);
-    // ------------------------------------------------------------------------- GATE ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- SWITCH ---------------------------------------------------------------------------------------//
-    meshList[GEO_SWITCH] = MeshBuilder::GenerateOBJ("wall", "OBJ//switch.obj");
-    meshList[GEO_SWITCH]->textureID = LoadTGA("Image//switchUV.tga");
-    meshList[GEO_SWITCH]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
-    meshList[GEO_SWITCH]->material.kDiffuse.Set(0.6, 0.6, 0.6);
-    meshList[GEO_SWITCH]->material.kSpecular.Set(0.4, 0.4, 0.4);
-    meshList[GEO_SWITCH]->material.kShininess = 10;
-
-    Node switch1 = Node(meshList[GEO_SWITCH]->maxPos, meshList[GEO_SWITCH]->minPos, Position(45, 8, 15), 6, 0, Vector3(0, 0, 0), "switch");
-    objsMaxMin.push_back(switch1);
-    // ------------------------------------------------------------------------- SWITCH ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- THWUMP ---------------------------------------------------------------------------------------//
-    meshList[GEO_THWUMP] = MeshBuilder::GenerateOBJ("wall", "OBJ//thwump.obj");
-    meshList[GEO_THWUMP]->textureID = LoadTGA("Image//thwumpUV.tga");
-    meshList[GEO_THWUMP]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
-    meshList[GEO_THWUMP]->material.kDiffuse.Set(0.6, 0.6, 0.6);
-    meshList[GEO_THWUMP]->material.kSpecular.Set(0.4, 0.4, 0.4);
-    meshList[GEO_THWUMP]->material.kShininess = 10;
-
-    Node thwump1 = Node(meshList[GEO_THWUMP]->maxPos, meshList[GEO_THWUMP]->minPos, Position(70, -10, 30), 6, 0, Vector3(0, 0, 0), "thwump1");
-    Node thwump2 = Node(meshList[GEO_THWUMP]->maxPos, meshList[GEO_THWUMP]->minPos, Position(100, -10, -30), 6, 0, Vector3(0, 0, 0), "thwump2");
-    Node thwump3 = Node(meshList[GEO_THWUMP]->maxPos, meshList[GEO_THWUMP]->minPos, Position(130, 5, 30), 6, 0, Vector3(0, 0, 0), "thwump3");
-    Node thwump4 = Node(meshList[GEO_THWUMP]->maxPos, meshList[GEO_THWUMP]->minPos, Position(160, 5, -30), 6, 0, Vector3(0, 0, 0), "thwump4");
-    objsMaxMin.push_back(thwump1);
-    objsMaxMin.push_back(thwump2);
-    objsMaxMin.push_back(thwump3);
-    objsMaxMin.push_back(thwump4);
-    // ------------------------------------------------------------------------- THWUMP ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- THRONE ---------------------------------------------------------------------------------------//
-    meshList[GEO_THRONE] = MeshBuilder::GenerateOBJ("wall", "OBJ//throne.obj");
-    meshList[GEO_THRONE]->textureID = LoadTGA("Image//wallUV.tga");
-    meshList[GEO_THRONE]->material.kSpecular.Set(0.5, 0.5, 0.5);
-    meshList[GEO_THRONE]->material.kShininess = 12.f;
-
-    Node throne = Node(meshList[GEO_THRONE]->maxPos, meshList[GEO_THRONE]->minPos, Position(230, -2, 0), 2, 0, Vector3(0, 0, 0), "throne");
-    objsMaxMin.push_back(throne);
-    // ------------------------------------------------------------------------- THRONE ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- PEDESTAL ---------------------------------------------------------------------------------------//
-    meshList[GEO_PEDESTAL] = MeshBuilder::GenerateOBJ("wall", "OBJ//pedastal.obj");
-    meshList[GEO_PEDESTAL]->textureID = LoadTGA("Image//pedestalUV.tga");
-    meshList[GEO_PEDESTAL]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
-    meshList[GEO_PEDESTAL]->material.kDiffuse.Set(0.6, 0.6, 0.6);
-    meshList[GEO_PEDESTAL]->material.kSpecular.Set(0.4, 0.4, 0.4);
-    meshList[GEO_PEDESTAL]->material.kShininess = 10;
-
-    Node pedastal1 = Node(meshList[GEO_PEDESTAL]->maxPos, meshList[GEO_PEDESTAL]->minPos, Position(230, -2, -25), 5, 0, Vector3(0, 0, 0), "pedestal1");
-    objsMaxMin.push_back(pedastal1);
-
-    Node pedastal2 = Node(meshList[GEO_PEDESTAL]->maxPos, meshList[GEO_PEDESTAL]->minPos, Position(230, -2, 25), 5, 0, Vector3(0, 0, 0), "pedestal2");
-    objsMaxMin.push_back(pedastal2);
-    // ------------------------------------------------------------------------- PEDESTAL ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- PILLAR ---------------------------------------------------------------------------------------//
-    meshList[GEO_PILLAR] = MeshBuilder::GenerateOBJ("wall", "OBJ//pillar.obj");
-    meshList[GEO_PILLAR]->textureID = LoadTGA("Image//pillarUV.tga");
-    meshList[GEO_PILLAR]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
-    meshList[GEO_PILLAR]->material.kDiffuse.Set(0.6, 0.6, 0.6);
-    meshList[GEO_PILLAR]->material.kSpecular.Set(0.4, 0.4, 0.4);
-    meshList[GEO_PILLAR]->material.kShininess = 10;
-
-    Node pillar1 = Node(meshList[GEO_PILLAR]->maxPos, meshList[GEO_PILLAR]->minPos, Position(40, -2, 40), 5, 0, Vector3(0, 0, 0), "pillar1");
-    objsMaxMin.push_back(pillar1);
-
-    Node pillar2 = Node(meshList[GEO_PILLAR]->maxPos, meshList[GEO_PILLAR]->minPos, Position(40, -2, -40), 5, 0, Vector3(0, 0, 0), "pillar2");
-    objsMaxMin.push_back(pillar2);
-
-    Node pillar3 = Node(meshList[GEO_PILLAR]->maxPos, meshList[GEO_PILLAR]->minPos, Position(-40, -2, 40), 5, 0, Vector3(0, 0, 0), "pillar3");
-    objsMaxMin.push_back(pillar3);
-
-    Node pillar4 = Node(meshList[GEO_PILLAR]->maxPos, meshList[GEO_PILLAR]->minPos, Position(-40, -2, -40), 5, 0, Vector3(0, 0, 0), "pillar4");
-    objsMaxMin.push_back(pillar4);
-
-    // ------------------------------------------------------------------------- PILLAR ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- LAVA ---------------------------------------------------------------------------------------//
-    //meshList[GEO_LAVA] = MeshBuilder::GenerateOBJ("wall", "OBJ//lavaPool.obj", objsMaxMin, MaxMinPos, verticeNum, maxPtr, minPtr);
-    //meshList[GEO_LAVA]->textureID = LoadTGA("Image//lavapoolUV.tga");
-
-    //Node lava = Node(meshList[GEO_LAVA]->maxPos, meshList[GEO_LAVA]->minPos, Position(150, -2, 0), 1.5, 0, Vector3(0, 0, 0), "lavapool");
-    //objsMaxMin.push_back(lava);
-    // ------------------------------------------------------------------------- LAVA ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- PEACH ---------------------------------------------------------------------------------------//
-    meshList[GEO_PEACH] = MeshBuilder::GenerateOBJ("peach", "OBJ//peach.obj");
-    meshList[GEO_PEACH]->textureID = LoadTGA("Image//peachUV.tga");
-    // ------------------------------------------------------------------------- PEACH ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- KEY ---------------------------------------------------------------------------------------//
-    meshList[GEO_KEY] = MeshBuilder::GenerateOBJ("key", "OBJ//key.obj");
-    meshList[GEO_KEY]->textureID = LoadTGA("Image//keyUV.tga");
-    // ------------------------------------------------------------------------- KEY ---------------------------------------------------------------------------------------//
-
-    // ------------------------------------------------------------------------- DOOR ---------------------------------------------------------------------------------------//
-    meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("door", "OBJ//door.obj");
-    meshList[GEO_DOOR]->textureID = LoadTGA("Image//doorUV.tga");
-
-    Node door = Node(meshList[GEO_DOOR]->maxPos, meshList[GEO_DOOR]->minPos, Position(-45, 0, 0), 10, 0, Vector3(0, 0, 0), "door");
-    objsMaxMin.push_back(door);
-    // ------------------------------------------------------------------------- DOOR ---------------------------------------------------------------------------------------//
-
-
-    // ------------------------------------------------------------------------- PIPE ---------------------------------------------------------------------------------------//
-    meshList[GEO_PIPE] = MeshBuilder::GenerateOBJ("pipe", "OBJ//pipe.obj");
-    meshList[GEO_PIPE]->textureID = LoadTGA("Image//pipeUV.tga");
-
-    Node pipe = Node(meshList[GEO_PIPE]->maxPos, meshList[GEO_PIPE]->minPos, Position(335, -2, 300), 5, 0, Vector3(0, 0, 0), "pipe");
-    objsMaxMin.push_back(pipe);
-    // ------------------------------------------------------------------------- PIPE ---------------------------------------------------------------------------------------//
-
-    meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-    meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
-
-    meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("LightBall", Color(1, 0, 0), 10, 20);
-
-
 
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -700,6 +511,13 @@ void SP2::RenderSkybox()
     modelStack.PopMatrix();
 }
 
+void SP2::RenderHandInfronOfScreen()
+{
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_HANDS], false, toggleLight);
+	modelStack.PopMatrix();
+}
+
 void SP2::RenderRoom(Vector3 size, unsigned groundMeshSize)
 {
 
@@ -800,6 +618,7 @@ void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
 
 
 }
+
 void SP2::Render()
 {
     // Render VBO here
@@ -842,18 +661,24 @@ void SP2::Render()
     //AXES
     //RenderMesh(meshList[GEO_AXES], false, toggleLight);
 
-    modelStack.PushMatrix();
-    modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-    RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-    modelStack.PopMatrix();
+    //modelStack.PushMatrix();
+    //modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+    //RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+    //modelStack.PopMatrix();
 
 
-    modelStack.PushMatrix();
-    modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
-    RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-    modelStack.PopMatrix();
+    //modelStack.PushMatrix();
+    //modelStack.Translate(light[1].position.x, light[1].position.y, light[1].position.z);
+    //RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+    //modelStack.PopMatrix();
 
+	//RENDER HANDS
+	modelStack.PushMatrix();
+	modelStack.Translate(camera5.position.x, camera5.position.y - 1, camera5.position.z);
+	RenderHandInfronOfScreen();
+	modelStack.PopMatrix();
 
+	//RENDER SKYBOX
     RenderSkybox();
 
     modelStack.PushMatrix();
@@ -863,9 +688,9 @@ void SP2::Render()
 
     std::ostringstream ss;
 
-    ss.str("");
-    ss << " X:" << camera3.position.x << "|| Y:" << camera3.position.y << "|| Z:" << camera3.position.z;
-    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
+    //ss.str("");
+    //ss << " X:" << camera3.position.x << "|| Y:" << camera3.position.y << "|| Z:" << camera3.position.z;
+    //RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
 
 }
 

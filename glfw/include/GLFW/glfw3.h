@@ -1862,7 +1862,7 @@ GLFWAPI int glfwGetMouseButton(GLFWwindow* window, int button);
  *
  *  @ingroup input
  */
-GLFWAPI void glfwGetCursorPos(GLFWwindow* window, double* xpos, double* ypos);
+GLFWAPI void glfwGetCursorPos(GLFWwindow* window, double* xpos, double* ypos, double* zpos);
 
 /*! @brief Sets the position of the cursor, relative to the client area of the
  *  window.

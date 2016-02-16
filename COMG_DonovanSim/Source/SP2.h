@@ -47,6 +47,7 @@ class SP2 : public Scene
         GEO_KEY,
         GEO_DOOR,
         GEO_PIPE,
+		GEO_HANDS,
 
         GEO_GROUND,
         NUM_GEOMETRY,
@@ -165,6 +166,10 @@ private:
     void keyInteractions(double dt);
     void doorInteractions(double dt);
     void pipeInteractions(double dt);
+
+
+	//Equipping
+	void RenderHandInfronOfScreen();
 };
 
 #endif
