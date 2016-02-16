@@ -33,22 +33,13 @@ class SP2 : public Scene
         GEO_BACK,
         GEO_LIGHTBALL,
         GEO_TEXT,
+        GEO_HANDS,
 
+        // For Testing / PlaceHolders
         GEO_WALL,
         GEO_WALL2,
-        GEO_THWUMP,
         GEO_GATETOP,
         GEO_GATE,
-        GEO_THRONE,
-        GEO_LAVA,
-        GEO_SWITCH,
-        GEO_PEDESTAL,
-        GEO_PILLAR,
-        GEO_PEACH,
-        GEO_KEY,
-        GEO_DOOR,
-        GEO_PIPE,
-		GEO_HANDS,
 
         GEO_GROUND,
         NUM_GEOMETRY,
@@ -158,7 +149,7 @@ private:
 
     void RenderSkybox();
     void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
-    void RenderRoom(Vector3 size, unsigned groundMeshSize = 100);
+    void RenderRoom(Position pos, Vector3 size = (1,1,1), int groundMeshSize = 100);
 
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
