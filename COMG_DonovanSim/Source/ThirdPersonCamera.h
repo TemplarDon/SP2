@@ -2,6 +2,7 @@
 #define _THIRDPERSONCAMERA_H_
 
 #include "Camera.h"
+#include "Vertex.h"
 
 #include "MyMath.h"
 
@@ -9,25 +10,34 @@ class ThirdPersonCamera : public Camera
 {
 private:
 	float camDistance;
-	Vector3 *focus;
+	Position *focus;
+	float minDistance;
+	float maxDistance;
+	float minPitch;
+	float maxPitch;
 
 public:
 	Vector3 camDirection;
 
 	ThirdPersonCamera();
 	~ThirdPersonCamera();
-	virtual void Init(const Vector3 position, const Vector3 up, Vector3 *focus, const float camDistance);
+	virtual void Init(const Vector3 position, const Vector3 up, Position *focus, const float camDistance);
 	virtual void Update(double dt);
 
 	void YawCamera(const float degrees);
-	void PitchCamera(const float degrees);
+	void PitchCamera(float degrees);
 	void Refocus();
 
-	float getCameraDistance();
-	void setCameraDistance(float distance);
+	float GetCameraDistance();
+	void SetCameraDistanceAbsolute(float distance);
+	void SetCameraDistanceRelative(float distance);
+	void SetCameraDistanceBounds(float min, float max);
 
-	Vector3* getFocusPoint();
-	void setFocusPoint(Vector3 *focus);
+	float GetCameraPitch();
+	void SetCameraPitchBounds(float min, float max);
+
+	Position* GetFocusPoint();
+	void SetFocusPoint(Position *focus);
 };
 
 #endif
