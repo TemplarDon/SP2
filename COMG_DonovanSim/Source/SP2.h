@@ -6,6 +6,7 @@
 #include "Camera2.h"
 #include "Camera3.h"
 #include "Camera5.h"
+#include "ThirdPersonCamera.h"
 #include "Mesh.h"
 #include "vertex.h"
 #include "MatrixStack.h"
@@ -141,6 +142,8 @@ private:
     Camera3 camera3;
     Camera5 camera5;
 
+    ThirdPersonCamera thirdPersonCamera;
+
 
     MS modelStack, viewStack, projectionStack;
 
@@ -149,7 +152,7 @@ private:
     void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
     void RenderSkybox();
-    void createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* verticeNum, std::vector<Position>& MaxMinPos, std::vector<Position>& offSets);
+    void createBoundBox(std::vector<Node>&objsMaxMin);
     void RenderRoom(Vector3 size, unsigned groundMeshSize = 100);
 
     void RenderText(Mesh* mesh, std::string text, Color color);

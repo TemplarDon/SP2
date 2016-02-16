@@ -13,7 +13,7 @@ public:
     void addItem(string itemName);
     void removeItem(string itemName);
 
-    void takeDamagae(int damageTaken);
+    void takeDamage(int damageTaken);
     void healHealth(int amountHealed);
 
     bool ifDead();

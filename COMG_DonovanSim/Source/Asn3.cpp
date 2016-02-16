@@ -473,11 +473,11 @@ void Asn3::Init()
 
 static float ROT_LIMIT = 45.f;
 static float SCALE_LIMIT = 5.f;
-float FramesPerSecond = 0;
+//float FramesPerSecond = 0;
 
 void Asn3::Update(double dt)
 {
-    FramesPerSecond = 1 / dt;
+    //FramesPerSecond = 1 / dt;
 
     if (Application::IsKeyPressed('1')) //enable back face culling
         glEnable(GL_CULL_FACE);

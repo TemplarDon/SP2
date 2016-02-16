@@ -15,12 +15,12 @@ protected:
     float rotateAngle;
     Vector3 rotateAxis;
 
-    string name;
+    CollisionOBJs(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis);
+
 public:
     bool canMove;
-
-    CollisionOBJs(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis);
     ~CollisionOBJs() = 0;
+
 };
 
 #endif

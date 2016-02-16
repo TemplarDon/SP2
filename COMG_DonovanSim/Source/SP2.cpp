@@ -205,7 +205,8 @@ void SP2::Init()
     Player somePlayer("TestMan", "Human", 100); // Name, Race, Money
 
     //Initialize camera settings
-    camera5.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 0, 0), Vector3(0, 1, 0));
+    camera5.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 0, 0), Vector3(0, 1, 0)); 
+    //thirdPersonCamera.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 1, 0), Vector3(0, 0, 0), 5);
 
     meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
@@ -458,10 +459,10 @@ void SP2::Update(double dt)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 
 
-    ifDead(dt);
+
     createBoundBox(objsMaxMin);
     camera5.Update(dt);
-    ifDead(dt);
+    //thirdPersonCamera.Update(dt);
 
 
 
@@ -704,7 +705,7 @@ void SP2::RenderRoom(Vector3 size, unsigned groundMeshSize)
 
 }
 
-void SP2::createBoundBox(std::vector<Node>&objsMaxMin, std::vector<Position>* verticeNum, std::vector<Position>& MaxMinPos, std::vector<Position>& offSets)
+void SP2::createBoundBox(std::vector<Node>&objsMaxMin)
 {
     Vector3 view = (camera5.target - camera5.position).Normalized();
 
