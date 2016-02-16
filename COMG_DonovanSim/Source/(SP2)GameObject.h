@@ -16,10 +16,11 @@ private:
     
 
 protected:
-    GameObject(std::string name);
-    string name;
+    GameObject(std::string name, Position pos);
+
 public:
-    
+    string name;
+    Position pos;
     virtual ~GameObject();
     
 };

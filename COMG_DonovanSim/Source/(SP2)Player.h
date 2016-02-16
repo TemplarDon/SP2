@@ -7,7 +7,7 @@
 class Player : public GameObject
 {
 public:
-    Player(string name, string race, int moneyAmount);
+    Player(string name, string race, int moneyAmount, Position pos);
     ~Player();
 
     void addItem(string itemName);
