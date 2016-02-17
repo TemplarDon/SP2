@@ -206,22 +206,22 @@ void SP2::Init()
     meshList[GEO_QUAD]->textureID = LoadTGA("Image//spaceground.tga");
 
     meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_FRONT]->textureID = LoadTGA("Image//spacefront.tga");
+    meshList[GEO_FRONT]->textureID = LoadTGA("Image//purplenebula_ft.tga");
 
     meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_BACK]->textureID = LoadTGA("Image//spaceback.tga");
+    meshList[GEO_BACK]->textureID = LoadTGA("Image//purplenebula_bk.tga");
 
     meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_TOP]->textureID = LoadTGA("Image//spacetop.tga");
+    meshList[GEO_TOP]->textureID = LoadTGA("Image//purplenebula_up.tga");
 
     meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//spacebottom.tga");
+    meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//purplenebula_dn.tga");
 
     meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_LEFT]->textureID = LoadTGA("Image//spaceleft.tga");
+    meshList[GEO_LEFT]->textureID = LoadTGA("Image//purplenebula_lf.tga");
 
     meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), objsMaxMin);
-    meshList[GEO_RIGHT]->textureID = LoadTGA("Image//spaceright.tga");
+    meshList[GEO_RIGHT]->textureID = LoadTGA("Image//purplenebula_rt.tga");
 	
     meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall.obj");
     meshList[GEO_WALL]->textureID = LoadTGA("Image//wallUV.tga");
@@ -247,6 +247,14 @@ void SP2::Init()
     // Collision 
     //initRoom(Position(20, 2, 0));
 
+	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
+	meshList[GEO_TRADEPOST]->textureID = LoadTGA("Image//TradingPostTexture2.tga");
+
+	meshList[GEO_SPEAKERS] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//RecRoomSpeakers.obj");
+	meshList[GEO_SPEAKERS]->textureID = LoadTGA("Image//RecRoomSpeakers.tga");
+
+	meshList[GEO_SOFA] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//sofa.obj");
+	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
     projectionStack.LoadMatrix(projection);
@@ -943,8 +951,8 @@ void SP2::Render()
     RenderSkybox();
 
     modelStack.PushMatrix();
-    modelStack.Scale(1000, 1000, 1000);
-    RenderMesh(meshList[GEO_QUAD], true, toggleLight);
+    modelStack.Scale(1000, 1, 1000);
+    RenderMesh(meshList[GEO_QUAD], false, toggleLight);
     modelStack.PopMatrix();
 
     //modelStack.PushMatrix();
@@ -979,6 +987,24 @@ void SP2::Render()
     modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
     RenderMesh(meshList[GEO_WALL], true, toggleLight);
     modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-5, 0, 5);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_TRADEPOST], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(10, 0, 10);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_SPEAKERS], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(8, 0, 8);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+	modelStack.PopMatrix();
 }
 
 void SP2::Exit()

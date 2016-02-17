@@ -45,6 +45,11 @@ class SP2 : public Scene
         GEO_GATETOP,
         GEO_GATE,
 
+		//Buildings/OBJ   
+		GEO_TRADEPOST,
+		GEO_SPEAKERS,   
+		GEO_SOFA, 
+
 
         GEO_GROUND,
         NUM_GEOMETRY,
