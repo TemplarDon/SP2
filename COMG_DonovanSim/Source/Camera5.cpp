@@ -38,8 +38,8 @@ void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vect
 
 	//view.y < 0.9396 && view.y > -09396
 
-	//Mouse
-	/*int Angle = 50;
+	//Mouse - Bugged
+	int Angle = 50;
 	horizontalAngle += mouseSpeed * dt * float(800 / 2 - Application::mouseX);
 	if (verticalAngle + mouseSpeed * dt * float(600 / 2 - Application::mouseY) < Angle && verticalAngle + mouseSpeed * dt * float(600 / 2 - Application::mouseY) > -Angle)
 	{
@@ -53,9 +53,41 @@ void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vect
 
 	Vector3 Right(sin(Math::DegreeToRadian(horizontalAngle) - 3.14f / 2.0f), 0, cos(Math::DegreeToRadian(horizontalAngle) - 3.14 / 2.9f));
 
-	up = Right.Cross(Direction);*/
+	up = Right.Cross(Direction);
+
+
 
     Vector3 view = (target - position).Normalized();
+
+    // Mouse - DonoDon
+    //float yaw = 0;
+    //float pitch = 0;
+
+    //yaw = (float)(mouseSpeed  * dt * (800 / 2 - Application::mouseX));
+
+    //pitch = (float)(mouseSpeed * dt * (600 / 2 - Application::mouseY));
+
+    //// Mouse
+    //Mtx44 rotationYaw;
+    //rotationYaw.SetToRotation(yaw, 0, 1, 0);
+    //view = (target - position);
+    //Vector3 right = view.Cross(up);
+    //view = rotationYaw * view;
+
+    //target = view + position;
+    //up = rotationYaw * up;
+
+    //Mtx44 rotationPitch;
+    //view = (target - position);
+    //right = view.Cross(up);
+    //right.y = 0;
+    //up = right.Cross(view).Normalized();
+    //rotationPitch.SetToRotation(pitch, right.x, right.y, right.z);
+
+    //view = rotationPitch * view;
+    //target = view + position;
+
+    
 	if (Application::IsKeyPressed('W'))
 	{
         view = (target - position).Normalized();
