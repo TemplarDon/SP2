@@ -1,6 +1,14 @@
 #ifndef SP_2_H
 #define SP_2_H
 
+
+#include "Mtx44.h"
+
+
+
+#
+#include "Material.h"
+
 #include "Scene.h"
 #include "Camera.h"
 #include "Camera2.h"
@@ -171,9 +179,7 @@ private:
     void doorInteractions(double dt);
     void pipeInteractions(double dt);
 
-
-	//Equipping
-	void RenderHandInfronOfScreen();
+	void RenderTest();
 };
 
 #endif

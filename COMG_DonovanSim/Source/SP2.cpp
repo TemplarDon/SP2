@@ -205,8 +205,12 @@ void SP2::Init()
     Player somePlayer("TestMan", "Human", 100); // Name, Race, Money
 
     //Initialize camera settings
-    camera5.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 0, 0), Vector3(0, 1, 0)); 
-    //thirdPersonCamera.Init(Vector3(-20, 3, -8/*300,3,300*/), Vector3(0, 1, 0), Vector3(0, 0, 0), 5);
+    camera5.Init(Vector3(20, 3, -8/*300,3,300*/), Vector3(0, 0, 0), Vector3(0, 1, 0)); 
+    //thirdPersonCamera.Init(Vector3(-20, 3, -8/*300,3,300*/
+
+	//Text
+	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//5.tga");
 
 	//HANDS
 	meshList[GEO_HANDS] = MeshBuilder::GenerateOBJ("Hands", "OBJ//Hands.obj");
@@ -214,6 +218,15 @@ void SP2::Init()
 
 	//AXES
     meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
+
+	meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall.obj");
+	meshList[GEO_WALL]->textureID = LoadTGA("Image//wallUV.tga");
+
+	meshList[GEO_WALL]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
+	meshList[GEO_WALL]->material.kDiffuse.Set(0.6, 0.6, 0.6);
+	meshList[GEO_WALL]->material.kSpecular.Set(0.4, 0.4, 0.4);
+	meshList[GEO_WALL]->material.kShininess = 10;
+
 
 	//SKYBOX
     meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), objsMaxMin);
@@ -511,10 +524,12 @@ void SP2::RenderSkybox()
     modelStack.PopMatrix();
 }
 
-void SP2::RenderHandInfronOfScreen()
+
+void SP2::RenderTest()
 {
 	modelStack.PushMatrix();
-	RenderMesh(meshList[GEO_HANDS], false, toggleLight);
+	modelStack.Translate(10, 3, 10);
+	RenderMesh(meshList[GEO_HANDS], true, toggleLight);
 	modelStack.PopMatrix();
 }
 
@@ -756,11 +771,26 @@ void SP2::Render()
     //RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
     //modelStack.PopMatrix();
 
-	//RENDER HANDS
-	modelStack.PushMatrix();
-	modelStack.Translate(camera5.position.x, camera5.position.y - 1, camera5.position.z);
-	RenderHandInfronOfScreen();
-	modelStack.PopMatrix();
+
+
+	//modelStack.PushMatrix();
+	//modelStack.Rotate(camera5.verticalAngle, 1, 0, 0);
+	//modelStack.Rotate(camera5.horizontalAngle, 0, 1, 0);
+	////RENDER HAND PIVOT
+	//RenderHandPivot();
+	////RENDER HANDS
+	//modelStack.PushMatrix();
+	//RenderHandInfronOfScreen();
+	//modelStack.PopMatrix();
+	//modelStack.PopMatrix();
+
+
+	////modelStack.Rotate(camera5.verticalAngle, 1, 0, 0);
+	////modelStack.Rotate(camera5.horizontalAngle, 0, 1, 0);
+
+
+	//Testing
+	RenderTest();
 
 	//RENDER SKYBOX
     RenderSkybox();
@@ -778,15 +808,19 @@ void SP2::Render()
     BuildingsList.push_back(test_wall);
     modelStack.PopMatrix();
 
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 5, -5);
-    modelStack.Scale(4, 4, 4);
-    RenderMesh(meshList[GEO_SWITCH], true, toggleLight);
-    InteractableOBJs test_switch = InteractableOBJs("switch", meshList[GEO_SWITCH]->maxPos, meshList[GEO_SWITCH]->minPos, (0, 5, -5), 4, 0, (0, 0, 0));
-    InteractablesList.push_back(test_switch);
-    modelStack.PopMatrix();
+    //modelStack.PushMatrix();
+    //modelStack.Translate(0, 5, -5);
+    //modelStack.Scale(4, 4, 4);
+    //RenderMesh(meshList[GEO_SWITCH], true, toggleLight);
+    //InteractableOBJs test_switch = InteractableOBJs("switch", meshList[GEO_SWITCH]->maxPos, meshList[GEO_SWITCH]->minPos, (0, 5, -5), 4, 0, (0, 0, 0));
+    //InteractablesList.push_back(test_switch);
+    //modelStack.PopMatrix();
 
-    std::ostringstream ss;
+	std::ostringstream ss;
+
+	ss.str("");
+	ss << "POSIION: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
 
     //ss.str("");
     //ss << " X:" << camera3.position.x << "|| Y:" << camera3.position.y << "|| Z:" << camera3.position.z;
