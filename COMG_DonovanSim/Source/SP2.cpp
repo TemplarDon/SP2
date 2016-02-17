@@ -168,6 +168,8 @@ void SP2::Init()
     maxPtr = 0;
     minPtr = 0;
 
+	heightOfWall = 12;
+
     Position * startingPos = new Position(0,0,0);
     startingPos->Set(110, 10, -8);
 
@@ -257,11 +259,7 @@ void SP2::Init()
     // Collision 
     initRoom(Position(20, 2, 0));
 
-	std::ostringstream ss;
-
-	ss.str("");
-	ss << "POSIION: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
+	initRoom(Position(200, 2, 0));
 
 	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
 	meshList[GEO_TRADEPOST]->textureID = LoadTGA("Image//TradingPostTexture2.tga");
@@ -271,6 +269,8 @@ void SP2::Init()
 
 	meshList[GEO_SOFA] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//sofa.obj");
 	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
+
+
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
     projectionStack.LoadMatrix(projection);
@@ -599,7 +599,7 @@ void SP2::initRoom(Position pos, Vector3 size, int groundMeshSize)
 
 void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
 {
-	heightOfWall = 12;
+
 	groundMeshSize = 100;
 
     // Whole Room
@@ -677,7 +677,7 @@ void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
 
 void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)
 {
-    Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
+    
 
     Position maxPos;
     Position minPos;
@@ -686,6 +686,7 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
 
     if (somePlayer.getCameraType() == "first")
     {
+		Vector3 view = (camera5.target - camera5.position).Normalized();
         cameraPos.x = camera5.position.x + view.x;
         cameraPos.y = camera5.position.y + view.y;
         cameraPos.z = camera5.position.z + view.z;
@@ -696,6 +697,7 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
     }
     else
     {
+		Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
         cameraPos.x = thirdPersonCamera.GetFocusPoint()->x + 3;
         cameraPos.y = thirdPersonCamera.GetFocusPoint()->y + 3;
         cameraPos.z = thirdPersonCamera.GetFocusPoint()->z + 3;
@@ -884,6 +886,33 @@ void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
     }
 }
 
+void SP2::RenderRecRoom()
+{
+	//SOFA
+	modelStack.PushMatrix();
+	modelStack.Translate(8, 0, 8);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//SPEAKER
+	modelStack.PushMatrix();
+	modelStack.Translate(10, 0, 10);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_SPEAKERS], true, toggleLight);
+	modelStack.PopMatrix();
+}
+
+void SP2::RenderTradingStation()
+{
+	//TRADING STATION
+	modelStack.PushMatrix();
+	modelStack.Translate(-5, 0, 5);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_TRADEPOST], true, toggleLight);
+	modelStack.PopMatrix();
+}
+
 void SP2::Render()
 {
     // Render VBO here
@@ -939,6 +968,8 @@ void SP2::Render()
 	//RENDER SKYBOX
     RenderSkybox();
 
+
+	//GROUND MESH
     modelStack.PushMatrix();
     modelStack.Scale(1000, 1000, 1000);
     RenderMesh(meshList[GEO_QUAD], true, toggleLight);
@@ -946,37 +977,35 @@ void SP2::Render()
 
 
 
-    //RenderRoom(Position(20, 2, 0));
+	//TRADING STATION
+	//modelStack.PushMatrix();
+	//RenderRoom(Position(100, 2, 0));
+	//modelStack.Translate(100, 2, 0);
+	//RenderTradingStation();
+	//modelStack.PopMatrix();
 
-	std::ostringstream ss;
 
-
-
+	//THIRD PERSON 
     modelStack.PushMatrix();
     modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
     RenderMesh(meshList[GEO_WALL], true, toggleLight);
     modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-5, 0, 5);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_TRADEPOST], true, toggleLight);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(10, 0, 10);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_SPEAKERS], true, toggleLight);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(8, 0, 8);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
-	modelStack.PopMatrix();
-
 	//RENDER ROOM (WALLS)
     RenderRoom(Position(20, 2, 0));
+
+
+	//modelStack.PushMatrix();
+	//modelStack.Rotate(90, 1, 0, 0);
+	////RENDER ROOM (WALLS)
+	//RenderRoom(Position(200, 2, 0));
+	//modelStack.PopMatrix();
+
+	//POSITION OF X Y Z
+	std::ostringstream ss;
+	ss.str("");
+	ss << "POSIION: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
 
 }
 
