@@ -875,13 +875,11 @@ void SP2::Render()
 	////modelStack.Rotate(camera5.verticalAngle, 1, 0, 0);
 	////modelStack.Rotate(camera5.horizontalAngle, 0, 1, 0);
 
-
-	//Testing
-
-
-	modelStack.PushMatrix();
-	modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y - 1, thirdPersonCamera.position.z);
-	modelStack.PopMatrix();
+	//RENDER HANDS
+	//modelStack.PushMatrix();
+	//modelStack.Translate(camera5.position.x, camera5.position.y - 1, camera5.position.z);
+	//RenderHandInfronOfScreen();
+	//modelStack.PopMatrix();
 
 
 	//RENDER SKYBOX

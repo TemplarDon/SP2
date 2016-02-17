@@ -1,32 +1,14 @@
-﻿Build started 2/17/2016 2:30:49 AM.
-     1>Project "C:\Users\donov_000\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" on node 2 (Build target(s)).
+﻿Build started 17/2/2016 2:29:50 PM.
+     1>Project "C:\Users\Shania\Desktop\SP2\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\donov_000\Desktop\SP2\\Common\Source /IC:\Users\donov_000\Desktop\SP2\\glfw\include /IC:\Users\donov_000\Desktop\SP2\\glew\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SP2.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Shania\Desktop\SP2\SP2\\Common\Source /IC:\Users\Shania\Desktop\SP2\SP2\\glfw\include /IC:\Users\Shania\Desktop\SP2\SP2\\glew\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Application.cpp Source\SP2.cpp
+         Application.cpp
+     1>c:\users\shania\desktop\sp2\sp2\comg_donovansim\source\sp2.h(145): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         Generating Code...
+         Skipping... (no relevant changes detected)
          SP2.cpp
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.h(137): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(129): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(143): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(144): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(157): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(250): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(251): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(266): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(476): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(485): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(494): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(503): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(512): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(519): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(544): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(553): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(565): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(573): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(581): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(612): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(634): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\donov_000\desktop\sp2\comg_donovansim\source\sp2.cpp(718): warning C4018: '<' : signed/unsigned mismatch
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\donov_000\Desktop\SP2\Debug /LIBPATH:"C:\Users\donov_000\Desktop\SP2\\glfw\lib-msvc120" /LIBPATH:C:\Users\donov_000\Desktop\SP2\\glew\lib glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.lib" /MACHINE:X86 "Debug\(SP2)AllParts.obj"
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Shania\Desktop\SP2\SP2\Debug\COMG_DonovanSim.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Shania\Desktop\SP2\SP2\Debug /LIBPATH:"C:\Users\Shania\Desktop\SP2\SP2\\glfw\lib-msvc120" /LIBPATH:C:\Users\Shania\Desktop\SP2\SP2\\glew\lib glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Shania\Desktop\SP2\SP2\Debug\COMG_DonovanSim.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Shania\Desktop\SP2\SP2\Debug\COMG_DonovanSim.lib" /MACHINE:X86 "Debug\(SP2)AllParts.obj"
          "Debug\(SP2)AllUpgrades.obj"
          "Debug\(SP2)Building.obj"
          "Debug\(SP2)InteractableOBJs.obj"
@@ -67,9 +49,9 @@
          Debug\SP2.obj
          Debug\ThirdPersonCamera.obj
          Debug\Utility.obj
-         COMG_DonovanSim.vcxproj -> C:\Users\donov_000\Desktop\SP2\Debug\COMG_DonovanSim.exe
-     1>Done Building Project "C:\Users\donov_000\Desktop\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" (Build target(s)).
+         COMG_DonovanSim.vcxproj -> C:\Users\Shania\Desktop\SP2\SP2\Debug\COMG_DonovanSim.exe
+     1>Done Building Project "C:\Users\Shania\Desktop\SP2\SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.34
+Time Elapsed 00:00:02.89
