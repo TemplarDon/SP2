@@ -152,6 +152,8 @@ private:
     void RenderRoom(Position pos, Vector3 size = (1,1,1), int groundMeshSize = 100);
     void initRoom(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
     void rayTracing(vector<InteractableOBJs>&InteractablesList);
+	void RenderTradingStation();
+	void RenderRecRoom();
 
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
