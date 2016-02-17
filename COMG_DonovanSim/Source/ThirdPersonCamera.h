@@ -6,6 +6,10 @@
 
 #include "MyMath.h"
 
+#include "(SP2)Player.h"
+#include "(SP2)Building.h"
+#include "(SP2)InteractableOBJs.h"
+
 class ThirdPersonCamera : public Camera
 {
 private:
@@ -22,7 +26,7 @@ public:
 	ThirdPersonCamera();
 	~ThirdPersonCamera();
 	virtual void Init(const Vector3 position, const Vector3 up, Position *focus, const float camDistance);
-	virtual void Update(double dt);
+    virtual void Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer);
 
 	void YawCamera(const float degrees);
 	void PitchCamera(float degrees);
@@ -38,6 +42,11 @@ public:
 
 	Position* GetFocusPoint();
 	void SetFocusPoint(Position *focus);
+
+    void cameraMovement(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer);
+
+    bool canMoveInteractable;
+    bool canMoveBuilding;
 };
 
 #endif

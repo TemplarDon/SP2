@@ -1,8 +1,13 @@
 #include "(SP2)Player.h"
 
-Player::Player(string name, string race, int moneyAmount, Position pos) : GameObject(name, pos), race(race), health(100)
+//Player::Player(string name, string race, int moneyAmount, Position pos) : GameObject(name, pos), race(race), health(100), cameraType("first")
+//{
+//    playerInventory.addMoney(moneyAmount);
+//}
+
+Player::Player() : GameObject("", Position(0, 0, 0)), health(100), cameraType("first"), cameraPtr(0)
 {
-    playerInventory.addMoney(moneyAmount);
+
 }
 
 Player::~Player()
@@ -37,6 +42,35 @@ void Player::takeDamage(int damageTaken)
 void Player::healHealth(int amountHealed)
 {
     this->health += amountHealed;
+}
+
+string Player::getCameraType()
+{
+    return this->cameraType;
+}
+
+Camera* Player::getCameraPtr()
+{
+    return cameraPtr;
+}
+
+void Player::setCameraPtr(Camera someCamera)
+{
+    this->cameraPtr = &someCamera;
+}
+
+void Player::setCameraType(string someCamType)
+{
+    this->cameraType = someCamType;
+}
+
+void Player::setPlayerStats(string name, string race, int moneyAmount, Position pos, Camera someCamera)
+{
+    this->name = name;
+    this->race = race;
+    this->pos = pos;
+    this->playerInventory.addMoney(100);
+    this->cameraPtr = &someCamera;
 }
 
 bool Player::ifDead()

@@ -5,6 +5,7 @@
 
 #include "(SP2)Building.h"
 #include "(SP2)InteractableOBJs.h"
+#include "(SP2)Player.h"
 
 class Camera5 : public Camera
 {
@@ -16,14 +17,15 @@ public:
 	Camera5();
 	~Camera5();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
-    virtual void Update(double dt, std::vector<InteractableOBJs>&InteractablesList, std::vector<Building>&BuildingsList);
+    virtual void Update(double dt, std::vector<InteractableOBJs>&InteractablesList, std::vector<Building>&BuildingsList, Player &somePlayer);
 	virtual void Reset();
 	float horizontalAngle = 0;
 	float verticalAngle = 0;
 	float mouseSpeed;
 	float speed;
 
-    bool canMove;
+    bool canMoveBuilding;
+    bool canMoveInteractable;
 };
 
 #endif
