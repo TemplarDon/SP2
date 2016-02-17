@@ -301,38 +301,7 @@ void SP2::Update(double dt)
 
     createBoundBox(InteractablesList, BuildingsList);
 
-
-
-
-
-    rotateAngle += (float)(15 * dt);
-
-    if (Application::IsKeyPressed('I'))
-    {
-        light[0].position.z -= (float)(10 * dt);
-    }
-    if (Application::IsKeyPressed('K'))
-    {
-        light[0].position.z += (float)(10 * dt);
-    }
-    if (Application::IsKeyPressed('J'))
-    {
-        light[0].position.x -= (float)(10 * dt);
-    }
-    if (Application::IsKeyPressed('L'))
-    {
-        light[0].position.x += (float)(10 * dt);
-    }
-    if (Application::IsKeyPressed('O'))
-    {
-        light[0].position.y -= (float)(10 * dt);
-    }
-    if (Application::IsKeyPressed('P'))
-    {
-        light[0].position.y += (float)(10 * dt);
-    }
-
-    if (Application::IsKeyPressed('T'))
+    if (Application::IsKeyPressed('B'))
     {
         if (toggleLight == true)
         {
@@ -369,27 +338,27 @@ void SP2::Update(double dt)
 
    
     
-        if (somePlayer.getCameraType() == "first")
+    if (somePlayer.getCameraType() == "first")
+    {
+        camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
+        if (Application::IsKeyPressed('T'))
         {
-            camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
-            if (Application::IsKeyPressed('T'))
-            {
-                //somePlayer.setCameraPtr(thirdPersonCamera);
-                camPointer = &thirdPersonCamera;
-                somePlayer.setCameraType("third");
-            }
+            //somePlayer.setCameraPtr(thirdPersonCamera);
+            camPointer = &thirdPersonCamera;
+            somePlayer.setCameraType("third");
+        }
 
-        }
-        else
+    }
+    else
+    {
+        thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
+        if (Application::IsKeyPressed('T'))
         {
-            thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
-            if (Application::IsKeyPressed('T'))
-            {
-                //somePlayer.setCameraPtr(camera5);
-                camPointer = &camera5;
-                somePlayer.setCameraType("first");
-            }
+            //somePlayer.setCameraPtr(camera5);
+            camPointer = &camera5;
+            somePlayer.setCameraType("first");
         }
+    }
     
   
     
