@@ -27,14 +27,30 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 	this->target = F;
 	this->up = right.Cross(camDirection);
 
+    this->canMoveBuilding = true;
+    this->canMoveInteractable = true;
+
 	SetCameraPitchBounds(-70, 80);
 	SetCameraDistanceBounds(10, 100);
 }
 
-void ThirdPersonCamera::Update(double dt)
+void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
 {
-    YawCamera(1);
+    float mouseSpeed = 10;
+    float horizontalAngle = 0; 
+    float verticalAngle = 0; 
+
+    horizontalAngle += mouseSpeed * dt * float(800 / 2 - Application::mouseX);
+    verticalAngle += mouseSpeed * dt * float(600 / 2 - Application::mouseY);
+
+    YawCamera(horizontalAngle);
+    PitchCamera(verticalAngle);
+
+    cameraMovement(dt, InteractablesList, BuildingsList, somePlayer);
+
 	Refocus();
+
+
 }
 
 void ThirdPersonCamera::YawCamera(const float degrees)
@@ -120,4 +136,188 @@ Position* ThirdPersonCamera::GetFocusPoint()
 void ThirdPersonCamera::SetFocusPoint(Position *focus)
 {
 	this->focus = focus;
+}
+
+void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
+{
+    Vector3 view = (target - position).Normalized();
+    if (Application::IsKeyPressed('W'))
+    {
+        view = (target - position).Normalized();
+        for (int i = 0; i < InteractablesList.size(); ++i)
+        {
+            if (InteractablesList[i].canMove == true)
+            {
+                canMoveInteractable = true;
+            }
+            else
+            {
+                canMoveInteractable = false;
+                break;
+            }
+        }
+
+        for (int i = 0; i < BuildingsList.size(); ++i)
+        {
+            if (BuildingsList[i].canMove == true)
+            {
+                canMoveBuilding = true;
+            }
+            else
+            {
+                canMoveBuilding = false;
+                break;
+            }
+        }
+
+        if (canMoveBuilding == true && canMoveInteractable == true)
+        {
+            position.x = position.x + view.x; // position = position + view
+            position.z = position.z + view.z; // position = position + view
+            target.x = target.x + view.x; // target = target + view
+            target.z = target.z + view.z; // target = target + view
+
+            somePlayer.pos.x += position.x;
+            somePlayer.pos.z += position.x;
+
+            focus->x += view.x;
+            focus->z += view.z;
+        }
+
+    }
+
+    if (Application::IsKeyPressed('S'))
+    {
+        view = (target - position).Normalized();
+        int offSetCount = 0;
+        for (int i = 0; i < InteractablesList.size(); ++i)
+        {
+            if (InteractablesList[i].canMove == true)
+            {
+                canMoveInteractable = true;
+            }
+            else
+            {
+                canMoveInteractable = false;
+                break;
+            }
+        }
+
+        for (int i = 0; i < BuildingsList.size(); ++i)
+        {
+            if (BuildingsList[i].canMove == true)
+            {
+                canMoveBuilding = true;
+            }
+            else
+            {
+                canMoveBuilding = false;
+                break;
+            }
+        }
+
+        if (canMoveBuilding == true && canMoveInteractable == true)
+        {
+            position.x = position.x - (target - position).Normalized().x;
+            position.z = position.z - (target - position).Normalized().z;
+            target.x = target.x - (target - position).Normalized().x;
+            target.z = target.z - (target - position).Normalized().z;
+
+            somePlayer.pos.x -= position.x;
+            somePlayer.pos.z -= position.x;
+
+            focus->x -= view.x;
+            focus->z -= view.z;
+        }
+    }
+
+    if (Application::IsKeyPressed('D'))
+    {
+        Vector3 right = view.Cross(up);
+        right.Normalize();
+        view = (target - position).Normalized();
+        int offSetCount = 0;
+        for (int i = 0; i < InteractablesList.size(); ++i)
+        {
+            if (InteractablesList[i].canMove == true)
+            {
+                canMoveInteractable = true;
+            }
+            else
+            {
+                canMoveInteractable = false;
+                break;
+            }
+        }
+
+        for (int i = 0; i < BuildingsList.size(); ++i)
+        {
+            if (BuildingsList[i].canMove == true)
+            {
+                canMoveBuilding = true;
+            }
+            else
+            {
+                canMoveBuilding = false;
+                break;
+            }
+        }
+
+        if (canMoveBuilding == true && canMoveInteractable == true)
+        {
+            position += right.Normalized();
+            target += right.Normalized();
+
+            somePlayer.pos.x += right.Normalized().x;
+            somePlayer.pos.z += right.Normalized().z;
+
+            focus->x += right.Normalized().x;
+            focus->z += right.Normalized().z;
+        }
+    }
+
+    if (Application::IsKeyPressed('A'))
+    {
+        Vector3 right = view.Cross(up);
+        right.Normalize();
+        view = (target - position).Normalized();
+        int offSetCount = 0;
+        for (int i = 0; i < InteractablesList.size(); ++i)
+        {
+            if (InteractablesList[i].canMove == true)
+            {
+                canMoveInteractable = true;
+            }
+            else
+            {
+                canMoveInteractable = false;
+                break;
+            }
+        }
+
+        for (int i = 0; i < BuildingsList.size(); ++i)
+        {
+            if (BuildingsList[i].canMove == true)
+            {
+                canMoveBuilding = true;
+            }
+            else
+            {
+                canMoveBuilding = false;
+                break;
+            }
+        }
+
+        if (canMoveBuilding == true && canMoveInteractable == true)
+        {
+            position -= right.Normalized();
+            target -= right.Normalized();
+
+            somePlayer.pos.x -= right.Normalized().x;
+            somePlayer.pos.z -= right.Normalized().z;
+
+            focus->x -= right.Normalized().x;
+            focus->z -= right.Normalized().z;
+        }
+    }
 }

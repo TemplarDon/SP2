@@ -3,10 +3,6 @@
 
 
 #include "Mtx44.h"
-
-
-
-#
 #include "Material.h"
 
 #include "Scene.h"
@@ -123,12 +119,15 @@ private:
     Position* maxPtr;
     Position* minPtr;
 
+    Player somePlayer;
+
     std::vector<Node>objsMaxMin; // Vector for storing min and max values of objs created
 
     vector<InteractableOBJs>InteractablesList;
     vector<Building>BuildingsList;
 
-    Camera2 camera;
+    Camera *camPointer;
+
     Camera3 camera3;
     Camera5 camera5;
 
@@ -143,20 +142,12 @@ private:
     void RenderSkybox();
     void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
     void RenderRoom(Position pos, Vector3 size = (1,1,1), int groundMeshSize = 100);
+    void initRoom(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
     void rayTracing(vector<InteractableOBJs>&InteractablesList);
 
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 
-    void gateInteractions(double dt);
-    void thwumpMovement(double dt);
-    void ifDead(double dt);
-    void peachInteractions(double dt);
-    void keyInteractions(double dt);
-    void doorInteractions(double dt);
-    void pipeInteractions(double dt);
-
-	void RenderTest();
 };
 
 #endif
