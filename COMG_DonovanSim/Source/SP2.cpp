@@ -169,7 +169,7 @@ void SP2::Init()
     minPtr = 0;
 
     Position * startingPos = new Position(0,0,0);
-    startingPos->Set(20, 4, -8);
+    startingPos->Set(110, 10, -8);
 
 	charPos = { 4, 0, 0 };
     //Initialize camera settings
@@ -182,23 +182,23 @@ void SP2::Init()
     // Init Player
     somePlayer.setPlayerStats("TestMan", "Human", 100, *startingPos, camera5); // Name, Race, Money, Pos, camera
 
+
+
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//5.tga");
 
 
+
 	//AXES
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
+
+
+	//LIGHTBALL
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1));
 
-	meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall.obj");
-	meshList[GEO_WALL]->textureID = LoadTGA("Image//wallUV.tga");
 
-	meshList[GEO_WALL]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
-	meshList[GEO_WALL]->material.kDiffuse.Set(0.6, 0.6, 0.6);
-	meshList[GEO_WALL]->material.kSpecular.Set(0.4, 0.4, 0.4);
-	meshList[GEO_WALL]->material.kShininess = 10;
 
 
 	//SKYBOX
@@ -223,17 +223,24 @@ void SP2::Init()
     meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), objsMaxMin);
     meshList[GEO_RIGHT]->textureID = LoadTGA("Image//purplenebula_rt.tga");
 	
-    meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//castleWall.obj");
-    meshList[GEO_WALL]->textureID = LoadTGA("Image//wallUV.tga");
 
-    meshList[GEO_WALL2] = MeshBuilder::GenerateOBJ("wall2", "OBJ//castleWall2.obj");
-    meshList[GEO_WALL2]->textureID = LoadTGA("Image//wallUV.tga");
+
+
+	//WALLS
+    meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//TestWall2.obj");
+    meshList[GEO_WALL]->textureID = LoadTGA("Image//TestWall.tga");
+
+    meshList[GEO_WALL2] = MeshBuilder::GenerateOBJ("wall2", "OBJ//TestWall.obj");
+    meshList[GEO_WALL2]->textureID = LoadTGA("Image//TestWall.tga");
 
     meshList[GEO_GATETOP] = MeshBuilder::GenerateOBJ("wall", "OBJ//gateTop.obj");
     meshList[GEO_GATETOP]->textureID = LoadTGA("Image//gateTopUV.tga");
 
     meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("wall", "OBJ//gate.obj");
     meshList[GEO_GATE]->textureID = LoadTGA("Image//gateUV.tga");
+
+
+
 
 	//GROUND MESH
     meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("ground", Color(1, 1, 1), objsMaxMin);
@@ -244,8 +251,17 @@ void SP2::Init()
     meshList[GEO_GROUND]->material.kSpecular.Set(0.4, 0.4, 0.4);
     meshList[GEO_GROUND]->material.kShininess = 1;
 
+
+
+	//init collision, then render room
     // Collision 
-    //initRoom(Position(20, 2, 0));
+    initRoom(Position(20, 2, 0));
+
+	std::ostringstream ss;
+
+	ss.str("");
+	ss << "POSIION: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
 
 	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
 	meshList[GEO_TRADEPOST]->textureID = LoadTGA("Image//TradingPostTexture2.tga");
@@ -562,27 +578,30 @@ void SP2::initRoom(Position pos, Vector3 size, int groundMeshSize)
     Building ceiling1 = Building("ceiling1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y + 30, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(ceiling1);
 
-    Building wall1 = Building("wall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x, pos.y, pos.z + (groundMeshSize / 2)), 10, 0, Vector3(0, 0, 0));
+	Building wall1 = Building("wall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 30, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(wall1);
 
-    Building wall2 = Building("wall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x, pos.y, pos.z + (-groundMeshSize / 2)), 10, 0, Vector3(0, 0, 0));
+	Building wall2 = Building("wall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x, pos.y + heightOfWall, pos.z + (-groundMeshSize / 2)), 30, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(wall2);
 
-    Building wall3 = Building("wall3", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y, pos.z - 85), 10, 0, Vector3(0, 0, 0));
+	Building wall3 = Building("wall3", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 85), 30, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(wall3);
 
-    Building wall4 = Building("wall4", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y, pos.z + 85), 10, 0, Vector3(0, 0, 0));
+	Building wall4 = Building("wall4", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 85), 30, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(wall4);
 
     Building gatetop1 = Building("gatetop1", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x + (groundMeshSize / 2) - 4, pos.y - 5, pos.z + 85), 8, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(gatetop1);
 
-    Building wall5 = Building("wall5", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y, pos.z), 8, 0, Vector3(0, 0, 0));
+	Building wall5 = Building("wall5", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z), 30, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(wall5);
 }
 
 void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
 {
+	heightOfWall = 12;
+	groundMeshSize = 100;
+
     // Whole Room
     modelStack.PushMatrix();
     modelStack.Translate(pos.x, pos.y, pos.z);
@@ -608,14 +627,14 @@ void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
     modelStack.PushMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate(0, 0, (groundMeshSize / 2));
-    modelStack.Scale(10, 10, 10);
+	modelStack.Translate(0, heightOfWall, (groundMeshSize / 2));
+	modelStack.Scale(30, 30, 30);
     RenderMesh(meshList[GEO_WALL], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate(0, 0, -(groundMeshSize / 2));
-    modelStack.Scale(10, 10, 10);
+	modelStack.Translate(0, heightOfWall, -(groundMeshSize / 2));
+	modelStack.Scale(30, 30, 30);
     RenderMesh(meshList[GEO_WALL], false, toggleLight);
     modelStack.PopMatrix();
 
@@ -624,14 +643,14 @@ void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
 
     // Wall w/ Hole for Gate;
     modelStack.PushMatrix();
-    modelStack.Translate(0, 0, -85);
-    modelStack.Scale(10, 10, 10);
+	modelStack.Translate(0, heightOfWall, -85);
+	modelStack.Scale(30, 30, 30);
     RenderMesh(meshList[GEO_WALL2], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate(0, 0, 85);
-    modelStack.Scale(10, 10, 10);
+    modelStack.Translate(0, heightOfWall, 85);
+	modelStack.Scale(30, 30, 30);
     RenderMesh(meshList[GEO_WALL2], false, toggleLight);
     modelStack.PopMatrix();
 
@@ -645,8 +664,8 @@ void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate((-groundMeshSize / 2), 0, 0);
-    modelStack.Scale(10, 10, 10);
+	modelStack.Translate((-groundMeshSize / 2), heightOfWall, 0);
+	modelStack.Scale(30, 30, 30);
     RenderMesh(meshList[GEO_WALL2], false, toggleLight);
     modelStack.PopMatrix();
 
@@ -904,15 +923,8 @@ void SP2::Render()
 		}
 	}
 
-    //AXES
-    //RenderMesh(meshList[GEO_AXES], false, toggleLight);
 
-    //modelStack.PushMatrix();
-    //modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-    //RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-    //modelStack.PopMatrix();
-
-
+	//RENDER LIGHTBALL
     modelStack.PushMatrix();
     modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
     RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
@@ -924,64 +936,21 @@ void SP2::Render()
 	modelStack.PopMatrix();
 
 
-
-	//modelStack.PushMatrix();
-	//modelStack.Rotate(camera5.verticalAngle, 1, 0, 0);
-	//modelStack.Rotate(camera5.horizontalAngle, 0, 1, 0);
-	////RENDER HAND PIVOT
-	//RenderHandPivot();
-	////RENDER HANDS
-	//modelStack.PushMatrix();
-	//RenderHandInfronOfScreen();
-	//modelStack.PopMatrix();
-	//modelStack.PopMatrix();
-
-
-	////modelStack.Rotate(camera5.verticalAngle, 1, 0, 0);
-	////modelStack.Rotate(camera5.horizontalAngle, 0, 1, 0);
-
-	//RENDER HANDS
-	//modelStack.PushMatrix();
-	//modelStack.Translate(camera5.position.x, camera5.position.y - 1, camera5.position.z);
-	//RenderHandInfronOfScreen();
-	//modelStack.PopMatrix();
-
-
 	//RENDER SKYBOX
     RenderSkybox();
 
     modelStack.PushMatrix();
-    modelStack.Scale(1000, 1, 1000);
-    RenderMesh(meshList[GEO_QUAD], false, toggleLight);
+    modelStack.Scale(1000, 1000, 1000);
+    RenderMesh(meshList[GEO_QUAD], true, toggleLight);
     modelStack.PopMatrix();
 
-    //modelStack.PushMatrix();
-    //modelStack.Translate(0, 5, -5);
-    //modelStack.Scale(4, 4, 4);
-    //RenderMesh(meshList[GEO_SWITCH], true, toggleLight);
-    //InteractableOBJs test_switch = InteractableOBJs("switch", meshList[GEO_SWITCH]->maxPos, meshList[GEO_SWITCH]->minPos, (0, 5, -5), 4, 0, (0, 0, 0));
-    //InteractablesList.push_back(test_switch);
-    //modelStack.PopMatrix();
+
 
     //RenderRoom(Position(20, 2, 0));
 
 	std::ostringstream ss;
 
 
-	//ss.str("");
-	//ss << "POSIION: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
-
-
- 
-
-    //modelStack.PushMatrix();
-    //modelStack.Translate(3, 0, 0);
-    //modelStack.Scale(3, 3, 3);
-    //RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    //InteractableOBJs shootingTestwall = InteractableOBJs("testwall", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(3, 0, 0), 3, 0, Vector3(0, 0, 0));
-    //InteractablesList.push_back(shootingTestwall);
-    //modelStack.PopMatrix();
 
     modelStack.PushMatrix();
     modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
@@ -1005,6 +974,10 @@ void SP2::Render()
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
 	modelStack.PopMatrix();
+
+	//RENDER ROOM (WALLS)
+    RenderRoom(Position(20, 2, 0));
+
 }
 
 void SP2::Exit()

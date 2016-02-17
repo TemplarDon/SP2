@@ -118,6 +118,7 @@ private:
     unsigned m_programID;
 
     float rotateAngle;
+	float heightOfWall;
 
     Position maxPos;
     Position minPos;
@@ -135,6 +136,8 @@ private:
     Camera *camPointer;
 
     Camera3 camera3;
+
+
     ThirdPersonCamera thirdPersonCamera;
 	Camera5 camera5;
 
