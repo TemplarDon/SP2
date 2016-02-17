@@ -49,6 +49,7 @@ class SP2 : public Scene
         GEO_GATETOP,
         GEO_GATE,
 
+
         GEO_GROUND,
         NUM_GEOMETRY,
     };
@@ -108,12 +109,10 @@ private:
     Mesh *meshList[NUM_GEOMETRY];
     unsigned m_programID;
 
-	typedef unsigned lightParam[UL_TOTAL];
-
     unsigned m_parameters[U_TOTAL];
 
-	static const size_t totalLights = 3;
-	lightParam lightUniformTypes[totalLights];
+	static const size_t totalLights = 1;
+	unsigned lightUniformTypes[totalLights][UL_TOTAL];
 
     float rotateAngle;
 
@@ -128,15 +127,11 @@ private:
     vector<InteractableOBJs>InteractablesList;
     vector<Building>BuildingsList;
 
-    Camera2 camera;
-    Camera3 camera3;
-    Camera5 camera5;
-
     ThirdPersonCamera thirdPersonCamera;
 
     MS modelStack, viewStack, projectionStack;
 
-    Light light[3];
+    Light light[totalLights];
     bool toggleLight;
     void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
@@ -148,15 +143,9 @@ private:
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 
-    void gateInteractions(double dt);
-    void thwumpMovement(double dt);
-    void ifDead(double dt);
-    void peachInteractions(double dt);
-    void keyInteractions(double dt);
-    void doorInteractions(double dt);
-    void pipeInteractions(double dt);
 
 	void RenderTest();
+
 };
 
 #endif

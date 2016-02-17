@@ -33,7 +33,6 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 
 void ThirdPersonCamera::Update(double dt)
 {
-    YawCamera(1);
 	Refocus();
 }
 
