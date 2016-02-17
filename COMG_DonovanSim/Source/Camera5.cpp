@@ -19,6 +19,7 @@ void Camera5::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	right.y = 0;
 	right.Normalize();
 	this->up = defaultUp = right.Cross(view).Normalized();
+    canMove = true;
 }
 
 void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)

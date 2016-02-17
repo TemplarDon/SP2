@@ -41,26 +41,18 @@ class SP2 : public Scene
         GEO_BACK,
         GEO_LIGHTBALL,
         GEO_TEXT,
+        GEO_HANDS,
 
+        // For Testing / PlaceHolders
         GEO_WALL,
         GEO_WALL2,
-        GEO_THWUMP,
         GEO_GATETOP,
         GEO_GATE,
-        GEO_THRONE,
-        GEO_LAVA,
-        GEO_SWITCH,
-        GEO_PEDESTAL,
-        GEO_PILLAR,
-        GEO_PEACH,
-        GEO_KEY,
-        GEO_DOOR,
-        GEO_PIPE,
-		GEO_HANDS,
 
         GEO_GROUND,
         NUM_GEOMETRY,
     };
+
     enum UNIFORM_TYPE
     {
         U_MVP = 0,
@@ -70,47 +62,8 @@ class SP2 : public Scene
         U_MATERIAL_DIFFUSE,
         U_MATERIAL_SPECULAR,
         U_MATERIAL_SHININESS,
-        U_LIGHT0_POSITION,
-        U_LIGHT0_COLOR,
-        U_LIGHT0_POWER,
-        U_LIGHT0_KC,
-        U_LIGHT0_KL,
-        U_LIGHT0_KQ,
-        U_LIGHTENABLED,
-        U_LIGHT0_TYPE,
-        U_LIGHT0_SPOTDIRECTION,
-        U_LIGHT0_COSCUTOFF,
-        U_LIGHT0_COSINNER,
-        U_LIGHT0_EXPONENT,
-
-        // Light2
-        U_LIGHT1_POSITION,
-        U_LIGHT1_COLOR,
-        U_LIGHT1_POWER,
-        U_LIGHT1_KC,
-        U_LIGHT1_KL,
-        U_LIGHT1_KQ,
-        U_LIGHT1ENABLED,
-        U_LIGHT1_TYPE,
-        U_LIGHT1_SPOTDIRECTION,
-        U_LIGHT1_COSCUTOFF,
-        U_LIGHT1_COSINNER,
-        U_LIGHT1_EXPONENT,
-
-        // Light3
-        U_LIGHT3_POSITION,
-        U_LIGHT3_COLOR,
-        U_LIGHT3_POWER,
-        U_LIGHT3_KC,
-        U_LIGHT3_KL,
-        U_LIGHT3_KQ,
-        U_LIGHT3ENABLED,
-        U_LIGHT3_TYPE,
-        U_LIGHT3_SPOTDIRECTION,
-        U_LIGHT3_COSCUTOFF,
-        U_LIGHT3_COSINNER,
-        U_LIGHT3_EXPONENT,
-
+        
+		U_LIGHTENABLED,
         U_NUMLIGHTS,
         U_COLOR_TEXTURE_ENABLED,
         U_COLOR_TEXTURE,
@@ -119,6 +72,24 @@ class SP2 : public Scene
 
         U_TOTAL,
     };
+
+	enum LIGHT_UNIFORM_TYPE
+	{
+		UL_POSITION = 0,
+		UL_COLOR,
+		UL_POWER,
+		UL_KC,
+		UL_KL,
+		UL_KQ,
+		UL_TYPE,
+		UL_SPOTDIRECTION,
+		UL_COSCUTOFF,
+		UL_COSINNER,
+		UL_EXPONENT,
+
+		UL_TOTAL,
+	};
+
 public:
     SP2();
     ~SP2();
@@ -136,7 +107,13 @@ private:
     unsigned m_indexBuffer[NUM_GEOMETRY];
     Mesh *meshList[NUM_GEOMETRY];
     unsigned m_programID;
+
+	typedef unsigned lightParam[UL_TOTAL];
+
     unsigned m_parameters[U_TOTAL];
+
+	static const size_t totalLights = 3;
+	lightParam lightUniformTypes[totalLights];
 
     float rotateAngle;
 
@@ -166,7 +143,7 @@ private:
 
     void RenderSkybox();
     void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
-    void RenderRoom(Vector3 size, unsigned groundMeshSize = 100);
+    void RenderRoom(Position pos, Vector3 size = (1,1,1), int groundMeshSize = 100);
 
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

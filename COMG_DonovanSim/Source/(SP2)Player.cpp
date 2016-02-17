@@ -1,6 +1,6 @@
 #include "(SP2)Player.h"
 
-Player::Player(string name, string race, int moneyAmount) : GameObject(name), race(race), health(100)
+Player::Player(string name, string race, int moneyAmount, Position pos) : GameObject(name, pos), race(race), health(100)
 {
     playerInventory.addMoney(moneyAmount);
 }
