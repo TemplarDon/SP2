@@ -254,11 +254,12 @@ void SP2::Init()
     meshList[GEO_GROUND]->material.kShininess = 1;
 
 
-
 	//init collision, then render room
-    // Collision 
+    //Collision
+	//Cafe Room
     initRoom(Position(20, 2, 0));
 
+	//Recreational Room
 	initRoom(Position(200, 2, 0));
 
 	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
