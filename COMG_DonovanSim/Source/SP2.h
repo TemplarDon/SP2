@@ -134,7 +134,6 @@ private:
 
     ThirdPersonCamera thirdPersonCamera;
 
-
     MS modelStack, viewStack, projectionStack;
 
     Light light[3];
@@ -144,6 +143,7 @@ private:
     void RenderSkybox();
     void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
     void RenderRoom(Position pos, Vector3 size = (1,1,1), int groundMeshSize = 100);
+    void rayTracing(vector<InteractableOBJs>&InteractablesList);
 
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

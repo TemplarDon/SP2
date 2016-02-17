@@ -95,10 +95,16 @@
     <None Include="Shader\TransformVertexShader.vertexshader" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\(SP2)AllParts.cpp" />
+    <ClCompile Include="Source\(SP2)AllUpgrades.cpp" />
     <ClCompile Include="Source\(SP2)Building.cpp" />
     <ClCompile Include="Source\(SP2)InteractableOBJs.cpp" />
     <ClCompile Include="Source\(SP2)Inventory.cpp" />
     <ClCompile Include="Source\(SP2)Player.cpp" />
+    <ClCompile Include="Source\(SP2)Ship.cpp" />
+    <ClCompile Include="Source\(SP2)ShipBuilder.cpp" />
+    <ClCompile Include="Source\(SP2)ShipParts.cpp" />
+    <ClCompile Include="Source\(SP2)Ship_Upgrade.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Asn1.cpp" />
     <ClCompile Include="Source\Asn2.cpp" />
@@ -135,6 +141,10 @@
     <ClInclude Include="Source\(SP2)CollisionOBJs.h" />
     <ClInclude Include="Source\(SP2)InteractableOBJs.h" />
     <ClInclude Include="Source\(SP2)Inventory.h" />
+    <ClInclude Include="Source\(SP2)ShipParts.h" />
+    <ClInclude Include="Source\(SP2)Ship_Upgrade.h" />
+    <ClInclude Include="Source\%28SP2%29AllUpgrades.h" />
+    <ClInclude Include="Source\%28SP2%29AllParts.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Asn1.h" />
     <ClInclude Include="Source\Asn2.h" />
@@ -168,6 +178,8 @@
     <ClInclude Include="Source\SceneTexture.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\SceneLight.h" />
+    <ClInclude Include="Source\%28SP2%29Ship.h" />
+    <ClInclude Include="Source\%28SP2%29ShipBuilder.h" />
     <ClInclude Include="Source\SP2.h" />
     <ClInclude Include="Source\ThirdPersonCamera.h" />
     <ClInclude Include="Source\Utility.h" />

@@ -17,7 +17,7 @@ public:
     Position maxPos;
     Position minPos;
 
-    Position offSet;
+    //Position offSet;
     int scaleOffSet;
 
     float rotateAngle;

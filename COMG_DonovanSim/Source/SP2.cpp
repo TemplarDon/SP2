@@ -192,8 +192,7 @@ void SP2::Init()
     maxPtr = 0;
     minPtr = 0;
 
-    // Init Player
-    Player somePlayer("TestMan", "Human", 100); // Name, Race, Money
+
 
     //Initialize camera settings
     camera5.Init(Vector3(20, 3, -8/*300,3,300*/), Vector3(0, 0, 0), Vector3(0, 1, 0)); 
@@ -202,6 +201,9 @@ void SP2::Init()
 	//Text
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//5.tga");
+
+    // Init Player
+    Player somePlayer("TestMan", "Human", 100, Position(camera5.position.x, camera5.position.y, camera5.position.z)); // Name, Race, Money
 
 	//HANDS
 	//meshList[GEO_HANDS] = MeshBuilder::GenerateOBJ("Hands", "OBJ//Hands.obj");
@@ -347,6 +349,14 @@ void SP2::Update(double dt)
         light[0].type = Light::LIGHT_POINT;
 		glUniform1i(lightUniformTypes[0][UL_TYPE], light[0].type);
     }
+
+
+    // TEST FOR BULLET COLLISION
+    if (Application::IsKeyPressed('B'))
+    {
+        rayTracing(InteractablesList);
+    }
+
 
 }
 
@@ -544,7 +554,6 @@ void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
 
     // Render Floor + Ceiling
     modelStack.PushMatrix();
-    //modelStack.Translate(0, 0, -20);
 
     modelStack.PushMatrix();
     modelStack.Scale(groundMeshSize, groundMeshSize, groundMeshSize);
@@ -702,13 +711,13 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
         minPos.z = tempMin.z;
 
         // Translating
-        maxPos.x += InteractablesList[i].offSet.x;
-        maxPos.y += InteractablesList[i].offSet.y;
-        maxPos.z += InteractablesList[i].offSet.z;
+        maxPos.x += InteractablesList[i].pos.x;
+        maxPos.y += InteractablesList[i].pos.y;
+        maxPos.z += InteractablesList[i].pos.z;
 
-        minPos.x += InteractablesList[i].offSet.x;
-        minPos.y += InteractablesList[i].offSet.y;
-        minPos.z += InteractablesList[i].offSet.z;
+        minPos.x += InteractablesList[i].pos.x;
+        minPos.y += InteractablesList[i].pos.y;
+        minPos.z += InteractablesList[i].pos.z;
 
         if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
         {
@@ -786,13 +795,13 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
         minPos.z = tempMin.z;
 
         // Translating
-        maxPos.x += BuildingsList[i].offSet.x;
-        maxPos.y += BuildingsList[i].offSet.y;
-        maxPos.z += BuildingsList[i].offSet.z;
+        maxPos.x += BuildingsList[i].pos.x;
+        maxPos.y += BuildingsList[i].pos.y;
+        maxPos.z += BuildingsList[i].pos.z;
 
-        minPos.x += BuildingsList[i].offSet.x;
-        minPos.y += BuildingsList[i].offSet.y;
-        minPos.z += BuildingsList[i].offSet.z;
+        minPos.x += BuildingsList[i].pos.x;
+        minPos.y += BuildingsList[i].pos.y;
+        minPos.z += BuildingsList[i].pos.z;
 
         if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
         {
@@ -806,6 +815,26 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
     }
 
 
+}
+
+void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
+{
+    Vector3 view = (camera5.target - camera5.position).Normalized();
+
+    float distance = 0;
+
+    for (size_t i = 0; i < InteractablesList.size(); ++i)
+    {
+        Vector3 objPos = (InteractablesList[i].pos.x, InteractablesList[i].pos.y, InteractablesList[i].pos.z);
+        Vector3 viewNormal = view.Normalized();
+
+        distance = objPos.Dot(viewNormal);
+
+        if (distance < 5)
+        {
+            std::cout << "HIT" << std::endl;
+        }
+    }
 }
 
 void SP2::Render()
@@ -898,11 +927,6 @@ void SP2::Render()
     modelStack.PopMatrix();
 
     //modelStack.PushMatrix();
-    //modelStack.Translate(0, 5, 0);
-    //modelStack.Scale(4, 4, 4);
-    //RenderMesh(meshList[GEO_WALL], true, toggleLight);
-
-    //modelStack.PushMatrix();
     //modelStack.Translate(0, 5, -5);
     //modelStack.Scale(4, 4, 4);
     //RenderMesh(meshList[GEO_SWITCH], true, toggleLight);
@@ -921,7 +945,15 @@ void SP2::Render()
     //ss << " X:" << camera3.position.x << "|| Y:" << camera3.position.y << "|| Z:" << camera3.position.z;
     //RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
 
-    RenderRoom(Position(0, 2, 0));
+    RenderRoom(Position(20, 2, 0));
+
+    modelStack.PushMatrix();
+    modelStack.Translate(3, 0, 0);
+    modelStack.Scale(3, 3, 3);
+    RenderMesh(meshList[GEO_WALL], true, toggleLight);
+    InteractableOBJs shootingTestwall = InteractableOBJs("testwall", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(3, 0, 0), 3, 0, Vector3(0, 0, 0));
+    InteractablesList.push_back(shootingTestwall);
+    modelStack.PopMatrix();
 }
 
 void SP2::Exit()

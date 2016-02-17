@@ -4,7 +4,7 @@ CollisionOBJs::CollisionOBJs(string name, Position maxPos, Position minPos, Posi
 {
     this->maxPos = maxPos;
     this->minPos = minPos;
-    this->offSet = offSet;
+    //this->offSet = offSet;
     this->scaleOffSet = scaleOffSet;
 
     this->rotateAngle = rotateAngle;
