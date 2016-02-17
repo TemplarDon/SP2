@@ -149,8 +149,8 @@ private:
 
     void RenderSkybox();
     void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
-    void RenderRoom(Position pos, Vector3 size = (1,1,1), int groundMeshSize = 100);
-    void initRoom(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
+    void RenderRoomTemplate(Position pos, Vector3 size = (1,1,1), int groundMeshSize = 100);
+    void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
     void rayTracing(vector<InteractableOBJs>&InteractablesList);
 	void RenderTradingStation();
 	void RenderRecRoom();

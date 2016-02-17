@@ -257,10 +257,10 @@ void SP2::Init()
 	//init collision, then render room
     //Collision
 	//Cafe Room
-    initRoom(Position(20, 2, 0));
+    initRoomTemplate(Position(0, 2, 0));
 
 	//Recreational Room
-	initRoom(Position(200, 2, 0));
+	initRoomTemplate(Position(100, 2, 0));
 
 	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
 	meshList[GEO_TRADEPOST]->textureID = LoadTGA("Image//TradingPostTexture2.tga");
@@ -540,7 +540,7 @@ void SP2::RenderSkybox()
     modelStack.PopMatrix();
 }
 
-void SP2::initRoom(Position pos, Vector3 size, int groundMeshSize)
+void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 {
     Building floor1 = Building("floor1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(floor1);
@@ -548,26 +548,49 @@ void SP2::initRoom(Position pos, Vector3 size, int groundMeshSize)
     Building ceiling1 = Building("ceiling1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y + 30, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(ceiling1);
 
-	Building wall1 = Building("wall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall1);
 
-	Building wall2 = Building("wall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x, pos.y + heightOfWall, pos.z + (-groundMeshSize / 2)), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall2);
+    Building rightWall1 = Building("rightWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(rightWall1);
 
-	Building wall3 = Building("wall3", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 85), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall3);
+    Building rightWall2 = Building("rightWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(rightWall2);
 
-	Building wall4 = Building("wall4", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 85), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall4);
+    Building rightGateTop = Building("rightGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 30, pos.z + (groundMeshSize / 2) - 4), 4, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(rightGateTop);
 
-    Building gatetop1 = Building("gatetop1", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x + (groundMeshSize / 2) - 4, pos.y - 5, pos.z + 85), 8, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(gatetop1);
 
-	Building wall5 = Building("wall5", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall5);
+    Building leftWall1 = Building("leftWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(leftWall1);                                                                                                                   
+                                                                                                                                                          
+    Building leftWall2 = Building("leftWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(leftWall2);
+
+    Building leftGateTop = Building("leftGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 30, pos.z - (groundMeshSize / 2) - 4), 4, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(leftGateTop);
+
+
+    Building frontWall1 = Building("frontWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(frontWall1);                                                                        
+                                                                                                                
+    Building frontWall2 = Building("frontWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(frontWall2);
+
+    Building frontGateTop = Building("frontGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x + (groundMeshSize / 2) - 4, pos.y + 30, pos.z), 4, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(frontGateTop);
+
+
+    Building backWall1 = Building("backWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(backWall1);
+
+    Building backWall2 = Building("backWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(backWall2);
+
+    Building backGateTop = Building("backGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x - (groundMeshSize / 2) - 4, pos.y + 30, pos.z), 4, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(backGateTop);
+
 }
 
-void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
+void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 {
 
 	groundMeshSize = 100;
@@ -596,48 +619,110 @@ void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
     // Render Walls
     modelStack.PushMatrix();
 
+    // ---------------------------- Right Wall ---------------------------------- //
     modelStack.PushMatrix();
-	modelStack.Translate(0, heightOfWall, (groundMeshSize / 2));
-	modelStack.Scale(30, 30, 30);
+	modelStack.Translate(0, 0, (groundMeshSize / 2));
+
+    modelStack.PushMatrix();
+    modelStack.Translate(38, heightOfWall, 0);
+    modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-	modelStack.Translate(0, heightOfWall, -(groundMeshSize / 2));
-	modelStack.Scale(30, 30, 30);
+    modelStack.Translate(-38, heightOfWall, 0);
+    modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL], false, toggleLight);
     modelStack.PopMatrix();
 
+    modelStack.PushMatrix();    
+    modelStack.Translate(0, 0, -4);
+    modelStack.Scale(5, 8, 5);
+    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PopMatrix();
+    // ---------------------------- Right Wall ---------------------------------- //
+
+
+    // ---------------------------- Left Wall ---------------------------------- //
+    modelStack.PushMatrix();
+    modelStack.Translate(0, 0, -(groundMeshSize / 2));
+
+    modelStack.PushMatrix();
+    modelStack.Translate(38, heightOfWall, 0);
+    modelStack.Scale(12, 30, 12);
+    RenderMesh(meshList[GEO_WALL], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(-38, heightOfWall, 0);
+    modelStack.Scale(12, 30, 12);
+    RenderMesh(meshList[GEO_WALL], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(0, 0, -4);
+    modelStack.Scale(5, 8, 5);
+    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PopMatrix();
+    // ---------------------------- Left Wall ---------------------------------- //
+
+
+    // ---------------------------- Front Wall ---------------------------------- //
     modelStack.PushMatrix();
     modelStack.Translate((groundMeshSize / 2), 0, 0);
 
-    // Wall w/ Hole for Gate;
     modelStack.PushMatrix();
-	modelStack.Translate(0, heightOfWall, -85);
-	modelStack.Scale(30, 30, 30);
+	modelStack.Translate(0, heightOfWall, -38);
+	modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL2], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate(0, heightOfWall, 85);
-	modelStack.Scale(30, 30, 30);
+    modelStack.Translate(0, heightOfWall, 38);
+	modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL2], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate(-4, -5, 0);
+    modelStack.Translate(-4, 0, 0);
     modelStack.Rotate(90, 0, 1, 0);
     modelStack.Scale(5, 8, 5);
     RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PopMatrix();
+    // ---------------------------- Front Wall ---------------------------------- //
+
+
+    // ---------------------------- Back Wall ---------------------------------- //
+    modelStack.PushMatrix();
+    modelStack.Translate((-groundMeshSize / 2), 0, 0);
 
     modelStack.PushMatrix();
-	modelStack.Translate((-groundMeshSize / 2), heightOfWall, 0);
-	modelStack.Scale(30, 30, 30);
+    modelStack.Translate(0, heightOfWall, -38);
+    modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL2], false, toggleLight);
     modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(0, heightOfWall, 38);
+    modelStack.Scale(12, 30, 12);
+    RenderMesh(meshList[GEO_WALL2], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(-4, 0, 0);
+    modelStack.Rotate(90, 0, 1, 0);
+    modelStack.Scale(5, 8, 5);
+    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PopMatrix();
+    // ---------------------------- Back Wall ---------------------------------- //
 
     modelStack.PopMatrix();
 
@@ -949,7 +1034,7 @@ void SP2::Render()
 
 	//TRADING STATION
 	//modelStack.PushMatrix();
-	//RenderRoom(Position(100, 2, 0));
+	//RenderRoomTemplate(Position(100, 2, 0));
 	//modelStack.Translate(100, 2, 0);
 	//RenderTradingStation();
 	//modelStack.PopMatrix();
@@ -961,15 +1046,16 @@ void SP2::Render()
     RenderMesh(meshList[GEO_WALL], true, toggleLight);
     modelStack.PopMatrix();
 
+	
+    //RENDER ROOM (WALLS)
+    RenderRoomTemplate(Position(0, 2, 0));
+
+
+	modelStack.PushMatrix();
 	//RENDER ROOM (WALLS)
-    RenderRoom(Position(20, 2, 0));
+	RenderRoomTemplate(Position(100, 2, 0));
+	modelStack.PopMatrix();
 
-
-	//modelStack.PushMatrix();
-	//modelStack.Rotate(90, 1, 0, 0);
-	////RENDER ROOM (WALLS)
-	//RenderRoom(Position(200, 2, 0));
-	//modelStack.PopMatrix();
 
 	//POSITION OF X Y Z
 	std::ostringstream ss;
