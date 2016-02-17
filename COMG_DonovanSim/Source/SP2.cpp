@@ -732,8 +732,7 @@ void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 
 void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)
 {
-    
-
+   
     Position maxPos;
     Position minPos;
 
@@ -745,17 +744,13 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
         cameraPos.x = camera5.position.x + view.x;
         cameraPos.y = camera5.position.y + view.y;
         cameraPos.z = camera5.position.z + view.z;
-
-        //cameraPos.x = somePlayer.pos.x + view.x;
-        //cameraPos.y = somePlayer.pos.y + view.y;
-        //cameraPos.z = somePlayer.pos.z + view.z;
     }
     else
     {
 		Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
-        cameraPos.x = thirdPersonCamera.GetFocusPoint()->x + 3;
-        cameraPos.y = thirdPersonCamera.GetFocusPoint()->y + 3;
-        cameraPos.z = thirdPersonCamera.GetFocusPoint()->z + 3;
+        cameraPos.x = thirdPersonCamera.GetFocusPoint()->x + view.x;
+        cameraPos.y = thirdPersonCamera.GetFocusPoint()->y + view.y;
+        cameraPos.z = thirdPersonCamera.GetFocusPoint()->z + view.z;
     }
 
 
