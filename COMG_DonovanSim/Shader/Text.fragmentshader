@@ -41,11 +41,7 @@ float getSpotlightEffect(Light light, vec3 lightDirection) {
 	vec3 S = normalize(light.spotDirection);
 	vec3 L = normalize(lightDirection);
 	float cosDirection = dot(L, S);
-	//return smoothstep(light.cosCutoff, light.cosInner, cosDirection);
-	if(cosDirection < light.cosCutoff)
-		return 0;
-	else
-		return 1; //pow(cosDirection, light.exponent);
+	return smoothstep(light.cosCutoff, light.cosInner, cosDirection);
 }
 
 // Constant values
@@ -76,7 +72,7 @@ void main(){
 		vec3 E = normalize(eyeDirection_cameraspace);
 		vec3 N = normalize( vertexNormal_cameraspace );
 		
-		color = 				
+		color = 
 				// Ambient : simulates indirect lighting
 				materialColor * vec4(material.kAmbient, 1);
 		
@@ -108,7 +104,6 @@ void main(){
 			float cosAlpha = clamp( dot( E, R ), 0, 1 );
 			
 			color += 
-
 				
 				// Diffuse : "color" of the object
 				materialColor * vec4(material.kDiffuse, 1) * vec4(lights[i].color, 1) * lights[i].power * cosTheta * attenuationFactor * spotlightEffect +

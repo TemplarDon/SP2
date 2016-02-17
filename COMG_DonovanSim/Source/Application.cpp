@@ -121,7 +121,7 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 
         glfwGetCursorPos(m_window, &mouseX, &mouseY, &mouseZ);
-        glfwSetCursorPos(m_window, 800 / 2, 600 / 2);
+        //glfwSetCursorPos(m_window, 800 / 2, 600 / 2);
 
 	} //Check if the ESC key had been pressed or if the window had been closed
 	scene->Exit();

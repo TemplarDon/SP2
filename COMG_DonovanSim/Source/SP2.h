@@ -45,6 +45,7 @@ class SP2 : public Scene
         GEO_GATETOP,
         GEO_GATE,
 
+
         GEO_GROUND,
         NUM_GEOMETRY,
     };
@@ -61,17 +62,19 @@ class SP2 : public Scene
         
 		U_LIGHTENABLED,
         U_NUMLIGHTS,
+
         U_COLOR_TEXTURE_ENABLED,
         U_COLOR_TEXTURE,
+
         U_TEXT_ENABLED,
         U_TEXT_COLOR,
 
         U_TOTAL,
     };
 
-	enum LIGHT_UNIFORM_TYPE
+	enum UNIFORM_LIGHT
 	{
-		UL_POSITION = 0,
+		UL_POSITION,
 		UL_COLOR,
 		UL_POWER,
 		UL_KC,
@@ -85,6 +88,11 @@ class SP2 : public Scene
 
 		UL_TOTAL,
 	};
+
+	static const size_t numLights = 3;
+
+	unsigned m_parameters[U_TOTAL];
+	unsigned lightUniforms[numLights][UL_TOTAL];
 
 public:
     SP2();
@@ -103,13 +111,6 @@ private:
     unsigned m_indexBuffer[NUM_GEOMETRY];
     Mesh *meshList[NUM_GEOMETRY];
     unsigned m_programID;
-
-	typedef unsigned lightParam[UL_TOTAL];
-
-    unsigned m_parameters[U_TOTAL];
-
-	static const size_t totalLights = 3;
-	lightParam lightUniformTypes[totalLights];
 
     float rotateAngle;
 
@@ -132,10 +133,11 @@ private:
     Camera5 camera5;
 
     ThirdPersonCamera thirdPersonCamera;
+	Camera5 camera5;
 
     MS modelStack, viewStack, projectionStack;
 
-    Light light[3];
+    Light light[numLights];
     bool toggleLight;
     void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
