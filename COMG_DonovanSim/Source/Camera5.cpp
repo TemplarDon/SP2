@@ -39,7 +39,7 @@ void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vect
 	//view.y < 0.9396 && view.y > -09396
 
 	//Mouse
-	int Angle = 50;
+	/*int Angle = 50;
 	horizontalAngle += mouseSpeed * dt * float(800 / 2 - Application::mouseX);
 	if (verticalAngle + mouseSpeed * dt * float(600 / 2 - Application::mouseY) < Angle && verticalAngle + mouseSpeed * dt * float(600 / 2 - Application::mouseY) > -Angle)
 	{
@@ -53,7 +53,7 @@ void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vect
 
 	Vector3 Right(sin(Math::DegreeToRadian(horizontalAngle) - 3.14f / 2.0f), 0, cos(Math::DegreeToRadian(horizontalAngle) - 3.14 / 2.9f));
 
-	up = Right.Cross(Direction);
+	up = Right.Cross(Direction);*/
 
     Vector3 view = (target - position).Normalized();
 	if (Application::IsKeyPressed('W'))
@@ -226,7 +226,7 @@ void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vect
 	}
 
     
-	target = position + Direction;
+	//target = position + Direction;
 
 }
 

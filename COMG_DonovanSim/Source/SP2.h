@@ -130,8 +130,6 @@ private:
     Camera *camPointer;
 
     Camera3 camera3;
-    Camera5 camera5;
-
     ThirdPersonCamera thirdPersonCamera;
 	Camera5 camera5;
 
