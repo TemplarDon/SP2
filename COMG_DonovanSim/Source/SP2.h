@@ -20,6 +20,7 @@
 #include "(SP2)InteractableOBJs.h"
 #include "(SP2)Building.h"
 #include "(SP2)Player.h"
+#include "(SP2)Ship.h"
 
 #include <vector>
 
@@ -58,6 +59,12 @@ class SP2 : public Scene
 
 		//NPCs
 		GEO_CHEF,
+
+		GEO_SPEAKERS,   
+		GEO_SOFA, 
+
+        //Space Ship
+        GEO_SHIP,
 
         GEO_GROUND,
         NUM_GEOMETRY,
@@ -174,6 +181,8 @@ private:
 	bool NearVendingText;
 	bool TokenOnScreen;
 
+
+    void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 };
 
 #endif

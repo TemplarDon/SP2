@@ -3,6 +3,7 @@
 
 #include "(SP2)GameObject.h"
 #include "(SP2)Inventory.h"
+#include "(SP2)Ship.h"
 #include "Camera.h"
 
 class Player : public GameObject
@@ -20,10 +21,12 @@ public:
 
     string getCameraType();
     Camera* getCameraPtr();
+
     void setCameraPtr(Camera someCamera);
     void setCameraType(string someCamType);
 
     void setPlayerStats(string name, string race, int moneyAmount, Position pos, Camera someCamera);
+    void enterShip(InteractableOBJs &someShip);
 
     bool ifDead();
     
