@@ -27,29 +27,37 @@ class SP2 : public Scene
 {
     enum GEOMETRY_TYPE
     {
-        GEO_AXES,
-        GEO_QUAD,
-        GEO_LEFT,
-        GEO_RIGHT,
-        GEO_TOP,
-        GEO_BOTTOM,
-        GEO_FRONT,
-        GEO_BACK,
-        GEO_LIGHTBALL,
-        GEO_TEXT,
-        GEO_HANDS,
+		GEO_AXES,
+		GEO_QUAD,
+		GEO_LEFT,
+		GEO_RIGHT,
+		GEO_TOP,
+		GEO_BOTTOM,
+		GEO_FRONT,
+		GEO_BACK,
+		GEO_LIGHTBALL,
+		GEO_TEXT,
+		GEO_HANDS,
 
-        // For Testing / PlaceHolders
-        GEO_WALL,
-        GEO_WALL2,
-        GEO_GATETOP,
-        GEO_GATE,
+		// For Testing / PlaceHolders
+		GEO_WALL,
+		GEO_WALL2,
+		GEO_GATETOP,
+		GEO_GATE,
 
 		//Buildings/OBJ   
 		GEO_TRADEPOST,
-		GEO_SPEAKERS,   
-		GEO_SOFA, 
+		GEO_SPEAKERS,
+		GEO_SOFA,
+		GEO_COUNTER,
+		GEO_FRIDGE,
+		GEO_TABLE,
+		GEO_VENDING,
+		GEO_CHAIR,
+		GEO_TOKEN,
 
+		//NPCs
+		GEO_CHEF,
 
         GEO_GROUND,
         NUM_GEOMETRY,
@@ -154,9 +162,17 @@ private:
     void rayTracing(vector<InteractableOBJs>&InteractablesList);
 	void RenderTradingStation();
 	void RenderRecRoom();
+	void RenderCafeRoom();
 
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTokenOnScreen(Mesh* mesh, float size, float x, float y);
+
+	float TokenTranslate;
+
+	//Bool for interactions (Shania's)
+	bool NearVendingText;
+	bool TokenOnScreen;
 
 };
 

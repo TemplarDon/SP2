@@ -41,6 +41,15 @@ void SP2::Init()
     glGenVertexArrays(1, &m_vertexArrayID);
     glBindVertexArray(m_vertexArrayID);
 
+
+	//Bools
+	NearVendingText = false;
+	TokenOnScreen = false;
+
+
+	//Floats
+	TokenTranslate = 12;
+
     //Shaders
     m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 
@@ -171,7 +180,7 @@ void SP2::Init()
 	heightOfWall = 12;
 
     Position * startingPos = new Position(0,0,0);
-    startingPos->Set(110, 10, -8);
+    startingPos->Set(150, 17, -36);
 
 	charPos = { 4, 0, 0 };
     //Initialize camera settings
@@ -254,23 +263,59 @@ void SP2::Init()
     meshList[GEO_GROUND]->material.kShininess = 1;
 
 
-	//init collision, then render room
-    //Collision
-	//Cafe Room
-    initRoomTemplate(Position(0, 2, 0));
 
-	//Recreational Room
-	initRoomTemplate(Position(100, 2, 0));
-
+	//TRADE POST
 	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
 	meshList[GEO_TRADEPOST]->textureID = LoadTGA("Image//TradingPostTexture2.tga");
 
+
+	//init collision, then render room
+    
+	//CAFE ROOM
+    initRoomTemplate(Position(0, 2, 0));            //Collision
+
+	//COUNTER
+	meshList[GEO_COUNTER] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Counter.obj");
+	meshList[GEO_COUNTER]->textureID = LoadTGA("Image//Counter.tga");
+
+	//FRIDGE
+	meshList[GEO_FRIDGE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Fridge.obj");
+	meshList[GEO_FRIDGE]->textureID = LoadTGA("Image//Fridge.tga");
+
+	//CHEF
+	meshList[GEO_CHEF] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chef.obj");
+	meshList[GEO_CHEF]->textureID = LoadTGA("Image//Chef.tga");
+
+
+	//TABLE
+	meshList[GEO_TABLE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Table.obj");
+	meshList[GEO_TABLE]->textureID = LoadTGA("Image//Table.tga");
+
+	//VENDING
+	meshList[GEO_VENDING] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Vending.obj");
+	meshList[GEO_VENDING]->textureID = LoadTGA("Image//Vending.tga");
+
+	//CHAIR
+	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chair.obj");
+	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//Chair.tga");
+
+	//Token
+	meshList[GEO_TOKEN] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Token.obj");
+	meshList[GEO_TOKEN]->textureID = LoadTGA("Image//Token.tga");
+
+
+
+
+	//Recreational Room
+	initRoomTemplate(Position(150, 2, 0));          //Collision
+
+	//SPEAKERS
 	meshList[GEO_SPEAKERS] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//RecRoomSpeakers.obj");
 	meshList[GEO_SPEAKERS]->textureID = LoadTGA("Image//RecRoomSpeakers.tga");
 
+	//SOFA
 	meshList[GEO_SOFA] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//sofa.obj");
 	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
-
 
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -362,8 +407,23 @@ void SP2::Update(double dt)
     }
     
   
-    
+    //VENDING
+	if (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25)
+	{
+		NearVendingText = true;
+	}
+	else
+	{
+		NearVendingText = false;
+	}
 
+
+	//COLLECT TOLKEN
+	if (Application::IsKeyPressed('Q'))
+	{
+		TokenOnScreen = true;
+		TokenTranslate = 10.5;
+	}
 }
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
@@ -936,6 +996,80 @@ void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
     }
 }
 
+void SP2::RenderCafeRoom()
+{
+	//COUNTER
+	modelStack.PushMatrix();
+	modelStack.Translate(180, 2, -30);
+	modelStack.Scale(2.3, 2, 2.3);
+	RenderMesh(meshList[GEO_COUNTER], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//FRIDGE
+	modelStack.PushMatrix();
+	modelStack.Translate(190, 2, -37);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_FRIDGE], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//CHEF
+	modelStack.PushMatrix();
+	modelStack.Translate(178, 3, -30);
+	modelStack.Scale(3.5, 3.8, 3.5);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[GEO_CHEF], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//TABLE
+	modelStack.PushMatrix();
+	modelStack.Translate(180, 2, 35);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_TABLE], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//CHAIR
+	modelStack.PushMatrix();
+	modelStack.Translate(170, 2, 35);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_CHAIR], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//VENDING
+	modelStack.PushMatrix();
+	modelStack.Translate(108, 2, 58);
+	modelStack.Scale(2.5, 2.5, 2.5);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//TOKEN
+	modelStack.PushMatrix();
+	modelStack.Translate(175, TokenTranslate, 30);
+	modelStack.Scale(1, 1.5, 1);
+	RenderMesh(meshList[GEO_TOKEN], true, toggleLight);
+	modelStack.PopMatrix();
+}
+
+void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	RenderMesh(mesh, true, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
 void SP2::RenderRecRoom()
 {
 	//SOFA
@@ -1019,6 +1153,9 @@ void SP2::Render()
     RenderSkybox();
 
 
+	//RENDER CAFE
+	RenderCafeRoom();
+
 	//GROUND MESH
     modelStack.PushMatrix();
     modelStack.Scale(1000, 1000, 1000);
@@ -1035,29 +1172,42 @@ void SP2::Render()
 	//modelStack.PopMatrix();
 
 
-	//THIRD PERSON 
-    modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
+	////THIRD PERSON 
+ //   modelStack.PushMatrix();
+ //   modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
+ //   RenderMesh(meshList[GEO_WALL], true, toggleLight);
+ //   modelStack.PopMatrix();
 
 	
     //RENDER ROOM (WALLS)
-    RenderRoomTemplate(Position(0, 2, 0));
+    RenderRoomTemplate(Position(0, 2, 0));     //RECREATIONAL ROOM
 
 
-	modelStack.PushMatrix();
 	//RENDER ROOM (WALLS)
-	RenderRoomTemplate(Position(100, 2, 0));
-	modelStack.PopMatrix();
+	RenderRoomTemplate(Position(150, 2, 0));   //CAFE
 
 
+
+	//INTERACTIONS
+
+
+	//TEXT
 	//POSITION OF X Y Z
 	std::ostringstream ss;
 	ss.str("");
 	ss << "POSIION: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
 
+	//VENDING TEXT
+	if (NearVendingText)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "PLEASE INSERT THE TOKEN", Color(1, 0, 0), 2, 6, 14);
+	}
+
+	if (TokenOnScreen == true)
+	{
+		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
+	}
 }
 
 void SP2::Exit()
