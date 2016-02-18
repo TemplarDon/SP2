@@ -271,6 +271,10 @@ void SP2::Init()
 	meshList[GEO_SOFA] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//sofa.obj");
 	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
 
+    // Space Ship
+    meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
+    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, Position(250, 2, 50), 4, 0, Vector3(0, 0, 0));
+    InteractablesList.push_back(someShip);
 
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -301,6 +305,17 @@ void SP2::Update(double dt)
 	}
 
     createBoundBox(InteractablesList, BuildingsList);
+    interactionCheck(dt, InteractablesList, somePlayer);
+
+    if (somePlayer.getCameraType() == "first")
+    {
+        camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
+    }
+    else
+    {
+        thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
+    }
+
 
     if (Application::IsKeyPressed('B'))
     {
@@ -339,31 +354,35 @@ void SP2::Update(double dt)
 
    
     
-    if (somePlayer.getCameraType() == "first")
-    {
-        camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
-        if (Application::IsKeyPressed('T'))
-        {
-            //somePlayer.setCameraPtr(thirdPersonCamera);
-            camPointer = &thirdPersonCamera;
-            somePlayer.setCameraType("third");
-        }
 
-    }
-    else
-    {
-        thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
-        if (Application::IsKeyPressed('T'))
-        {
-            //somePlayer.setCameraPtr(camera5);
-            camPointer = &camera5;
-            somePlayer.setCameraType("first");
-        }
-    }
     
   
     
 
+}
+
+void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
+{
+    for (size_t i = 0; i < InteractablesList.size(); ++i)
+    {
+        if (InteractablesList[i].name == "ship"/* && somePlayer.pos.x < InteractablesList[i].maxPos.x + 3 && somePlayer.pos.x > InteractablesList[i].minPos.x - 3 && somePlayer.pos.z < InteractablesList[i].maxPos.z + 3 && somePlayer.pos.z > InteractablesList[i].minPos.z - 3*/)
+        {
+            if (Application::IsKeyPressed('E'))
+            {
+                if (somePlayer.getCameraType() == "first")
+                {
+                    camPointer = &thirdPersonCamera;
+                    somePlayer.setCameraType("third");
+                    thirdPersonCamera.SetFocusPoint(&InteractablesList[i].pos);
+                }
+                else
+                {
+                    camPointer = &camera5;
+                    somePlayer.setCameraType("first");
+                }
+            }
+        }
+    }
 }
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
@@ -1038,7 +1057,7 @@ void SP2::Render()
 	//THIRD PERSON 
     modelStack.PushMatrix();
     modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
+    //RenderMesh(meshList[GEO_WALL], true, toggleLight);
     modelStack.PopMatrix();
 
 	
@@ -1051,6 +1070,13 @@ void SP2::Render()
 	RenderRoomTemplate(Position(100, 2, 0));
 	modelStack.PopMatrix();
 
+
+    // SpaceShip
+    modelStack.PushMatrix();
+    modelStack.Translate(250, 2, 50);
+    modelStack.Scale(4, 4, 4);
+    RenderMesh(meshList[GEO_SHIP], true, toggleLight);
+    modelStack.PopMatrix();
 
 	//POSITION OF X Y Z
 	std::ostringstream ss;

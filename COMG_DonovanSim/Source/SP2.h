@@ -20,6 +20,7 @@
 #include "(SP2)InteractableOBJs.h"
 #include "(SP2)Building.h"
 #include "(SP2)Player.h"
+#include "(SP2)Ship.h"
 
 #include <vector>
 
@@ -50,7 +51,8 @@ class SP2 : public Scene
 		GEO_SPEAKERS,   
 		GEO_SOFA, 
 
-
+        //Space Ship
+        GEO_SHIP,
         GEO_GROUND,
         NUM_GEOMETRY,
     };
@@ -158,6 +160,8 @@ private:
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 
+
+    void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 };
 
 #endif
