@@ -141,12 +141,6 @@ private:
     float rotateAngle;
 	float heightOfWall;
 
-    Position maxPos;
-    Position minPos;
-
-    Position* maxPtr;
-    Position* minPtr;
-
     Player somePlayer;
 
     vector<InteractableOBJs>InteractablesList;
@@ -166,7 +160,7 @@ private:
 
     void RenderSkybox();
     void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
-    void RenderRoomTemplate(Position pos, Vector3 size = (1,1,1), int groundMeshSize = 100);
+    void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
     void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
     void rayTracing(vector<InteractableOBJs>&InteractablesList);
 	void RenderTradingStation();
@@ -186,7 +180,6 @@ private:
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 
 	//Shorthand codes for easier coding (Gary's)
-
 	void LoadShaderCodes();
 	void LoadLights();
 	void LoadMeshes();
