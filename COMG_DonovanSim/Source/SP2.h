@@ -1,10 +1,13 @@
 #ifndef SP_2_H
 #define SP_2_H
 
+#include "GL\glew.h"
+#include "shader.hpp"
+#include "Utility.h"
 
 #include "Mtx44.h"
-#include "Material.h"
 
+#include "Application.h"
 #include "Scene.h"
 #include "Camera.h"
 #include "Camera2.h"
@@ -12,10 +15,14 @@
 #include "Camera5.h"
 #include "ThirdPersonCamera.h"
 #include "Mesh.h"
+#include "MeshBuilder.h"
+#include "Material.h"
+#include "LoadTGA.h"
 #include "vertex.h"
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Node.h"
+#include "timer.h"
 
 #include "(SP2)InteractableOBJs.h"
 #include "(SP2)Building.h"
@@ -23,6 +30,7 @@
 #include "(SP2)Ship.h"
 
 #include <vector>
+#include <sstream>
 
 class SP2 : public Scene
 {
@@ -152,9 +160,8 @@ private:
     Camera *camPointer;
 
     Camera3 camera3;
-
-    ThirdPersonCamera thirdPersonCamera;
 	Camera5 camera5;
+	ThirdPersonCamera thirdPersonCamera;
 
     MS modelStack, viewStack, projectionStack;
 
@@ -181,8 +188,14 @@ private:
 	bool NearVendingText;
 	bool TokenOnScreen;
 
-
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
+
+	//Shorthand codes for easier coding (Gary's)
+
+	void LoadShaderCodes();
+	void LoadLights();
+	void LoadMeshes();
+	void ReadKeyPresses();
 };
 
 #endif

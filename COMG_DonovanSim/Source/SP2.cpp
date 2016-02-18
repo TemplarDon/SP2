@@ -1,16 +1,4 @@
 #include "SP2.h"
-#include "GL\glew.h"
-
-#include "shader.hpp"
-#include "Mtx44.h"
-#include "Utility.h"
-#include "LoadTGA.h"
-
-#include "Application.h"
-#include "MeshBuilder.h"
-
-#include "timer.h"
-#include <sstream>
 
 SP2::SP2()
 {
@@ -23,161 +11,29 @@ SP2::~SP2()
 
 void SP2::Init()
 {
-    // Init VBO here
-
-    // Set background color to dark blue
-    glClearColor(0.0f, 0.0f, 0.2f, 0.0f);
-
-    //Enable depth buffer and depth testing
-    glEnable(GL_DEPTH_TEST);
-
-    //Enable back face culling
-    glEnable(GL_CULL_FACE);
-
-    //Default to fill mode
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-    // Generate a default VAO for now
-    glGenVertexArrays(1, &m_vertexArrayID);
-    glBindVertexArray(m_vertexArrayID);
-
-
-	//Bools
+    //Bools
 	NearVendingText = false;
 	TokenOnScreen = false;
-
 
 	//Floats
 	TokenTranslate = 12;
 
-    //Shaders
-    m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
-
-    // Enable blending
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    //Mapping variables to tell gpu what is what
-    m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
-    m_parameters[U_MODELVIEW] = glGetUniformLocation(m_programID, "MV");
-    m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE] = glGetUniformLocation(m_programID, "MV_inverse_transpose");
-    m_parameters[U_MATERIAL_AMBIENT] = glGetUniformLocation(m_programID, "material.kAmbient");
-    m_parameters[U_MATERIAL_DIFFUSE] = glGetUniformLocation(m_programID, "material.kDiffuse");
-    m_parameters[U_MATERIAL_SPECULAR] = glGetUniformLocation(m_programID, "material.kSpecular");
-	m_parameters[U_MATERIAL_SHININESS] = glGetUniformLocation(m_programID, "material.kShininess");
-
-	for (size_t S = 0; S < numLights; S++)
-	{
-		std::string baseString = "lights[" + std::to_string(S);
-
-		static vector<std::string> endings =
-		{
-			"].position_cameraspace",
-			"].color",
-			"].power",
-			"].kC",
-			"].kL",
-			"].kQ",
-			"].type",
-			"].spotDirection",
-			"].cosCutoff",
-			"].cosInner",
-			"].exponent"
-		};
-
-		vector<std::string>::iterator i = endings.begin();
-
-		lightUniforms[S][UL_POSITION] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_COLOR] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_POWER] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_KC] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_KL] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_KQ] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_TYPE] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_SPOTDIRECTION] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_COSCUTOFF] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_COSINNER] = glGetUniformLocation(m_programID, (baseString + *i).c_str()); i++;
-		lightUniforms[S][UL_EXPONENT] = glGetUniformLocation(m_programID, (baseString + *i).c_str());
-	}
-
-	m_parameters[U_LIGHTENABLED] = glGetUniformLocation(m_programID, "lightEnabled");
-	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
-
-    // Get a handle for our "colorTexture" uniform
-    m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
-    m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
-
-    // Get a handle for our "textColor" uniform
-    m_parameters[U_TEXT_ENABLED] = glGetUniformLocation(m_programID, "textEnabled");
-    m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
-
-	glUseProgram(m_programID);
-
-	light[0].type = Light::LIGHT_SPOT;
-	light[0].position.Set(-60, 12, 0);
-	light[0].color.Set(1, 1, 1);
-	light[0].power = 1;
-	light[0].kC = 1.0f;
-	light[0].kL = 0.01f;
-	light[0].kQ = 0.001f;
-	light[0].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[0].cosInner = cos(Math::DegreeToRadian(30));
-	light[0].exponent = 3.0f;
-	light[0].spotDirection.Set(0.2f, 1.0f, 0.2f);
-
-	light[1].type = Light::LIGHT_SPOT;
-	light[1].position.Set(0, 10, 0);
-	light[1].color.Set(0, 1, 1);
-	light[1].power = 1;
-	light[1].kC = 1.0f;
-	light[1].kL = 0.01f;
-	light[1].kQ = 0.001f;
-	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[1].cosInner = cos(Math::DegreeToRadian(30));
-	light[1].exponent = 3.0f;
-	light[1].spotDirection.Set(-0.2f, 1.0f, -0.2f);
-
-	light[2].type = Light::LIGHT_SPOT;
-	light[2].position.Set(3, 10, 0);
-	light[2].color.Set(1, 0, 0);
-	light[2].power = 1;
-	light[2].kC = 1.0f;
-	light[2].kL = 0.01f;
-	light[2].kQ = 0.001f;
-	light[2].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[2].cosInner = cos(Math::DegreeToRadian(30));
-	light[2].exponent = 3.0f;
-	light[2].spotDirection.Set(-0.2f, 1.0f, 0);
-
-	glUniform1i(m_parameters[U_NUMLIGHTS], numLights);
-
-	for (size_t S = 0; S < numLights; S++)
-	{
-		glUniform1i(lightUniforms[S][UL_TYPE], light[S].type);
-		glUniform3fv(lightUniforms[S][UL_COLOR], 1, &light[S].color.r);
-		glUniform1f(lightUniforms[S][UL_POWER], light[S].power);
-		glUniform1f(lightUniforms[S][UL_KC], light[S].kC);
-		glUniform1f(lightUniforms[S][UL_KL], light[S].kL);
-		glUniform1f(lightUniforms[S][UL_KQ], light[S].kQ);
-		glUniform1f(lightUniforms[S][UL_COSCUTOFF], light[S].cosCutoff);
-		glUniform1f(lightUniforms[S][UL_COSINNER], light[S].cosInner);
-		glUniform1f(lightUniforms[S][UL_EXPONENT], light[S].exponent);
-	}
-
-    // Make sure you pass uniform parameters after glUseProgram()
-    glUniform1i(m_parameters[U_NUMLIGHTS], numLights);
+	LoadShaderCodes();
+	LoadLights();
+	LoadMeshes();
 
     //variable to rotate geometry
     rotateAngle = 0;
     toggleLight = true;
 
-    Position maxPos = Position(0, 0, 0); // Vector for max pos
-    Position minPos = Position(0, 0, 0); // Vector for min pos
+    //Position maxPos = Position(0, 0, 0); // Vector for max pos
+    //Position minPos = Position(0, 0, 0); // Vector for min pos
 
     maxPtr = 0;
     minPtr = 0;
 
 	heightOfWall = 12;
+
 
     // Starting Pos Of Player
     Position startingPos;
@@ -189,7 +45,11 @@ void SP2::Init()
     Position * shipStartingPosPtr = &shipStartingPos;
     shipStartingPos.Set(200, 2, 100);
 
-	charPos = { 4, 0, 0 };
+	charPos = { 150, 17, -36 };
+    //Initialize camera settings
+    camera5.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
+    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
+
     //Initialize camera settings
     camera5.Init(Vector3(startingPos.x, startingPos.y, startingPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
     thirdPersonCamera.Init(Vector3(shipStartingPos.x - 30, shipStartingPos.y + 10, shipStartingPos.z - 30), Vector3(0, 1, 0), shipStartingPosPtr, 10);
@@ -199,6 +59,7 @@ void SP2::Init()
 
     // Init Player
     somePlayer.setPlayerStats("TestMan", "Human", 100, *startingPosPtr, camera5); // Name, Race, Money, Pos, camera
+	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, camera5); // Name, Race, Money, Pos, camera
 
 
 
@@ -335,7 +196,6 @@ void SP2::Init()
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
     projectionStack.LoadMatrix(projection);
-
 }
 
 static float ROT_LIMIT = 45.f;
@@ -346,19 +206,7 @@ void SP2::Update(double dt)
 {
     FramesPerSecond = 1 / dt;
 
-    if (Application::IsKeyPressed('1')) //enable back face culling
-        glEnable(GL_CULL_FACE);
-    if (Application::IsKeyPressed('2')) //disable back face culling
-        glDisable(GL_CULL_FACE);
-    if (Application::IsKeyPressed('3'))
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-    if (Application::IsKeyPressed('4'))
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-
-	if (Application::IsKeyPressed('A'))
-	{
-		charPos.x -= (float)dt * 50;
-	}
+	ReadKeyPresses();
 
     createBoundBox(InteractablesList, BuildingsList);
     interactionCheck(dt, InteractablesList, somePlayer);
@@ -372,59 +220,22 @@ void SP2::Update(double dt)
         thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
     }
 
-
-    if (Application::IsKeyPressed('B'))
-    {
-        if (toggleLight == true)
-        {
-            toggleLight = false;
-        }
-        else
-        {
-            toggleLight = true;
-        }
-    }
-
-    if (Application::IsKeyPressed('5'))
-    {
-        light[0].type = Light::LIGHT_SPOT;
-        glUniform1i(lightUniforms[0][UL_TYPE], light[0].type);
-    }
-    if (Application::IsKeyPressed('6'))
-    {
-        light[0].type = Light::LIGHT_DIRECTIONAL;
-		glUniform1i(lightUniforms[0][UL_TYPE], light[0].type);
-    }
-    if (Application::IsKeyPressed('7'))
-    {
-        light[0].type = Light::LIGHT_POINT;
-		glUniform1i(lightUniforms[0][UL_TYPE], light[0].type);
-    }
+    // TEST FOR BULLET COLLISION
+    //if (Application::IsKeyPressed('B'))
+    //{
+    //    rayTracing(InteractablesList);
+    //}
   
     //VENDING
-	if (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25)
-	{
-		NearVendingText = true;
-	}
-	else
-	{
-		NearVendingText = false;
-	}
+	NearVendingText = (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25);
 
-
-	//COLLECT TOLKEN
-	if (Application::IsKeyPressed('Q'))
-	{
-		TokenOnScreen = true;
-		TokenTranslate = 10.5;
-	}
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
-    for (size_t i = 0; i < ShipList.size(); ++i)
+	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); ++i)
     {
-        if (ShipList[i].name == "ship")
+        if (i->name == "ship"/* && somePlayer.pos.x < i->maxPos.x + 3 && somePlayer.pos.x > i->minPos.x - 3 && somePlayer.pos.z < i->maxPos.z + 3 && somePlayer.pos.z > i->minPos.z - 3*/)
         {
             if (Application::IsKeyPressed('E'))
             {
@@ -440,6 +251,216 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
                 }
             }
         }
+
+		std::cout << i->isInView(*thirdPersonCamera.GetFocusPoint(), thirdPersonCamera.camDirection) << std::endl;
+    }
+}
+
+void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)
+{
+
+	Position maxPos;
+	Position minPos;
+
+	Position cameraPos;
+
+	if (somePlayer.getCameraType() == "first")
+	{
+		Vector3 view = (camera5.target - camera5.position).Normalized();
+		cameraPos.x = camera5.position.x + view.x;
+		cameraPos.y = camera5.position.y + view.y;
+		cameraPos.z = camera5.position.z + view.z;
+	}
+	else
+	{
+		Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
+		cameraPos.x = thirdPersonCamera.GetFocusPoint()->x + view.x;
+		cameraPos.y = thirdPersonCamera.GetFocusPoint()->y + view.y;
+		cameraPos.z = thirdPersonCamera.GetFocusPoint()->z + view.z;
+	}
+
+
+	for (int i = 0; i < InteractablesList.size(); ++i)
+	{
+		maxPos.x = InteractablesList[i].maxPos.x;
+		maxPos.y = InteractablesList[i].maxPos.y;
+		maxPos.z = InteractablesList[i].maxPos.z;
+
+		minPos.x = InteractablesList[i].minPos.x;
+		minPos.y = InteractablesList[i].minPos.y;
+		minPos.z = InteractablesList[i].minPos.z;
+
+		// Scaling
+		maxPos.x = maxPos.x * InteractablesList[i].scaleOffSet;
+		maxPos.y = maxPos.y * InteractablesList[i].scaleOffSet;
+		maxPos.z = maxPos.z * InteractablesList[i].scaleOffSet;
+
+		minPos.x = minPos.x * InteractablesList[i].scaleOffSet;
+		minPos.y = minPos.y * InteractablesList[i].scaleOffSet;
+		minPos.z = minPos.z * InteractablesList[i].scaleOffSet;
+
+		// Rotation
+		Mtx44 rotation;
+		Vector3 tempMax;
+		Vector3 tempMin;
+
+		tempMax.x = maxPos.x;
+		tempMax.y = maxPos.y;
+		tempMax.z = maxPos.z;
+
+		tempMin.x = minPos.x;
+		tempMin.y = minPos.y;
+		tempMin.z = minPos.z;
+		if (InteractablesList[i].rotateAxis.x == 1)
+		{
+			rotation.SetToRotation(InteractablesList[i].rotateAngle, 1, 0, 0);
+			tempMax = rotation * tempMax;
+			tempMin = rotation * tempMin;
+		}
+		if (InteractablesList[i].rotateAxis.y == 1)
+		{
+			rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 1, 0);
+			tempMax = rotation * tempMax;
+			tempMin = rotation * tempMin;
+		}
+		if (InteractablesList[i].rotateAxis.z == 1)
+		{
+			rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 0, 1);
+			tempMax = rotation * tempMax;
+			tempMin = rotation * tempMin;
+		}
+
+		maxPos.x = tempMax.x;
+		maxPos.y = tempMax.y;
+		maxPos.z = tempMax.z;
+
+		minPos.x = tempMin.x;
+		minPos.y = tempMin.y;
+		minPos.z = tempMin.z;
+
+		// Translating
+		maxPos.x += InteractablesList[i].pos.x;
+		maxPos.y += InteractablesList[i].pos.y;
+		maxPos.z += InteractablesList[i].pos.z;
+
+		minPos.x += InteractablesList[i].pos.x;
+		minPos.y += InteractablesList[i].pos.y;
+		minPos.z += InteractablesList[i].pos.z;
+
+		if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
+		{
+			InteractablesList[i].canMove = true;
+		}
+		else
+		{
+			InteractablesList[i].canMove = false;
+		}
+	}
+
+
+	for (int i = 0; i < BuildingsList.size(); ++i)
+	{
+		maxPos.x = BuildingsList[i].maxPos.x;
+		maxPos.y = BuildingsList[i].maxPos.y;
+		maxPos.z = BuildingsList[i].maxPos.z;
+
+		minPos.x = BuildingsList[i].minPos.x;
+		minPos.y = BuildingsList[i].minPos.y;
+		minPos.z = BuildingsList[i].minPos.z;
+
+		// Scaling
+		maxPos.x = maxPos.x * BuildingsList[i].scaleOffSet;
+		maxPos.y = maxPos.y * BuildingsList[i].scaleOffSet;
+		maxPos.z = maxPos.z * BuildingsList[i].scaleOffSet;
+
+		minPos.x = minPos.x * BuildingsList[i].scaleOffSet;
+		minPos.y = minPos.y * BuildingsList[i].scaleOffSet;
+		minPos.z = minPos.z * BuildingsList[i].scaleOffSet;
+
+		// Rotation
+		Mtx44 rotation;
+		Vector3 tempMax;
+		Vector3 tempMin;
+
+		tempMax.x = maxPos.x;
+		tempMax.y = maxPos.y;
+		tempMax.z = maxPos.z;
+
+		tempMin.x = minPos.x;
+		tempMin.y = minPos.y;
+		tempMin.z = minPos.z;
+		if (BuildingsList[i].rotateAxis.x == 1)
+		{
+			rotation.SetToRotation(BuildingsList[i].rotateAngle, 1, 0, 0);
+			tempMax = rotation * tempMax;
+			tempMin = rotation * tempMin;
+		}
+		if (BuildingsList[i].rotateAxis.y == 1)
+		{
+			rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 1, 0);
+			tempMax = rotation * tempMax;
+			tempMin = rotation * tempMin;
+		}
+		if (BuildingsList[i].rotateAxis.z == 1)
+		{
+			rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 0, 1);
+			tempMax = rotation * tempMax;
+			tempMin = rotation * tempMin;
+		}
+
+		maxPos.x = tempMax.x;
+		maxPos.y = tempMax.y;
+		maxPos.z = tempMax.z;
+
+		minPos.x = tempMin.x;
+		minPos.y = tempMin.y;
+		minPos.z = tempMin.z;
+
+		// Translating
+		maxPos.x += BuildingsList[i].pos.x;
+		maxPos.y += BuildingsList[i].pos.y;
+		maxPos.z += BuildingsList[i].pos.z;
+
+		minPos.x += BuildingsList[i].pos.x;
+		minPos.y += BuildingsList[i].pos.y;
+		minPos.z += BuildingsList[i].pos.z;
+
+		if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
+		{
+			BuildingsList[i].canMove = true;
+		}
+		else
+		{
+			BuildingsList[i].canMove = false;
+		}
+
+	}
+
+
+}
+
+
+
+void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
+{
+    Vector3 view = (camera5.target - camera5.position).Normalized();
+
+    for (size_t i = 0; i < InteractablesList.size(); ++i)
+    {
+        Vector3 objPos = (InteractablesList[i].pos.x, InteractablesList[i].pos.y, InteractablesList[i].pos.z);
+        //Vector3 viewNormal = view.Normalized();
+
+        //distance = objPos.Dot(viewNormal);
+
+        Vector3 projection = (objPos.Dot(view.Normalized()) * view.Normalized());
+
+        Vector3 distVec = -objPos + projection;
+
+        if (distVec.Length() < 1)
+        {
+            std::cout << "HIT" << std::endl;
+        }
+
     }
 }
 
@@ -487,631 +508,6 @@ void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-}
-
-void SP2::RenderText(Mesh* mesh, std::string text, Color color)
-{
-    if (!mesh || mesh->textureID <= 0) //Proper error check
-        return;
-
-    glDisable(GL_DEPTH_TEST);
-    glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
-    glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
-    glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-    glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-    glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-    for (unsigned i = 0; i < text.length(); ++i)
-    {
-        Mtx44 characterSpacing;
-        characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
-        Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
-        glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-
-        mesh->Render((unsigned)text[i] * 6, 6);
-    }
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-    glEnable(GL_DEPTH_TEST);
-}
-
-void SP2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
-{
-    if (!mesh || mesh->textureID <= 0) //Proper error check
-        return;
-
-
-    glDisable(GL_DEPTH_TEST);
-    //Add these code just after glDisable(GL_DEPTH_TEST);
-    Mtx44 ortho;
-    ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
-    projectionStack.PushMatrix();
-    projectionStack.LoadMatrix(ortho);
-    viewStack.PushMatrix();
-    viewStack.LoadIdentity(); //No need camera for ortho mode
-    modelStack.PushMatrix();
-    modelStack.LoadIdentity(); //Reset modelStack
-    modelStack.Scale(size, size, size);
-    modelStack.Translate(x, y, 0);
-
-
-    glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
-    glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
-    glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-    glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-    glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-    for (unsigned i = 0; i < text.length(); ++i)
-    {
-        Mtx44 characterSpacing;
-        characterSpacing.SetToTranslation(i * 1.0f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
-        Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
-        glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-
-        mesh->Render((unsigned)text[i] * 6, 6);
-    }
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-
-    projectionStack.PopMatrix();
-    viewStack.PopMatrix();
-    modelStack.PopMatrix();
-
-    glEnable(GL_DEPTH_TEST);
-}
-
-void SP2::RenderSkybox()
-{
-    // FRONT
-    modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y, -249.5 + thirdPersonCamera.position.z);
-    modelStack.Rotate(90, 1, 0, 0);
-    modelStack.Rotate(-90, 0, 1, 0);
-    modelStack.Scale(500, 500, 500);
-    RenderMesh(meshList[GEO_FRONT], false, toggleLight);
-    modelStack.PopMatrix();
-
-    // BACK
-    modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y, 249.5 + thirdPersonCamera.position.z);
-    modelStack.Rotate(-90, 1, 0, 0);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(500, 500, 500);
-    RenderMesh(meshList[GEO_BACK], false, toggleLight);
-    modelStack.PopMatrix();
-
-    // LEFT
-    modelStack.PushMatrix();
-    modelStack.Translate(-249.5 + thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z);
-    modelStack.Rotate(-90, 0, 0, 1);
-    modelStack.Rotate(0, 0, 1, 0);
-    modelStack.Scale(500, 500, 500);
-    RenderMesh(meshList[GEO_LEFT], false, toggleLight);
-    modelStack.PopMatrix();
-
-    // RIGHT
-    modelStack.PushMatrix();
-    modelStack.Translate(249.5 + thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z);
-    modelStack.Rotate(90, 0, 0, 1);
-    modelStack.Rotate(180, 0, 1, 0);
-    modelStack.Scale(500, 500, 500);
-    RenderMesh(meshList[GEO_RIGHT], false, toggleLight);
-    modelStack.PopMatrix();
-
-    // BOTTOM
-    modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.position.x, -249.5 + thirdPersonCamera.position.y, thirdPersonCamera.position.z);
-    modelStack.Scale(500, 500, 500);
-    RenderMesh(meshList[GEO_BOTTOM], false, toggleLight);
-    modelStack.PopMatrix();
-
-    // TOP
-    modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.position.x, 249.5 + thirdPersonCamera.position.y, thirdPersonCamera.position.z);
-    modelStack.Rotate(180, 1, 0, 0);
-    modelStack.Rotate(180, 0, 1, 0);
-    modelStack.Scale(500, 500, 500);
-    RenderMesh(meshList[GEO_TOP], false, toggleLight);
-    modelStack.PopMatrix();
-}
-
-void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
-{
-    Building floor1 = Building("floor1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(floor1);
-
-    Building ceiling1 = Building("ceiling1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y + 30, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(ceiling1);
-
-
-    Building rightWall1 = Building("rightWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(rightWall1);
-
-    Building rightWall2 = Building("rightWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(rightWall2);
-
-    Building rightGateTop = Building("rightGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 30, pos.z + (groundMeshSize / 2) - 4), 4, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(rightGateTop);
-
-
-    Building leftWall1 = Building("leftWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(leftWall1);                                                                                                                   
-                                                                                                                                                          
-    Building leftWall2 = Building("leftWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(leftWall2);
-
-    Building leftGateTop = Building("leftGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 30, pos.z - (groundMeshSize / 2) - 4), 4, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(leftGateTop);
-
-
-    Building frontWall1 = Building("frontWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 12, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(frontWall1);                                                                        
-                                                                                                                
-    Building frontWall2 = Building("frontWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 12, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(frontWall2);
-
-    Building frontGateTop = Building("frontGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x + (groundMeshSize / 2) - 4, pos.y + 30, pos.z), 4, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(frontGateTop);
-
-
-    Building backWall1 = Building("backWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 12, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(backWall1);
-
-    Building backWall2 = Building("backWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 12, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(backWall2);
-
-    Building backGateTop = Building("backGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x - (groundMeshSize / 2) - 4, pos.y + 30, pos.z), 4, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(backGateTop);
-
-}
-
-void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
-{
-
-	groundMeshSize = 100;
-
-    // Whole Room
-    modelStack.PushMatrix();
-    modelStack.Translate(pos.x, pos.y, pos.z);
-
-    // Render Floor + Ceiling
-    modelStack.PushMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Scale(groundMeshSize, groundMeshSize, groundMeshSize);
-    RenderMesh(meshList[GEO_GROUND], false, toggleLight); // Floor
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 30, 0);
-    modelStack.Rotate(180, 1, 0, 0);
-    modelStack.Scale(groundMeshSize, groundMeshSize, groundMeshSize);
-    RenderMesh(meshList[GEO_GROUND], false, toggleLight); // Ceiling
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-    // Render Walls
-    modelStack.PushMatrix();
-
-    // ---------------------------- Right Wall ---------------------------------- //
-    modelStack.PushMatrix();
-	modelStack.Translate(0, 0, (groundMeshSize / 2));
-
-    modelStack.PushMatrix();
-    modelStack.Translate(38, heightOfWall, 0);
-    modelStack.Scale(12, 30, 12);
-    RenderMesh(meshList[GEO_WALL], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(-38, heightOfWall, 0);
-    modelStack.Scale(12, 30, 12);
-    RenderMesh(meshList[GEO_WALL], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();    
-    modelStack.Translate(0, 0, -4);
-    modelStack.Scale(5, 8, 5);
-    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-    // ---------------------------- Right Wall ---------------------------------- //
-
-
-    // ---------------------------- Left Wall ---------------------------------- //
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 0, -(groundMeshSize / 2));
-
-    modelStack.PushMatrix();
-    modelStack.Translate(38, heightOfWall, 0);
-    modelStack.Scale(12, 30, 12);
-    RenderMesh(meshList[GEO_WALL], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(-38, heightOfWall, 0);
-    modelStack.Scale(12, 30, 12);
-    RenderMesh(meshList[GEO_WALL], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, 0, -4);
-    modelStack.Scale(5, 8, 5);
-    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-    // ---------------------------- Left Wall ---------------------------------- //
-
-
-    // ---------------------------- Front Wall ---------------------------------- //
-    modelStack.PushMatrix();
-    modelStack.Translate((groundMeshSize / 2), 0, 0);
-
-    modelStack.PushMatrix();
-	modelStack.Translate(0, heightOfWall, -38);
-	modelStack.Scale(12, 30, 12);
-    RenderMesh(meshList[GEO_WALL2], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, heightOfWall, 38);
-	modelStack.Scale(12, 30, 12);
-    RenderMesh(meshList[GEO_WALL2], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(-4, 0, 0);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(5, 8, 5);
-    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-    // ---------------------------- Front Wall ---------------------------------- //
-
-
-    // ---------------------------- Back Wall ---------------------------------- //
-    modelStack.PushMatrix();
-    modelStack.Translate((-groundMeshSize / 2), 0, 0);
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, heightOfWall, -38);
-    modelStack.Scale(12, 30, 12);
-    RenderMesh(meshList[GEO_WALL2], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(0, heightOfWall, 38);
-    modelStack.Scale(12, 30, 12);
-    RenderMesh(meshList[GEO_WALL2], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PushMatrix();
-    modelStack.Translate(-4, 0, 0);
-    modelStack.Rotate(90, 0, 1, 0);
-    modelStack.Scale(5, 8, 5);
-    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-    // ---------------------------- Back Wall ---------------------------------- //
-
-    modelStack.PopMatrix();
-
-    modelStack.PopMatrix();
-
-}
-
-void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)
-{
-   
-    Position maxPos;
-    Position minPos;
-
-    Position cameraPos;
-
-    if (somePlayer.getCameraType() == "first")
-    {
-		Vector3 view = (camera5.target - camera5.position).Normalized();
-        cameraPos.x = camera5.position.x + view.x;
-        cameraPos.y = camera5.position.y + view.y;
-        cameraPos.z = camera5.position.z + view.z;
-    }
-    else
-    {
-		Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
-        cameraPos.x = thirdPersonCamera.GetFocusPoint()->x + view.x;
-        cameraPos.y = thirdPersonCamera.GetFocusPoint()->y + view.y;
-        cameraPos.z = thirdPersonCamera.GetFocusPoint()->z + view.z;
-    }
-
-
-    for (int i = 0; i < InteractablesList.size(); ++i)
-    {
-        maxPos.x = InteractablesList[i].maxPos.x;
-        maxPos.y = InteractablesList[i].maxPos.y;
-        maxPos.z = InteractablesList[i].maxPos.z;
-
-        minPos.x = InteractablesList[i].minPos.x;
-        minPos.y = InteractablesList[i].minPos.y;
-        minPos.z = InteractablesList[i].minPos.z;
-
-        // Scaling
-        maxPos.x = maxPos.x * InteractablesList[i].scaleOffSet;
-        maxPos.y = maxPos.y * InteractablesList[i].scaleOffSet;
-        maxPos.z = maxPos.z * InteractablesList[i].scaleOffSet;
-
-        minPos.x = minPos.x * InteractablesList[i].scaleOffSet;
-        minPos.y = minPos.y * InteractablesList[i].scaleOffSet;
-        minPos.z = minPos.z * InteractablesList[i].scaleOffSet;
-
-        // Rotation
-        Mtx44 rotation;
-        Vector3 tempMax;
-        Vector3 tempMin;
-
-        tempMax.x = maxPos.x;
-        tempMax.y = maxPos.y;
-        tempMax.z = maxPos.z;
-
-        tempMin.x = minPos.x;
-        tempMin.y = minPos.y;
-        tempMin.z = minPos.z;
-        if (InteractablesList[i].rotateAxis.x == 1)
-        {
-            rotation.SetToRotation(InteractablesList[i].rotateAngle, 1, 0, 0);
-            tempMax = rotation * tempMax;
-            tempMin = rotation * tempMin;
-        }
-        if (InteractablesList[i].rotateAxis.y == 1)
-        {
-            rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 1, 0);
-            tempMax = rotation * tempMax;
-            tempMin = rotation * tempMin;
-        }
-        if (InteractablesList[i].rotateAxis.z == 1)
-        {
-            rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 0, 1);
-            tempMax = rotation * tempMax;
-            tempMin = rotation * tempMin;
-        }
-
-        maxPos.x = tempMax.x;
-        maxPos.y = tempMax.y;
-        maxPos.z = tempMax.z;
-
-        minPos.x = tempMin.x;
-        minPos.y = tempMin.y;
-        minPos.z = tempMin.z;
-
-        // Translating
-        maxPos.x += InteractablesList[i].pos.x;
-        maxPos.y += InteractablesList[i].pos.y;
-        maxPos.z += InteractablesList[i].pos.z;
-
-        minPos.x += InteractablesList[i].pos.x;
-        minPos.y += InteractablesList[i].pos.y;
-        minPos.z += InteractablesList[i].pos.z;
-
-        if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
-        {
-            InteractablesList[i].canMove = true;
-        }
-        else
-        {
-            InteractablesList[i].canMove = false;
-        }
-    }
-
-
-    for (int i = 0; i < BuildingsList.size(); ++i)
-    {
-        maxPos.x = BuildingsList[i].maxPos.x;
-        maxPos.y = BuildingsList[i].maxPos.y;
-        maxPos.z = BuildingsList[i].maxPos.z;
-
-        minPos.x = BuildingsList[i].minPos.x;
-        minPos.y = BuildingsList[i].minPos.y;
-        minPos.z = BuildingsList[i].minPos.z;
-
-        // Scaling
-        maxPos.x = maxPos.x * BuildingsList[i].scaleOffSet;
-        maxPos.y = maxPos.y * BuildingsList[i].scaleOffSet;
-        maxPos.z = maxPos.z * BuildingsList[i].scaleOffSet;
-
-        minPos.x = minPos.x * BuildingsList[i].scaleOffSet;
-        minPos.y = minPos.y * BuildingsList[i].scaleOffSet;
-        minPos.z = minPos.z * BuildingsList[i].scaleOffSet;
-
-        // Rotation
-        Mtx44 rotation;
-        Vector3 tempMax;
-        Vector3 tempMin;
-
-        tempMax.x = maxPos.x;
-        tempMax.y = maxPos.y;
-        tempMax.z = maxPos.z;
-
-        tempMin.x = minPos.x;
-        tempMin.y = minPos.y;
-        tempMin.z = minPos.z;
-        if (BuildingsList[i].rotateAxis.x == 1)
-        {
-            rotation.SetToRotation(BuildingsList[i].rotateAngle, 1, 0, 0);
-            tempMax = rotation * tempMax;
-            tempMin = rotation * tempMin;
-        }
-        if (BuildingsList[i].rotateAxis.y == 1)
-        {
-            rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 1, 0);
-            tempMax = rotation * tempMax;
-            tempMin = rotation * tempMin;
-        }
-        if (BuildingsList[i].rotateAxis.z == 1)
-        {
-            rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 0, 1);
-            tempMax = rotation * tempMax;
-            tempMin = rotation * tempMin;
-        }
-
-        maxPos.x = tempMax.x;
-        maxPos.y = tempMax.y;
-        maxPos.z = tempMax.z;
-
-        minPos.x = tempMin.x;
-        minPos.y = tempMin.y;
-        minPos.z = tempMin.z;
-
-        // Translating
-        maxPos.x += BuildingsList[i].pos.x;
-        maxPos.y += BuildingsList[i].pos.y;
-        maxPos.z += BuildingsList[i].pos.z;
-
-        minPos.x += BuildingsList[i].pos.x;
-        minPos.y += BuildingsList[i].pos.y;
-        minPos.z += BuildingsList[i].pos.z;
-
-        if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
-        {
-            BuildingsList[i].canMove = true;
-        }
-        else
-        {
-            BuildingsList[i].canMove = false;
-        }
-
-    }
-
-
-}
-
-void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
-{
-    Vector3 view = (camera5.target - camera5.position).Normalized();
-
-    for (size_t i = 0; i < InteractablesList.size(); ++i)
-    {
-        Vector3 objPos = (InteractablesList[i].pos.x, InteractablesList[i].pos.y, InteractablesList[i].pos.z);
-        //Vector3 viewNormal = view.Normalized();
-
-        //distance = objPos.Dot(viewNormal);
-
-        Vector3 projection = (objPos.Dot(view.Normalized()) * view.Normalized());
-
-        Vector3 distVec = -objPos + projection;
-
-        if (distVec.Length() < 1)
-        {
-            std::cout << "HIT" << std::endl;
-        }
-
-    }
-}
-
-void SP2::RenderCafeRoom()
-{
-	//COUNTER
-	modelStack.PushMatrix();
-	modelStack.Translate(180, 2, -30);
-	modelStack.Scale(2.3, 2, 2.3);
-	RenderMesh(meshList[GEO_COUNTER], true, toggleLight);
-	modelStack.PopMatrix();
-
-	//FRIDGE
-	modelStack.PushMatrix();
-	modelStack.Translate(190, 2, -37);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_FRIDGE], true, toggleLight);
-	modelStack.PopMatrix();
-
-	//CHEF
-	modelStack.PushMatrix();
-	modelStack.Translate(178, 3, -30);
-	modelStack.Scale(3.5, 3.8, 3.5);
-	modelStack.Rotate(-90, 0, 1, 0);
-	RenderMesh(meshList[GEO_CHEF], true, toggleLight);
-	modelStack.PopMatrix();
-
-	//TABLE
-	modelStack.PushMatrix();
-	modelStack.Translate(180, 2, 35);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_TABLE], true, toggleLight);
-	modelStack.PopMatrix();
-
-	//CHAIR
-	modelStack.PushMatrix();
-	modelStack.Translate(170, 2, 35);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_CHAIR], true, toggleLight);
-	modelStack.PopMatrix();
-
-	//VENDING
-	modelStack.PushMatrix();
-	modelStack.Translate(108, 2, 58);
-	modelStack.Scale(2.5, 2.5, 2.5);
-	modelStack.Rotate(-90, 0, 1, 0);
-	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
-	modelStack.PopMatrix();
-
-	//TOKEN
-	modelStack.PushMatrix();
-	modelStack.Translate(175, TokenTranslate, 30);
-	modelStack.Scale(1, 1.5, 1);
-	RenderMesh(meshList[GEO_TOKEN], true, toggleLight);
-	modelStack.PopMatrix();
-}
-
-void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)
-{
-	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
-	projectionStack.PushMatrix();
-	projectionStack.LoadMatrix(ortho);
-	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
-	modelStack.PushMatrix();
-	modelStack.LoadIdentity(); //Reset modelStack
-	modelStack.Scale(size, size, size);
-	modelStack.Translate(x, y, 0);
-	modelStack.Rotate(-90, 1, 0, 0);
-	RenderMesh(mesh, true, toggleLight);
-
-	projectionStack.PopMatrix();
-	viewStack.PopMatrix();
-	modelStack.PopMatrix();
-}
-
-void SP2::RenderRecRoom()
-{
-	//SOFA
-	modelStack.PushMatrix();
-	modelStack.Translate(8, 0, 8);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
-	modelStack.PopMatrix();
-
-	//SPEAKER
-	modelStack.PushMatrix();
-	modelStack.Translate(10, 0, 10);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_SPEAKERS], true, toggleLight);
-	modelStack.PopMatrix();
-}
-
-void SP2::RenderTradingStation()
-{
-	//TRADING STATION
-	modelStack.PushMatrix();
-	modelStack.Translate(-5, 0, 5);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_TRADEPOST], true, toggleLight);
-	modelStack.PopMatrix();
 }
 
 void SP2::Render()
@@ -1216,13 +612,13 @@ void SP2::Render()
 	//POSITION OF X Y Z
 	std::ostringstream ss;
 	ss.str("");
-	ss << "POSIION: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
+	ss << "Position: X(" << thirdPersonCamera.GetFocusPoint()->x << ") Y(" << thirdPersonCamera.GetFocusPoint()->y << ") Z(" << thirdPersonCamera.GetFocusPoint()->z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
 	//VENDING TEXT
 	if (NearVendingText)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "PLEASE INSERT THE TOKEN", Color(1, 0, 0), 2, 6, 14);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, 14);
 	}
 
 	if (TokenOnScreen == true)
