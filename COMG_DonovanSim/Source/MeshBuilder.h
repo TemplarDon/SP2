@@ -15,7 +15,7 @@ class MeshBuilder
 {
 public:
 	static Mesh* GenerateAxes(const std::string &meshName, float lengthX, float lengthY, float lengthZ);
-    static Mesh* GenerateQuad(const std::string &meshName, Color color, std::vector<Node>&objsMaxMin);
+    static Mesh* GenerateQuad(const std::string &meshName, Color color);
     static Mesh* GenerateCube(const std::string &meshName, Color color);
     //static Mesh* GenerateCircle(const std::string &meshName, float lengthX, float lengthY); //My attempt
 

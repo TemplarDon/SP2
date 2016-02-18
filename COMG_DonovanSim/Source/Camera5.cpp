@@ -28,7 +28,7 @@ void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vect
 	Vector3 boundary(1000, 1000, 1000);
 
 	speed = 30;
-	mouseSpeed = 10;
+	mouseSpeed = 12;
 
 	static const float CAMERA_SPEED = 50.f;
 	if (Application::IsKeyPressed('R'))

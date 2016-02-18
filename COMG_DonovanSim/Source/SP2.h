@@ -10,8 +10,6 @@
 #include "Application.h"
 #include "Scene.h"
 #include "Camera.h"
-#include "Camera2.h"
-#include "Camera3.h"
 #include "Camera5.h"
 #include "ThirdPersonCamera.h"
 #include "Mesh.h"
@@ -151,15 +149,12 @@ private:
 
     Player somePlayer;
 
-    std::vector<Node>objsMaxMin; // Vector for storing min and max values of objs created
-
     vector<InteractableOBJs>InteractablesList;
     vector<Building>BuildingsList;
     vector<Ship>ShipList;
 
     Camera *camPointer;
 
-    Camera3 camera3;
 	Camera5 camera5;
 	ThirdPersonCamera thirdPersonCamera;
 

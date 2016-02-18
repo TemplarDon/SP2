@@ -81,25 +81,25 @@ void SP2::Init()
 
 
 	//SKYBOX
-    meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1));
     meshList[GEO_QUAD]->textureID = LoadTGA("Image//spaceground.tga");
 
-    meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
     meshList[GEO_FRONT]->textureID = LoadTGA("Image//purplenebula_ft.tga");
 
-    meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
     meshList[GEO_BACK]->textureID = LoadTGA("Image//purplenebula_bk.tga");
 
-    meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1));
     meshList[GEO_TOP]->textureID = LoadTGA("Image//purplenebula_up.tga");
 
-    meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1));
     meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//purplenebula_dn.tga");
 
-    meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1));
     meshList[GEO_LEFT]->textureID = LoadTGA("Image//purplenebula_lf.tga");
 
-    meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1));
     meshList[GEO_RIGHT]->textureID = LoadTGA("Image//purplenebula_rt.tga");
 	
 
@@ -122,7 +122,7 @@ void SP2::Init()
 
 
 	//GROUND MESH
-    meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("ground", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("ground", Color(1, 1, 1));
     meshList[GEO_GROUND]->textureID = LoadTGA("Image//castleFloor.tga");
 
     meshList[GEO_GROUND]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
