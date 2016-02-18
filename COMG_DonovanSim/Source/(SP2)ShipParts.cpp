@@ -8,5 +8,12 @@ ShipParts::~ShipParts()
 {
 }
 
-void ShipParts::partsEffect()
-{}
+string ShipParts::getName()
+{
+    return this->name;
+}
+
+int ShipParts::partsEffect()
+{
+    return 0;
+}

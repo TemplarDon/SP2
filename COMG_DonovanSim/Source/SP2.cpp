@@ -173,10 +173,13 @@ void SP2::Init()
     Position * startingPos = new Position(0,0,0);
     startingPos->Set(110, 10, -8);
 
+    Position * shipStartingPos = new Position(0, 0, 0);
+    shipStartingPos->Set(200, 2, 10);
+
 	charPos = { 4, 0, 0 };
     //Initialize camera settings
     camera5.Init(Vector3(startingPos->x, startingPos->y, startingPos->z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), startingPos, 10);
+    thirdPersonCamera.Init(Vector3(shipStartingPos->x - 30, shipStartingPos->y + 10, shipStartingPos->z - 30), Vector3(0, 1, 0), shipStartingPos, 10);
 
     // Init Cam Pointer
     camPointer = &camera5;
@@ -273,8 +276,11 @@ void SP2::Init()
 
     // Space Ship
     meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
-    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, Position(250, 2, 50), 4, 0, Vector3(0, 0, 0));
-    InteractablesList.push_back(someShip);
+    Ship someShip = Ship("ship", *shipStartingPos);
+    ShipList.push_back(someShip);
+
+    meshList[GEO_MINE] = MeshBuilder::GenerateOBJ("ship", "OBJ//mine.obj");
+    meshList[GEO_MINE]->textureID = LoadTGA("Image//mineUV.tga");
 
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -363,9 +369,9 @@ void SP2::Update(double dt)
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
-    for (size_t i = 0; i < InteractablesList.size(); ++i)
+    for (size_t i = 0; i < ShipList.size(); ++i)
     {
-        if (InteractablesList[i].name == "ship"/* && somePlayer.pos.x < InteractablesList[i].maxPos.x + 3 && somePlayer.pos.x > InteractablesList[i].minPos.x - 3 && somePlayer.pos.z < InteractablesList[i].maxPos.z + 3 && somePlayer.pos.z > InteractablesList[i].minPos.z - 3*/)
+        if (ShipList[i].name == "ship")
         {
             if (Application::IsKeyPressed('E'))
             {
@@ -373,7 +379,6 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
                 {
                     camPointer = &thirdPersonCamera;
                     somePlayer.setCameraType("third");
-                    thirdPersonCamera.SetFocusPoint(&InteractablesList[i].pos);
                 }
                 else
                 {
@@ -1073,9 +1078,16 @@ void SP2::Render()
 
     // SpaceShip
     modelStack.PushMatrix();
-    modelStack.Translate(250, 2, 50);
+    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
     modelStack.Scale(4, 4, 4);
     RenderMesh(meshList[GEO_SHIP], true, toggleLight);
+    modelStack.PopMatrix();
+
+    // Mine
+    modelStack.PushMatrix();
+    modelStack.Translate(-100, 2, 50);
+    modelStack.Scale(4, 4, 4);
+    RenderMesh(meshList[GEO_MINE], true, toggleLight);
     modelStack.PopMatrix();
 
 	//POSITION OF X Y Z

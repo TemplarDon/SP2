@@ -54,6 +54,9 @@ class SP2 : public Scene
         //Space Ship
         GEO_SHIP,
         GEO_GROUND,
+
+        //Mine
+        GEO_MINE,
         NUM_GEOMETRY,
     };
 
@@ -134,6 +137,7 @@ private:
 
     vector<InteractableOBJs>InteractablesList;
     vector<Building>BuildingsList;
+    vector<Ship>ShipList;
 
     Camera *camPointer;
 

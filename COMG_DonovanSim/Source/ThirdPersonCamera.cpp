@@ -172,15 +172,15 @@ void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&Inter
 
         if (canMoveBuilding == true && canMoveInteractable == true)
         {
-            position.x = position.x + view.x; // position = position + view
-            position.z = position.z + view.z; // position = position + view
-            target.x = target.x + view.x; // target = target + view
-            target.z = target.z + view.z; // target = target + view
+            position = position + view;
+            target = target + view;
 
             somePlayer.pos.x += position.x;
+            somePlayer.pos.y += position.y;
             somePlayer.pos.z += position.x;
 
             focus->x += view.x;
+            focus->y += view.y;
             focus->z += view.z;
         }
 
@@ -218,15 +218,15 @@ void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&Inter
 
         if (canMoveBuilding == true && canMoveInteractable == true)
         {
-            position.x = position.x - (target - position).Normalized().x;
-            position.z = position.z - (target - position).Normalized().z;
-            target.x = target.x - (target - position).Normalized().x;
-            target.z = target.z - (target - position).Normalized().z;
+            position = position - view;
+            target = target +- view;
 
             somePlayer.pos.x -= position.x;
+            somePlayer.pos.y -= position.y;
             somePlayer.pos.z -= position.x;
 
             focus->x -= view.x;
+            focus->y -= view.y;
             focus->z -= view.z;
         }
     }

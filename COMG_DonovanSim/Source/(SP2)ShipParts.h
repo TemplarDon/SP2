@@ -8,11 +8,12 @@ class ShipParts
 {
 protected:
     ShipParts(string name);
-
     string name;
-    virtual void partsEffect();
+
 public:
-    virtual ~ShipParts() = 0;
+    string getName();
+    virtual int partsEffect();
+    ~ShipParts();
 
 };
 

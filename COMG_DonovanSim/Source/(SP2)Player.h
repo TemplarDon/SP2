@@ -26,7 +26,6 @@ public:
     void setCameraType(string someCamType);
 
     void setPlayerStats(string name, string race, int moneyAmount, Position pos, Camera someCamera);
-    void enterShip(InteractableOBJs &someShip);
 
     bool ifDead();
     
