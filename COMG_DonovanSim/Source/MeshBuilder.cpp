@@ -799,13 +799,13 @@ Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &f
     }
 
 
-    maxPos.x += 0.1f;
-    maxPos.y += 0.1f;
-    maxPos.z += 0.1f;
-
-    minPos.x -= 0.1f;
-    minPos.y -= 0.1f;
-    minPos.z -= 0.1f;
+    maxPos.x += 0.5f;
+    maxPos.y += 0.5f;
+    maxPos.z += 0.5f;
+            
+    minPos.x -= 0.5f;
+    minPos.y -= 0.5f;
+    minPos.z -= 0.5f;      
 
     IndexVBO(vertices, uvs, normals, index_buffer_data, vertex_buffer_data);
 

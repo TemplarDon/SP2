@@ -41,6 +41,15 @@ void SP2::Init()
     glGenVertexArrays(1, &m_vertexArrayID);
     glBindVertexArray(m_vertexArrayID);
 
+
+	//Bools
+	NearVendingText = false;
+	TokenOnScreen = false;
+
+
+	//Floats
+	TokenTranslate = 12;
+
     //Shaders
     m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 
@@ -171,7 +180,7 @@ void SP2::Init()
 	heightOfWall = 12;
 
     Position * startingPos = new Position(0,0,0);
-    startingPos->Set(110, 10, -8);
+    startingPos->Set(150, 17, -36);
 
 	charPos = { 4, 0, 0 };
     //Initialize camera settings
@@ -254,23 +263,64 @@ void SP2::Init()
     meshList[GEO_GROUND]->material.kShininess = 1;
 
 
-	//init collision, then render room
-    //Collision
-	//Cafe Room
-    initRoom(Position(20, 2, 0));
 
-	//Recreational Room
-	initRoom(Position(200, 2, 0));
-
+	//TRADE POST
 	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
 	meshList[GEO_TRADEPOST]->textureID = LoadTGA("Image//TradingPostTexture2.tga");
 
+
+	//init collision, then render room
+    
+	//CAFE ROOM
+    initRoomTemplate(Position(0, 2, 0));            //Collision
+
+	//COUNTER
+	meshList[GEO_COUNTER] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Counter.obj");
+	meshList[GEO_COUNTER]->textureID = LoadTGA("Image//Counter.tga");
+
+	//FRIDGE
+	meshList[GEO_FRIDGE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Fridge.obj");
+	meshList[GEO_FRIDGE]->textureID = LoadTGA("Image//Fridge.tga");
+
+	//CHEF
+	meshList[GEO_CHEF] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chef.obj");
+	meshList[GEO_CHEF]->textureID = LoadTGA("Image//Chef.tga");
+
+
+	//TABLE
+	meshList[GEO_TABLE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Table.obj");
+	meshList[GEO_TABLE]->textureID = LoadTGA("Image//Table.tga");
+
+	//VENDING
+	meshList[GEO_VENDING] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Vending.obj");
+	meshList[GEO_VENDING]->textureID = LoadTGA("Image//Vending.tga");
+
+	//CHAIR
+	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chair.obj");
+	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//Chair.tga");
+
+	//Token
+	meshList[GEO_TOKEN] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Token.obj");
+	meshList[GEO_TOKEN]->textureID = LoadTGA("Image//Token.tga");
+
+
+
+
+	//Recreational Room
+	initRoomTemplate(Position(150, 2, 0));          //Collision
+
+	//SPEAKERS
 	meshList[GEO_SPEAKERS] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//RecRoomSpeakers.obj");
 	meshList[GEO_SPEAKERS]->textureID = LoadTGA("Image//RecRoomSpeakers.tga");
 
+	//SOFA
 	meshList[GEO_SOFA] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//sofa.obj");
 	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
 
+    // Space Ship
+    meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
+    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, Position(250, 2, 50), 4, 0, Vector3(0, 0, 0));
+    InteractablesList.push_back(someShip);
 
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -301,6 +351,17 @@ void SP2::Update(double dt)
 	}
 
     createBoundBox(InteractablesList, BuildingsList);
+    interactionCheck(dt, InteractablesList, somePlayer);
+
+    if (somePlayer.getCameraType() == "first")
+    {
+        camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
+    }
+    else
+    {
+        thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
+    }
+
 
     if (Application::IsKeyPressed('B'))
     {
@@ -339,31 +400,50 @@ void SP2::Update(double dt)
 
    
     
-    if (somePlayer.getCameraType() == "first")
-    {
-        camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
-        if (Application::IsKeyPressed('T'))
-        {
-            //somePlayer.setCameraPtr(thirdPersonCamera);
-            camPointer = &thirdPersonCamera;
-            somePlayer.setCameraType("third");
-        }
 
-    }
-    else
-    {
-        thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
-        if (Application::IsKeyPressed('T'))
-        {
-            //somePlayer.setCameraPtr(camera5);
-            camPointer = &camera5;
-            somePlayer.setCameraType("first");
-        }
-    }
     
   
-    
+    //VENDING
+	if (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25)
+	{
+		NearVendingText = true;
+	}
+	else
+	{
+		NearVendingText = false;
+	}
 
+
+	//COLLECT TOLKEN
+	if (Application::IsKeyPressed('Q'))
+	{
+		TokenOnScreen = true;
+		TokenTranslate = 10.5;
+	}
+}
+
+void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
+{
+    for (size_t i = 0; i < InteractablesList.size(); ++i)
+    {
+        if (InteractablesList[i].name == "ship"/* && somePlayer.pos.x < InteractablesList[i].maxPos.x + 3 && somePlayer.pos.x > InteractablesList[i].minPos.x - 3 && somePlayer.pos.z < InteractablesList[i].maxPos.z + 3 && somePlayer.pos.z > InteractablesList[i].minPos.z - 3*/)
+        {
+            if (Application::IsKeyPressed('E'))
+            {
+                if (somePlayer.getCameraType() == "first")
+                {
+                    camPointer = &thirdPersonCamera;
+                    somePlayer.setCameraType("third");
+                    thirdPersonCamera.SetFocusPoint(&InteractablesList[i].pos);
+                }
+                else
+                {
+                    camPointer = &camera5;
+                    somePlayer.setCameraType("first");
+                }
+            }
+        }
+    }
 }
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
@@ -540,7 +620,7 @@ void SP2::RenderSkybox()
     modelStack.PopMatrix();
 }
 
-void SP2::initRoom(Position pos, Vector3 size, int groundMeshSize)
+void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 {
     Building floor1 = Building("floor1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(floor1);
@@ -548,26 +628,49 @@ void SP2::initRoom(Position pos, Vector3 size, int groundMeshSize)
     Building ceiling1 = Building("ceiling1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y + 30, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(ceiling1);
 
-	Building wall1 = Building("wall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall1);
 
-	Building wall2 = Building("wall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x, pos.y + heightOfWall, pos.z + (-groundMeshSize / 2)), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall2);
+    Building rightWall1 = Building("rightWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(rightWall1);
 
-	Building wall3 = Building("wall3", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 85), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall3);
+    Building rightWall2 = Building("rightWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(rightWall2);
 
-	Building wall4 = Building("wall4", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 85), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall4);
+    Building rightGateTop = Building("rightGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 30, pos.z + (groundMeshSize / 2) - 4), 4, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(rightGateTop);
 
-    Building gatetop1 = Building("gatetop1", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x + (groundMeshSize / 2) - 4, pos.y - 5, pos.z + 85), 8, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(gatetop1);
 
-	Building wall5 = Building("wall5", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z), 30, 0, Vector3(0, 0, 0));
-    BuildingsList.push_back(wall5);
+    Building leftWall1 = Building("leftWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(leftWall1);                                                                                                                   
+                                                                                                                                                          
+    Building leftWall2 = Building("leftWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(leftWall2);
+
+    Building leftGateTop = Building("leftGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 30, pos.z - (groundMeshSize / 2) - 4), 4, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(leftGateTop);
+
+
+    Building frontWall1 = Building("frontWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(frontWall1);                                                                        
+                                                                                                                
+    Building frontWall2 = Building("frontWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(frontWall2);
+
+    Building frontGateTop = Building("frontGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x + (groundMeshSize / 2) - 4, pos.y + 30, pos.z), 4, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(frontGateTop);
+
+
+    Building backWall1 = Building("backWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(backWall1);
+
+    Building backWall2 = Building("backWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 12, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(backWall2);
+
+    Building backGateTop = Building("backGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x - (groundMeshSize / 2) - 4, pos.y + 30, pos.z), 4, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(backGateTop);
+
 }
 
-void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
+void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 {
 
 	groundMeshSize = 100;
@@ -596,48 +699,110 @@ void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
     // Render Walls
     modelStack.PushMatrix();
 
+    // ---------------------------- Right Wall ---------------------------------- //
     modelStack.PushMatrix();
-	modelStack.Translate(0, heightOfWall, (groundMeshSize / 2));
-	modelStack.Scale(30, 30, 30);
+	modelStack.Translate(0, 0, (groundMeshSize / 2));
+
+    modelStack.PushMatrix();
+    modelStack.Translate(38, heightOfWall, 0);
+    modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-	modelStack.Translate(0, heightOfWall, -(groundMeshSize / 2));
-	modelStack.Scale(30, 30, 30);
+    modelStack.Translate(-38, heightOfWall, 0);
+    modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL], false, toggleLight);
     modelStack.PopMatrix();
 
+    modelStack.PushMatrix();    
+    modelStack.Translate(0, 0, -4);
+    modelStack.Scale(5, 8, 5);
+    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PopMatrix();
+    // ---------------------------- Right Wall ---------------------------------- //
+
+
+    // ---------------------------- Left Wall ---------------------------------- //
+    modelStack.PushMatrix();
+    modelStack.Translate(0, 0, -(groundMeshSize / 2));
+
+    modelStack.PushMatrix();
+    modelStack.Translate(38, heightOfWall, 0);
+    modelStack.Scale(12, 30, 12);
+    RenderMesh(meshList[GEO_WALL], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(-38, heightOfWall, 0);
+    modelStack.Scale(12, 30, 12);
+    RenderMesh(meshList[GEO_WALL], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(0, 0, -4);
+    modelStack.Scale(5, 8, 5);
+    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PopMatrix();
+    // ---------------------------- Left Wall ---------------------------------- //
+
+
+    // ---------------------------- Front Wall ---------------------------------- //
     modelStack.PushMatrix();
     modelStack.Translate((groundMeshSize / 2), 0, 0);
 
-    // Wall w/ Hole for Gate;
     modelStack.PushMatrix();
-	modelStack.Translate(0, heightOfWall, -85);
-	modelStack.Scale(30, 30, 30);
+	modelStack.Translate(0, heightOfWall, -38);
+	modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL2], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate(0, heightOfWall, 85);
-	modelStack.Scale(30, 30, 30);
+    modelStack.Translate(0, heightOfWall, 38);
+	modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL2], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate(-4, -5, 0);
+    modelStack.Translate(-4, 0, 0);
     modelStack.Rotate(90, 0, 1, 0);
     modelStack.Scale(5, 8, 5);
     RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
     modelStack.PopMatrix();
 
     modelStack.PopMatrix();
+    // ---------------------------- Front Wall ---------------------------------- //
+
+
+    // ---------------------------- Back Wall ---------------------------------- //
+    modelStack.PushMatrix();
+    modelStack.Translate((-groundMeshSize / 2), 0, 0);
 
     modelStack.PushMatrix();
-	modelStack.Translate((-groundMeshSize / 2), heightOfWall, 0);
-	modelStack.Scale(30, 30, 30);
+    modelStack.Translate(0, heightOfWall, -38);
+    modelStack.Scale(12, 30, 12);
     RenderMesh(meshList[GEO_WALL2], false, toggleLight);
     modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(0, heightOfWall, 38);
+    modelStack.Scale(12, 30, 12);
+    RenderMesh(meshList[GEO_WALL2], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(-4, 0, 0);
+    modelStack.Rotate(90, 0, 1, 0);
+    modelStack.Scale(5, 8, 5);
+    RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PopMatrix();
+    // ---------------------------- Back Wall ---------------------------------- //
 
     modelStack.PopMatrix();
 
@@ -647,8 +812,7 @@ void SP2::RenderRoom(Position pos, Vector3 size, int groundMeshSize)
 
 void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)
 {
-    
-
+   
     Position maxPos;
     Position minPos;
 
@@ -660,17 +824,13 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
         cameraPos.x = camera5.position.x + view.x;
         cameraPos.y = camera5.position.y + view.y;
         cameraPos.z = camera5.position.z + view.z;
-
-        //cameraPos.x = somePlayer.pos.x + view.x;
-        //cameraPos.y = somePlayer.pos.y + view.y;
-        //cameraPos.z = somePlayer.pos.z + view.z;
     }
     else
     {
 		Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
-        cameraPos.x = thirdPersonCamera.GetFocusPoint()->x + 3;
-        cameraPos.y = thirdPersonCamera.GetFocusPoint()->y + 3;
-        cameraPos.z = thirdPersonCamera.GetFocusPoint()->z + 3;
+        cameraPos.x = thirdPersonCamera.GetFocusPoint()->x + view.x;
+        cameraPos.y = thirdPersonCamera.GetFocusPoint()->y + view.y;
+        cameraPos.z = thirdPersonCamera.GetFocusPoint()->z + view.z;
     }
 
 
@@ -856,6 +1016,80 @@ void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
     }
 }
 
+void SP2::RenderCafeRoom()
+{
+	//COUNTER
+	modelStack.PushMatrix();
+	modelStack.Translate(180, 2, -30);
+	modelStack.Scale(2.3, 2, 2.3);
+	RenderMesh(meshList[GEO_COUNTER], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//FRIDGE
+	modelStack.PushMatrix();
+	modelStack.Translate(190, 2, -37);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_FRIDGE], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//CHEF
+	modelStack.PushMatrix();
+	modelStack.Translate(178, 3, -30);
+	modelStack.Scale(3.5, 3.8, 3.5);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[GEO_CHEF], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//TABLE
+	modelStack.PushMatrix();
+	modelStack.Translate(180, 2, 35);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_TABLE], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//CHAIR
+	modelStack.PushMatrix();
+	modelStack.Translate(170, 2, 35);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_CHAIR], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//VENDING
+	modelStack.PushMatrix();
+	modelStack.Translate(108, 2, 58);
+	modelStack.Scale(2.5, 2.5, 2.5);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//TOKEN
+	modelStack.PushMatrix();
+	modelStack.Translate(175, TokenTranslate, 30);
+	modelStack.Scale(1, 1.5, 1);
+	RenderMesh(meshList[GEO_TOKEN], true, toggleLight);
+	modelStack.PopMatrix();
+}
+
+void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	RenderMesh(mesh, true, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
 void SP2::RenderRecRoom()
 {
 	//SOFA
@@ -939,6 +1173,9 @@ void SP2::Render()
     RenderSkybox();
 
 
+	//RENDER CAFE
+	RenderCafeRoom();
+
 	//GROUND MESH
     modelStack.PushMatrix();
     modelStack.Scale(1000, 1000, 1000);
@@ -949,27 +1186,36 @@ void SP2::Render()
 
 	//TRADING STATION
 	//modelStack.PushMatrix();
-	//RenderRoom(Position(100, 2, 0));
+	//RenderRoomTemplate(Position(100, 2, 0));
 	//modelStack.Translate(100, 2, 0);
 	//RenderTradingStation();
 	//modelStack.PopMatrix();
 
 
-	//THIRD PERSON 
-    modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
-    RenderMesh(meshList[GEO_WALL], true, toggleLight);
-    modelStack.PopMatrix();
+	////THIRD PERSON 
+ //   modelStack.PushMatrix();
+ //   modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
+ //   RenderMesh(meshList[GEO_WALL], true, toggleLight);
+ //   modelStack.PopMatrix();
+
+	
+    //RENDER ROOM (WALLS)
+    RenderRoomTemplate(Position(0, 2, 0));     //RECREATIONAL ROOM
+
 
 	//RENDER ROOM (WALLS)
-    RenderRoom(Position(20, 2, 0));
+	RenderRoomTemplate(Position(150, 2, 0));   //CAFE
 
 
-	//modelStack.PushMatrix();
-	//modelStack.Rotate(90, 1, 0, 0);
-	////RENDER ROOM (WALLS)
-	//RenderRoom(Position(200, 2, 0));
-	//modelStack.PopMatrix();
+
+	//INTERACTIONS
+
+    // SpaceShip
+    modelStack.PushMatrix();
+    modelStack.Translate(250, 2, 50);
+    modelStack.Scale(4, 4, 4);
+    RenderMesh(meshList[GEO_SHIP], true, toggleLight);
+    modelStack.PopMatrix();
 
 	//POSITION OF X Y Z
 	std::ostringstream ss;
@@ -977,6 +1223,16 @@ void SP2::Render()
 	ss << "POSIION: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 3, 4);
 
+	//VENDING TEXT
+	if (NearVendingText)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "PLEASE INSERT THE TOKEN", Color(1, 0, 0), 2, 6, 14);
+	}
+
+	if (TokenOnScreen == true)
+	{
+		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
+	}
 }
 
 void SP2::Exit()
