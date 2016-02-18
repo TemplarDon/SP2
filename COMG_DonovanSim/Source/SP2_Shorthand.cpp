@@ -247,8 +247,8 @@ void SP2::LoadMeshes()
 
 	// Space Ship
 	meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
-	Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, Position(250, 2, 50), 4, 0, Vector3(0, 0, 0));
-	InteractablesList.push_back(someShip);
+	Ship someShip = Ship("ship", Position(250, 2, 50));
+	ShipList.push_back(someShip);
 }
 
 void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)

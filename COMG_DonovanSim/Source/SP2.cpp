@@ -43,7 +43,7 @@ void SP2::Init()
     startingPos->Set(150, 17, -36);
 
     Position * shipStartingPos = new Position(0, 0, 0);
-    shipStartingPos->Set(200, 2, 10);
+    shipStartingPos->Set(200, 2, 100);
 
 	charPos = { 4, 0, 0 };
     //Initialize camera settings
@@ -232,9 +232,6 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
 	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); ++i)
     {
         if (i->name == "ship"/* && somePlayer.pos.x < i->maxPos.x + 3 && somePlayer.pos.x > i->minPos.x - 3 && somePlayer.pos.z < i->maxPos.z + 3 && somePlayer.pos.z > i->minPos.z - 3*/)
-    for (size_t i = 0; i < ShipList.size(); ++i)
-    {
-        if (ShipList[i].name == "ship")
         {
             if (Application::IsKeyPressed('E'))
             {
