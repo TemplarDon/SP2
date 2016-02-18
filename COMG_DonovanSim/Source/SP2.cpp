@@ -179,22 +179,26 @@ void SP2::Init()
 
 	heightOfWall = 12;
 
-    Position * startingPos = new Position(0,0,0);
-    startingPos->Set(150, 17, -36);
+    // Starting Pos Of Player
+    Position startingPos;
+    Position * startingPosPtr = &startingPos;
+    startingPos.Set(150, 17, -36);
 
-    Position * shipStartingPos = new Position(0, 0, 0);
-    shipStartingPos->Set(200, 2, 10);
+    // Starting Pos of Ship
+    Position shipStartingPos;
+    Position * shipStartingPosPtr = &shipStartingPos;
+    shipStartingPos.Set(200, 2, 100);
 
 	charPos = { 4, 0, 0 };
     //Initialize camera settings
-    camera5.Init(Vector3(startingPos->x, startingPos->y, startingPos->z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    thirdPersonCamera.Init(Vector3(shipStartingPos->x - 30, shipStartingPos->y + 10, shipStartingPos->z - 30), Vector3(0, 1, 0), shipStartingPos, 10);
+    camera5.Init(Vector3(startingPos.x, startingPos.y, startingPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
+    thirdPersonCamera.Init(Vector3(shipStartingPos.x - 30, shipStartingPos.y + 10, shipStartingPos.z - 30), Vector3(0, 1, 0), shipStartingPosPtr, 10);
 
     // Init Cam Pointer
     camPointer = &camera5;
 
     // Init Player
-    somePlayer.setPlayerStats("TestMan", "Human", 100, *startingPos, camera5); // Name, Race, Money, Pos, camera
+    somePlayer.setPlayerStats("TestMan", "Human", 100, *startingPosPtr, camera5); // Name, Race, Money, Pos, camera
 
 
 
@@ -322,7 +326,7 @@ void SP2::Init()
 
     // Space Ship
     meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
-    Ship someShip = Ship("ship", *shipStartingPos);
+    Ship someShip = Ship("ship", *shipStartingPosPtr);
     ShipList.push_back(someShip);
 
     meshList[GEO_MINE] = MeshBuilder::GenerateOBJ("ship", "OBJ//mine.obj");
@@ -396,18 +400,6 @@ void SP2::Update(double dt)
         light[0].type = Light::LIGHT_POINT;
 		glUniform1i(lightUniforms[0][UL_TYPE], light[0].type);
     }
-
-
-    // TEST FOR BULLET COLLISION
-    //if (Application::IsKeyPressed('B'))
-    //{
-    //    rayTracing(InteractablesList);
-    //}
-
-   
-    
-
-    
   
     //VENDING
 	if (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25)
@@ -1195,14 +1187,6 @@ void SP2::Render()
 	//modelStack.Translate(100, 2, 0);
 	//RenderTradingStation();
 	//modelStack.PopMatrix();
-
-
-	////THIRD PERSON 
- //   modelStack.PushMatrix();
- //   modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
- //   RenderMesh(meshList[GEO_WALL], true, toggleLight);
- //   modelStack.PopMatrix();
-
 	
     //RENDER ROOM (WALLS)
     RenderRoomTemplate(Position(0, 2, 0));     //RECREATIONAL ROOM

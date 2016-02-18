@@ -60,9 +60,6 @@ class SP2 : public Scene
 		//NPCs
 		GEO_CHEF,
 
-		GEO_SPEAKERS,   
-		GEO_SOFA, 
-
         //Space Ship
         GEO_SHIP,
 
@@ -155,7 +152,6 @@ private:
     Camera *camPointer;
 
     Camera3 camera3;
-
 
     ThirdPersonCamera thirdPersonCamera;
 	Camera5 camera5;

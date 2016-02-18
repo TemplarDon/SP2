@@ -24,8 +24,8 @@ public:
 	float mouseSpeed;
 	float speed;
 
-    bool canMoveBuilding;
-    bool canMoveInteractable;
+    bool canMoveBuilding;       // bool to check if camera can move through every obj in BuildingList vector
+    bool canMoveInteractable;   // bool to check if camera can move through every obj in InteractableList vector
 };
 
 #endif
