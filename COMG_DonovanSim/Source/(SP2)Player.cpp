@@ -73,11 +73,6 @@ void Player::setPlayerStats(string name, string race, int moneyAmount, Position 
     this->cameraPtr = &someCamera;
 }
 
-void Player::enterShip(InteractableOBJs& someShip)
-{
-
-}
-
 bool Player::ifDead()
 {
     if (this->health <= 0)

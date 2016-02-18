@@ -12,7 +12,7 @@ protected:
     string name;
     virtual void useUpgradeEffect();
 public:
-    virtual ~Ship_Upgrade() = 0;
+    ~Ship_Upgrade();
 
 };
 

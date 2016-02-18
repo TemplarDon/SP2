@@ -39,11 +39,155 @@ void SP2::Init()
     camera5.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
     thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
 
+    Position * startingPos = new Position(0,0,0);
+    startingPos->Set(150, 17, -36);
+
+    Position * shipStartingPos = new Position(0, 0, 0);
+    shipStartingPos->Set(200, 2, 10);
+
+	charPos = { 4, 0, 0 };
+    //Initialize camera settings
+    camera5.Init(Vector3(startingPos->x, startingPos->y, startingPos->z), Vector3(1, 1, 1), Vector3(0, 1, 0));
+    thirdPersonCamera.Init(Vector3(shipStartingPos->x - 30, shipStartingPos->y + 10, shipStartingPos->z - 30), Vector3(0, 1, 0), shipStartingPos, 10);
+
     // Init Cam Pointer
     camPointer = &camera5;
 
     // Init Player
-    somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, camera5); // Name, Race, Money, Pos, camera
+	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, camera5); // Name, Race, Money, Pos, camera
+    somePlayer.setPlayerStats("TestMan", "Human", 100, *startingPos, camera5); // Name, Race, Money, Pos, camera
+
+
+
+	//Text
+	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//5.tga");
+
+
+
+	//AXES
+	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
+
+
+
+	//LIGHTBALL
+	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1));
+
+
+
+
+	//SKYBOX
+    meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_QUAD]->textureID = LoadTGA("Image//spaceground.tga");
+
+    meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_FRONT]->textureID = LoadTGA("Image//purplenebula_ft.tga");
+
+    meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_BACK]->textureID = LoadTGA("Image//purplenebula_bk.tga");
+
+    meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_TOP]->textureID = LoadTGA("Image//purplenebula_up.tga");
+
+    meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//purplenebula_dn.tga");
+
+    meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_LEFT]->textureID = LoadTGA("Image//purplenebula_lf.tga");
+
+    meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_RIGHT]->textureID = LoadTGA("Image//purplenebula_rt.tga");
+	
+
+
+
+	//WALLS
+    meshList[GEO_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//TestWall2.obj");
+    meshList[GEO_WALL]->textureID = LoadTGA("Image//TestWall.tga");
+
+    meshList[GEO_WALL2] = MeshBuilder::GenerateOBJ("wall2", "OBJ//TestWall.obj");
+    meshList[GEO_WALL2]->textureID = LoadTGA("Image//TestWall.tga");
+
+    meshList[GEO_GATETOP] = MeshBuilder::GenerateOBJ("wall", "OBJ//gateTop.obj");
+    meshList[GEO_GATETOP]->textureID = LoadTGA("Image//gateTopUV.tga");
+
+    meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("wall", "OBJ//gate.obj");
+    meshList[GEO_GATE]->textureID = LoadTGA("Image//gateUV.tga");
+
+
+
+
+	//GROUND MESH
+    meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("ground", Color(1, 1, 1), objsMaxMin);
+    meshList[GEO_GROUND]->textureID = LoadTGA("Image//castleFloor.tga");
+
+    meshList[GEO_GROUND]->material.kAmbient.Set(0.15f, 0.15f, 0.15f);
+    meshList[GEO_GROUND]->material.kDiffuse.Set(0.6, 0.6, 0.6);
+    meshList[GEO_GROUND]->material.kSpecular.Set(0.4, 0.4, 0.4);
+    meshList[GEO_GROUND]->material.kShininess = 1;
+
+
+
+	//TRADE POST
+	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
+	meshList[GEO_TRADEPOST]->textureID = LoadTGA("Image//TradingPostTexture2.tga");
+
+
+	//init collision, then render room
+    
+	//CAFE ROOM
+    initRoomTemplate(Position(0, 2, 0));            //Collision
+
+	//COUNTER
+	meshList[GEO_COUNTER] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Counter.obj");
+	meshList[GEO_COUNTER]->textureID = LoadTGA("Image//Counter.tga");
+
+	//FRIDGE
+	meshList[GEO_FRIDGE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Fridge.obj");
+	meshList[GEO_FRIDGE]->textureID = LoadTGA("Image//Fridge.tga");
+
+	//CHEF
+	meshList[GEO_CHEF] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chef.obj");
+	meshList[GEO_CHEF]->textureID = LoadTGA("Image//Chef.tga");
+
+
+	//TABLE
+	meshList[GEO_TABLE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Table.obj");
+	meshList[GEO_TABLE]->textureID = LoadTGA("Image//Table.tga");
+
+	//VENDING
+	meshList[GEO_VENDING] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Vending.obj");
+	meshList[GEO_VENDING]->textureID = LoadTGA("Image//Vending.tga");
+
+	//CHAIR
+	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chair.obj");
+	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//Chair.tga");
+
+	//Token
+	meshList[GEO_TOKEN] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Token.obj");
+	meshList[GEO_TOKEN]->textureID = LoadTGA("Image//Token.tga");
+
+
+
+
+	//Recreational Room
+	initRoomTemplate(Position(150, 2, 0));          //Collision
+
+	//SPEAKERS
+	meshList[GEO_SPEAKERS] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//RecRoomSpeakers.obj");
+	meshList[GEO_SPEAKERS]->textureID = LoadTGA("Image//RecRoomSpeakers.tga");
+
+	//SOFA
+	meshList[GEO_SOFA] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//sofa.obj");
+	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
+
+    // Space Ship
+    meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
+    Ship someShip = Ship("ship", *shipStartingPos);
+    ShipList.push_back(someShip);
+
+    meshList[GEO_MINE] = MeshBuilder::GenerateOBJ("ship", "OBJ//mine.obj");
+    meshList[GEO_MINE]->textureID = LoadTGA("Image//mineUV.tga");
 
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -88,6 +232,9 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
 	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); ++i)
     {
         if (i->name == "ship"/* && somePlayer.pos.x < i->maxPos.x + 3 && somePlayer.pos.x > i->minPos.x - 3 && somePlayer.pos.z < i->maxPos.z + 3 && somePlayer.pos.z > i->minPos.z - 3*/)
+    for (size_t i = 0; i < ShipList.size(); ++i)
+    {
+        if (ShipList[i].name == "ship")
         {
             if (Application::IsKeyPressed('E'))
             {
@@ -457,9 +604,16 @@ void SP2::Render()
 
     // SpaceShip
     modelStack.PushMatrix();
-    modelStack.Translate(250, 2, 50);
+    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
     modelStack.Scale(4, 4, 4);
     RenderMesh(meshList[GEO_SHIP], true, toggleLight);
+    modelStack.PopMatrix();
+
+    // Mine
+    modelStack.PushMatrix();
+    modelStack.Translate(-100, 2, 50);
+    modelStack.Scale(4, 4, 4);
+    RenderMesh(meshList[GEO_MINE], true, toggleLight);
     modelStack.PopMatrix();
 
 	//POSITION OF X Y Z

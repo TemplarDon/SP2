@@ -1,20 +1,25 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include "(SP2)InteractableOBJs.h"
-#include <Queue>
+#include "(SP2)GameObject.h"
+#include "(SP2)AllParts.h"
+#include "(SP2)AllUpgrades.h"
 
-using std::queue;
-
-class Ship : public InteractableOBJs
+class Ship : public GameObject
 {
 public:
-    Ship(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis);
+    Ship(string name, Position pos);
     ~Ship();
 
     float shipSpeed;
     float maxSpeed;
+    vector<ShipParts> ShipPartsVector;
+    vector<Ship_Upgrade> ShipUpgradeVector;
 
+    void addShipPart(ShipParts &somePart);
+    void addShipUpgrade(Ship_Upgrade &someUpgrade);
+
+    void calculateShipStats();
 };
 
 #endif

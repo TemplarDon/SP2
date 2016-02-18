@@ -1,6 +1,6 @@
 #include "(SP2)AllParts.h"
 
-Dual_Wings::Dual_Wings(string name) : ShipParts(name)
+Dual_Wings::Dual_Wings(string name) : Wings(name)
 {
 }
 
@@ -8,12 +8,13 @@ Dual_Wings::~Dual_Wings()
 {
 }
 
-void Dual_Wings::partsEffect()
+int Dual_Wings::partsEffect()
 {
+    return 3;
 }
 
 
-Quad_Wings::Quad_Wings(string name) : ShipParts(name)
+Quad_Wings::Quad_Wings(string name) : Wings(name)
 {
 }
 
@@ -21,13 +22,13 @@ Quad_Wings::~Quad_Wings()
 {
 }
 
-void Quad_Wings::partsEffect()
+int Quad_Wings::partsEffect()
 {
-
+    return 5;
 }
 
 
-G1_Engine::G1_Engine(string name) : ShipParts(name)
+G1_Engine::G1_Engine(string name) : Engine(name)
 {
 }
 
@@ -35,12 +36,13 @@ G1_Engine::~G1_Engine()
 {
 }
 
-void G1_Engine::partsEffect()
+int G1_Engine::partsEffect()
 {
+    return 3;
 }
 
 
-G2_Engine::G2_Engine(string name) : ShipParts(name)
+G2_Engine::G2_Engine(string name) : Engine(name)
 {
 }
 
@@ -48,12 +50,13 @@ G2_Engine::~G2_Engine()
 {
 }
 
-void G2_Engine::partsEffect()
+int G2_Engine::partsEffect()
 {
+    return 5;
 }
 
 
-Light_Hull::Light_Hull(string name) : ShipParts(name)
+Light_Hull::Light_Hull(string name) : Hull(name)
 {
 }
 
@@ -61,12 +64,13 @@ Light_Hull::~Light_Hull()
 {
 }
 
-void Light_Hull::partsEffect()
+int Light_Hull::partsEffect()
 {
+    return 0;
 }
 
 
-Medium_Hull::Medium_Hull(string name) : ShipParts(name)
+Medium_Hull::Medium_Hull(string name) : Hull(name)
 {
 }
 
@@ -74,12 +78,13 @@ Medium_Hull::~Medium_Hull()
 {
 }
 
-void Medium_Hull::partsEffect()
+int Medium_Hull::partsEffect()
 {
+    return 0;
 }
 
 
-Heavy_Hull::Heavy_Hull(string name) : ShipParts(name)
+Heavy_Hull::Heavy_Hull(string name) : Hull(name)
 {
 }
 
@@ -87,8 +92,9 @@ Heavy_Hull::~Heavy_Hull()
 {
 }
 
-void Heavy_Hull::partsEffect()
+int Heavy_Hull::partsEffect()
 {
+    return 0;
 }
 
 
