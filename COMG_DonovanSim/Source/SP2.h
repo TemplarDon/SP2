@@ -144,6 +144,14 @@ private:
 
     Player somePlayer;
 
+    // Starting posisiton of player
+    Position startingPos;
+    Position * startingPosPtr;
+
+    // Starting position for ship
+    Position shipStartingPos;
+    Position * shipStartingPosPtr;
+
     vector<InteractableOBJs>InteractablesList;
     vector<Building>BuildingsList;
     vector<Ship>ShipList;
@@ -161,9 +169,11 @@ private:
 
     void RenderSkybox();
     void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
-    void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
+
+    // Functions to create a room. (initRoomTemplate to have collision, RenderRoomTemplate to render)
     void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
-    void rayTracing(vector<InteractableOBJs>&InteractablesList);
+    void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
+
 	void RenderTradingStation();
 	void RenderRecRoom();
 	void RenderCafeRoom();

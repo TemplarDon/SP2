@@ -19,9 +19,9 @@
     Ship's pos
 */
 /******************************************************************************/
-Ship::Ship(string name, Position pos) : GameObject(name, pos)
+Ship::Ship(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis) : InteractableOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
 {
-
+    
 }
 
 /******************************************************************************/

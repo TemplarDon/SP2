@@ -10,21 +10,21 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include "(SP2)GameObject.h"
+#include "(SP2)InteractableOBJs.h"
 #include "(SP2)AllParts.h"
 #include "(SP2)AllUpgrades.h"
 
 /*************************************************************************************************/
 /*!
-Class Ship : public GameObject
+Class Ship : public CollisionOBJs
 \brief
     Class Ship. Contains Constructor/ Destructor for Ship and ship stats
 */
 /*************************************************************************************************/
-class Ship : public GameObject
+class Ship : public InteractableOBJs
 {
 public:
-    Ship(string name, Position pos);
+    Ship(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis);
     ~Ship();
 
     // Ship's Speed

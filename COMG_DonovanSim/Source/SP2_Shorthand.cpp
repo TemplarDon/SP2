@@ -257,8 +257,8 @@ void SP2::LoadMeshes()
 	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
 
 	// Space Ship
-	meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
-	Ship someShip = Ship("ship", Position(250, 2, 50));
+    meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
+    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0));
 	ShipList.push_back(someShip);
 }
 

@@ -36,14 +36,12 @@ void SP2::Init()
 
 
     // Starting Pos Of Player
-    Position startingPos;
-    Position * startingPosPtr = &startingPos;
     startingPos.Set(150, 17, -36);
+    startingPosPtr = &startingPos;
 
     // Starting Pos of Ship
-    Position shipStartingPos;
-    Position * shipStartingPosPtr = &shipStartingPos;
-    shipStartingPos.Set(200, 2, 100);
+    shipStartingPos.Set(250, 102, 50);
+    shipStartingPosPtr = &shipStartingPos;
 
 	charPos = { 150, 17, -36 };
     //Initialize camera settings (Gary's)
@@ -52,7 +50,7 @@ void SP2::Init()
 
     //Initialize camera settings (Don's)
     camera5.Init(Vector3(startingPos.x, startingPos.y, startingPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    thirdPersonCamera.Init(Vector3(shipStartingPos.x - 30, shipStartingPos.y + 10, shipStartingPos.z - 30), Vector3(0, 1, 0), shipStartingPosPtr, 10);
+    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), shipStartingPosPtr, 10);
 
     // Init Cam Pointer
     camPointer = &camera5;
@@ -61,7 +59,10 @@ void SP2::Init()
     somePlayer.setPlayerStats("TestMan", "Human", 100, *startingPosPtr, camera5); // Name, Race, Money, Pos, camera
 	//somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, camera5); // Name, Race, Money, Pos, camera
 
-	LoadMeshes();
+    LoadMeshes();
+
+    //camPointer = &thirdPersonCamera;
+    //somePlayer.setCameraType("third");
 
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -164,14 +165,28 @@ void SP2::Update(double dt)
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
-	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); ++i)
+    Vector3 view = (camera5.target - camera5.position).Normalized();
+    for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
     {
-        if (i->name == "ship"/* && somePlayer.pos.x < i->maxPos.x + 3 && somePlayer.pos.x > i->minPos.x - 3 && somePlayer.pos.z < i->maxPos.z + 3 && somePlayer.pos.z > i->minPos.z - 3*/)
+        if (i->isInView(somePlayer.pos, view) == true)
         {
-            
+            std::cout << "NEAR" << std::endl;
+            if (Application::IsKeyPressed('E'))
+            {
+                if (somePlayer.getCameraType() == "first")
+                {
+                    camPointer = &thirdPersonCamera;
+                    somePlayer.setCameraType("third");
+                }
+                else
+                {
+                    camPointer = &camera5;
+                    somePlayer.setCameraType("first");
+                }
+            }
         }
 
-		std::cout << i->isInView(*thirdPersonCamera.GetFocusPoint(), thirdPersonCamera.camDirection) << std::endl;
+		//std::cout << i->isInView(*thirdPersonCamera.GetFocusPoint(), thirdPersonCamera.camDirection) << std::endl;
     }
 }
 
