@@ -432,7 +432,7 @@ void SP2::Render()
 		}
 	}
 
-
+	RenderCode();
 }
 
 void SP2::Exit()
