@@ -14,9 +14,13 @@ void SP2::Init()
     //Bools
 	NearVendingText = false;
 	TokenOnScreen = false;
+	RenderCoke = false;
+	ConsumeCokeText = false;
 
 	//Floats
-	TokenTranslate = 12;
+	TokenTranslate = 11;
+	TextTranslate = 20;
+	TestRotation = 90;
 
 	LoadShaderCodes();
 	LoadLights();
@@ -87,9 +91,50 @@ void SP2::Update(double dt)
     //{
     //    rayTracing(InteractablesList);
     //}
+
+   
+    
+	TestRotation += float( dt * 100);
+    
   
     //VENDING
-	NearVendingText = (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25);
+	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
+	{
+		NearVendingText = true;
+	}
+	else
+	{
+		NearVendingText = false;
+	}
+
+
+	//COLLECT TOKEN
+	if (camera5.position.x > 150 && camera5.position.x < 180 && camera5.position.z > 10 && camera5.position.z < 20)
+	{
+		if (Application::IsKeyPressed('Q'))
+		{
+			TokenOnScreen = true;
+			TokenTranslate = 10.5;
+		}
+	}
+
+	//INSERT COIN INTO VENDING
+	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
+	{
+		if (Application::IsKeyPressed('Q'))
+		{
+			TokenOnScreen = false;
+			TextTranslate = 100;
+			RenderCoke = true;
+			ConsumeCokeText = true;
+		}
+	}
+
+	if (Application::IsKeyPressed('U'))
+	{
+		ConsumeCokeText = false;
+		RenderCoke = false;
+	}
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
@@ -337,6 +382,7 @@ void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 
         glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
 
+
         //load material
         glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
         glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
@@ -360,12 +406,60 @@ void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
         glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
     }
 
+
     mesh->Render(); //this line should only be called once 
     if (mesh->textureID > 0)
     {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
+}
+
+void SP2::RenderCokeOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(mesh, true, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
+void SP2::RenderRecRoom()
+{
+	//SOFA
+	modelStack.PushMatrix();
+	modelStack.Translate(8, 0, 8);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//SPEAKER
+	modelStack.PushMatrix();
+	modelStack.Translate(10, 0, 10);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_SPEAKERS], true, toggleLight);
+	modelStack.PopMatrix();
+}
+
+void SP2::RenderTradingStation()
+{
+	//TRADING STATION
+	modelStack.PushMatrix();
+	modelStack.Translate(-5, 0, 5);
+	modelStack.Scale(2, 2, 2);
+	RenderMesh(meshList[GEO_TRADEPOST], true, toggleLight);
+	modelStack.PopMatrix();
 }
 
 void SP2::Render()
@@ -476,13 +570,50 @@ void SP2::Render()
 	//VENDING TEXT
 	if (NearVendingText)
 	{
+
 		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, 14);
+
+		RenderTextOnScreen(meshList[GEO_TEXT], "PLEASE INSERT THE TOKEN", Color(1, 0, 0), 2, 6, TextTranslate);
 	}
+
+	//COKE TEXT
+	if (ConsumeCokeText)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS U TO DRINK", Color(1, 0, 0), 2, 6, 18);
+
+	}
+
+	if (RenderCoke == true)
+	{
+		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
+	}
+
+	//RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
 
 	if (TokenOnScreen == true)
 	{
 		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
 	}
+
+//TOKEN
+	modelStack.PushMatrix();
+	modelStack.Translate(175, TokenTranslate, 30);
+	modelStack.Scale(1, 1.5, 1);
+	RenderMesh(meshList[GEO_TOKEN], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//TEST
+	glBlendFunc(1, 1);
+	modelStack.PushMatrix();
+	modelStack.Translate(150, 13, 10);
+	modelStack.Scale(5, 5, 5);
+	modelStack.Rotate(TestRotation, 0, 1, 0);
+	RenderMesh(meshList[GEO_COKE], true, toggleLight);
+	modelStack.PopMatrix();
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	//MOUSE
+	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 15);
 }
 
 void SP2::Exit()
