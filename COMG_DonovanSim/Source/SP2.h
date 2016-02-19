@@ -62,6 +62,7 @@ class SP2 : public Scene
 		GEO_VENDING,
 		GEO_CHAIR,
 		GEO_TOKEN,
+		GEO_COKE,
 
 		//NPCs
 		GEO_CHEF,
@@ -170,12 +171,18 @@ private:
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderTokenOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderCokeOnScreen(Mesh* mesh, float size, float x, float y);
 
 	float TokenTranslate;
+	float TextTranslate;
+	float TestRotation;
 
 	//Bool for interactions (Shania's)
 	bool NearVendingText;
 	bool TokenOnScreen;
+	bool GetCokeText;
+	bool RenderCoke;
+	bool ConsumeCokeText;
 
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 

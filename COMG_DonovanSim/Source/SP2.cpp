@@ -14,9 +14,13 @@ void SP2::Init()
     //Bools
 	NearVendingText = false;
 	TokenOnScreen = false;
+	RenderCoke = false;
+	ConsumeCokeText = false;
 
 	//Floats
-	TokenTranslate = 12;
+	TokenTranslate = 11;
+	TextTranslate = 20;
+	TestRotation = 90;
 
 	LoadShaderCodes();
 	LoadLights();
@@ -89,11 +93,53 @@ void SP2::Update(double dt)
     //{
     //    rayTracing(InteractablesList);
     //}
+
+   
+    
+	TestRotation += float( dt * 100);
+    
   
     //VENDING
 	NearVendingText = (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25);
 
 	rayTracing(InteractablesList);
+	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
+	{
+		NearVendingText = true;
+	}
+	else
+	{
+		NearVendingText = false;
+	}
+
+
+	//COLLECT TOKEN
+	if (camera5.position.x > 150 && camera5.position.x < 180 && camera5.position.z > 10 && camera5.position.z < 20)
+	{
+		if (Application::IsKeyPressed('Q'))
+		{
+			TokenOnScreen = true;
+			TokenTranslate = 10.5;
+		}
+	}
+
+	//INSERT COIN INTO VENDING
+	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
+	{
+		if (Application::IsKeyPressed('Q'))
+		{
+			TokenOnScreen = false;
+			TextTranslate = 100;
+			RenderCoke = true;
+			ConsumeCokeText = true;
+		}
+	}
+
+	if (Application::IsKeyPressed('U'))
+	{
+		ConsumeCokeText = false;
+		RenderCoke = false;
+	}
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
@@ -314,6 +360,7 @@ void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 
         glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
 
+
         //load material
         glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
         glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
@@ -336,6 +383,7 @@ void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
     {
         glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
     }
+
 
     mesh->Render(); //this line should only be called once 
     if (mesh->textureID > 0)
@@ -384,7 +432,7 @@ void SP2::Render()
 		}
 	}
 
-	RenderCode();
+
 }
 
 void SP2::Exit()

@@ -714,6 +714,26 @@ void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+void SP2::RenderCokeOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(mesh, true, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
 void SP2::RenderRecRoom()
 {
 	//SOFA
