@@ -34,6 +34,7 @@ InteractableOBJs::InteractableOBJs(string name, Position maxPos, Position minPos
 : CollisionOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
 {
     this->effectOver = false;
+    requiredDistanceSquared = 100;
 }
 
 /******************************************************************************/
@@ -47,7 +48,19 @@ InteractableOBJs::~InteractableOBJs()
 
 }
 
-bool InteractableOBJs::isInView(const Position &charPos, const Vector3 &viewDirection)
+/******************************************************************************/
+/*!
+\brief
+    Function to check if object is in view of player
+\param  charPos
+    position of player / point from which the function checks
+\param  maxPos
+    view vector
+\returns
+    returns a bool, if true, object is in view
+*/
+/******************************************************************************/
+bool InteractableOBJs::isInView(const Position &charPos, const Vector3 &viewDirection) 
 {
 	Vector3 P1 = Vector3(charPos.x, charPos.y, charPos.z);
 	Vector3 P2 = Vector3(pos.x, pos.y, pos.z);
@@ -59,7 +72,6 @@ bool InteractableOBJs::isInView(const Position &charPos, const Vector3 &viewDire
 	if (D.LengthSquared() > requiredDistanceSquared) return false;
 
 	//Check if focusing on point
-
 	std::cout << "Is near" << std::endl;
 	return (D - D.Dot(viewDirection)*viewDirection).LengthSquared() < requiredDistanceSquared;
 	

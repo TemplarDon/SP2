@@ -125,8 +125,8 @@ void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vect
             target.x = target.x + view.x; // target = target + view
             target.z = target.z + view.z; // target = target + view
 
-            somePlayer.pos.x += position.x;
-            somePlayer.pos.z += position.x;
+            somePlayer.pos.x += view.x;
+            somePlayer.pos.z += view.x;
         }
 
 	}
@@ -337,8 +337,8 @@ void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vect
             target.x = target.x - (target - position).Normalized().x; 
             target.z = target.z - (target - position).Normalized().z; 
 
-            somePlayer.pos.x -= position.x;
-            somePlayer.pos.z -= position.x;
+            somePlayer.pos.x -= view.x;
+            somePlayer.pos.z -= view.x;
         }
 	}
 

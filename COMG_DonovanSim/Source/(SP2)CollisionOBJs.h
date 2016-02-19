@@ -23,7 +23,6 @@ class CollisionOBJs : public GameObject
 {
 protected:
 
-
     CollisionOBJs(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis);
 
 public:

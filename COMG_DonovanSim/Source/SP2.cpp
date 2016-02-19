@@ -20,7 +20,7 @@ void SP2::Init()
 
 	LoadShaderCodes();
 	LoadLights();
-	LoadMeshes();
+
 
     //variable to rotate geometry
     rotateAngle = 0;
@@ -30,14 +30,12 @@ void SP2::Init()
 
 
     // Starting Pos Of Player
-    Position startingPos;
-    Position * startingPosPtr = &startingPos;
     startingPos.Set(150, 17, -36);
+    startingPosPtr = &startingPos;
 
     // Starting Pos of Ship
-    Position shipStartingPos;
-    Position * shipStartingPosPtr = &shipStartingPos;
-    shipStartingPos.Set(200, 2, 100);
+    shipStartingPos.Set(250, 102, 50);
+    shipStartingPosPtr = &shipStartingPos;
 
 	charPos = { 150, 17, -36 };
     //Initialize camera settings (Garry's)
@@ -46,7 +44,7 @@ void SP2::Init()
 
     //Initialize camera settings (Don's)
     camera5.Init(Vector3(startingPos.x, startingPos.y, startingPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    thirdPersonCamera.Init(Vector3(shipStartingPos.x - 30, shipStartingPos.y + 10, shipStartingPos.z - 30), Vector3(0, 1, 0), shipStartingPosPtr, 10);
+    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), shipStartingPosPtr, 10);
 
     // Init Cam Pointer
     camPointer = &camera5;
@@ -54,6 +52,11 @@ void SP2::Init()
     // Init Player
     somePlayer.setPlayerStats("TestMan", "Human", 100, *startingPosPtr, camera5); // Name, Race, Money, Pos, camera
 	//somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, camera5); // Name, Race, Money, Pos, camera
+
+    LoadMeshes();
+
+    //camPointer = &thirdPersonCamera;
+    //somePlayer.setCameraType("third");
 
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -82,22 +85,16 @@ void SP2::Update(double dt)
         thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
     }
 
-    // TEST FOR BULLET COLLISION
-    //if (Application::IsKeyPressed('B'))
-    //{
-    //    rayTracing(InteractablesList);
-    //}
-  
-    //VENDING
-	NearVendingText = (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25);
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
-	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); ++i)
+    Vector3 view = (camera5.target - camera5.position).Normalized();
+    for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
     {
-        if (i->name == "ship"/* && somePlayer.pos.x < i->maxPos.x + 3 && somePlayer.pos.x > i->minPos.x - 3 && somePlayer.pos.z < i->maxPos.z + 3 && somePlayer.pos.z > i->minPos.z - 3*/)
+        if (i->isInView(somePlayer.pos, view) == true)
         {
+            std::cout << "NEAR" << std::endl;
             if (Application::IsKeyPressed('E'))
             {
                 if (somePlayer.getCameraType() == "first")
@@ -113,7 +110,7 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
             }
         }
 
-		std::cout << i->isInView(*thirdPersonCamera.GetFocusPoint(), thirdPersonCamera.camDirection) << std::endl;
+		//std::cout << i->isInView(*thirdPersonCamera.GetFocusPoint(), thirdPersonCamera.camDirection) << std::endl;
     }
 }
 
@@ -299,29 +296,6 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
 
 }
 
-void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
-{
-    Vector3 view = (camera5.target - camera5.position).Normalized();
-
-    for (size_t i = 0; i < InteractablesList.size(); ++i)
-    {
-        Vector3 objPos = (InteractablesList[i].pos.x, InteractablesList[i].pos.y, InteractablesList[i].pos.z);
-        //Vector3 viewNormal = view.Normalized();
-
-        //distance = objPos.Dot(viewNormal);
-
-        Vector3 projection = (objPos.Dot(view.Normalized()) * view.Normalized());
-
-        Vector3 distVec = -objPos + projection;
-
-        if (distVec.Length() < 1)
-        {
-            std::cout << "HIT" << std::endl;
-        }
-
-    }
-}
-
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 {
     Mtx44 MVP, modelView, modelView_inverse_transpose;
@@ -455,7 +429,7 @@ void SP2::Render()
 
     // SpaceShip
     modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
+    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y - 30, thirdPersonCamera.GetFocusPoint()->z + 80);
     modelStack.Scale(4, 4, 4);
     RenderMesh(meshList[GEO_SHIP], true, toggleLight);
     modelStack.PopMatrix();

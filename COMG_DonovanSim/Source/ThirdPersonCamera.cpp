@@ -175,9 +175,9 @@ void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&Inter
             position = position + view;
             target = target + view;
 
-            somePlayer.pos.x += position.x;
-            somePlayer.pos.y += position.y;
-            somePlayer.pos.z += position.x;
+            somePlayer.pos.x += view.x;
+            somePlayer.pos.y += view.y;
+            somePlayer.pos.z += view.x;
 
             focus->x += view.x;
             focus->y += view.y;
@@ -221,9 +221,9 @@ void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&Inter
             position = position - view;
             target = target +- view;
 
-            somePlayer.pos.x -= position.x;
-            somePlayer.pos.y -= position.y;
-            somePlayer.pos.z -= position.x;
+            somePlayer.pos.x -= view.x;
+            somePlayer.pos.y -= view.y;
+            somePlayer.pos.z -= view.x;
 
             focus->x -= view.x;
             focus->y -= view.y;
