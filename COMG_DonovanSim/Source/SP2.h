@@ -184,6 +184,7 @@ private:
 	void LoadLights();
 	void LoadMeshes();
 	void ReadKeyPresses();
+	void RenderCode();
 };
 
 #endif

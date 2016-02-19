@@ -20,7 +20,7 @@ void SP2::Init()
 
 	LoadShaderCodes();
 	LoadLights();
-	LoadMeshes();
+
 
     //variable to rotate geometry
     rotateAngle = 0;
@@ -40,7 +40,7 @@ void SP2::Init()
     shipStartingPos.Set(200, 2, 100);
 
 	charPos = { 150, 17, -36 };
-    //Initialize camera settings (Garry's)
+    //Initialize camera settings (Gary's)
     //camera5.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
     //thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
 
@@ -54,6 +54,8 @@ void SP2::Init()
     // Init Player
     somePlayer.setPlayerStats("TestMan", "Human", 100, *startingPosPtr, camera5); // Name, Race, Money, Pos, camera
 	//somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, camera5); // Name, Race, Money, Pos, camera
+
+	LoadMeshes();
 
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
@@ -90,6 +92,8 @@ void SP2::Update(double dt)
   
     //VENDING
 	NearVendingText = (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25);
+
+	rayTracing(InteractablesList);
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
@@ -98,19 +102,7 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
     {
         if (i->name == "ship"/* && somePlayer.pos.x < i->maxPos.x + 3 && somePlayer.pos.x > i->minPos.x - 3 && somePlayer.pos.z < i->maxPos.z + 3 && somePlayer.pos.z > i->minPos.z - 3*/)
         {
-            if (Application::IsKeyPressed('E'))
-            {
-                if (somePlayer.getCameraType() == "first")
-                {
-                    camPointer = &thirdPersonCamera;
-                    somePlayer.setCameraType("third");
-                }
-                else
-                {
-                    camPointer = &camera5;
-                    somePlayer.setCameraType("first");
-                }
-            }
+            
         }
 
 		std::cout << i->isInView(*thirdPersonCamera.GetFocusPoint(), thirdPersonCamera.camDirection) << std::endl;
@@ -301,25 +293,10 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
 
 void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
 {
-    Vector3 view = (camera5.target - camera5.position).Normalized();
-
-    for (size_t i = 0; i < InteractablesList.size(); ++i)
-    {
-        Vector3 objPos = (InteractablesList[i].pos.x, InteractablesList[i].pos.y, InteractablesList[i].pos.z);
-        //Vector3 viewNormal = view.Normalized();
-
-        //distance = objPos.Dot(viewNormal);
-
-        Vector3 projection = (objPos.Dot(view.Normalized()) * view.Normalized());
-
-        Vector3 distVec = -objPos + projection;
-
-        if (distVec.Length() < 1)
-        {
-            std::cout << "HIT" << std::endl;
-        }
-
-    }
+	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+	{
+		std::cout << i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), camera5.target) << std::endl;
+	}
 }
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
@@ -407,82 +384,7 @@ void SP2::Render()
 		}
 	}
 
-
-	//RENDER LIGHTBALL
-    modelStack.PushMatrix();
-    modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-    RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(charPos.x, charPos.y, charPos.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-	modelStack.PopMatrix();
-
-
-	//RENDER SKYBOX
-    RenderSkybox();
-
-
-	//RENDER CAFE
-	RenderCafeRoom();
-
-	//GROUND MESH
-    modelStack.PushMatrix();
-    modelStack.Scale(1000, 1000, 1000);
-    RenderMesh(meshList[GEO_QUAD], true, toggleLight);
-    modelStack.PopMatrix();
-
-
-
-	//TRADING STATION
-	//modelStack.PushMatrix();
-	//RenderRoomTemplate(Position(100, 2, 0));
-	//modelStack.Translate(100, 2, 0);
-	//RenderTradingStation();
-	//modelStack.PopMatrix();
-	
-    //RENDER ROOM (WALLS)
-    RenderRoomTemplate(Position(0, 2, 0));     //RECREATIONAL ROOM
-
-
-	//RENDER ROOM (WALLS)
-	RenderRoomTemplate(Position(150, 2, 0));   //CAFE
-
-
-
-	//INTERACTIONS
-
-    // SpaceShip
-    modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
-    modelStack.Scale(4, 4, 4);
-    RenderMesh(meshList[GEO_SHIP], true, toggleLight);
-    modelStack.PopMatrix();
-
-    // Mine
-    //modelStack.PushMatrix();
-    //modelStack.Translate(-100, 2, 50);
-    //modelStack.Scale(4, 4, 4);
-    //RenderMesh(meshList[GEO_MINE], true, toggleLight);
-    //modelStack.PopMatrix();
-
-	// POSITION OF X Y Z
-	std::ostringstream ss;
-	ss.str("");
-	ss << "Position: X(" << thirdPersonCamera.GetFocusPoint()->x << ") Y(" << thirdPersonCamera.GetFocusPoint()->y << ") Z(" << thirdPersonCamera.GetFocusPoint()->z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
-
-	//VENDING TEXT
-	if (NearVendingText)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, 14);
-	}
-
-	if (TokenOnScreen == true)
-	{
-		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
-	}
+	RenderCode();
 }
 
 void SP2::Exit()
