@@ -305,14 +305,14 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 
 void SP2::ReadKeyPresses()
 {
-	if (Application::IsKeyPressed('1')) //enable back face culling
-		glEnable(GL_CULL_FACE);
-	if (Application::IsKeyPressed('2')) //disable back face culling
-		glDisable(GL_CULL_FACE);
-	if (Application::IsKeyPressed('3'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	if (Application::IsKeyPressed('4'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
+	//if (Application::IsKeyPressed('1')) //enable back face culling
+	//	glEnable(GL_CULL_FACE);
+	//if (Application::IsKeyPressed('2')) //disable back face culling
+	//	glDisable(GL_CULL_FACE);
+	//if (Application::IsKeyPressed('3'))
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
+	//if (Application::IsKeyPressed('4'))
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 
 	if (Application::IsKeyPressed('B'))
 	{
@@ -348,10 +348,103 @@ void SP2::ReadKeyPresses()
 		light[0].type = Light::LIGHT_POINT;
 		glUniform1i(lightUniforms[0][UL_TYPE], light[0].type);
 	}
+	
+	if (Application::IsKeyPressed('E'))
+	{
+		if (somePlayer.getCameraType() == "first")
+		{
+			camPointer = &thirdPersonCamera;
+			somePlayer.setCameraType("third");
+		}
+		else
+		{
+			camPointer = &camera5;
+			somePlayer.setCameraType("first");
+		}
+	}
 }
 
 
 
+
+void SP2::RenderCode()
+{
+//RENDER LIGHTBALL
+	modelStack.PushMatrix();
+	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(charPos.x, charPos.y, charPos.z);
+	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+	modelStack.PopMatrix();
+
+
+	//RENDER SKYBOX
+	RenderSkybox();
+
+
+	//RENDER CAFE
+	RenderCafeRoom();
+
+	//GROUND MESH
+	modelStack.PushMatrix();
+	modelStack.Scale(1000, 1000, 1000);
+	RenderMesh(meshList[GEO_QUAD], true, toggleLight);
+	modelStack.PopMatrix();
+
+
+
+	//TRADING STATION
+	//modelStack.PushMatrix();
+	//RenderRoomTemplate(Position(100, 2, 0));
+	//modelStack.Translate(100, 2, 0);
+	//RenderTradingStation();
+	//modelStack.PopMatrix();
+
+	//RENDER ROOM (WALLS)
+	RenderRoomTemplate(Position(0, 2, 0));     //RECREATIONAL ROOM
+
+
+	//RENDER ROOM (WALLS)
+	RenderRoomTemplate(Position(150, 2, 0));   //CAFE
+
+
+
+	//INTERACTIONS
+
+	// SpaceShip
+	modelStack.PushMatrix();
+	modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
+	modelStack.Scale(4, 4, 4);
+	RenderMesh(meshList[GEO_SHIP], true, toggleLight);
+	modelStack.PopMatrix();
+
+	// Mine
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-100, 2, 50);
+	//modelStack.Scale(4, 4, 4);
+	//RenderMesh(meshList[GEO_MINE], true, toggleLight);
+	//modelStack.PopMatrix();
+
+	// POSITION OF X Y Z
+	std::ostringstream ss;
+	ss.str("");
+	ss << "Position: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
+
+	//VENDING TEXT
+	if (NearVendingText)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, 14);
+	}
+
+	if (TokenOnScreen == true)
+	{
+		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
+	}
+}
 
 void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 {
@@ -614,6 +707,26 @@ void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.Scale(size, size, size);
 	modelStack.Translate(x, y, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
+	RenderMesh(mesh, true, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
+void SP2::RenderCokeOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(90, 0, 1, 0);
 	RenderMesh(mesh, true, toggleLight);
 
 	projectionStack.PopMatrix();

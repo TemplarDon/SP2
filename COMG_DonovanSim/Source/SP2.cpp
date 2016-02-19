@@ -14,9 +14,13 @@ void SP2::Init()
     //Bools
 	NearVendingText = false;
 	TokenOnScreen = false;
+	RenderCoke = false;
+	ConsumeCokeText = false;
 
 	//Floats
-	TokenTranslate = 12;
+	TokenTranslate = 11;
+	TextTranslate = 20;
+	TestRotation = 90;
 
 	LoadShaderCodes();
 	LoadLights();
@@ -38,7 +42,7 @@ void SP2::Init()
     shipStartingPosPtr = &shipStartingPos;
 
 	charPos = { 150, 17, -36 };
-    //Initialize camera settings (Garry's)
+    //Initialize camera settings (Gary's)
     //camera5.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
     //thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
 
@@ -85,6 +89,58 @@ void SP2::Update(double dt)
         thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
     }
 
+    // TEST FOR BULLET COLLISION
+    //if (Application::IsKeyPressed('B'))
+    //{
+    //    rayTracing(InteractablesList);
+    //}
+
+   
+    
+	TestRotation += float( dt * 100);
+    
+  
+    //VENDING
+	NearVendingText = (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25);
+
+	rayTracing(InteractablesList);
+	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
+	{
+		NearVendingText = true;
+	}
+	else
+	{
+		NearVendingText = false;
+	}
+
+
+	//COLLECT TOKEN
+	if (camera5.position.x > 150 && camera5.position.x < 180 && camera5.position.z > 10 && camera5.position.z < 20)
+	{
+		if (Application::IsKeyPressed('Q'))
+		{
+			TokenOnScreen = true;
+			TokenTranslate = 10.5;
+		}
+	}
+
+	//INSERT COIN INTO VENDING
+	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
+	{
+		if (Application::IsKeyPressed('Q'))
+		{
+			TokenOnScreen = false;
+			TextTranslate = 100;
+			RenderCoke = true;
+			ConsumeCokeText = true;
+		}
+	}
+
+	if (Application::IsKeyPressed('U'))
+	{
+		ConsumeCokeText = false;
+		RenderCoke = false;
+	}
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
@@ -296,6 +352,14 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
 
 }
 
+void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
+{
+	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+	{
+		std::cout << i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), camera5.target) << std::endl;
+	}
+}
+
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 {
     Mtx44 MVP, modelView, modelView_inverse_transpose;
@@ -310,6 +374,7 @@ void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
         modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
 
         glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
+
 
         //load material
         glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
@@ -333,6 +398,7 @@ void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
     {
         glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
     }
+
 
     mesh->Render(); //this line should only be called once 
     if (mesh->textureID > 0)
@@ -381,82 +447,7 @@ void SP2::Render()
 		}
 	}
 
-
-	//RENDER LIGHTBALL
-    modelStack.PushMatrix();
-    modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-    RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(charPos.x, charPos.y, charPos.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-	modelStack.PopMatrix();
-
-
-	//RENDER SKYBOX
-    RenderSkybox();
-
-
-	//RENDER CAFE
-	RenderCafeRoom();
-
-	//GROUND MESH
-    modelStack.PushMatrix();
-    modelStack.Scale(1000, 1000, 1000);
-    RenderMesh(meshList[GEO_QUAD], true, toggleLight);
-    modelStack.PopMatrix();
-
-
-
-	//TRADING STATION
-	//modelStack.PushMatrix();
-	//RenderRoomTemplate(Position(100, 2, 0));
-	//modelStack.Translate(100, 2, 0);
-	//RenderTradingStation();
-	//modelStack.PopMatrix();
-	
-    //RENDER ROOM (WALLS)
-    RenderRoomTemplate(Position(0, 2, 0));     //RECREATIONAL ROOM
-
-
-	//RENDER ROOM (WALLS)
-	RenderRoomTemplate(Position(150, 2, 0));   //CAFE
-
-
-
-	//INTERACTIONS
-
-    // SpaceShip
-    modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y - 30, thirdPersonCamera.GetFocusPoint()->z + 80);
-    modelStack.Scale(4, 4, 4);
-    RenderMesh(meshList[GEO_SHIP], true, toggleLight);
-    modelStack.PopMatrix();
-
-    // Mine
-    //modelStack.PushMatrix();
-    //modelStack.Translate(-100, 2, 50);
-    //modelStack.Scale(4, 4, 4);
-    //RenderMesh(meshList[GEO_MINE], true, toggleLight);
-    //modelStack.PopMatrix();
-
-	// POSITION OF X Y Z
-	std::ostringstream ss;
-	ss.str("");
-	ss << "Position: X(" << thirdPersonCamera.GetFocusPoint()->x << ") Y(" << thirdPersonCamera.GetFocusPoint()->y << ") Z(" << thirdPersonCamera.GetFocusPoint()->z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
-
-	//VENDING TEXT
-	if (NearVendingText)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, 14);
-	}
-
-	if (TokenOnScreen == true)
-	{
-		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
-	}
+	RenderCode();
 }
 
 void SP2::Exit()

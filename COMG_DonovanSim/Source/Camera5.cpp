@@ -63,9 +63,9 @@ void Camera5::Update(double dt, vector<InteractableOBJs>&InteractablesList, vect
     float yaw = 0;
     float pitch = 0;
 
-    yaw = (float)(mouseSpeed  * dt * (800 / 2 - Application::mouseX));
+    yaw = (float)(mouseSpeed  * dt * (1680 / 2 - Application::mouseX));
 
-    pitch = (float)(mouseSpeed * dt * (600 / 2 - Application::mouseY));
+    pitch = (float)(mouseSpeed * dt * (1080 / 2 - Application::mouseY));
 
     // Mouse
     Mtx44 rotationYaw;
