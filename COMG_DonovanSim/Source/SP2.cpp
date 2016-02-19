@@ -16,6 +16,8 @@ void SP2::Init()
 	TokenOnScreen = false;
 	RenderCoke = false;
 	ConsumeCokeText = false;
+	testText = false;
+	PickUpTokenText = false;
 
 	//Floats
 	TokenTranslate = 11;
@@ -97,48 +99,66 @@ void SP2::Update(double dt)
    
     
 	TestRotation += float( dt * 100);
-    
-  
-    //VENDING
-	NearVendingText = (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25);
 
-	rayTracing(InteractablesList);
-	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
-	{
-		NearVendingText = true;
-	}
-	else
-	{
-		NearVendingText = false;
-	}
+	//rayTracing(InteractablesList);
 
 
-	//COLLECT TOKEN
-	if (camera5.position.x > 150 && camera5.position.x < 180 && camera5.position.z > 10 && camera5.position.z < 20)
+	//INTERACTABLEOBJS DECTECTION
+	Vector3 view = (camera5.target - camera5.position).Normalized();
+
+
+	//VENDING MACHINE
+	for (int i = 0; InteractablesList.size() > i; i++)
 	{
-		if (Application::IsKeyPressed('Q'))
+		if (InteractablesList[i].name == "vending")
 		{
-			TokenOnScreen = true;
-			TokenTranslate = 10.5;
+
+			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+			{
+				NearVendingText = true;
+				if (Application::IsKeyPressed('Q'))
+				{
+					TextTranslate = 100;
+					TokenOnScreen = false;
+					RenderCoke = true;
+					ConsumeCokeText = true;
+				}
+
+				if (Application::IsKeyPressed('U'))
+				{
+					ConsumeCokeText = false;
+					RenderCoke = false;
+				}
+			}
+			else
+			{
+				NearVendingText = false;
+			}
+
 		}
 	}
 
-	//INSERT COIN INTO VENDING
-	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
+	//TOKEN
+	for (int i = 0; InteractablesList.size() > i; i++)
 	{
-		if (Application::IsKeyPressed('Q'))
+		if (InteractablesList[i].name == "token")
 		{
-			TokenOnScreen = false;
-			TextTranslate = 100;
-			RenderCoke = true;
-			ConsumeCokeText = true;
-		}
-	}
 
-	if (Application::IsKeyPressed('U'))
-	{
-		ConsumeCokeText = false;
-		RenderCoke = false;
+			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+			{
+				PickUpTokenText = true;
+
+				if (Application::IsKeyPressed('Q'))
+				{
+					TokenOnScreen = true;
+					TokenTranslate = 10.5;
+				}
+			}
+			else
+			{
+				PickUpTokenText = false;
+			}
+		}
 	}
 }
 
