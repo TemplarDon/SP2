@@ -245,10 +245,17 @@ void SP2::LoadMeshes()
 	meshList[GEO_SOFA] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//sofa.obj");
 	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
 
-	// Space Ship
+    initSpaceShip();
+}
+
+void SP2::initSpaceShip()
+{
+    // Space Ship
     meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
     Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0));
-	ShipList.push_back(someShip);
+    someShip.setRequirements(50, 500);
+
+    shipTemplatePtr = &someShip;
 }
 
 void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
@@ -305,15 +312,6 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 
 void SP2::ReadKeyPresses()
 {
-	//if (Application::IsKeyPressed('1')) //enable back face culling
-	//	glEnable(GL_CULL_FACE);
-	//if (Application::IsKeyPressed('2')) //disable back face culling
-	//	glDisable(GL_CULL_FACE);
-	//if (Application::IsKeyPressed('3'))
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	//if (Application::IsKeyPressed('4'))
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-
 	if (Application::IsKeyPressed('B'))
 	{
 		if (toggleLight == true)
@@ -332,36 +330,6 @@ void SP2::ReadKeyPresses()
 		TokenOnScreen = true;
 		TokenTranslate = 10.5;
 	}
-
-	if (Application::IsKeyPressed('5'))
-	{
-		light[0].type = Light::LIGHT_SPOT;
-		glUniform1i(lightUniforms[0][UL_TYPE], light[0].type);
-	}
-	if (Application::IsKeyPressed('6'))
-	{
-		light[0].type = Light::LIGHT_DIRECTIONAL;
-		glUniform1i(lightUniforms[0][UL_TYPE], light[0].type);
-	}
-	if (Application::IsKeyPressed('7'))
-	{
-		light[0].type = Light::LIGHT_POINT;
-		glUniform1i(lightUniforms[0][UL_TYPE], light[0].type);
-	}
-	
-	if (Application::IsKeyPressed('E'))
-	{
-		if (somePlayer.getCameraType() == "first")
-		{
-			camPointer = &thirdPersonCamera;
-			somePlayer.setCameraType("third");
-		}
-		else
-		{
-			camPointer = &camera5;
-			somePlayer.setCameraType("first");
-		}
-	}
 }
 
 
@@ -369,7 +337,7 @@ void SP2::ReadKeyPresses()
 
 void SP2::RenderCode()
 {
-//RENDER LIGHTBALL
+    //RENDER LIGHTBALL
 	modelStack.PushMatrix();
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
@@ -414,12 +382,21 @@ void SP2::RenderCode()
 
 	//INTERACTIONS
 
-	// SpaceShip
-	modelStack.PushMatrix();
-	modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
-	modelStack.Scale(4, 4, 4);
-	RenderMesh(meshList[GEO_SHIP], true, toggleLight);
-	modelStack.PopMatrix();
+    // SpaceShip
+    //modelStack.PushMatrix();
+    //modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y - 30, thirdPersonCamera.GetFocusPoint()->z + 80);
+    //modelStack.Translate(thirdPersonCamera.target.x, thirdPersonCamera.target.y, thirdPersonCamera.target.z);
+    //modelStack.Rotate(shipRotateAngle, 1, 1, 1);
+    //modelStack.Scale(4, 4, 4);
+    //RenderMesh(meshList[GEO_SHIP], true, toggleLight);
+    //modelStack.PopMatrix();
+
+    if (ShipList.size() > 0)
+    {
+        RenderSpaceShip();
+    }
+
+
 
 	// Mine
 	//modelStack.PushMatrix();
@@ -759,6 +736,30 @@ void SP2::RenderTradingStation()
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_TRADEPOST], true, toggleLight);
 	modelStack.PopMatrix();
+}
+
+void SP2::RenderSpaceShip()
+{
+    // Start of SpaceShip
+    modelStack.PushMatrix();
+
+    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y -10, thirdPersonCamera.GetFocusPoint()->z + 80);
+
+    //if (thirdPersonCamera.yawingLeft == true || thirdPersonCamera.yawingRight == true) { modelStack.Rotate(shipHorizontalRotateAngle, 0, 1, 0); }
+    //if (thirdPersonCamera.pitchingDown == true || thirdPersonCamera.pitchingUp == true) { modelStack.Rotate(shipVerticalRotateAngle, 0, 0, 1); }
+
+    modelStack.Rotate(shipHorizontalRotateAngle, 0, 1, 0);
+
+    modelStack.Rotate(shipVerticalRotateAngle, 1, 0, 1);
+
+    modelStack.Scale(4, 4, 4);
+
+    RenderMesh(meshList[GEO_HULL], true, toggleLight);
+    RenderMesh(meshList[GEO_WINGS], true, toggleLight);
+    RenderMesh(meshList[GEO_ENGINE], true, toggleLight);
+
+    modelStack.PopMatrix();
+    // End of SpaceShip
 }
 
 void SP2::RenderText(Mesh* mesh, std::string text, Color color)

@@ -29,8 +29,12 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 
     this->canMoveBuilding = true;
     this->canMoveInteractable = true;
+    this->yawingLeft = false;
+    this->yawingRight = false;
+    this->pitchingDown = false;
+    this->pitchingUp = false;
 
-	SetCameraPitchBounds(-70, 80);
+	SetCameraPitchBounds(-30, 15);
 	SetCameraDistanceBounds(10, 100);
 }
 
@@ -40,17 +44,16 @@ void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
     float horizontalAngle = 0; 
     float verticalAngle = 0; 
 
-    horizontalAngle += mouseSpeed * dt * float(800 / 2 - Application::mouseX);
-    verticalAngle += mouseSpeed * dt * float(600 / 2 - Application::mouseY);
+    horizontalAngle += mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
+    verticalAngle += mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
 
     YawCamera(horizontalAngle);
     PitchCamera(verticalAngle);
 
+    shipTurningAnimation(Application::mouseX, Application::mouseY);
     cameraMovement(dt, InteractablesList, BuildingsList, somePlayer);
 
 	Refocus();
-
-
 }
 
 void ThirdPersonCamera::YawCamera(const float degrees)
@@ -172,8 +175,8 @@ void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&Inter
 
         if (canMoveBuilding == true && canMoveInteractable == true)
         {
-            position = position + view;
-            target = target + view;
+            position += view;
+            target += view;
 
             somePlayer.pos.x += view.x;
             somePlayer.pos.y += view.y;
@@ -186,138 +189,179 @@ void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&Inter
 
     }
 
-    if (Application::IsKeyPressed('S'))
-    {
-        view = (target - position).Normalized();
-        int offSetCount = 0;
-        for (int i = 0; i < InteractablesList.size(); ++i)
-        {
-            if (InteractablesList[i].canMove == true)
-            {
-                canMoveInteractable = true;
-            }
-            else
-            {
-                canMoveInteractable = false;
-                break;
-            }
-        }
+    //if (Application::IsKeyPressed('S'))
+    //{
+    //    view = (target - position).Normalized();
+    //    int offSetCount = 0;
+    //    for (int i = 0; i < InteractablesList.size(); ++i)
+    //    {
+    //        if (InteractablesList[i].canMove == true)
+    //        {
+    //            canMoveInteractable = true;
+    //        }
+    //        else
+    //        {
+    //            canMoveInteractable = false;
+    //            break;
+    //        }
+    //    }
 
-        for (int i = 0; i < BuildingsList.size(); ++i)
-        {
-            if (BuildingsList[i].canMove == true)
-            {
-                canMoveBuilding = true;
-            }
-            else
-            {
-                canMoveBuilding = false;
-                break;
-            }
-        }
+    //    for (int i = 0; i < BuildingsList.size(); ++i)
+    //    {
+    //        if (BuildingsList[i].canMove == true)
+    //        {
+    //            canMoveBuilding = true;
+    //        }
+    //        else
+    //        {
+    //            canMoveBuilding = false;
+    //            break;
+    //        }
+    //    }
 
-        if (canMoveBuilding == true && canMoveInteractable == true)
-        {
-            position = position - view;
-            target = target +- view;
+    //    if (canMoveBuilding == true && canMoveInteractable == true)
+    //    {
+    //        position = position - view;
+    //        target = target - view;
 
-            somePlayer.pos.x -= view.x;
-            somePlayer.pos.y -= view.y;
-            somePlayer.pos.z -= view.x;
+    //        somePlayer.pos.x -= view.x;
+    //        somePlayer.pos.y -= view.y;
+    //        somePlayer.pos.z -= view.x;
 
-            focus->x -= view.x;
-            focus->y -= view.y;
-            focus->z -= view.z;
-        }
+    //        focus->x -= view.x;
+    //        focus->y -= view.y;
+    //        focus->z -= view.z;
+    //    }
+    //}
+
+    //if (Application::IsKeyPressed('D'))
+    //{
+    //    Vector3 right = view.Cross(up);
+    //    right.Normalize();
+    //    view = (target - position).Normalized();
+    //    int offSetCount = 0;
+    //    for (int i = 0; i < InteractablesList.size(); ++i)
+    //    {
+    //        if (InteractablesList[i].canMove == true)
+    //        {
+    //            canMoveInteractable = true;
+    //        }
+    //        else
+    //        {
+    //            canMoveInteractable = false;
+    //            break;
+    //        }
+    //    }
+
+    //    for (int i = 0; i < BuildingsList.size(); ++i)
+    //    {
+    //        if (BuildingsList[i].canMove == true)
+    //        {
+    //            canMoveBuilding = true;
+    //        }
+    //        else
+    //        {
+    //            canMoveBuilding = false;
+    //            break;
+    //        }
+    //    }
+
+    //    if (canMoveBuilding == true && canMoveInteractable == true)
+    //    {
+    //        position += right.Normalized();
+    //        target += right.Normalized();
+
+    //        somePlayer.pos.x += right.Normalized().x;
+    //        somePlayer.pos.z += right.Normalized().z;
+
+    //        focus->x += right.Normalized().x;
+    //        focus->z += right.Normalized().z;
+    //    }
+    //}
+
+    //if (Application::IsKeyPressed('A'))
+    //{
+    //    Vector3 right = view.Cross(up);
+    //    right.Normalize();
+    //    view = (target - position).Normalized();
+    //    int offSetCount = 0;
+    //    for (int i = 0; i < InteractablesList.size(); ++i)
+    //    {
+    //        if (InteractablesList[i].canMove == true)
+    //        {
+    //            canMoveInteractable = true;
+    //        }
+    //        else
+    //        {
+    //            canMoveInteractable = false;
+    //            break;
+    //        }
+    //    }
+
+    //    for (int i = 0; i < BuildingsList.size(); ++i)
+    //    {
+    //        if (BuildingsList[i].canMove == true)
+    //        {
+    //            canMoveBuilding = true;
+    //        }
+    //        else
+    //        {
+    //            canMoveBuilding = false;
+    //            break;
+    //        }
+    //    }
+
+    //    if (canMoveBuilding == true && canMoveInteractable == true)
+    //    {
+    //        position -= right.Normalized();
+    //        target -= right.Normalized();
+
+    //        somePlayer.pos.x -= right.Normalized().x;
+    //        somePlayer.pos.z -= right.Normalized().z;
+
+    //        focus->x -= right.Normalized().x;
+    //        focus->z -= right.Normalized().z;
+    //    }
+    //}
+}
+
+void ThirdPersonCamera::shipTurningAnimation(float yaw, float pitch)
+{
+    if (pitch > 0 && pitch < 540)
+    { 
+        pitchingUp = true; 
+    }
+    else 
+    { 
+        pitchingUp = false; 
     }
 
-    if (Application::IsKeyPressed('D'))
-    {
-        Vector3 right = view.Cross(up);
-        right.Normalize();
-        view = (target - position).Normalized();
-        int offSetCount = 0;
-        for (int i = 0; i < InteractablesList.size(); ++i)
-        {
-            if (InteractablesList[i].canMove == true)
-            {
-                canMoveInteractable = true;
-            }
-            else
-            {
-                canMoveInteractable = false;
-                break;
-            }
-        }
-
-        for (int i = 0; i < BuildingsList.size(); ++i)
-        {
-            if (BuildingsList[i].canMove == true)
-            {
-                canMoveBuilding = true;
-            }
-            else
-            {
-                canMoveBuilding = false;
-                break;
-            }
-        }
-
-        if (canMoveBuilding == true && canMoveInteractable == true)
-        {
-            position += right.Normalized();
-            target += right.Normalized();
-
-            somePlayer.pos.x += right.Normalized().x;
-            somePlayer.pos.z += right.Normalized().z;
-
-            focus->x += right.Normalized().x;
-            focus->z += right.Normalized().z;
-        }
+    if (pitch > 540 && pitch < 1080) 
+    { 
+        pitchingDown = true;
+    }
+    else 
+    { 
+        pitchingDown = false; 
     }
 
-    if (Application::IsKeyPressed('A'))
-    {
-        Vector3 right = view.Cross(up);
-        right.Normalize();
-        view = (target - position).Normalized();
-        int offSetCount = 0;
-        for (int i = 0; i < InteractablesList.size(); ++i)
-        {
-            if (InteractablesList[i].canMove == true)
-            {
-                canMoveInteractable = true;
-            }
-            else
-            {
-                canMoveInteractable = false;
-                break;
-            }
-        }
 
-        for (int i = 0; i < BuildingsList.size(); ++i)
-        {
-            if (BuildingsList[i].canMove == true)
-            {
-                canMoveBuilding = true;
-            }
-            else
-            {
-                canMoveBuilding = false;
-                break;
-            }
-        }
-
-        if (canMoveBuilding == true && canMoveInteractable == true)
-        {
-            position -= right.Normalized();
-            target -= right.Normalized();
-
-            somePlayer.pos.x -= right.Normalized().x;
-            somePlayer.pos.z -= right.Normalized().z;
-
-            focus->x -= right.Normalized().x;
-            focus->z -= right.Normalized().z;
-        }
+    if (yaw > 0 && yaw < 840) 
+    { 
+        yawingLeft = true; 
     }
+    else 
+    {
+        yawingLeft = false;
+    }
+
+    if (yaw > 840 && yaw < 1680) 
+    { 
+        yawingRight = true;
+    }
+    else 
+    { 
+        yawingRight = false; 
+    }
+    
 }

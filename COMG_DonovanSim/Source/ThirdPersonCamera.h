@@ -8,7 +8,7 @@
 
 #include "(SP2)Player.h"
 #include "(SP2)Building.h"
-#include "(SP2)InteractableOBJs.h"
+#include "(SP2)Ship.h"
 
 class ThirdPersonCamera : public Camera
 {
@@ -45,8 +45,18 @@ public:
 
     void cameraMovement(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer);
 
+    // Variables for checking for collision
     bool canMoveInteractable;
     bool canMoveBuilding;
+
+    // Variables for checking where ship is turning
+    bool yawingRight;
+    bool yawingLeft;
+    bool pitchingUp;
+    bool pitchingDown;
+
+    // Function for checking which direction is the ship turning in
+    void shipTurningAnimation(float yaw, float pitch);
 };
 
 #endif

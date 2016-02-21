@@ -47,6 +47,10 @@ public:
 
     // Function to calculate the ship's stats using its parts and upgrades
     void calculateShipStats();
+
+    string hullType;
+    string wingType;
+    string engineType;
 };
 
 #endif

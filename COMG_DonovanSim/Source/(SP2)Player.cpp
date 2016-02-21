@@ -36,10 +36,10 @@ Player::~Player()
     Function for adding item to player's inventory
 
 \param  itemName
-    string containing item's name that is to be added
+    InteractableOBJs containing item's name that is to be added
 */
 /******************************************************************************/
-void Player::addItem(string itemName)
+void Player::addItem(InteractableOBJs itemName)
 {
     this->playerInventory.itemList.push_back(itemName);
 }
@@ -50,14 +50,14 @@ void Player::addItem(string itemName)
     Function for removing an item from player's inventory
 
 \param  itemName
-    string containing item's name that is to be removed
+    InteractableOBJs containing item's name that is to be removed
 */
 /******************************************************************************/
-void Player::removeItem(string itemName)
+void Player::removeItem(InteractableOBJs itemName)
 {
-    for (list<string>::iterator it = this->playerInventory.itemList.begin(); it != this->playerInventory.itemList.end();)
+    for (list<InteractableOBJs>::iterator it = this->playerInventory.itemList.begin(); it != this->playerInventory.itemList.end();)
     {
-        if (*it == itemName)
+        if (it->name == itemName.name)
         {
             it = this->playerInventory.itemList.erase(it);
         }

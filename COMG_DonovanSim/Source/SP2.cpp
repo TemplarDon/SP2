@@ -38,8 +38,10 @@ void SP2::Init()
     startingPosPtr = &startingPos;
 
     // Starting Pos of Ship
-    shipStartingPos.Set(250, 102, 50);
+    shipStartingPos.Set(75, 18, 150);
     shipStartingPosPtr = &shipStartingPos;
+    shipHorizontalRotateAngle = 0;
+    shipVerticalRotateAngle = 0;
 
 	charPos = { 150, 17, -36 };
     //Initialize camera settings (Gary's)
@@ -88,22 +90,12 @@ void SP2::Update(double dt)
     {
         thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
     }
-
-    // TEST FOR BULLET COLLISION
-    //if (Application::IsKeyPressed('B'))
-    //{
-    //    rayTracing(InteractablesList);
-    //}
-
    
     
 	TestRotation += float( dt * 100);
     
-  
+    
     //VENDING
-	NearVendingText = (camera5.position.x > 100 && camera5.position.x < 140 && camera5.position.z > 5 && camera5.position.z < 25);
-
-	rayTracing(InteractablesList);
 	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
 	{
 		NearVendingText = true;
@@ -141,6 +133,97 @@ void SP2::Update(double dt)
 		ConsumeCokeText = false;
 		RenderCoke = false;
 	}
+
+    // Ship Animation
+    if (thirdPersonCamera.yawingLeft == true && shipHorizontalRotateAngle >= -20) { shipHorizontalRotateAngle += (float)(10 * dt); }
+    if (thirdPersonCamera.yawingRight == true && shipHorizontalRotateAngle <= 20) { shipHorizontalRotateAngle -= (float)(10 * dt); }
+    if (thirdPersonCamera.pitchingDown == true && shipVerticalRotateAngle >= -20) { shipVerticalRotateAngle += (float)(10 * dt); }
+    if (thirdPersonCamera.pitchingUp == true && shipHorizontalRotateAngle <= 20) { shipVerticalRotateAngle -= (float)(10 * dt); }
+    
+    // Reset Ship to original orientation
+    if (thirdPersonCamera.yawingRight == false )
+    {
+        if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
+        {
+            shipHorizontalRotateAngle += (float)(2 * dt);
+        }
+    }
+
+    if (thirdPersonCamera.yawingLeft == false)
+    {
+        if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
+        {
+            shipHorizontalRotateAngle -= (float)(2 * dt);
+        }
+
+    }
+
+    if (thirdPersonCamera.pitchingDown == false)
+    {
+        if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
+        {
+            shipVerticalRotateAngle += (float)(2 * dt);
+        }
+    }
+
+    if (thirdPersonCamera.pitchingUp == false)
+    {
+        if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
+        {
+            shipVerticalRotateAngle -= (float)(2 * dt);
+        }
+
+    }
+
+    // Ship Creation
+    if (Application::IsKeyPressed('E'))
+    {
+        // Space Ship Template
+        meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
+        Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0));
+        someShip.setRequirements(50, 500);
+
+        shipTemplatePtr = &someShip;
+
+        ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LightHull, DualWings, G1Engine));
+
+        // Load Meshes for specific ship parts
+        for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
+        {
+            if (i->hullType == "LightHull")
+            {
+                meshList[GEO_HULL] = MeshBuilder::GenerateOBJ("shipHull", "OBJ//Ship Models//LightHull.obj");
+            }
+            else if (i->hullType == "MediumHull")
+            {
+
+            }
+            else if (i->hullType == "LargeHull")
+            {
+
+            }
+
+            if (i->wingType == "DualWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//DualWings.obj");
+            }
+            else if (i->wingType == "QuadWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//QuadWings.obj");
+            }
+
+            if (i->engineType == "G1Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G1Engine.obj");
+            }
+            else if (i->engineType == "G2Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G2Engine.obj");
+            }
+        }
+
+    }
+
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
@@ -150,8 +233,7 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
     {
         if (i->isInView(somePlayer.pos, view) == true)
         {
-            std::cout << "NEAR" << std::endl;
-            if (Application::IsKeyPressed('E'))
+            if (Application::IsKeyPressed('F'))
             {
                 if (somePlayer.getCameraType() == "first")
                 {
@@ -165,8 +247,6 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
                 }
             }
         }
-
-		//std::cout << i->isInView(*thirdPersonCamera.GetFocusPoint(), thirdPersonCamera.camDirection) << std::endl;
     }
 }
 
@@ -352,13 +432,6 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
 
 }
 
-void SP2::rayTracing(vector<InteractableOBJs>&InteractablesList)
-{
-	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-	{
-		std::cout << i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), camera5.target) << std::endl;
-	}
-}
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 {

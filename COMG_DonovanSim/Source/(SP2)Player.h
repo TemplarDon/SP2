@@ -10,7 +10,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "(SP2)GameObject.h"
+#include "(SP2)InteractableOBJs.h"
 #include "(SP2)Inventory.h"
 #include "(SP2)Ship.h"
 #include "Camera.h"
@@ -30,8 +30,8 @@ public:
     ~Player();
 
     // Functions for adding and removing items from players inventory
-    void addItem(string itemName);
-    void removeItem(string itemName);
+    void addItem(InteractableOBJs itemName);
+    void removeItem(InteractableOBJs itemName);
 
     // Functions for player taking damage and healing health
     void takeDamage(int damageTaken);

@@ -25,7 +25,7 @@
 #include "(SP2)InteractableOBJs.h"
 #include "(SP2)Building.h"
 #include "(SP2)Player.h"
-#include "(SP2)Ship.h"
+#include "(SP2)ShipBuilder.h"
 
 #include <vector>
 #include <sstream>
@@ -69,6 +69,9 @@ class SP2 : public Scene
 
         //Space Ship
         GEO_SHIP,
+        GEO_HULL,
+        GEO_WINGS,
+        GEO_ENGINE,
 
         GEO_GROUND,
 
@@ -152,6 +155,10 @@ private:
     Position shipStartingPos;
     Position * shipStartingPosPtr;
 
+    // Variable to allow ship to rotate while moving
+    float shipHorizontalRotateAngle;
+    float shipVerticalRotateAngle;
+
     vector<InteractableOBJs>InteractablesList;
     vector<Building>BuildingsList;
     vector<Ship>ShipList;
@@ -174,9 +181,27 @@ private:
     void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
     void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 
+    // Init Ship Builder & Ship Ptr
+    ShipBuilder ShipBuilder;
+    Ship* shipTemplatePtr;
+
+    // Init Ship Parts
+    Light_Hull LightHull;
+
+    G1_Engine G1Engine;
+    G2_Engine G2Engine;
+
+    Dual_Wings DualWings;
+    Quad_Wings QaudWings;
+
+    // Function to Init & Render SpaceShip
+    void initSpaceShip();
+    void RenderSpaceShip();
+
 	void RenderTradingStation();
 	void RenderRecRoom();
 	void RenderCafeRoom();
+
 
     void RenderText(Mesh* mesh, std::string text, Color color);
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

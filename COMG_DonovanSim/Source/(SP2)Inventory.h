@@ -9,7 +9,7 @@
 /*************************************************************************************************/
 #ifndef INVENTORY_H
 #define INVENTORY_H
-#include "(SP2)GameObject.h"
+#include "(SP2)InteractableOBJs.h"
 
 /*************************************************************************************************/
 /*!
@@ -28,7 +28,7 @@ public:
     int moneyAmount;
 
     // List containing Items
-    list<string> itemList;
+    list<InteractableOBJs> itemList;
 
     // Function to add Money to Player
     void addMoney(int money);
