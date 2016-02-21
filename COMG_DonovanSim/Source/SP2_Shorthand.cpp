@@ -225,6 +225,9 @@ void SP2::LoadMeshes()
 	//VENDING
 	meshList[GEO_VENDING] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Vending.obj");
 	meshList[GEO_VENDING]->textureID = LoadTGA("Image//Vending.tga");
+	InteractableOBJs vending = InteractableOBJs("vending", meshList[GEO_VENDING]->maxPos, meshList[GEO_VENDING]->minPos, Position(108, 2,58), 3, 0, Vector3(0, 0, 0));
+	vending.setRequirements(55, 15);
+	InteractablesList.push_back(vending);
 
 	//CHAIR
 	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chair.obj");
@@ -233,6 +236,14 @@ void SP2::LoadMeshes()
 	//Token
 	meshList[GEO_TOKEN] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Token.obj");
 	meshList[GEO_TOKEN]->textureID = LoadTGA("Image//Token.tga");
+	InteractableOBJs token = InteractableOBJs("token", meshList[GEO_TOKEN]->maxPos, meshList[GEO_TOKEN]->minPos, Position(175, TokenTranslate, 30), 2, 0, Vector3(0, 0, 0));
+	token.setRequirements(30, 5);
+	InteractablesList.push_back(token);
+
+	//COKE
+	meshList[GEO_COKE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Coke.obj");
+	meshList[GEO_COKE]->textureID = LoadTGA("Image//Coke.tga");
+
 
 	//Recreational Room
 	initRoomTemplate(Position(150, 2, 0));          //Collision
@@ -330,7 +341,7 @@ void SP2::ReadKeyPresses()
 		TokenOnScreen = true;
 		TokenTranslate = 10.5;
 	}
-}
+
 
 
 
@@ -414,12 +425,38 @@ void SP2::RenderCode()
 	//VENDING TEXT
 	if (NearVendingText)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, 14);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, TextTranslate);
 	}
 
 	if (TokenOnScreen == true)
 	{
 		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
+	}
+
+	//TEST TEXT
+	if (testText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "testTESTtest", Color(1, 0, 0), 2, 6, 14);
+	}
+
+	//PICK UP TOKEN
+	if (PickUpTokenText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS Q TO PICK UP TOKEN", Color(1, 0, 0), 2, 6, 18);
+	}
+
+	//PICK UP COKE
+	if (RenderCoke == true)
+	{
+		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
+	}
+
+	//CONSUME COKE TEXT
+	if (ConsumeCokeText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "THANKS FOR BUYING A COKE!!", Color(1, 0, 0), 2, 6, 22);
+		RenderTextOnScreen(meshList[GEO_TEXT], "HERE IS YOUR COKE.", Color(1, 0, 0), 2, 6, 20);
+		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS U TO DRINK COKE", Color(1, 0, 0), 2, 6, 18);
 	}
 }
 

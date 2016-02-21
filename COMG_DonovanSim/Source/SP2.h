@@ -218,6 +218,8 @@ private:
 	bool GetCokeText;
 	bool RenderCoke;
 	bool ConsumeCokeText;
+	bool PickUpTokenText;
+	bool testText;
 
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 
