@@ -20,11 +20,16 @@ void SP2::Init()
 	PickUpTokenText = false;
 	DisplayCafeMenu = false;
 	YesShowCafeMenu = false;
+	MENUBOOL = false;
+	wearSuitText = false;
+	wearSuit = false;
+
 
 	//Floats
 	TokenTranslate = 11;
 	TextTranslate = 20;
 	TestRotation = 90;
+	SuitTranslate = 2;
 
 	LoadShaderCodes();
 	LoadLights();
@@ -38,7 +43,7 @@ void SP2::Init()
 
 
     // Starting Pos Of Player
-	startingPos.Set(250, 17, 30);
+	startingPos.Set(250, 17, 150);
     startingPosPtr = &startingPos;
 
     // Starting Pos of Ship
@@ -86,29 +91,21 @@ void SP2::Update(double dt)
     createBoundBox(InteractablesList, BuildingsList);
     interactionCheck(dt, InteractablesList, somePlayer);
 
-    if (somePlayer.getCameraType() == "first")
-    {
-        camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
-    }
-    else
-    {
-        thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
-    }
+	if (MENUBOOL == false)
+	{
+		if (somePlayer.getCameraType() == "first")
+		{
+			camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
+		}
+		else
+		{
+			thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
+		}
+	}
    
     
 	TestRotation += float( dt * 100);
     
-    
-    //VENDING
-	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
-	{
-		NearVendingText = true;
-	}
-	else
-	{
-		NearVendingText = false;
-	}
-
 
 	//INTERACTABLEOBJS DECTECTION
 	Vector3 view = (camera5.target - camera5.position).Normalized();
@@ -145,11 +142,10 @@ void SP2::Update(double dt)
 			}
 
 		}
-	}
 
-	//TOKEN
-	for (int i = 0; InteractablesList.size() > i; i++)
-	{
+
+		
+		//TOKEN
 		if (InteractablesList[i].name == "token")
 		{
 
@@ -168,12 +164,9 @@ void SP2::Update(double dt)
 				PickUpTokenText = false;
 			}
 		}
-	}
 
 
-	//COUNTER
-	for (int i = 0; InteractablesList.size() > i; i++)
-	{
+		//COUNTER
 		if (InteractablesList[i].name == "counter")
 		{
 
@@ -182,7 +175,13 @@ void SP2::Update(double dt)
 				testText = true;
 				if (Application::IsKeyPressed('Y'))
 				{
+					MENUBOOL = true;
 					YesShowCafeMenu = true;
+				}
+
+				if (Application::IsKeyPressed('I'))
+				{
+					MENUBOOL = false;
 				}
 
 				if (YesShowCafeMenu == true)
@@ -201,7 +200,37 @@ void SP2::Update(double dt)
 				YesShowCafeMenu = false;
 			}
 		}
+
+
+
+
+		//SPACESUIT
+		if (InteractablesList[i].name == "spacesuit")
+		{
+
+			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+			{
+				wearSuitText = true;
+				if (Application::IsKeyPressed('T'))
+				{
+					SuitTranslate = -50;
+					wearSuit = true;
+				}
+			}
+			else
+			{
+				wearSuitText = false;
+
+			}
+
+			if (Application::IsKeyPressed('G'))
+			{
+				wearSuit = false;
+			}
+		}
 	}
+
+
 
     // Ship Animation
     if (thirdPersonCamera.yawingLeft == true && shipHorizontalRotateAngle >= -20) { shipHorizontalRotateAngle += (float)(10 * dt); }
@@ -292,8 +321,6 @@ void SP2::Update(double dt)
         }
 
     }
-
->>>>>>> origin/master
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)

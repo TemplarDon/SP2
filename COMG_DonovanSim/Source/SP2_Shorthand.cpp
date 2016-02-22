@@ -265,6 +265,29 @@ void SP2::LoadMeshes()
 	meshList[GEO_SOFA] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//sofa.obj");
 	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
 
+
+
+
+	//BUNK
+	meshList[GEO_BUNK] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Bunk.obj");
+	meshList[GEO_BUNK]->textureID = LoadTGA("Image//Bunk.tga");
+
+	//NPC
+	meshList[GEO_SPACEGUY] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spaceman.obj");
+	meshList[GEO_SPACEGUY]->textureID = LoadTGA("Image//Spaceman.tga");
+
+	//SPACESUIT
+	meshList[GEO_SPACESUIT] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spacesuit.obj");
+	meshList[GEO_SPACESUIT]->textureID = LoadTGA("Image//Spacesuit.tga");
+	InteractableOBJs spacesuit = InteractableOBJs("spacesuit", meshList[GEO_SPACESUIT]->maxPos, meshList[GEO_SPACESUIT]->minPos, Position(220, SuitTranslate, 190), 2, 0, Vector3(0, 0, 0));
+	spacesuit.setRequirements(25, 15);
+	InteractablesList.push_back(spacesuit);
+
+	//SPACE MASK
+	meshList[GEO_SPACEMASK] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spacemask.obj");
+	meshList[GEO_SPACEMASK]->textureID = LoadTGA("Image//Spacemask.tga");
+
+	//SPACESHIP STUFF
     initSpaceShip();
 }
 
@@ -348,7 +371,7 @@ void SP2::ReadKeyPresses()
 		TokenOnScreen = true;
 		TokenTranslate = 10.5;
 	}
-
+}
 
 void SP2::RenderCode()
 {
@@ -370,6 +393,9 @@ void SP2::RenderCode()
 
 	//RENDER CAFE
 	RenderCafeRoom();
+
+	//RENDER BUNK
+	RenderBunkRoom();
 
 	//GROUND MESH
 	modelStack.PushMatrix();
@@ -419,7 +445,7 @@ void SP2::RenderCode()
 
 	RenderRoomTemplate(Position(120, 2, 30));
 
-	RenderRoomTemplate(Position(120, 2, -100));
+	//RenderRoomTemplate(Position(120, 2, -100));
 
 	//INTERACTIONS
 
@@ -492,6 +518,19 @@ void SP2::RenderCode()
 	//Cafe menu
 	if (DisplayCafeMenu == true)
 	{
+		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
+	}
+
+	//WEAR SUIT TEXT
+	if (wearSuitText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS T TO PUT ON SPACE SUIT", Color(1, 0, 0), 2, 6, 18);
+	}
+
+	//WEAR SUIT \ MASK ON SCREEN
+	if (wearSuit == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS T TO PUT ON SPACE SUIT", Color(1, 0, 0), 2, 8, 14);
 		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
 	}
 }
@@ -639,55 +678,130 @@ void SP2::RenderSkybox()
 {
 	// FRONT
 	modelStack.PushMatrix();
-	modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y, -249.5 + thirdPersonCamera.position.z);
+	modelStack.Translate(somePlayer.pos.x, somePlayer.pos.y, -500 + somePlayer.pos.z);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Scale(500, 500, 500);
+	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_FRONT], false, toggleLight);
 	modelStack.PopMatrix();
 
 	// BACK
 	modelStack.PushMatrix();
-	modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y, 249.5 + thirdPersonCamera.position.z);
+	modelStack.Translate(somePlayer.pos.x, somePlayer.pos.y, 500 + somePlayer.pos.z);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Scale(500, 500, 500);
+	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_BACK], false, toggleLight);
 	modelStack.PopMatrix();
 
 	// LEFT
 	modelStack.PushMatrix();
-	modelStack.Translate(-249.5 + thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z);
+	modelStack.Translate(-500 + somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z);
 	modelStack.Rotate(-90, 0, 0, 1);
 	modelStack.Rotate(0, 0, 1, 0);
-	modelStack.Scale(500, 500, 500);
+	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_LEFT], false, toggleLight);
 	modelStack.PopMatrix();
 
 	// RIGHT
 	modelStack.PushMatrix();
-	modelStack.Translate(249.5 + thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z);
+	modelStack.Translate(500 + somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(500, 500, 500);
+	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_RIGHT], false, toggleLight);
 	modelStack.PopMatrix();
 
 	// BOTTOM
 	modelStack.PushMatrix();
-	modelStack.Translate(thirdPersonCamera.position.x, -249.5 + thirdPersonCamera.position.y, thirdPersonCamera.position.z);
-	modelStack.Scale(500, 500, 500);
+	modelStack.Translate(somePlayer.pos.x, -500 + somePlayer.pos.y, somePlayer.pos.z);
+	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_BOTTOM], false, toggleLight);
 	modelStack.PopMatrix();
 
 	// TOP
 	modelStack.PushMatrix();
-	modelStack.Translate(thirdPersonCamera.position.x, 249.5 + thirdPersonCamera.position.y, thirdPersonCamera.position.z);
+	modelStack.Translate(somePlayer.pos.x, 500 + somePlayer.pos.y, somePlayer.pos.z);
 	modelStack.Rotate(180, 1, 0, 0);
 	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(500, 500, 500);
+	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_TOP], false, toggleLight);
 	modelStack.PopMatrix();
+}
+
+void SP2::RenderBunkRoom()
+{
+	//BUNK 1 
+	modelStack.PushMatrix();
+	modelStack.Translate(288, 3, 127);
+	modelStack.Scale(1.2, 1.2, 1.2);
+	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//BUNK 2 
+	modelStack.PushMatrix();
+	modelStack.Translate(271, 3, 127);
+	modelStack.Scale(1.2, 1.2, 1.2);
+	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
+	modelStack.PopMatrix();
+
+
+	//BUNK 3 
+	modelStack.PushMatrix();
+	modelStack.Translate(210, 3, 127);
+	modelStack.Scale(1.2, 1.2, 1.2);
+	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//BUNK 4 
+	modelStack.PushMatrix();
+	modelStack.Translate(227, 3, 127);
+	modelStack.Scale(1.2, 1.2, 1.2);
+	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
+	modelStack.PopMatrix();
+
+
+
+	//BUNK 5 
+	modelStack.PushMatrix();
+	modelStack.Translate(288, 3, 191.5);
+	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//BUNK 6 
+	modelStack.PushMatrix();
+	modelStack.Translate(271, 3, 191.5);
+	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//SPACE MAN RANDOM NPC
+	modelStack.PushMatrix();
+	modelStack.Translate(271, 1.9, 143);
+	modelStack.Scale(3.4, 4.4, 3.4);
+	RenderMesh(meshList[GEO_SPACEGUY], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//SPACESUIT
+	modelStack.PushMatrix();
+	modelStack.Translate(220, SuitTranslate, 190);
+	modelStack.Scale(1.3, 1.3, 1.3);
+	modelStack.Rotate(180 , 0, 1, 0);
+	RenderMesh(meshList[GEO_SPACESUIT], true, toggleLight);
+	modelStack.PopMatrix();
+
+
+	glBlendFunc(1, 1);
+	modelStack.PushMatrix();
+	modelStack.Translate(220, 10, 190);
+	modelStack.Scale(2, 2, 2);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[GEO_SPACEMASK], true, toggleLight);
+	modelStack.PopMatrix();
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void SP2::RenderCafeRoom()
@@ -813,6 +927,27 @@ void SP2::RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y)
 }
 
 void SP2::RenderHandOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	//modelStack.Rotate(-20, 0, 1, 0);
+	//modelStack.Rotate(90, 1, 0, 0);
+	RenderMesh(mesh, true, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
+void SP2::RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
