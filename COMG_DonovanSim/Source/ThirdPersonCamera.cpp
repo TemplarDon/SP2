@@ -50,8 +50,9 @@ void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
     YawCamera(horizontalAngle);
     PitchCamera(verticalAngle);
 
-    shipTurningAnimation(Application::mouseX, Application::mouseY);
     cameraMovement(dt, InteractablesList, BuildingsList, somePlayer);
+
+    
 
 	Refocus();
 }
@@ -83,6 +84,7 @@ void ThirdPersonCamera::PitchCamera(float degrees)
 	up = rotationMatrix * up;
 
 	Refocus();
+
 }
 
 void ThirdPersonCamera::SetCameraPitchBounds(float min, float max)
@@ -185,7 +187,11 @@ void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&Inter
             focus->x += view.x;
             focus->y += view.y;
             focus->z += view.z;
+
+            shipTurningAnimation(Application::mouseX, Application::mouseY);
         }
+
+        
 
     }
 

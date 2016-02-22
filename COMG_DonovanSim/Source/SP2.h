@@ -246,6 +246,10 @@ private:
 	bool wearSuitText;
 	bool wearSuit;
 
+    // Bool for Door
+    float gateOffset;
+    bool gateOpening;
+    bool gateClosing;
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 
 	//Shorthand codes for easier coding (Gary's)
