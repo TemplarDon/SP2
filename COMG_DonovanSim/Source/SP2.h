@@ -225,7 +225,11 @@ private:
 
 	void RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y);
 
-
+    // Functions for Interactions
+    void vendingMachineInteractions();
+    void tokenInteractions();
+    void counterInteractions();
+    void spaceSuitInteractions();
 
 	float TokenTranslate;
 	float TextTranslate;

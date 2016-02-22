@@ -119,86 +119,34 @@ void SP2::Update(double dt)
 	//INTERACTABLEOBJS DECTECTION
 	Vector3 view = (camera5.target - camera5.position).Normalized();
 
-
-	//VENDING MACHINE
-	for (int i = 0; InteractablesList.size() > i; i++)
-	{
-		if (InteractablesList[i].name == "vending")
-		{
-
-			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true) // move up
-			{
-				NearVendingText = true;
-				if (Application::IsKeyPressed('Q'))
-				{
-					TextTranslate = 100;
-					TokenOnScreen = false;
-					RenderCoke = true;
-					ConsumeCokeText = true;
-				}
-
-				if (Application::IsKeyPressed('U'))
-				{
-					ConsumeCokeText = false;
-					RenderCoke = false;
-				}
-			}
-			else
-			{
-				NearVendingText = false;
-				ConsumeCokeText = false;
-				RenderCoke = false;
-			}
-
-		}
-
-        //TOKEN
-        if (InteractablesList[i].name == "token")
+    // Interactions for Rooms
+    for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+    {
+        if (it->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view))
         {
-
-            if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+            if (it->name == "vending")
             {
-                PickUpTokenText = true;
+                vendingMachineInteractions();
+            }
+            else
+            {
+                NearVendingText = false;
+                ConsumeCokeText = false;
+                RenderCoke = false;
+            }
 
-                if (Application::IsKeyPressed('Q'))
-                {
-                    TokenOnScreen = true;
-                    TokenTranslate = 10.5;
-                }
+            if (it->name == "token")
+            {
+                tokenInteractions();
             }
             else
             {
                 PickUpTokenText = false;
             }
-        }
 
-
-        //COUNTER
-        if (InteractablesList[i].name == "counter")
-        {
-
-            if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+            if (it->name == "counter")
             {
-                testText = true;
-                if (Application::IsKeyPressed('Y'))
-                {
-                    MENUBOOL = true;
-                    YesShowCafeMenu = true;
-                }
-
-                if (Application::IsKeyPressed('I'))
-                {
-                    MENUBOOL = false;
-                }
-
-                if (YesShowCafeMenu == true)
-                {
-                    DisplayCafeMenu = true;
-                }
-                else
-                {
-                    DisplayCafeMenu = false;
-                }
+                counterInteractions();
             }
             else
             {
@@ -206,72 +154,171 @@ void SP2::Update(double dt)
                 DisplayCafeMenu = false;
                 YesShowCafeMenu = false;
             }
-        }
 
-
-
-
-        //SPACESUIT
-        if (InteractablesList[i].name == "spacesuit")
-        {
-
-            if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+            if (it->name == "spacesuit")
             {
-                wearSuitText = true;
-                if (Application::IsKeyPressed('T'))
-                {
-                    SuitTranslate = -50;
-                    wearSuit = true;
-                }
+                spaceSuitInteractions();
             }
             else
             {
                 wearSuitText = false;
-
-            }
-
-            if (Application::IsKeyPressed('G'))
-            {
-                wearSuit = false;
             }
         }
+    }
+
+
+	////VENDING MACHINE
+	//for (int i = 0; InteractablesList.size() > i; i++)
+	//{
+	//	if (InteractablesList[i].name == "vending")
+	//	{
+
+	//		if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view)) // move up
+	//		{
+	//			NearVendingText = true;
+	//			if (Application::IsKeyPressed('Q'))
+	//			{
+	//				TextTranslate = 100;
+	//				TokenOnScreen = false;
+	//				RenderCoke = true;
+	//				ConsumeCokeText = true;
+	//			}
+
+	//			if (Application::IsKeyPressed('U'))
+	//			{
+	//				ConsumeCokeText = false;
+	//				RenderCoke = false;
+	//			}
+	//		}
+	//		else
+	//		{
+	//			NearVendingText = false;
+	//			ConsumeCokeText = false;
+	//			RenderCoke = false;
+	//		}
+
+	//	}
+
+ //       //TOKEN
+ //       if (InteractablesList[i].name == "token")
+ //       {
+
+ //           if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+ //           {
+ //               PickUpTokenText = true;
+
+ //               if (Application::IsKeyPressed('Q'))
+ //               {
+ //                   TokenOnScreen = true;
+ //                   TokenTranslate = 10.5;
+ //               }
+ //           }
+ //           else
+ //           {
+ //               PickUpTokenText = false;
+ //           }
+ //       }
+
+
+ //       //COUNTER
+ //       if (InteractablesList[i].name == "counter")
+ //       {
+
+ //           if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+ //           {
+ //               testText = true;
+ //               if (Application::IsKeyPressed('Y'))
+ //               {
+ //                   MENUBOOL = true;
+ //                   YesShowCafeMenu = true;
+ //               }
+
+ //               if (Application::IsKeyPressed('I'))
+ //               {
+ //                   MENUBOOL = false;
+ //               }
+
+ //               if (YesShowCafeMenu == true)
+ //               {
+ //                   DisplayCafeMenu = true;
+ //               }
+ //               else
+ //               {
+ //                   DisplayCafeMenu = false;
+ //               }
+ //           }
+ //           else
+ //           {
+ //               testText = false;
+ //               DisplayCafeMenu = false;
+ //               YesShowCafeMenu = false;
+ //           }
+ //       }
+
+
+
+
+ //       //SPACESUIT
+ //       if (InteractablesList[i].name == "spacesuit")
+ //       {
+
+ //           if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+ //           {
+ //               wearSuitText = true;
+ //               if (Application::IsKeyPressed('T'))
+ //               {
+ //                   SuitTranslate = -50;
+ //                   wearSuit = true;
+ //               }
+ //           }
+ //           else
+ //           {
+ //               wearSuitText = false;
+
+ //           }
+
+ //           if (Application::IsKeyPressed('G'))
+ //           {
+ //               wearSuit = false;
+ //           }
+ //       }
         //Gate Interaction
-        string gate = "Gate";
-        if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view) == true && InteractablesList[i].name.find(gate) != string::npos)
-        //if (somePlayer.pos.x < InteractablesList[i].pos.x + 20 && somePlayer.pos.x > InteractablesList[i].pos.x - 20 && somePlayer.pos.z < InteractablesList[i].pos.z + 20 && somePlayer.pos.z > InteractablesList[i].pos.z - 20)
-        {
-            gateOpening = true;
-        }
-        else
-        {
-            gateOpening = false;
-        }
+        //string gate = "Gate";
+        //if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view) == true && InteractablesList[i].name.find(gate) != string::npos)
+        ////if (somePlayer.pos.x < InteractablesList[i].pos.x + 20 && somePlayer.pos.x > InteractablesList[i].pos.x - 20 && somePlayer.pos.z < InteractablesList[i].pos.z + 20 && somePlayer.pos.z > InteractablesList[i].pos.z - 20)
+        //{
+        //    gateOpening = true;
+        //}
+        //else
+        //{
+        //    gateOpening = false;
+        //}
 
-        // Moving Gate
-        if (gateOpening == true)
-        {
-            if (gateOffset <= 10)
-            {
-                gateOffset += (float)(dt);
-                InteractablesList[i].pos.y += gateOffset;
-            }
+        //// Moving Gate
+        //if (gateOpening == true)
+        //{
+        //    if (gateOffset <= 10)
+        //    {
+        //        gateOffset += (float)(dt);
+        //        InteractablesList[i].pos.y += gateOffset;
+        //    }
 
-        }
+        //}
 
-        if (gateOpening == false)
-        {
-            if (gateOffset > 0)
-            {
-                gateOffset -= (float)(dt);
-                InteractablesList[i].pos.y -= gateOffset;
-            }
-        }
+        //if (gateOpening == false)
+        //{
+        //    if (gateOffset > 0)
+        //    {
+        //        gateOffset -= (float)(dt);
+        //        InteractablesList[i].pos.y -= gateOffset;
+        //    }
+        //}
         
             
 	
 
 		
-	}
+	/*}*/
 
 
 
@@ -429,6 +476,74 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
                 }
             }
         }
+    }
+}
+
+void SP2::vendingMachineInteractions()
+{
+    NearVendingText = true;
+    if (Application::IsKeyPressed('Q'))
+    {
+        TextTranslate = 100;
+        TokenOnScreen = false;
+        RenderCoke = true;
+        ConsumeCokeText = true;
+    }
+
+    if (Application::IsKeyPressed('U'))
+    {
+        ConsumeCokeText = false;
+        RenderCoke = false;
+    }
+}
+
+void SP2::tokenInteractions()
+{
+    PickUpTokenText = true;
+
+    if (Application::IsKeyPressed('Q'))
+    {
+        TokenOnScreen = true;
+        TokenTranslate = 10.5;
+    }
+}
+
+void SP2::counterInteractions()
+{
+    testText = true;
+    if (Application::IsKeyPressed('Y'))
+    {
+        MENUBOOL = true;
+        YesShowCafeMenu = true;
+    }
+
+    if (Application::IsKeyPressed('I'))
+    {
+        MENUBOOL = false;
+    }
+
+    if (YesShowCafeMenu == true)
+    {
+        DisplayCafeMenu = true;
+    }
+    else
+    {
+        DisplayCafeMenu = false;
+    }
+}
+
+void SP2::spaceSuitInteractions()
+{
+    wearSuitText = true;
+    if (Application::IsKeyPressed('T'))
+    {
+        SuitTranslate = -50;
+        wearSuit = true;
+    }
+
+    if (Application::IsKeyPressed('G'))
+    {
+        wearSuit = false;
     }
 }
 
