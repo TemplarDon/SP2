@@ -29,11 +29,16 @@ void SP2::Init()
 	HoldCrystal = false;
 	int crystals = 0;
 
+    gateClosing = false;
+    gateOpening = true;
+
 	//Floats
 	TokenTranslate = 11;
 	TextTranslate = 20;
 	TestRotation = 90;
 	SuitTranslate = 2;
+
+    gateOffset = 0;
 
 	LoadShaderCodes();
 	LoadLights();
@@ -51,7 +56,7 @@ void SP2::Init()
     startingPosPtr = &startingPos;
 
     // Starting Pos of Ship
-    shipStartingPos.Set(75, 18, 150);
+    shipStartingPos.Set(180, 18, 300);
     shipStartingPosPtr = &shipStartingPos;
     shipHorizontalRotateAngle = 0;
     shipVerticalRotateAngle = 0;
@@ -63,7 +68,7 @@ void SP2::Init()
 
     //Initialize camera settings (Don's)
     camera5.Init(Vector3(startingPos.x, startingPos.y, startingPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), shipStartingPosPtr, 10);
+    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), shipStartingPosPtr, 25);
 
     // Init Cam Pointer
     camPointer = &camera5;
@@ -108,7 +113,7 @@ void SP2::Update(double dt)
 	}
    
     
-	TestRotation += float( dt * 100);
+	TestRotation += 0.001f;
     
 
 	//INTERACTABLEOBJS DECTECTION
@@ -147,13 +152,46 @@ void SP2::Update(double dt)
 
 		}
 
+        //Gate Interaction
+        string gate = "Gate";
+        if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view) == true && InteractablesList[i].name.find(gate) != string::npos)
+        //if (somePlayer.pos.x < InteractablesList[i].pos.x + 20 && somePlayer.pos.x > InteractablesList[i].pos.x - 20 && somePlayer.pos.z < InteractablesList[i].pos.z + 20 && somePlayer.pos.z > InteractablesList[i].pos.z - 20)
+        {
+            gateOpening = true;
+        }
+        else
+        {
+            gateOpening = false;
+        }
 
-		
+        // Moving Gate
+        if (gateOpening == true)
+        {
+            if (gateOffset <= 10)
+            {
+                gateOffset += (float)(dt);
+                InteractablesList[i].pos.y += gateOffset;
+            }
+
+        }
+
+        if (gateOpening == false)
+        {
+            if (gateOffset > 0)
+            {
+                gateOffset -= (float)(dt);
+                InteractablesList[i].pos.y -= gateOffset;
+            }
+        }
+        
+            
+	}
+
 		//TOKEN
 		if (InteractablesList[i].name == "token")
 		{
 
-			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+            if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view) == true)
 			{
 				PickUpTokenText = true;
 
@@ -237,15 +275,15 @@ void SP2::Update(double dt)
 
 
     // Ship Animation
-    if (thirdPersonCamera.yawingLeft == true && shipHorizontalRotateAngle >= -20) { shipHorizontalRotateAngle += (float)(10 * dt); }
-    if (thirdPersonCamera.yawingRight == true && shipHorizontalRotateAngle <= 20) { shipHorizontalRotateAngle -= (float)(10 * dt); }
-    if (thirdPersonCamera.pitchingDown == true && shipVerticalRotateAngle >= -20) { shipVerticalRotateAngle += (float)(10 * dt); }
-    if (thirdPersonCamera.pitchingUp == true && shipHorizontalRotateAngle <= 20) { shipVerticalRotateAngle -= (float)(10 * dt); }
+    if (thirdPersonCamera.yawingLeft == true && shipHorizontalRotateAngle >= -90) { shipHorizontalRotateAngle += (float)(10 * dt); }
+    if (thirdPersonCamera.yawingRight == true && shipHorizontalRotateAngle <= 90) { shipHorizontalRotateAngle -= (float)(10 * dt); }
+    if (thirdPersonCamera.pitchingDown == true && shipVerticalRotateAngle >= -90) { shipVerticalRotateAngle += (float)(10 * dt); }
+    if (thirdPersonCamera.pitchingUp == true && shipHorizontalRotateAngle <= 90) { shipVerticalRotateAngle -= (float)(10 * dt); }
     
     // Reset Ship to original orientation
     if (thirdPersonCamera.yawingRight == false )
     {
-        if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
+        if (shipHorizontalRotateAngle >= -90 && shipHorizontalRotateAngle < 0)
         {
             shipHorizontalRotateAngle += (float)(2 * dt);
         }
@@ -253,7 +291,7 @@ void SP2::Update(double dt)
 
     if (thirdPersonCamera.yawingLeft == false)
     {
-        if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
+        if (shipHorizontalRotateAngle <= 90 && shipHorizontalRotateAngle > 0)
         {
             shipHorizontalRotateAngle -= (float)(2 * dt);
         }
@@ -262,7 +300,7 @@ void SP2::Update(double dt)
 
     if (thirdPersonCamera.pitchingDown == false)
     {
-        if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
+        if (shipVerticalRotateAngle >= -90 && shipVerticalRotateAngle < 0)
         {
             shipVerticalRotateAngle += (float)(2 * dt);
         }
@@ -270,7 +308,7 @@ void SP2::Update(double dt)
 
     if (thirdPersonCamera.pitchingUp == false)
     {
-        if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
+        if (shipVerticalRotateAngle <= 90 && shipVerticalRotateAngle > 0)
         {
             shipVerticalRotateAngle -= (float)(2 * dt);
         }
