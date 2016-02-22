@@ -465,6 +465,8 @@ void SP2::RenderCode()
 
 	RenderRoomTemplate(Position(120, 2, 30));
 
+    RenderRoomTemplate(Position(120, 2, -100));
+
 	//RenderRoomTemplate(Position(120, 2, -100));
 
 	//INTERACTIONS
@@ -724,14 +726,14 @@ void SP2::RenderSkybox()
 	// FRONT
 	modelStack.PushMatrix();
 
-	if (somePlayer.getCameraType() == "first")
-	{
-		modelStack.Translate(camera5.position.x, camera5.position.y, -249.5 + camera5.position.z);
-	}
-	else
-	{
-		modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y, -249.5 + thirdPersonCamera.position.z);
-	}
+	//if (somePlayer.getCameraType() == "first")
+	//{
+	//	modelStack.Translate(camera5.position.x, camera5.position.y, -249.5 + camera5.position.z);
+	//}
+	//else
+	//{
+	//	modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y, -249.5 + thirdPersonCamera.position.z);
+	//}
 
 	modelStack.Translate(somePlayer.pos.x, somePlayer.pos.y, -500 + somePlayer.pos.z);
 
@@ -744,14 +746,14 @@ void SP2::RenderSkybox()
 	// BACK
 	modelStack.PushMatrix();
 
-	if (somePlayer.getCameraType() == "first")
-	{
-		modelStack.Translate(camera5.position.x, camera5.position.y, 249.5 + camera5.position.z);
-	}
-	else
-	{
-		modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y, 249.5 + thirdPersonCamera.position.z);
-	}
+	//if (somePlayer.getCameraType() == "first")
+	//{
+	//	modelStack.Translate(camera5.position.x, camera5.position.y, 249.5 + camera5.position.z);
+	//}
+	//else
+	//{
+	//	modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y, 249.5 + thirdPersonCamera.position.z);
+	//}
 
 	modelStack.Translate(somePlayer.pos.x, somePlayer.pos.y, 500 + somePlayer.pos.z);
 
@@ -764,14 +766,14 @@ void SP2::RenderSkybox()
 	// LEFT
 	modelStack.PushMatrix();
 
-	if (somePlayer.getCameraType() == "first")
-	{
-		modelStack.Translate(-249.5 + camera5.position.x, camera5.position.y, camera5.position.z);
-	}
-	else
-	{
-		modelStack.Translate(-249.5 + thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z);
-	}
+	//if (somePlayer.getCameraType() == "first")
+	//{
+	//	modelStack.Translate(-249.5 + camera5.position.x, camera5.position.y, camera5.position.z);
+	//}
+	//else
+	//{
+	//	modelStack.Translate(-249.5 + thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z);
+	//}
 
 	modelStack.Translate(-500 + somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z);
 
@@ -784,14 +786,14 @@ void SP2::RenderSkybox()
 	// RIGHT
 	modelStack.PushMatrix();
 
-	if (somePlayer.getCameraType() == "first")
-	{
-		modelStack.Translate(249.5 + camera5.position.x, camera5.position.y, camera5.position.z);
-	}
-	else
-	{
-		modelStack.Translate(249.5 + thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z);
-	}
+	//if (somePlayer.getCameraType() == "first")
+	//{
+	//	modelStack.Translate(249.5 + camera5.position.x, camera5.position.y, camera5.position.z);
+	//}
+	//else
+	//{
+	//	modelStack.Translate(249.5 + thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z);
+	//}
 
 	modelStack.Translate(500 + somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z);
 
@@ -804,15 +806,15 @@ void SP2::RenderSkybox()
 	// BOTTOM
 	modelStack.PushMatrix();
 
-	if (somePlayer.getCameraType() == "first")
-	{
-		modelStack.Translate(camera5.position.x, -249.5 + camera5.position.y, camera5.position.z);
-	}
-	else
-	{
-		modelStack.Translate(thirdPersonCamera.position.x, -249.5 + thirdPersonCamera.position.y, thirdPersonCamera.position.z);
-	}
-	modelStack.Scale(500, 500, 500);
+	//if (somePlayer.getCameraType() == "first")
+	//{
+	//	modelStack.Translate(camera5.position.x, -249.5 + camera5.position.y, camera5.position.z);
+	//}
+	//else
+	//{
+	//	modelStack.Translate(thirdPersonCamera.position.x, -249.5 + thirdPersonCamera.position.y, thirdPersonCamera.position.z);
+	//}
+	//modelStack.Scale(500, 500, 500);
 
 	modelStack.Translate(somePlayer.pos.x, -500 + somePlayer.pos.y, somePlayer.pos.z);
 	modelStack.Scale(1000, 1000, 1000);
@@ -823,14 +825,14 @@ void SP2::RenderSkybox()
 	// TOP
 	modelStack.PushMatrix();
 
-	if (somePlayer.getCameraType() == "first")
-	{
-		modelStack.Translate(camera5.position.x, 249.5 + camera5.position.y, camera5.position.z);
-	}
-	else
-	{
-		modelStack.Translate(thirdPersonCamera.position.x, 249.5 + thirdPersonCamera.position.y, thirdPersonCamera.position.z);
-	}
+	//if (somePlayer.getCameraType() == "first")
+	//{
+	//	modelStack.Translate(camera5.position.x, 249.5 + camera5.position.y, camera5.position.z);
+	//}
+	//else
+	//{
+	//	modelStack.Translate(thirdPersonCamera.position.x, 249.5 + thirdPersonCamera.position.y, thirdPersonCamera.position.z);
+	//}
 
 	modelStack.Translate(somePlayer.pos.x, 500 + somePlayer.pos.y, somePlayer.pos.z);
 

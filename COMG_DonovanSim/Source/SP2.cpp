@@ -126,7 +126,7 @@ void SP2::Update(double dt)
 		if (InteractablesList[i].name == "vending")
 		{
 
-			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true) // move up
 			{
 				NearVendingText = true;
 				if (Application::IsKeyPressed('Q'))
@@ -152,6 +152,89 @@ void SP2::Update(double dt)
 
 		}
 
+        //TOKEN
+        if (InteractablesList[i].name == "token")
+        {
+
+            if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+            {
+                PickUpTokenText = true;
+
+                if (Application::IsKeyPressed('Q'))
+                {
+                    TokenOnScreen = true;
+                    TokenTranslate = 10.5;
+                }
+            }
+            else
+            {
+                PickUpTokenText = false;
+            }
+        }
+
+
+        //COUNTER
+        if (InteractablesList[i].name == "counter")
+        {
+
+            if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+            {
+                testText = true;
+                if (Application::IsKeyPressed('Y'))
+                {
+                    MENUBOOL = true;
+                    YesShowCafeMenu = true;
+                }
+
+                if (Application::IsKeyPressed('I'))
+                {
+                    MENUBOOL = false;
+                }
+
+                if (YesShowCafeMenu == true)
+                {
+                    DisplayCafeMenu = true;
+                }
+                else
+                {
+                    DisplayCafeMenu = false;
+                }
+            }
+            else
+            {
+                testText = false;
+                DisplayCafeMenu = false;
+                YesShowCafeMenu = false;
+            }
+        }
+
+
+
+
+        //SPACESUIT
+        if (InteractablesList[i].name == "spacesuit")
+        {
+
+            if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+            {
+                wearSuitText = true;
+                if (Application::IsKeyPressed('T'))
+                {
+                    SuitTranslate = -50;
+                    wearSuit = true;
+                }
+            }
+            else
+            {
+                wearSuitText = false;
+
+            }
+
+            if (Application::IsKeyPressed('G'))
+            {
+                wearSuit = false;
+            }
+        }
         //Gate Interaction
         string gate = "Gate";
         if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view) == true && InteractablesList[i].name.find(gate) != string::npos)
@@ -185,91 +268,9 @@ void SP2::Update(double dt)
         }
         
             
-	}
+	
 
-		//TOKEN
-		if (InteractablesList[i].name == "token")
-		{
-
-            if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view) == true)
-			{
-				PickUpTokenText = true;
-
-				if (Application::IsKeyPressed('Q'))
-				{
-					TokenOnScreen = true;
-					TokenTranslate = 10.5;
-				}
-			}
-			else
-			{
-				PickUpTokenText = false;
-			}
-		}
-
-
-		//COUNTER
-		if (InteractablesList[i].name == "counter")
-		{
-
-			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
-			{
-				testText = true;
-				if (Application::IsKeyPressed('Y'))
-				{
-					MENUBOOL = true;
-					YesShowCafeMenu = true;
-				}
-
-				if (Application::IsKeyPressed('I'))
-				{
-					MENUBOOL = false;
-				}
-
-				if (YesShowCafeMenu == true)
-				{
-					DisplayCafeMenu = true;
-				}
-				else
-				{
-					DisplayCafeMenu = false;
-				}
-			}
-			else
-			{
-				testText = false;
-				DisplayCafeMenu = false;
-				YesShowCafeMenu = false;
-			}
-		}
-
-
-
-
-		//SPACESUIT
-		if (InteractablesList[i].name == "spacesuit")
-		{
-
-			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
-			{
-				wearSuitText = true;
-				if (Application::IsKeyPressed('T'))
-				{
-					SuitTranslate = -50;
-					wearSuit = true;
-				}
-			}
-			else
-			{
-				wearSuitText = false;
-
-			}
-
-			if (Application::IsKeyPressed('G'))
-			{
-				wearSuit = false;
-			}
-		}
+		
 	}
 
 
@@ -325,7 +326,7 @@ void SP2::Update(double dt)
 
         shipTemplatePtr = &someShip;
 
-        ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LightHull, DualWings, G1Engine));
+        ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LightHull, QaudWings, G1Engine));
 
         // Load Meshes for specific ship parts
         for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)

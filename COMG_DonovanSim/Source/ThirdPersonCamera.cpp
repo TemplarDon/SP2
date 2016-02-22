@@ -187,8 +187,8 @@ void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&Inter
             focus->x += view.x;
             focus->y += view.y;
             focus->z += view.z;
-
             shipTurningAnimation(Application::mouseX, Application::mouseY);
+            
         }
 
         
