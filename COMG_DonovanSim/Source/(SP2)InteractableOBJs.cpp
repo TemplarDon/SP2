@@ -30,7 +30,7 @@ InteractableOBJs Constructor
     axis to rotate collision box by (not working)
 */
 /******************************************************************************/
-InteractableOBJs::InteractableOBJs(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis)
+InteractableOBJs::InteractableOBJs(string name, Position maxPos, Position minPos, Position offSet, float scaleOffSet, float rotateAngle, Vector3 rotateAxis)
 : CollisionOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
 {
     this->effectOver = false;

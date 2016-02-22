@@ -18,6 +18,8 @@ void SP2::Init()
 	ConsumeCokeText = false;
 	testText = false;
 	PickUpTokenText = false;
+	DisplayCafeMenu = false;
+	YesShowCafeMenu = false;
 
 	//Floats
 	TokenTranslate = 11;
@@ -36,7 +38,7 @@ void SP2::Init()
 
 
     // Starting Pos Of Player
-    startingPos.Set(150, 17, -36);
+	startingPos.Set(250, 17, 30);
     startingPosPtr = &startingPos;
 
     // Starting Pos of Ship
@@ -138,6 +140,8 @@ void SP2::Update(double dt)
 			else
 			{
 				NearVendingText = false;
+				ConsumeCokeText = false;
+				RenderCoke = false;
 			}
 
 		}
@@ -162,6 +166,39 @@ void SP2::Update(double dt)
 			else
 			{
 				PickUpTokenText = false;
+			}
+		}
+	}
+
+
+	//COUNTER
+	for (int i = 0; InteractablesList.size() > i; i++)
+	{
+		if (InteractablesList[i].name == "counter")
+		{
+
+			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+			{
+				testText = true;
+				if (Application::IsKeyPressed('Y'))
+				{
+					YesShowCafeMenu = true;
+				}
+
+				if (YesShowCafeMenu == true)
+				{
+					DisplayCafeMenu = true;
+				}
+				else
+				{
+					DisplayCafeMenu = false;
+				}
+			}
+			else
+			{
+				testText = false;
+				DisplayCafeMenu = false;
+				YesShowCafeMenu = false;
 			}
 		}
 	}
@@ -256,6 +293,7 @@ void SP2::Update(double dt)
 
     }
 
+>>>>>>> origin/master
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)

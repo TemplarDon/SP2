@@ -180,7 +180,7 @@ void SP2::LoadMeshes()
 	meshList[GEO_WALL2] = MeshBuilder::GenerateOBJ("wall2", "OBJ//TestWall.obj");
 	meshList[GEO_WALL2]->textureID = LoadTGA("Image//TestWall.tga");
 
-	meshList[GEO_GATETOP] = MeshBuilder::GenerateOBJ("wall", "OBJ//gateTop.obj");
+	meshList[GEO_GATETOP] = MeshBuilder::GenerateOBJ("wall", "OBJ//TESTDOOR.obj");
 	meshList[GEO_GATETOP]->textureID = LoadTGA("Image//gateTopUV.tga");
 
 	meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("wall", "OBJ//gate.obj");
@@ -202,12 +202,15 @@ void SP2::LoadMeshes()
 
 	//init collision, then render room
 
-	//CAFE ROOM
-	initRoomTemplate(Position(0, 2, 0));            //Collision
+	////CAFE
+	//initRoomTemplate(Position(150, 2, 0));          //Collision
 
 	//COUNTER
 	meshList[GEO_COUNTER] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Counter.obj");
 	meshList[GEO_COUNTER]->textureID = LoadTGA("Image//Counter.tga");
+	InteractableOBJs counter = InteractableOBJs("counter", meshList[GEO_COUNTER]->maxPos, meshList[GEO_COUNTER]->minPos, Position(280, 2, 0), 2.3, 0, Vector3(0, 0, 0));
+	counter.setRequirements(40, 15);
+	InteractablesList.push_back(counter);
 
 	//FRIDGE
 	meshList[GEO_FRIDGE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Fridge.obj");
@@ -225,8 +228,8 @@ void SP2::LoadMeshes()
 	//VENDING
 	meshList[GEO_VENDING] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Vending.obj");
 	meshList[GEO_VENDING]->textureID = LoadTGA("Image//Vending.tga");
-	InteractableOBJs vending = InteractableOBJs("vending", meshList[GEO_VENDING]->maxPos, meshList[GEO_VENDING]->minPos, Position(108, 2,58), 3, 0, Vector3(0, 0, 0));
-	vending.setRequirements(55, 15);
+	InteractableOBJs vending = InteractableOBJs("vending", meshList[GEO_VENDING]->maxPos, meshList[GEO_VENDING]->minPos, Position(210, 2, 88), 3, 0, Vector3(0, 0, 0));
+	vending.setRequirements(52, 15);  //55, 15
 	InteractablesList.push_back(vending);
 
 	//CHAIR
@@ -236,7 +239,7 @@ void SP2::LoadMeshes()
 	//Token
 	meshList[GEO_TOKEN] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Token.obj");
 	meshList[GEO_TOKEN]->textureID = LoadTGA("Image//Token.tga");
-	InteractableOBJs token = InteractableOBJs("token", meshList[GEO_TOKEN]->maxPos, meshList[GEO_TOKEN]->minPos, Position(175, TokenTranslate, 30), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs token = InteractableOBJs("token", meshList[GEO_TOKEN]->maxPos, meshList[GEO_TOKEN]->minPos, Position(276, TokenTranslate, 61), 2, 0, Vector3(0, 0, 0));
 	token.setRequirements(30, 5);
 	InteractablesList.push_back(token);
 
@@ -244,9 +247,15 @@ void SP2::LoadMeshes()
 	meshList[GEO_COKE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Coke.obj");
 	meshList[GEO_COKE]->textureID = LoadTGA("Image//Coke.tga");
 
+	//CAFE MENU TEXT BOX
+	meshList[GEO_CAFETEXTBOX] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//TextBoxCafeMenu.obj");
+	meshList[GEO_CAFETEXTBOX]->textureID = LoadTGA("Image//Token.tga");
 
-	//Recreational Room
-	initRoomTemplate(Position(150, 2, 0));          //Collision
+
+
+
+	////RECREATIOMAL ROOM
+	//initRoomTemplate(Position(20, 2, 0));            //Collision
 
 	//SPEAKERS
 	meshList[GEO_SPEAKERS] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//RecRoomSpeakers.obj");
@@ -319,8 +328,6 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 
 }
 
-
-
 void SP2::ReadKeyPresses()
 {
 	if (Application::IsKeyPressed('B'))
@@ -341,9 +348,6 @@ void SP2::ReadKeyPresses()
 		TokenOnScreen = true;
 		TokenTranslate = 10.5;
 	}
-
-
-
 
 
 void SP2::RenderCode()
@@ -373,6 +377,14 @@ void SP2::RenderCode()
 	RenderMesh(meshList[GEO_QUAD], true, toggleLight);
 	modelStack.PopMatrix();
 
+	////GROUND MESH
+	//modelStack.PushMatrix();
+	//modelStack.Translate(250, 0, 50);
+	//RenderMesh(meshList[GEO_HAND], true, toggleLight);
+	//modelStack.PopMatrix();
+
+	////RenderHand
+	//RenderHandOnScreen(meshList[GEO_HAND], 5, 1, 1);
 
 
 	//TRADING STATION
@@ -382,14 +394,32 @@ void SP2::RenderCode()
 	//RenderTradingStation();
 	//modelStack.PopMatrix();
 
-	//RENDER ROOM (WALLS)
-	RenderRoomTemplate(Position(0, 2, 0));     //RECREATIONAL ROOM
+	////RENDER ROOM (WALLS)
+	//RenderRoomTemplate(Position(20, 2, 0));     //RECREATIONAL ROOM
 
 
 	//RENDER ROOM (WALLS)
-	RenderRoomTemplate(Position(150, 2, 0));   //CAFE
+	//RenderRoomTemplate(Position(150, 2, 0));   //CAFE
+
+	////RENDER ROOM (WALLS)
+	//RenderRoomTemplate(Position(280, 2, 0));   //SPACE ENGINE ROOM
+
+	////RENDER ROOM (WALLS)
+	//RenderRoomTemplate(Position(150, 2, 150));   //BUNK ROOM
+
+	RenderRoomTemplate(Position(250, 2, 160));   
+
+	RenderRoomTemplate(Position(250, 2, 30));  //CAFE ROOM
+
+	RenderRoomTemplate(Position(250, 2, -100));
 
 
+
+	RenderRoomTemplate(Position(120, 2, 160));
+
+	RenderRoomTemplate(Position(120, 2, 30));
+
+	RenderRoomTemplate(Position(120, 2, -100));
 
 	//INTERACTIONS
 
@@ -457,6 +487,12 @@ void SP2::RenderCode()
 		RenderTextOnScreen(meshList[GEO_TEXT], "THANKS FOR BUYING A COKE!!", Color(1, 0, 0), 2, 6, 22);
 		RenderTextOnScreen(meshList[GEO_TEXT], "HERE IS YOUR COKE.", Color(1, 0, 0), 2, 6, 20);
 		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS U TO DRINK COKE", Color(1, 0, 0), 2, 6, 18);
+	}
+
+	//Cafe menu
+	if (DisplayCafeMenu == true)
+	{
+		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
 	}
 }
 
@@ -658,21 +694,21 @@ void SP2::RenderCafeRoom()
 {
 	//COUNTER
 	modelStack.PushMatrix();
-	modelStack.Translate(180, 2, -30);
+	modelStack.Translate(280, 2, 0);
 	modelStack.Scale(2.3, 2, 2.3);
 	RenderMesh(meshList[GEO_COUNTER], true, toggleLight);
 	modelStack.PopMatrix();
 
 	//FRIDGE
 	modelStack.PushMatrix();
-	modelStack.Translate(190, 2, -37);
+	modelStack.Translate(295, 2, -13);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_FRIDGE], true, toggleLight);
 	modelStack.PopMatrix();
 
 	//CHEF
 	modelStack.PushMatrix();
-	modelStack.Translate(178, 3, -30);
+	modelStack.Translate(280, 2, -2);
 	modelStack.Scale(3.5, 3.8, 3.5);
 	modelStack.Rotate(-90, 0, 1, 0);
 	RenderMesh(meshList[GEO_CHEF], true, toggleLight);
@@ -680,31 +716,39 @@ void SP2::RenderCafeRoom()
 
 	//TABLE
 	modelStack.PushMatrix();
-	modelStack.Translate(180, 2, 35);
+	modelStack.Translate(280, 2, 65);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_TABLE], true, toggleLight);
 	modelStack.PopMatrix();
 
-	//CHAIR
+	//CHAIR 1
 	modelStack.PushMatrix();
-	modelStack.Translate(170, 2, 35);
+	modelStack.Translate(270, 2, 65);
 	modelStack.Scale(2, 2, 2);
 	RenderMesh(meshList[GEO_CHAIR], true, toggleLight);
 	modelStack.PopMatrix();
 
-	//VENDING
+	//CHAIR 2
 	modelStack.PushMatrix();
-	modelStack.Translate(108, 2, 58);
-	modelStack.Scale(2.5, 2.5, 2.5);
-	modelStack.Rotate(-90, 0, 1, 0);
-	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
+	modelStack.Translate(290, 2, 65);
+	modelStack.Scale(2, 2, 2);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[GEO_CHAIR], true, toggleLight);
 	modelStack.PopMatrix();
 
 	//TOKEN
 	modelStack.PushMatrix();
-	modelStack.Translate(175, TokenTranslate, 30);
+	modelStack.Translate(276, TokenTranslate, 61);
 	modelStack.Scale(1, 1.5, 1);
 	RenderMesh(meshList[GEO_TOKEN], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//VENDING
+	modelStack.PushMatrix();
+	modelStack.Translate(210, 2, 88);
+	modelStack.Scale(2.5, 2.5, 2.5);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
 	modelStack.PopMatrix();
 }
 
@@ -741,6 +785,47 @@ void SP2::RenderCokeOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.Scale(size, size, size);
 	modelStack.Translate(x, y, 0);
 	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(mesh, true, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
+void SP2::RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(90, 0, 0, 1);
+	RenderMesh(mesh, true, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
+void SP2::RenderHandOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	//modelStack.Rotate(-20, 0, 1, 0);
+	//modelStack.Rotate(90, 1, 0, 0);
 	RenderMesh(mesh, true, toggleLight);
 
 	projectionStack.PopMatrix();
