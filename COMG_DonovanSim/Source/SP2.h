@@ -66,10 +66,14 @@ class SP2 : public Scene
 		GEO_TOKEN,
 		GEO_COKE,
 		GEO_CAFETEXTBOX,
+		GEO_BUNK,
+		GEO_SPACEMASK,
 
 
 		//NPCs
 		GEO_CHEF,
+		GEO_SPACEGUY,
+		GEO_SPACESUIT,
 
         //Space Ship
         GEO_SHIP,
@@ -207,6 +211,7 @@ private:
 	void RenderTradingStation();
 	void RenderRecRoom();
 	void RenderCafeRoom();
+	void RenderBunkRoom();
 
 
     void RenderText(Mesh* mesh, std::string text, Color color);
@@ -215,11 +220,17 @@ private:
 	void RenderCokeOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderHandOnScreen(Mesh* mesh, float size, float x, float y);
+
 	void RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y);
+
+	void RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y);
+
+
 
 	float TokenTranslate;
 	float TextTranslate;
 	float TestRotation;
+	float SuitTranslate;
 
 	//Bool for interactions (Shania's)
 	bool NearVendingText;
@@ -231,6 +242,9 @@ private:
 	bool testText;
 	bool DisplayCafeMenu;
 	bool YesShowCafeMenu;
+	bool MENUBOOL;
+	bool wearSuitText;
+	bool wearSuit;
 
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 
