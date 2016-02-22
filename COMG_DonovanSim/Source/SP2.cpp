@@ -21,6 +21,10 @@ void SP2::Init()
 	DisplayCafeMenu = false;
 	YesShowCafeMenu = false;
 
+	NearCrystal = false;
+	HoldCrystal = false;
+	int crystals = 0;
+
 	//Floats
 	TokenTranslate = 11;
 	TextTranslate = 20;
@@ -292,8 +296,47 @@ void SP2::Update(double dt)
         }
 
     }
+	//JUMP
+	if (isFalling == true)
+	{
+		camera5.position.y -= 20 * dt; // "gravity" when falling , modify this value to change how fast player falls 
+	}
+	if (camera5.position.y != 17)
+	{
+		isFalling = true; //sets falling state to true once player is off the ground 
+	}
+	if (camera5.position.y <= 17)
+	{
+		isFalling = false; //sets falling state to false once player is on the ground  
+	}
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		camera5.position.y += moving * dt;
+		moving -= 10;  // modify this value to change how long player can jump  
+		if (moving < 0)
+		{
+			moving = 0;
+		}
+	}
+	if (isFalling == false)
+	{
+		moving = 100;  // resets gravity once player hits the ground
+	}
 
->>>>>>> origin/master
+	//Mining   
+	if ((camera5.position.x <= -80 && camera5.position.x >= -120) && (camera5.position.z <= -80 && camera5.position.z >= -120))
+	{
+		NearCrystal = true;
+		if (Application::IsKeyPressed('O'))
+		{
+			HoldCrystal = true;
+		}
+	}
+	else
+	{
+		NearCrystal = false;
+	}
+
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)

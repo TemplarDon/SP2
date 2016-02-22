@@ -81,7 +81,9 @@ class SP2 : public Scene
 
         //Mine
         GEO_MINE,
+		GEO_CRYSTAL,
         NUM_GEOMETRY,
+
     };
 
     enum UNIFORM_TYPE
@@ -213,7 +215,7 @@ private:
 	void RenderCokeOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderHandOnScreen(Mesh* mesh, float size, float x, float y);
-
+	void RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y);
 
 	float TokenTranslate;
 	float TextTranslate;
@@ -238,6 +240,15 @@ private:
 	void LoadMeshes();
 	void ReadKeyPresses();
 	void RenderCode();
+
+	//Jump
+	bool isJump = false;
+	bool isFalling = false;
+	float moving = 100;    // modify this value to change speed of jump  
+
+	//Mining Interactions     
+	bool NearCrystal;
+	bool HoldCrystal;
 };
 
 #endif
