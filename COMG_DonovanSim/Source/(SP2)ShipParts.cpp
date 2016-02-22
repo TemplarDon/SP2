@@ -49,7 +49,7 @@ string ShipParts::getName()
 \brief
     Function for the partsEffect
 \return
-    returns 0
+    returns a value that is used to increase the ship's stats
 */
 /******************************************************************************/
 int ShipParts::partsEffect()

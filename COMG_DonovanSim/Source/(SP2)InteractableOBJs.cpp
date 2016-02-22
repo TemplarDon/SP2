@@ -68,12 +68,12 @@ bool InteractableOBJs::isInView(const Position &charPos, const Vector3 &viewDire
 	Vector3 D = P2 - P1;
 	Vector3 V = viewDirection.Normalized();
 
-	std::cout << (D - D.Dot(V)*V).LengthSquared() << std::endl;
+	//std::cout << (D - D.Dot(V)*V).LengthSquared() << std::endl;
 	//Check if within distance
 	if (D.LengthSquared() > requiredDistanceSquared) return false;
 
 	//Check if focusing on point
-	std::cout << "Is near" << std::endl;
+	//std::cout << "Is near" << std::endl;
 	if (D.Dot(V) < 0) return false;
 	return (D - D.Dot(V)*V).LengthSquared() < requiredFocusSquared;
 	

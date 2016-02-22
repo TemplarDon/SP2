@@ -46,14 +46,12 @@ ShipBuilder::~ShipBuilder()
     
 */
 /******************************************************************************/
-Ship* ShipBuilder::createShip(string name, Position pos, Hull HullPart, Wings WingsPart, Engine EnginePart, vector<Ship_Upgrade>upgradesVec)
+Ship ShipBuilder::createShip(Ship* templateShip, Hull HullPart, Wings WingsPart, Engine EnginePart)
 {
-    //Ship * someShip = new Ship(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis);
-    //someShip->addShipPart(HullPart);
-    //someShip->addShipPart(WingsPart);
-    //someShip->addShipPart(EnginePart);
+    templateShip->addShipPart(HullPart);
+    templateShip->addShipPart(WingsPart);
+    templateShip->addShipPart(EnginePart);
+    templateShip->calculateShipStats();
 
-    //return someShip;
-
-    return 0;
+    return *templateShip;
 }

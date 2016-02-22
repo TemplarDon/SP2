@@ -24,7 +24,7 @@ Class Dual_Wings : public Wings
 class Dual_Wings : public Wings
 {
 public:
-    Dual_Wings(string name);
+    Dual_Wings(string name = "DualWings");
     ~Dual_Wings();
 
     int partsEffect();
@@ -39,7 +39,7 @@ Class Quad_Wings : public Wings
 class Quad_Wings : public Wings
 {
 public:
-    Quad_Wings(string name);
+    Quad_Wings(string name = "QuadWings");
     ~Quad_Wings();
 
     int partsEffect();
@@ -54,7 +54,7 @@ Class G1_Engine : public Engine
 class G1_Engine : public Engine
 {
 public:
-    G1_Engine(string name);
+    G1_Engine(string name = "G1Engine");
     ~G1_Engine();
 
     int partsEffect();
@@ -69,7 +69,7 @@ Class G2_Engine : public Engine
 class G2_Engine : public Engine
 {
 public:
-    G2_Engine(string name);
+    G2_Engine(string name = "G2Engine");
     ~G2_Engine();
 
     int partsEffect();
@@ -84,7 +84,7 @@ Class Light_Hull : public Hull
 class Light_Hull : public Hull
 {
 public:
-    Light_Hull(string name);
+    Light_Hull(string name = "LightHull");
     ~Light_Hull();
 
     int partsEffect();
@@ -99,7 +99,7 @@ Class Medium_Hull : public Hull
 class Medium_Hull : public Hull
 {
 public:
-    Medium_Hull(string name);
+    Medium_Hull(string name = "MediumHull");
     ~Medium_Hull();
 
     int partsEffect();
@@ -114,7 +114,7 @@ Class Heavy_Hull : public Hull
 class Heavy_Hull : public Hull
 {
 public:
-    Heavy_Hull(string name);
+    Heavy_Hull(string name = "LargeHull");
     ~Heavy_Hull();
 
     int partsEffect();
