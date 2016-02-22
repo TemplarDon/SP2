@@ -51,6 +51,8 @@ class SP2 : public Scene
 		GEO_WALL2,
 		GEO_GATETOP,
 		GEO_GATE,
+		GEO_TESTDOOR,
+		GEO_HAND,
 
 		//Buildings/OBJ   
 		GEO_TRADEPOST,
@@ -63,6 +65,8 @@ class SP2 : public Scene
 		GEO_CHAIR,
 		GEO_TOKEN,
 		GEO_COKE,
+		GEO_CAFETEXTBOX,
+
 
 		//NPCs
 		GEO_CHEF,
@@ -182,6 +186,9 @@ private:
     void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderTokenOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderCokeOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderHandOnScreen(Mesh* mesh, float size, float x, float y);
+
 
 	float TokenTranslate;
 	float TextTranslate;
@@ -195,6 +202,8 @@ private:
 	bool ConsumeCokeText;
 	bool PickUpTokenText;
 	bool testText;
+	bool DisplayCafeMenu;
+	bool YesShowCafeMenu;
 
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 

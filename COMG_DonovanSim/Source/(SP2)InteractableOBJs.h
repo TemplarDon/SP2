@@ -29,7 +29,7 @@ private:
 	float requiredDistanceSquared;
 
 public:
-    InteractableOBJs(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis);
+    InteractableOBJs(string name, Position maxPos, Position minPos, Position offSet, float scaleOffSet, float rotateAngle, Vector3 rotateAxis);
     ~InteractableOBJs();
 
 	void setRequirements(const float distance, const float focus);
