@@ -18,6 +18,8 @@ void SP2::Init()
 	LoadShaderCodes();
 	LoadLights();
 
+	srand(time(0));
+
 	//variable to rotate geometry
 	rotateAngle = 0;
 
@@ -41,18 +43,13 @@ void SP2::Init()
 
 
 	//JUmp
-	acceleration = -0.5;
-	firstvelo = 5;
+	acceleration = -1;
+	firstvelo = 0;
 	secondvelo = 0;
-	time = 1;
+	t = 1;
 	distance = 0; 
-	gravity = -10;
 	firstpos = 0;
-
-
-	NearCrystal = false;
-	HoldCrystal = false;
-	int crystals = 0;
+	onGround = true;
 
     gateClosing = false;
     gateOpening = true;
@@ -103,6 +100,21 @@ void SP2::Init()
 
 	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
 	thirdPersonCamera.SetCameraDistanceAbsolute(60);
+
+	//Assigning coords to array  
+	for (int i = 0; i < CrystalNo; i++)
+	{
+		xcoords[i] = rand() % 900 - 450;
+		zcoords[i] = rand() % 900 - 450;
+		rendercrystal[i] = 1;
+	}
+	for (int i = 0; i < CrystalNo; i++)
+	{
+		InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(xcoords[i], 0, zcoords[i]), 5, 0, Vector3(0, 0, 0));
+		crystal.setRequirements(30, 5);
+		InteractablesList.push_back(crystal);
+	}
+	crystalcount = 0;
 }
 
 void SP2::Update(double dt)
@@ -150,7 +162,34 @@ void SP2::Update(double dt)
 		Vector3 viewDirection = (camera5.target - camera5.position).Normalized();
 		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
 		{
-			if (i->name == "vending")
+			if (i->name == "crystal")
+			{
+				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
+				{
+					CrystalText = true;
+					posxcheck = i->pos.x; 
+					poszcheck = i->pos.z;
+					if (Application::IsKeyPressed('M'))
+					{
+						for (int i = 0; i < CrystalNo; i++)
+						{
+							if (posxcheck == xcoords[i])
+							{
+								for (int i = 0; i < CrystalNo; i++)
+								{
+									if (poszcheck == zcoords[i])
+									{
+										rendercrystal[i] = 0;
+										crystalcount += 1;
+                                        
+									}
+								}
+							}
+						}
+					}
+				}			
+			}
+			else if (i->name == "vending")
 			{
 				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
 				{
@@ -211,7 +250,7 @@ void SP2::Update(double dt)
 					YesShowCafeMenu = false;
 				}
 			}
-
+			/*
 			else if (i->name == "spacesuit")
             {
                 spaceSuitInteractions();
@@ -220,6 +259,7 @@ void SP2::Update(double dt)
             {
                 wearSuitText = false;
             }
+			*/
 		}
 	}
 
@@ -245,30 +285,27 @@ void SP2::Update(double dt)
     shipAnimation(dt);
     
 	//JUMP
-	if (Application::IsKeyPressed(VK_SPACE))
+	if (Application::IsKeyPressed(VK_SPACE) &&  (onGround == true)) //s = ut + 0.5 at^2
+	{ 
+		firstpos = camera5.position.y;
+		firstvelo = 50;
+		onGround = false;
+	}
+	if (onGround == false)
 	{
-		firstpos = camera5.position.y;  
-		/*
-		secondvelo = firstvelo + (acceleration * time * time);
+		secondvelo = firstvelo + (acceleration * t * t); // a = -2 , t = 1 
 		firstvelo = secondvelo;
 
-		distance = ( (secondvelo * time) + (0.5 * acceleration * time * time) )  ;
+		distance = ((firstvelo * t) + (0.5 * acceleration * t * t));
 		camera5.position.y += distance * dt;
 		*/
 	}
 
-	//Mining   
-	if ((camera5.position.x <= -80 && camera5.position.x >= -120) && (camera5.position.z <= -80 && camera5.position.z >= -120))
-	{
-		NearCrystal = true;
-		if (Application::IsKeyPressed('O'))
+		if (firstpos >= camera5.position.y)
 		{
-			HoldCrystal = true;
+			camera5.position.y = firstpos;
+			onGround = true;
 		}
-	}
-	else
-	{
-		NearCrystal = false;
 	}
 }
 

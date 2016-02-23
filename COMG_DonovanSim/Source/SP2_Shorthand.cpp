@@ -202,9 +202,7 @@ void SP2::LoadMeshes()
 	//CRYSTAL
 	meshList[GEO_CRYSTAL] = MeshBuilder::GenerateOBJ("Crystal", "OBJ//crystal2.obj");
 	meshList[GEO_CRYSTAL]->textureID = LoadTGA("Image//crystal_Tile.tga");
-	InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(-100, 0, -100), 2, 0, Vector3(0, 0, 0));
-	crystal.setRequirements(30, 5);
-	InteractablesList.push_back(crystal);
+
 	//init collision, then render room
 
 	////CAFE
@@ -461,6 +459,9 @@ void SP2::RenderCode()
 	//RENDER RECREATIONAL ROOM   
 	RenderRecRoom();
 
+	//RENDER RANDOM CRYSTAL GENERATION   
+	RenderCrystals();
+
 	//GROUND MESH
 	modelStack.PushMatrix();
 	modelStack.Scale(1000, 1000, 1000);
@@ -527,14 +528,6 @@ void SP2::RenderCode()
 	//RenderMesh(meshList[GEO_MINE], true, toggleLight);
 	//modelStack.PopMatrix();
 
-	if (!HoldCrystal)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(-100, 2, -100);
-		modelStack.Scale(5, 5, 5);
-		RenderMesh(meshList[GEO_CRYSTAL], true, toggleLight);
-		modelStack.PopMatrix();
-	}
 
 	// POSITION OF X Y Z
 	std::ostringstream ss;
@@ -542,6 +535,10 @@ void SP2::RenderCode()
 	ss << "Position: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
+	std::ostringstream as;
+	as.str("");
+	as << "Crystals :" << crystalcount;
+	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 5);
 	//VENDING TEXT
 	if (NearVendingText)
 	{
@@ -586,16 +583,6 @@ void SP2::RenderCode()
 	}
 
 
-	//Mining  
-	if ((NearCrystal) && HoldCrystal == false )
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press O to pick up crystal", Color(1, 0, 0), 2, 6, TextTranslate);
-	}
-
-	if (HoldCrystal == true)   
-	{
-		RenderCrystalOnScreen(meshList[GEO_CRYSTAL], 5, 8, 6);
-    }
 	//WEAR SUIT TEXT
 	if (wearSuitText == true)
 	{
@@ -605,9 +592,12 @@ void SP2::RenderCode()
 	//WEAR SUIT \ MASK ON SCREEN
 	if (wearSuit == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS T TO PUT ON SPACE SUIT", Color(1, 0, 0), 2, 8, 14);
 		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
+	}
 
+	if (CrystalText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS M TO MINE THE CRYSTAL", Color(1, 0, 0), 2, 8, 14);
 	}
 }
 
@@ -1009,6 +999,26 @@ void SP2::RenderCafeRoom()
 	modelStack.PopMatrix();
 }
 
+void SP2::RenderCrystals()
+{
+for (int i = 0; i < CrystalNo; i++)
+	{
+		if ((((xcoords[i] > 30) && (xcoords[i] < 350)) && ((zcoords[i] > -190) && (zcoords[i] < 250))) || (rendercrystal[i] == 0))
+		{
+
+		}
+		else
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate(xcoords[i], 2, zcoords[i]);
+			modelStack.Scale(5, 5, 5);
+			RenderMesh(meshList[GEO_CRYSTAL], true, toggleLight);
+			modelStack.PopMatrix();
+		}
+	}
+
+	
+}
 void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
