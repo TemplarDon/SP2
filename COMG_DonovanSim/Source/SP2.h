@@ -69,6 +69,12 @@ class SP2 : public Scene
 		GEO_BUNK,
 		GEO_SPACEMASK,
 
+        // ARMOURY / SHOP
+        GEO_GUN,
+        GEO_GUN_RACK,
+        GEO_SHOOTING_RANGE,
+        GEO_TARGET,
+
 
 		//NPCs
 		GEO_CHEF,
@@ -265,6 +271,7 @@ private:
 	void RenderRecRoom();
 	void RenderCafeRoom();
 	void RenderBunkRoom();
+    void RenderArmouryAndShop();
 
 
 

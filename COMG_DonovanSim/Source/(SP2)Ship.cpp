@@ -32,7 +32,7 @@
 Ship::Ship(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis) : InteractableOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
 {
     shipSpeed = 0;
-    maxSpeed = 0;
+    turningSpeed = 0;
 }
 
 /******************************************************************************/
@@ -87,12 +87,12 @@ void Ship::calculateShipStats()
     {
         if (it->getName().find(wings) != string::npos)
         {
-            this->shipSpeed += it->partsEffect();
+            this->turningSpeed += it->partsEffect();
             this->wingType = it->getName();
         }
         if (it->getName().find(engine) != string::npos)
         {
-            this->maxSpeed += it->partsEffect();
+            this->shipSpeed += it->partsEffect();
             this->engineType = it->getName();
         }
         if (it->getName().find(hull) != string::npos)

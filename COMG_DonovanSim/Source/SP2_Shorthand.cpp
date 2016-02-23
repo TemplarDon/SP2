@@ -298,13 +298,42 @@ void SP2::LoadMeshes()
 
     initRoomTemplate(Position(250, 2, -100));
  
+    // Armoury / Shop
     initRoomTemplate(Position(120, 2, 160));
+
+    // Gun
+    meshList[GEO_GUN] = MeshBuilder::GenerateOBJ("gun", "OBJ//Armoury Models//gun.obj");
+    meshList[GEO_GUN]->textureID = LoadTGA("Image//Armoury Textures//gunUV.tga");
+    InteractableOBJs gun = InteractableOBJs("gun", meshList[GEO_GUN]->maxPos, meshList[GEO_GUN]->minPos, Position(120 + 40, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
+    gun.setRequirements(25, 15);
+    InteractablesList.push_back(gun);
+
+    // Gun-Rack
+    meshList[GEO_GUN_RACK] = MeshBuilder::GenerateOBJ("gun rack", "OBJ//Armoury Models//gunrack.obj");
+    meshList[GEO_GUN_RACK]->textureID = LoadTGA("Image//Armoury Textures//gunrackUV.tga");
+    InteractableOBJs gunRack = InteractableOBJs("gun rack", meshList[GEO_GUN_RACK]->maxPos, meshList[GEO_GUN_RACK]->minPos, Position(120 + 40, 2, 160 + 40), 6, 0, Vector3(0, 0, 0));
+    gunRack.setRequirements(25, 15);
+    InteractablesList.push_back(gunRack);
+
+    // Shooting Range
+    meshList[GEO_SHOOTING_RANGE] = MeshBuilder::GenerateOBJ("shooting range", "OBJ//Armoury Models//shootingRange.obj");
+    meshList[GEO_SHOOTING_RANGE]->textureID = LoadTGA("Image//Armoury Textures//shootingRangeUV.tga");
+    InteractableOBJs shootingRange = InteractableOBJs("shooting range", meshList[GEO_SHOOTING_RANGE]->maxPos, meshList[GEO_SHOOTING_RANGE]->minPos, Position(120 + 5, 2, 160 + 40), 6, 0, Vector3(0, 0, 0));
+    shootingRange.setRequirements(25, 15);
+    InteractablesList.push_back(shootingRange);
+
+    // Target Dummy
+    meshList[GEO_TARGET] = MeshBuilder::GenerateOBJ("target dummmy", "OBJ//Armoury Models//target.obj");
+    meshList[GEO_TARGET]->textureID = LoadTGA("Image//Armoury Textures//targetUV.tga");
+    InteractableOBJs target = InteractableOBJs("target dummmy", meshList[GEO_TARGET]->maxPos, meshList[GEO_TARGET]->minPos, Position(120 - 35, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
+    target.setRequirements(25, 15);
+    InteractablesList.push_back(target);
 
     initRoomTemplate(Position(120, 2, 30));
 
     initRoomTemplate(Position(120, 2, -100));
 
-    initSpaceShip();
+    initSpaceShip(); 
 }
 
 void SP2::initSpaceShip()
@@ -475,8 +504,12 @@ void SP2::RenderCode()
 	RenderRoomTemplate(Position(250, 2, -100));
 
 
-
+    // Armoury / Shop
+    modelStack.PushMatrix();
 	RenderRoomTemplate(Position(120, 2, 160));
+    modelStack.Translate(120, 2, 160);
+    RenderArmouryAndShop();
+    modelStack.PopMatrix();
 
 	RenderRoomTemplate(Position(120, 2, 30));
 
@@ -484,17 +517,7 @@ void SP2::RenderCode()
 
 	//RenderRoomTemplate(Position(120, 2, -100));
 
-	//INTERACTIONS
-
-    // SpaceShip
-    //modelStack.PushMatrix();
-    //modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y - 30, thirdPersonCamera.GetFocusPoint()->z + 80);
-    //modelStack.Translate(thirdPersonCamera.target.x, thirdPersonCamera.target.y, thirdPersonCamera.target.z);
-    //modelStack.Rotate(shipRotateAngle, 1, 1, 1);
-    //modelStack.Scale(4, 4, 4);
-    //RenderMesh(meshList[GEO_SHIP], true, toggleLight);
-    //modelStack.PopMatrix();
-
+	//INTERACTION
 
 
 	// Mine
@@ -1198,6 +1221,47 @@ void SP2::RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y)
 
 }
 
+void SP2::RenderArmouryAndShop()
+{
+    // Gun Rack + Gun
+    modelStack.PushMatrix();
+
+    // Gun Rack
+    modelStack.Translate(40, 0, 40);
+    modelStack.Rotate(180, 0, 1, 0);
+    modelStack.Scale(6, 6, 6);
+    RenderMesh(meshList[GEO_GUN_RACK], true, toggleLight);
+
+    // Gun
+    modelStack.PushMatrix();
+    modelStack.Scale(0.8, 0.8, 0.8);
+    RenderMesh(meshList[GEO_GUN], true, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PopMatrix();
+
+    // Shooting Range + Target
+    modelStack.PushMatrix();
+
+    // Shooting Range
+    modelStack.PushMatrix();
+    modelStack.Translate(5, 0, 40);
+    modelStack.Scale(6, 6, 6);
+    RenderMesh(meshList[GEO_SHOOTING_RANGE], true, toggleLight);
+    modelStack.PopMatrix();
+
+    // Target
+    modelStack.PushMatrix();
+    modelStack.Translate(-35, 0, 40);
+    modelStack.Rotate(90, 0, 1, 0);
+    modelStack.Scale(6, 6, 6);
+    RenderMesh(meshList[GEO_TARGET], true, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PopMatrix();
+}
+
+
 void SP2::RenderTradingStation()
 {
 	//TRADING STATION
@@ -1215,9 +1279,6 @@ void SP2::RenderSpaceShip()
 
 	modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
 
-    //if (thirdPersonCamera.yawingLeft == true || thirdPersonCamera.yawingRight == true) { modelStack.Rotate(shipHorizontalRotateAngle, 0, 1, 0); }
-    //if (thirdPersonCamera.pitchingDown == true || thirdPersonCamera.pitchingUp == true) { modelStack.Rotate(shipVerticalRotateAngle, 0, 0, 1); }
-
     // Rotate Ship By its own Axis
     modelStack.Rotate(shipHorizontalRotateAngle, 0, 1, 0);
     modelStack.Rotate(shipVerticalRotateAngle, 1, 0, 1);
@@ -1230,7 +1291,7 @@ void SP2::RenderSpaceShip()
     RenderMesh(meshList[GEO_ENGINE], true, toggleLight);
 
     modelStack.PopMatrix();
-    // End of SpaceShip
+    // End of 
 }
 
 void SP2::RenderText(Mesh* mesh, std::string text, Color color)

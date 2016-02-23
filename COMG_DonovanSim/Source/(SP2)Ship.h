@@ -30,8 +30,8 @@ public:
     // Ship's Speed
     float shipSpeed;
 
-    // Ship's Max Speed
-    float maxSpeed;
+    // Ship's Turning Speed
+    float turningSpeed;
 
     // Vector Containing the Ships's Parts
     vector<ShipParts> ShipPartsVector;
