@@ -31,7 +31,20 @@ void SP2::Init()
 	PickUpTokenText = false;
 	DisplayCafeMenu = false;
 	YesShowCafeMenu = false;
+	
 	toggleLight = true;
+	
+	MENUBOOL = false;
+	
+	wearSuitText = false;
+	wearSuit = false;
+
+	NearCrystal = false;
+	HoldCrystal = false;
+	int crystals = 0;
+
+    gateClosing = false;
+    gateOpening = true;
 
 	thirdPersonCamera.SetMouseEnabled(false);
 
@@ -40,6 +53,10 @@ void SP2::Init()
 	TokenTranslate = 11;
 	TextTranslate = 20;
 	TestRotation = 90;
+	
+	SuitTranslate = 2;
+
+    gateOffset = 0;
 
 	heightOfWall = 12;
 
@@ -86,13 +103,16 @@ void SP2::Update(double dt)
     createBoundBox(InteractablesList, BuildingsList);
     interactionCheck(dt, InteractablesList, somePlayer);
 
-    if (somePlayer.getCameraType() == "first")
-    {
-        camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
-    }
-    else
-    {
-        thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
+	if (!MENUBOOL)
+	{
+    	if (somePlayer.getCameraType() == "first")
+    	{
+    	    camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
+    	}
+    	else
+    	{
+    	    thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
+    	}
     }
     
 	TestRotation += float(dt * 100);
@@ -176,6 +196,15 @@ void SP2::Update(double dt)
 					YesShowCafeMenu = false;
 				}
 			}
+
+			else if (i->name == "spacesuit")
+            {
+                spaceSuitInteractions();
+            }
+            else
+            {
+                wearSuitText = false;
+            }
 		}
 	}
 
@@ -222,6 +251,39 @@ void SP2::Update(double dt)
 
     //}
 
+	//Gate Interaction
+    //string gate = "Gate";
+    //if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view) == true && InteractablesList[i].name.find(gate) != string::npos)
+    ////if (somePlayer.pos.x < InteractablesList[i].pos.x + 20 && somePlayer.pos.x > InteractablesList[i].pos.x - 20 && somePlayer.pos.z < InteractablesList[i].pos.z + 20 && somePlayer.pos.z > InteractablesList[i].pos.z - 20)
+    //{
+    //    gateOpening = true;
+    //}
+    //else
+    //{
+    //    gateOpening = false;
+    //}
+
+    //// Moving Gate
+    //if (gateOpening == true)
+    //{
+    //    if (gateOffset <= 10)
+    //    {
+    //        gateOffset += (float)(dt);
+    //        InteractablesList[i].pos.y += gateOffset;
+    //    }
+
+    //}
+
+    //if (gateOpening == false)
+    //{
+    //    if (gateOffset > 0)
+    //    {
+    //        gateOffset -= (float)(dt);
+    //        InteractablesList[i].pos.y -= gateOffset;
+    //    }
+    //}
+    
+
     // Ship Creation
     if (Application::IsKeyPressed('E') && ShipList.size() == 0)
     {
@@ -234,7 +296,7 @@ void SP2::Update(double dt)
 
         shipTemplatePtr = &someShip;
 
-        ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LightHull, DualWings, G1Engine));
+        ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LightHull, QaudWings, G1Engine));
 
         // Load Meshes for specific ship parts
         for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
@@ -272,7 +334,47 @@ void SP2::Update(double dt)
         }
 
     }
+    
+	//JUMP
+	if (isFalling == true)
+	{
+		camera5.position.y -= 20 * dt; // "gravity" when falling , modify this value to change how fast player falls 
+	}
+	if (camera5.position.y != 17)
+	{
+		isFalling = true; //sets falling state to true once player is off the ground 
+	}
+	if (camera5.position.y <= 17)
+	{
+		isFalling = false; //sets falling state to false once player is on the ground  
+	}
+	if (Application::IsKeyPressed(VK_SPACE))
+	{
+		camera5.position.y += moving * dt;
+		moving -= 10;  // modify this value to change how long player can jump  
+		if (moving < 0)
+		{
+			moving = 0;
+		}
+	}
+	if (isFalling == false)
+	{
+		moving = 100;  // resets gravity once player hits the ground
+	}
 
+	//Mining   
+	if ((camera5.position.x <= -80 && camera5.position.x >= -120) && (camera5.position.z <= -80 && camera5.position.z >= -120))
+	{
+		NearCrystal = true;
+		if (Application::IsKeyPressed('O'))
+		{
+			HoldCrystal = true;
+		}
+	}
+	else
+	{
+		NearCrystal = false;
+	}
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
@@ -298,6 +400,74 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
                 }
             }
         }
+    }
+}
+
+void SP2::vendingMachineInteractions()
+{
+    NearVendingText = true;
+    if (Application::IsKeyPressed('Q'))
+    {
+        TextTranslate = 100;
+        TokenOnScreen = false;
+        RenderCoke = true;
+        ConsumeCokeText = true;
+    }
+
+    if (Application::IsKeyPressed('U'))
+    {
+        ConsumeCokeText = false;
+        RenderCoke = false;
+    }
+}
+
+void SP2::tokenInteractions()
+{
+    PickUpTokenText = true;
+
+    if (Application::IsKeyPressed('Q'))
+    {
+        TokenOnScreen = true;
+        TokenTranslate = 10.5;
+    }
+}
+
+void SP2::counterInteractions()
+{
+    testText = true;
+    if (Application::IsKeyPressed('Y'))
+    {
+        MENUBOOL = true;
+        YesShowCafeMenu = true;
+    }
+
+    if (Application::IsKeyPressed('I'))
+    {
+        MENUBOOL = false;
+    }
+
+    if (YesShowCafeMenu == true)
+    {
+        DisplayCafeMenu = true;
+    }
+    else
+    {
+        DisplayCafeMenu = false;
+    }
+}
+
+void SP2::spaceSuitInteractions()
+{
+    wearSuitText = true;
+    if (Application::IsKeyPressed('T'))
+    {
+        SuitTranslate = -50;
+        wearSuit = true;
+    }
+
+    if (Application::IsKeyPressed('G'))
+    {
+        wearSuit = false;
     }
 }
 

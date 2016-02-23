@@ -66,10 +66,14 @@ class SP2 : public Scene
 		GEO_TOKEN,
 		GEO_COKE,
 		GEO_CAFETEXTBOX,
+		GEO_BUNK,
+		GEO_SPACEMASK,
 
 
 		//NPCs
 		GEO_CHEF,
+		GEO_SPACEGUY,
+		GEO_SPACESUIT,
 
         //Space Ship
         GEO_SHIP,
@@ -81,7 +85,9 @@ class SP2 : public Scene
 
         //Mine
         GEO_MINE,
+		GEO_CRYSTAL,
         NUM_GEOMETRY,
+
     };
 
     enum UNIFORM_TYPE
@@ -181,7 +187,6 @@ private:
     void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
 
-    void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
 
     // Init Ship Builder & Ship Ptr
     ShipBuilder ShipBuilder;
@@ -196,10 +201,10 @@ private:
     Dual_Wings DualWings;
     Quad_Wings QaudWings;
 
-
 	float TokenTranslate;
 	float TextTranslate;
 	float TestRotation;
+	float SuitTranslate;
 
 	//Bool for interactions (Shania's)
 	bool NearVendingText;
@@ -211,8 +216,27 @@ private:
 	bool testText;
 	bool DisplayCafeMenu;
 	bool YesShowCafeMenu;
+	bool MENUBOOL;
+	bool wearSuitText;
+	bool wearSuit;
 
-    void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
+    // Bools for Door
+    
+    float gateOffset;
+    bool gateOpening;
+    bool gateClosing;
+
+
+
+	//Jump
+	
+	bool isJump = false;
+	bool isFalling = false;
+	float moving = 100;    // modify this value to change speed of jump
+
+	//Mining Interactions     
+	bool NearCrystal;
+	bool HoldCrystal;
 
 
 
@@ -225,7 +249,6 @@ private:
 	void RenderCode();
 
 
-
 	// Function to Init & Render SpaceShip
 
 	void initSpaceShip();
@@ -234,6 +257,8 @@ private:
 	void RenderTradingStation();
 	void RenderRecRoom();
 	void RenderCafeRoom();
+	void RenderBunkRoom();
+
 
 
 	void RenderSkybox();
@@ -244,6 +269,20 @@ private:
 	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderHandOnScreen(Mesh* mesh, float size, float x, float y);
 
+
+	void RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y);
+	
+	void RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y);
+
+	
+    
+    void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
+    void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
+	
+    void vendingMachineInteractions();
+    void tokenInteractions();
+    void counterInteractions();
+    void spaceSuitInteractions();
 
 
 	// Functions to create a room. (initRoomTemplate to have collision, RenderRoomTemplate to render)
