@@ -32,6 +32,9 @@ public:
     InteractableOBJs(string name, Position maxPos, Position minPos, Position offSet, float scaleOffSet, float rotateAngle, Vector3 rotateAxis);
     ~InteractableOBJs();
 
+    void setEffectOverBool(bool newBool);
+    bool getEffectOverBool();
+
 	void setRequirements(const float distance, const float focus);
 
 	bool isInView(const Position &pos, const Vector3 &viewDirection);

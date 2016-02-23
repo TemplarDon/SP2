@@ -163,12 +163,10 @@ private:
     Player somePlayer;
 
 	//Starting position for player
-
 	Position startingCharPos;
     Position charPos;
 
     // Starting position for ship
-
     Position shipStartingPos;
 	Position shipPos;
 	
@@ -297,6 +295,9 @@ private:
     void tokenInteractions();
     void counterInteractions();
     void spaceSuitInteractions();
+    void doorInteractions(double dt);
+    void shipAnimation(double dt);
+    void shipCreation();
 
 
 	// Functions to create a room. (initRoomTemplate to have collision, RenderRoomTemplate to render)

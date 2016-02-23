@@ -72,7 +72,7 @@ void SP2::Init()
 	heightOfWall = 12;
 
 
-	startingCharPos = charPos = { 150, 17, -36 };
+	startingCharPos = charPos = { 600, 17, -36 };
 
 	shipStartingPos = shipPos = { 75, 18, 150 };
     shipHorizontalRotateAngle = 0;
@@ -223,130 +223,26 @@ void SP2::Update(double dt)
 		}
 	}
 
-    // Ship Animation
-    if (thirdPersonCamera.yawingLeft == true /*&& shipHorizontalRotateAngle >= -20*/) { shipHorizontalRotateAngle += (float)(30 * dt); }
-    if (thirdPersonCamera.yawingRight == true /*&& shipHorizontalRotateAngle <= 20*/) { shipHorizontalRotateAngle -= (float)(30 * dt); }
-    if (thirdPersonCamera.pitchingDown == true /*&& shipVerticalRotateAngle >= -20*/) { shipVerticalRotateAngle += (float)(30 * dt); }
-    if (thirdPersonCamera.pitchingUp == true /*&& shipHorizontalRotateAngle <= 20*/) { shipVerticalRotateAngle -= (float)(30 * dt); }
     
-    // Reset Ship to original orientation
-    /*if (thirdPersonCamera.yawingRight == false )
+    for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
     {
-        if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
+        // Gate Interaction - Don't Touch - Donovan
+        string gate = "Gate";
+        if (it->name.find(gate) != string::npos)
         {
-            shipHorizontalRotateAngle += (float)(10 * dt);
+            doorInteractions(dt);
         }
     }
-
-    if (thirdPersonCamera.yawingLeft == false)
-    {
-        if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
-        {
-            shipHorizontalRotateAngle -= (float)(10 * dt);
-        }
-
-    }
-
-    if (thirdPersonCamera.pitchingDown == false)
-    {
-        if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
-        {
-            shipVerticalRotateAngle += (float)(10 * dt);
-        }
-    }
-
-    if (thirdPersonCamera.pitchingUp == false)
-    {
-        if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
-        {
-            shipVerticalRotateAngle -= (float)(10 * dt);
-        }
-
-    }*/
-
-	//Gate Interaction
-    //string gate = "Gate";
-    //if (InteractablesList[i].isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view) == true && InteractablesList[i].name.find(gate) != string::npos)
-    ////if (somePlayer.pos.x < InteractablesList[i].pos.x + 20 && somePlayer.pos.x > InteractablesList[i].pos.x - 20 && somePlayer.pos.z < InteractablesList[i].pos.z + 20 && somePlayer.pos.z > InteractablesList[i].pos.z - 20)
-    //{
-    //    gateOpening = true;
-    //}
-    //else
-    //{
-    //    gateOpening = false;
-    //}
-
-    //// Moving Gate
-    //if (gateOpening == true)
-    //{
-    //    if (gateOffset <= 10)
-    //    {
-    //        gateOffset += (float)(dt);
-    //        InteractablesList[i].pos.y += gateOffset;
-    //    }
-
-    //}
-
-    //if (gateOpening == false)
-    //{
-    //    if (gateOffset > 0)
-    //    {
-    //        gateOffset -= (float)(dt);
-    //        InteractablesList[i].pos.y -= gateOffset;
-    //    }
-    //}
     
 
-    // Ship Creation
+    // Ship Creation - Don't Touch - Donovan
     if (Application::IsKeyPressed('E') && ShipList.size() == 0)
     {
-        // Space Ship Template
-		//WHY SHOULD YOU LOAD A MESH IN THE MIDDLE OF THE PROGRAM? WHO WAS DOING IT? (comment by Gary Goh)
-        //meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
-
-        Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0));
-        someShip.setRequirements(50, 500);
-
-        shipTemplatePtr = &someShip;
-
-        ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LightHull, QaudWings, G1Engine));
-
-        // Load Meshes for specific ship parts
-        for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
-        {
-            if (i->hullType == "LightHull")
-            {
-                meshList[GEO_HULL] = MeshBuilder::GenerateOBJ("shipHull", "OBJ//Ship Models//LightHull.obj");
-            }
-            else if (i->hullType == "MediumHull")
-            {
-
-            }
-            else if (i->hullType == "LargeHull")
-            {
-
-            }
-
-            if (i->wingType == "DualWings")
-            {
-                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//DualWings.obj");
-            }
-            else if (i->wingType == "QuadWings")
-            {
-                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//QuadWings.obj");
-            }
-
-            if (i->engineType == "G1Engine")
-            {
-                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G1Engine.obj");
-            }
-            else if (i->engineType == "G2Engine")
-            {
-                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G2Engine.obj");
-            }
-        }
-
+        shipCreation();
     }
+
+    // Ship Creation - Don't Touch - Donovan
+    shipAnimation(dt);
     
 	//JUMP
 	if (Application::IsKeyPressed(VK_SPACE))
@@ -360,6 +256,7 @@ void SP2::Update(double dt)
 		camera5.position.y += distance * dt;
 		*/
 	}
+
 	//Mining   
 	if ((camera5.position.x <= -80 && camera5.position.x >= -120) && (camera5.position.z <= -80 && camera5.position.z >= -120))
 	{
@@ -373,6 +270,163 @@ void SP2::Update(double dt)
 	{
 		NearCrystal = false;
 	}
+}
+
+void SP2::doorInteractions(double dt)
+{
+    Vector3 view = (camera5.target - camera5.position).Normalized();
+    for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+    {
+        if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+        {
+            //it->setEffectOverBool(true);
+            gateOpening = true;
+
+            //Moving Gate Upwards
+            if (gateOpening)
+            {
+                if (gateOffset <= 35)
+                {
+                    gateOffset += (float)(dt);
+                    it->pos.y += gateOffset;
+                }
+
+            }
+
+        }
+        else
+        {
+            //it->setEffectOverBool(false);
+            gateOpening = false;
+
+            //Moving Gate Downwards
+            if (!gateOpening)
+            {
+                if (gateOffset > 0)
+                {
+                    gateOffset -= (float)(dt);
+                    it->pos.y -= gateOffset;
+                }
+            }
+        }
+
+
+
+        ////Moving Gate Upwards
+        //if (it->getEffectOverBool() == true)
+        //{
+        //    if (gateOffset <= 10)
+        //    {
+        //        gateOffset += (float)(dt);
+        //        it->pos.y += gateOffset;
+        //    }
+
+        //}
+
+        //// Moving Gate Downwards
+        //if (it->getEffectOverBool() == false)
+        //{
+        //    if (gateOffset > 0)
+        //    {
+        //        gateOffset -= (float)(dt);
+        //        it->pos.y -= gateOffset;
+        //    }
+        //}
+    }
+
+}
+
+void SP2::shipAnimation(double dt)
+{
+    // Ship Animation
+    if (thirdPersonCamera.yawingLeft == true /*&& shipHorizontalRotateAngle >= -20*/) { shipHorizontalRotateAngle += (float)(30 * dt); }
+    if (thirdPersonCamera.yawingRight == true /*&& shipHorizontalRotateAngle <= 20*/) { shipHorizontalRotateAngle -= (float)(30 * dt); }
+    if (thirdPersonCamera.pitchingDown == true /*&& shipVerticalRotateAngle >= -20*/) { shipVerticalRotateAngle += (float)(30 * dt); }
+    if (thirdPersonCamera.pitchingUp == true /*&& shipHorizontalRotateAngle <= 20*/) { shipVerticalRotateAngle -= (float)(30 * dt); }
+
+    // Reset Ship to original orientation
+    /*if (thirdPersonCamera.yawingRight == false )
+    {
+    if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
+    {
+    shipHorizontalRotateAngle += (float)(10 * dt);
+    }
+    }
+
+    if (thirdPersonCamera.yawingLeft == false)
+    {
+    if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
+    {
+    shipHorizontalRotateAngle -= (float)(10 * dt);
+    }
+
+    }
+
+    if (thirdPersonCamera.pitchingDown == false)
+    {
+    if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
+    {
+    shipVerticalRotateAngle += (float)(10 * dt);
+    }
+    }
+
+    if (thirdPersonCamera.pitchingUp == false)
+    {
+    if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
+    {
+    shipVerticalRotateAngle -= (float)(10 * dt);
+    }
+
+    }*/
+}
+
+void SP2::shipCreation()
+{
+    // Space Ship Template
+    //WHY SHOULD YOU LOAD A MESH IN THE MIDDLE OF THE PROGRAM? WHO WAS DOING IT? (comment by Gary Goh)
+    //meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
+
+    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0));
+    someShip.setRequirements(50, 500);
+
+    shipTemplatePtr = &someShip;
+
+    ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LightHull, QaudWings, G1Engine));
+
+    // Load Meshes for specific ship parts
+    for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
+    {
+        if (i->hullType == "LightHull")
+        {
+            meshList[GEO_HULL] = MeshBuilder::GenerateOBJ("shipHull", "OBJ//Ship Models//LightHull.obj");
+        }
+        else if (i->hullType == "MediumHull")
+        {
+
+        }
+        else if (i->hullType == "LargeHull")
+        {
+
+        }
+
+        if (i->wingType == "DualWings")
+        {
+            meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//DualWings.obj");
+        }
+        else if (i->wingType == "QuadWings")
+        {
+            meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//QuadWings.obj");
+        }
+
+        if (i->engineType == "G1Engine")
+        {
+            meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G1Engine.obj");
+        }
+        else if (i->engineType == "G2Engine")
+        {
+            meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G2Engine.obj");
+        }
+    }
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
@@ -648,7 +702,6 @@ void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Buil
 
 
 }
-
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 {
