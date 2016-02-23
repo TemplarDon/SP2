@@ -26,9 +26,6 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 	this->position = F - camDirection * camDistance;
 	this->target = F;
 	this->up = right.Cross(camDirection);
-
-    this->canMoveBuilding = true;
-    this->canMoveInteractable = true;
     this->yawingLeft = false;
     this->yawingRight = false;
     this->pitchingDown = false;
@@ -40,21 +37,27 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 
 void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
 {
-    float mouseSpeed = 10;
-    float horizontalAngle = 0; 
-    float verticalAngle = 0; 
+	float mouseSpeed = 10;
 
-    horizontalAngle += mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
-    verticalAngle += mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
+	if (mouseEnabled)
+	{
+		float horizontalAngle = mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
+		float verticalAngle = mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
 
-    YawCamera(horizontalAngle);
-    PitchCamera(verticalAngle);
+		YawCamera(horizontalAngle);
+		PitchCamera(verticalAngle);
+	}
 
-    cameraMovement(dt, InteractablesList, BuildingsList, somePlayer);
+	shipTurningAnimation(Application::mouseX, Application::mouseY);
 
     
 
 	Refocus();
+}
+
+void ThirdPersonCamera::SetMouseEnabled(const bool &toggle)
+{
+	mouseEnabled = toggle;
 }
 
 void ThirdPersonCamera::YawCamera(const float degrees)
@@ -84,7 +87,6 @@ void ThirdPersonCamera::PitchCamera(float degrees)
 	up = rotationMatrix * up;
 
 	Refocus();
-
 }
 
 void ThirdPersonCamera::SetCameraPitchBounds(float min, float max)
@@ -143,7 +145,7 @@ void ThirdPersonCamera::SetFocusPoint(Position *focus)
 	this->focus = focus;
 }
 
-void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
+/*void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
 {
     Vector3 view = (target - position).Normalized();
     if (Application::IsKeyPressed('W'))
@@ -330,6 +332,7 @@ void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&Inter
     //    }
     //}
 }
+*/
 
 void ThirdPersonCamera::shipTurningAnimation(float yaw, float pitch)
 {

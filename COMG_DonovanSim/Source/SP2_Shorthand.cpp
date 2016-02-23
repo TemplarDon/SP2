@@ -238,8 +238,8 @@ void SP2::LoadMeshes()
 	InteractablesList.push_back(vending);
 
 	//CHAIR
-	//meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chair.obj");
-	//meshList[GEO_CHAIR]->textureID = LoadTGA("Image//Chair.tga");
+	/*meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chair.obj");
+	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//Chair.tga");*/
 
 	//Token
 	meshList[GEO_TOKEN] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Token.obj");
@@ -373,26 +373,27 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 
 void SP2::ReadKeyPresses()
 {
-    if (Application::IsKeyPressed('B'))
-    {
-        if (toggleLight == true)
-        {
-            toggleLight = false;
-        }
-        else
-        {
-            toggleLight = true;
-        }
-    }
+	if (Application::IsKeyPressed('B'))
+	{
+		if (toggleLight == true)
+		{
+			toggleLight = false;
+		}
+		else
+		{
+			toggleLight = true;
+		}
+	}
 
-    //COLLECT TOLKEN
-    if (Application::IsKeyPressed('Q'))
-    {
-        TokenOnScreen = true;
-        TokenTranslate = 10.5;
-    }
+	//COLLECT TOLKEN
+	if (Application::IsKeyPressed('Q'))
+	{
+		TokenOnScreen = true;
+		TokenTranslate = 10.5;
+	}
 }
 
+//Main Render code.
 void SP2::RenderCode()
 {
     //RENDER LIGHTBALL
@@ -402,9 +403,20 @@ void SP2::RenderCode()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(charPos.x, charPos.y, charPos.z);
+	modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 	modelStack.PopMatrix();
+
+	if (ShipList.size() > 0)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
+		modelStack.Scale(6, 6, 6);
+		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+		modelStack.PopMatrix();
+
+		RenderSpaceShip();
+	}
 
 
 	//RENDER SKYBOX
@@ -483,11 +495,6 @@ void SP2::RenderCode()
     //RenderMesh(meshList[GEO_SHIP], true, toggleLight);
     //modelStack.PopMatrix();
 
-    if (ShipList.size() > 0)
-    {
-        RenderSpaceShip();
-    }
-
 
 
 	// Mine
@@ -497,11 +504,7 @@ void SP2::RenderCode()
 	//RenderMesh(meshList[GEO_MINE], true, toggleLight);
 	//modelStack.PopMatrix();
 
-	if (HoldCrystal == true)
-	{
-
-	}
-	else
+	if (!HoldCrystal)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(-100, 2, -100);
@@ -1210,8 +1213,10 @@ void SP2::RenderSpaceShip()
     // Start of SpaceShip
     modelStack.PushMatrix();
 
-    // Translate Ship to focus point
-    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y - 10, thirdPersonCamera.GetFocusPoint()->z +  thirdPersonCamera.GetCameraDistance());
+	modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
+
+    //if (thirdPersonCamera.yawingLeft == true || thirdPersonCamera.yawingRight == true) { modelStack.Rotate(shipHorizontalRotateAngle, 0, 1, 0); }
+    //if (thirdPersonCamera.pitchingDown == true || thirdPersonCamera.pitchingUp == true) { modelStack.Rotate(shipVerticalRotateAngle, 0, 0, 1); }
 
     // Rotate Ship By its own Axis
     modelStack.Rotate(shipHorizontalRotateAngle, 0, 1, 0);
