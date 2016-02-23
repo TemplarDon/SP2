@@ -417,6 +417,9 @@ void SP2::RenderCode()
 	//RENDER BUNK
 	RenderBunkRoom();
 
+	//RENDER RECREATIONAL ROOM   
+	RenderRecRoom();
+
 	//GROUND MESH
 	modelStack.PushMatrix();
 	modelStack.Scale(1000, 1000, 1000);
@@ -973,7 +976,7 @@ void SP2::RenderCafeRoom()
 
 	//VENDING
 	modelStack.PushMatrix();
-	modelStack.Translate(210, 2, 88);
+	modelStack.Translate(216, 2, 70);
 	modelStack.Scale(2.5, 2.5, 2.5);
 	modelStack.Rotate(-90, 0, 1, 0);
 	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
@@ -1086,17 +1089,90 @@ void SP2::RenderRecRoom()
 {
 	//SOFA
 	modelStack.PushMatrix();
-	modelStack.Translate(155, 2, 65);
-	modelStack.Scale(2, 2, 2);
+	modelStack.Translate(150, 5, 75);
+	modelStack.Scale(5, 8, 5);
 	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
 	modelStack.PopMatrix();
 
-	//SPEAKER
 	modelStack.PushMatrix();
-	modelStack.Translate(10, 17, 10);
-	modelStack.Scale(2, 2, 2);
+	modelStack.Translate(145, 3, 60);
+	modelStack.Scale(2,1,2);
+	RenderMesh(meshList[GEO_TABLE], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(160, 5, 60);
+	modelStack.Scale(5, 8, 5);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+
+	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(145, 10, 60);
+	modelStack.Scale(3, 3, 3);
+	modelStack.Rotate(180, 0, 1, 0);
 	RenderMesh(meshList[GEO_SPEAKERS], true, toggleLight);
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(162, 5, -7);
+	modelStack.Scale(5, 7, 2);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(162, 5, 7);
+	modelStack.Scale(5, 7, 2);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(142, 5, -7);
+	modelStack.Scale(5, 7, 2);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(142, 5, 7);
+	modelStack.Scale(5, 7, 2);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(90, 2, 70);
+	modelStack.Scale(2.5 , 2.5 , 2.5);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(90, 5, -12);
+	modelStack.Scale(5, 8, 5);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(75, 5, 6);
+	modelStack.Scale(5, 8, 5);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[GEO_SOFA], true, toggleLight);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(91, 3, 6);
+	modelStack.Scale(2, 1, 2);
+	modelStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[GEO_TABLE], true, toggleLight);
+	modelStack.PopMatrix();
+
+
+
+
 }
 
 void SP2::RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y)

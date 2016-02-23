@@ -260,9 +260,15 @@ private:
 	void RenderCode();
 
 	//Jump
-	bool isJump = false;
-	bool isFalling = false;
-	float moving = 100;    // modify this value to change speed of jump  
+	int acceleration;
+	int time;
+	int firstvelo;
+	int secondvelo;
+	int distance;
+	int gravity; 
+	int firstpos;
+
+	bool onGround;
 
 	//Mining Interactions     
 	bool NearCrystal;

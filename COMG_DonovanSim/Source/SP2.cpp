@@ -24,6 +24,14 @@ void SP2::Init()
 	wearSuitText = false;
 	wearSuit = false;
 
+	//JUmp
+	acceleration = -0.5;
+	firstvelo = 5;
+	secondvelo = 0;
+	time = 1;
+	distance = 0; 
+	gravity = -10;
+	firstpos = 0;
 
 	NearCrystal = false;
 	HoldCrystal = false;
@@ -366,32 +374,17 @@ void SP2::Update(double dt)
     }
 
 	//JUMP
-	if (isFalling == true)
-	{
-		camera5.position.y -= 20 * dt; // "gravity" when falling , modify this value to change how fast player falls 
-	}
-	if (camera5.position.y != 17)
-	{
-		isFalling = true; //sets falling state to true once player is off the ground 
-	}
-	if (camera5.position.y <= 17)
-	{
-		isFalling = false; //sets falling state to false once player is on the ground  
-	}
 	if (Application::IsKeyPressed(VK_SPACE))
 	{
-		camera5.position.y += moving * dt;
-		moving -= 10;  // modify this value to change how long player can jump  
-		if (moving < 0)
-		{
-			moving = 0;
-		}
-	}
-	if (isFalling == false)
-	{
-		moving = 100;  // resets gravity once player hits the ground
-	}
+		firstpos = camera5.position.y;  
+		/*
+		secondvelo = firstvelo + (acceleration * time * time);
+		firstvelo = secondvelo;
 
+		distance = ( (secondvelo * time) + (0.5 * acceleration * time * time) )  ;
+		camera5.position.y += distance * dt;
+		*/
+	}
 	//Mining   
 	if ((camera5.position.x <= -80 && camera5.position.x >= -120) && (camera5.position.z <= -80 && camera5.position.z >= -120))
 	{
