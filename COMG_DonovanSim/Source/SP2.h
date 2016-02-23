@@ -29,6 +29,8 @@
 
 #include <vector>
 #include <sstream>
+#include <cstdlib>
+#include <time.h>
 
 class SP2 : public Scene
 {
@@ -231,7 +233,7 @@ private:
 	//Jump
 
 	int acceleration;
-	int time;
+	int t;
 	int firstvelo;
 	int secondvelo;
 	int distance;
@@ -242,9 +244,15 @@ private:
 
 
 	//Mining Interactions     
-	bool NearCrystal;
-	bool HoldCrystal;
+	bool CrystalText;
+	int CrystalNo = 100;
+	int posxcheck; 
+	int poszcheck; 
+	int crystalcount;
 
+	int xcoords[100];
+	int zcoords[100];
+	int rendercrystal[100];
 
 
 	//Shorthand codes for easier coding (Gary's)
@@ -265,7 +273,7 @@ private:
 	void RenderRecRoom();
 	void RenderCafeRoom();
 	void RenderBunkRoom();
-
+	void RenderCrystals();
 
 
 	void RenderSkybox();
