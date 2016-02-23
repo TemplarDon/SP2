@@ -1,5 +1,9 @@
 #include "SP2.h"
 
+static float ROT_LIMIT = 45.f;
+static float SCALE_LIMIT = 5.f;
+float FramesPerSecond = 0;
+
 SP2::SP2()
 {
 }
@@ -11,7 +15,14 @@ SP2::~SP2()
 
 void SP2::Init()
 {
-    //Bools
+	LoadShaderCodes();
+	LoadLights();
+
+	//variable to rotate geometry
+	rotateAngle = 0;
+
+	//Bools
+
 	NearVendingText = false;
 	TokenOnScreen = false;
 	RenderCoke = false;
@@ -20,48 +31,38 @@ void SP2::Init()
 	PickUpTokenText = false;
 	DisplayCafeMenu = false;
 	YesShowCafeMenu = false;
+	toggleLight = true;
+
+	thirdPersonCamera.SetMouseEnabled(false);
 
 	//Floats
+
 	TokenTranslate = 11;
 	TextTranslate = 20;
 	TestRotation = 90;
 
-	LoadShaderCodes();
-	LoadLights();
-
-
-    //variable to rotate geometry
-    rotateAngle = 0;
-    toggleLight = true;
-
 	heightOfWall = 12;
 
 
-    // Starting Pos Of Player
-	startingPos.Set(250, 17, 30);
-    startingPosPtr = &startingPos;
+	startingCharPos = charPos = { 150, 17, -36 };
 
-    // Starting Pos of Ship
-    shipStartingPos.Set(75, 18, 150);
-    shipStartingPosPtr = &shipStartingPos;
+	shipStartingPos = shipPos = { 75, 18, 150 };
     shipHorizontalRotateAngle = 0;
     shipVerticalRotateAngle = 0;
-
-	charPos = { 150, 17, -36 };
     //Initialize camera settings (Gary's)
     //camera5.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
     //thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
 
     //Initialize camera settings (Don's)
-    camera5.Init(Vector3(startingPos.x, startingPos.y, startingPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), shipStartingPosPtr, 10);
+	camera5.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
+    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 10);
 
     // Init Cam Pointer
     camPointer = &camera5;
 
     // Init Player
-    somePlayer.setPlayerStats("TestMan", "Human", 100, *startingPosPtr, camera5); // Name, Race, Money, Pos, camera
-	//somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, camera5); // Name, Race, Money, Pos, camera
+	//somePlayer.setPlayerStats("TestMan", "Human", 100, playerStartingPos, camera5); // Name, Race, Money, Pos, camera
+	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, camera5); // Name, Race, Money, Pos, camera
 
     LoadMeshes();
 
@@ -71,11 +72,10 @@ void SP2::Init()
     Mtx44 projection;
     projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
     projectionStack.LoadMatrix(projection);
-}
 
-static float ROT_LIMIT = 45.f;
-static float SCALE_LIMIT = 5.f;
-float FramesPerSecond = 0;
+	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
+	thirdPersonCamera.SetCameraDistanceAbsolute(60);
+}
 
 void SP2::Update(double dt)
 {
@@ -94,161 +94,141 @@ void SP2::Update(double dt)
     {
         thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
     }
-   
     
-	TestRotation += float( dt * 100);
-    
-    
-    //VENDING
-	if (camera5.position.x > 100 && camera5.position.x < 123 && camera5.position.z > 5 && camera5.position.z < 35)
+	TestRotation += float(dt * 100);
+
+	//Movements with OBJs. NOTE: Cameras should have a name to define.
+	if (camPointer == &thirdPersonCamera)
 	{
-		NearVendingText = true;
-	}
-	else
-	{
-		NearVendingText = false;
-	}
-
-
-	//INTERACTABLEOBJS DECTECTION
-	Vector3 view = (camera5.target - camera5.position).Normalized();
-
-
-	//VENDING MACHINE
-	for (int i = 0; InteractablesList.size() > i; i++)
-	{
-		if (InteractablesList[i].name == "vending")
+		Vector3 view = (camPointer->target - camPointer->position).Normalized();
+		if (Application::IsKeyPressed('W'))
 		{
+			shipPos.x += view.x;
+			shipPos.y += view.y;
+			shipPos.z += view.z;
+		}
+	}
 
-			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
+	//Interactions with OBJs.
+	if (camPointer == &camera5)
+	{
+		Vector3 viewDirection = (camera5.target - camera5.position).Normalized();
+		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+		{
+			if (i->name == "vending")
 			{
-				NearVendingText = true;
-				if (Application::IsKeyPressed('Q'))
+				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
 				{
-					TextTranslate = 100;
-					TokenOnScreen = false;
-					RenderCoke = true;
-					ConsumeCokeText = true;
-				}
+					NearVendingText = true;
+					if (Application::IsKeyPressed('Q'))
+					{
+						TextTranslate = 100;
+						TokenOnScreen = false;
+						RenderCoke = true;
+						ConsumeCokeText = true;
+					}
 
-				if (Application::IsKeyPressed('U'))
+					if (Application::IsKeyPressed('U'))
+					{
+						ConsumeCokeText = false;
+						RenderCoke = false;
+					}
+				}
+				else
 				{
+					NearVendingText = false;
 					ConsumeCokeText = false;
 					RenderCoke = false;
 				}
 			}
-			else
+
+			else if (i->name == "token")
 			{
-				NearVendingText = false;
-				ConsumeCokeText = false;
-				RenderCoke = false;
-			}
 
-		}
-	}
-
-	//TOKEN
-	for (int i = 0; InteractablesList.size() > i; i++)
-	{
-		if (InteractablesList[i].name == "token")
-		{
-
-			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
-			{
-				PickUpTokenText = true;
-
-				if (Application::IsKeyPressed('Q'))
+				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
 				{
-					TokenOnScreen = true;
-					TokenTranslate = 10.5;
-				}
-			}
-			else
-			{
-				PickUpTokenText = false;
-			}
-		}
-	}
+					PickUpTokenText = true;
 
-
-	//COUNTER
-	for (int i = 0; InteractablesList.size() > i; i++)
-	{
-		if (InteractablesList[i].name == "counter")
-		{
-
-			if (InteractablesList[i].isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), view) == true)
-			{
-				testText = true;
-				if (Application::IsKeyPressed('Y'))
-				{
-					YesShowCafeMenu = true;
-				}
-
-				if (YesShowCafeMenu == true)
-				{
-					DisplayCafeMenu = true;
+					if (Application::IsKeyPressed('Q'))
+					{
+						TokenOnScreen = true;
+						TokenTranslate = 10.5;
+					}
 				}
 				else
 				{
-					DisplayCafeMenu = false;
+					PickUpTokenText = false;
 				}
 			}
-			else
+
+			else if (i->name == "counter")
 			{
-				testText = false;
-				DisplayCafeMenu = false;
-				YesShowCafeMenu = false;
+				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
+				{
+					testText = true;
+					if (Application::IsKeyPressed('Y')) YesShowCafeMenu = true;
+					DisplayCafeMenu = YesShowCafeMenu;
+				}
+				else
+				{
+					testText = false;
+					DisplayCafeMenu = false;
+					YesShowCafeMenu = false;
+				}
 			}
 		}
 	}
 
-    // Ship Animation
-    if (thirdPersonCamera.yawingLeft == true && shipHorizontalRotateAngle >= -20) { shipHorizontalRotateAngle += (float)(10 * dt); }
-    if (thirdPersonCamera.yawingRight == true && shipHorizontalRotateAngle <= 20) { shipHorizontalRotateAngle -= (float)(10 * dt); }
-    if (thirdPersonCamera.pitchingDown == true && shipVerticalRotateAngle >= -20) { shipVerticalRotateAngle += (float)(10 * dt); }
-    if (thirdPersonCamera.pitchingUp == true && shipHorizontalRotateAngle <= 20) { shipVerticalRotateAngle -= (float)(10 * dt); }
-    
-    // Reset Ship to original orientation
-    if (thirdPersonCamera.yawingRight == false )
-    {
-        if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
-        {
-            shipHorizontalRotateAngle += (float)(2 * dt);
-        }
-    }
+	shipHorizontalRotateAngle += (float)(30 * dt);
 
-    if (thirdPersonCamera.yawingLeft == false)
-    {
-        if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
-        {
-            shipHorizontalRotateAngle -= (float)(2 * dt);
-        }
+    //// Ship Animation
+    //if (thirdPersonCamera.yawingLeft == true && shipHorizontalRotateAngle >= -20) { shipHorizontalRotateAngle += (float)(10 * dt); }
+    //if (thirdPersonCamera.yawingRight == true && shipHorizontalRotateAngle <= 20) { shipHorizontalRotateAngle -= (float)(10 * dt); }
+    //if (thirdPersonCamera.pitchingDown == true && shipVerticalRotateAngle >= -20) { shipVerticalRotateAngle += (float)(10 * dt); }
+    //if (thirdPersonCamera.pitchingUp == true && shipHorizontalRotateAngle <= 20) { shipVerticalRotateAngle -= (float)(10 * dt); }
+    //
+    //// Reset Ship to original orientation
+    //if (thirdPersonCamera.yawingRight == false )
+    //{
+    //    if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
+    //    {
+    //        shipHorizontalRotateAngle += (float)(2 * dt);
+    //    }
+    //}
 
-    }
+    //if (thirdPersonCamera.yawingLeft == false)
+    //{
+    //    if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
+    //    {
+    //        shipHorizontalRotateAngle -= (float)(2 * dt);
+    //    }
 
-    if (thirdPersonCamera.pitchingDown == false)
-    {
-        if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
-        {
-            shipVerticalRotateAngle += (float)(2 * dt);
-        }
-    }
+    //}
 
-    if (thirdPersonCamera.pitchingUp == false)
-    {
-        if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
-        {
-            shipVerticalRotateAngle -= (float)(2 * dt);
-        }
+    //if (thirdPersonCamera.pitchingDown == false)
+    //{
+    //    if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
+    //    {
+    //        shipVerticalRotateAngle += (float)(2 * dt);
+    //    }
+    //}
 
-    }
+    //if (thirdPersonCamera.pitchingUp == false)
+    //{
+    //    if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
+    //    {
+    //        shipVerticalRotateAngle -= (float)(2 * dt);
+    //    }
+
+    //}
 
     // Ship Creation
-    if (Application::IsKeyPressed('E'))
+    if (Application::IsKeyPressed('E') && ShipList.size() == 0)
     {
         // Space Ship Template
-        meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
+		//WHY SHOULD YOU LOAD A MESH IN THE MIDDLE OF THE PROGRAM? WHO WAS DOING IT? (comment by Gary Goh)
+        //meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
+
         Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0));
         someShip.setRequirements(50, 500);
 
@@ -293,17 +273,18 @@ void SP2::Update(double dt)
 
     }
 
->>>>>>> origin/master
 }
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
+	bool F = Application::IsKeyPressed('F');
+
     Vector3 view = (camera5.target - camera5.position).Normalized();
     for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
     {
         if (i->isInView(somePlayer.pos, view) == true)
         {
-            if (Application::IsKeyPressed('F'))
+            if (F)
             {
                 if (somePlayer.getCameraType() == "first")
                 {

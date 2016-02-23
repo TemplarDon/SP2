@@ -26,9 +26,6 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 	this->position = F - camDirection * camDistance;
 	this->target = F;
 	this->up = right.Cross(camDirection);
-
-    this->canMoveBuilding = true;
-    this->canMoveInteractable = true;
     this->yawingLeft = false;
     this->yawingRight = false;
     this->pitchingDown = false;
@@ -40,20 +37,25 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 
 void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
 {
-    float mouseSpeed = 10;
-    float horizontalAngle = 0; 
-    float verticalAngle = 0; 
+	float mouseSpeed = 10;
 
-    horizontalAngle += mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
-    verticalAngle += mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
+	if (mouseEnabled)
+	{
+		float horizontalAngle = mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
+		float verticalAngle = mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
 
-    YawCamera(horizontalAngle);
-    PitchCamera(verticalAngle);
+		YawCamera(horizontalAngle);
+		PitchCamera(verticalAngle);
+	}
 
-    shipTurningAnimation(Application::mouseX, Application::mouseY);
-    cameraMovement(dt, InteractablesList, BuildingsList, somePlayer);
+	shipTurningAnimation(Application::mouseX, Application::mouseY);
 
 	Refocus();
+}
+
+void ThirdPersonCamera::SetMouseEnabled(const bool &toggle)
+{
+	mouseEnabled = toggle;
 }
 
 void ThirdPersonCamera::YawCamera(const float degrees)
@@ -139,190 +141,6 @@ Position* ThirdPersonCamera::GetFocusPoint()
 void ThirdPersonCamera::SetFocusPoint(Position *focus)
 {
 	this->focus = focus;
-}
-
-void ThirdPersonCamera::cameraMovement(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
-{
-    Vector3 view = (target - position).Normalized();
-    if (Application::IsKeyPressed('W'))
-    {
-        view = (target - position).Normalized();
-        for (int i = 0; i < InteractablesList.size(); ++i)
-        {
-            if (InteractablesList[i].canMove == true)
-            {
-                canMoveInteractable = true;
-            }
-            else
-            {
-                canMoveInteractable = false;
-                break;
-            }
-        }
-
-        for (int i = 0; i < BuildingsList.size(); ++i)
-        {
-            if (BuildingsList[i].canMove == true)
-            {
-                canMoveBuilding = true;
-            }
-            else
-            {
-                canMoveBuilding = false;
-                break;
-            }
-        }
-
-        if (canMoveBuilding == true && canMoveInteractable == true)
-        {
-            position += view;
-            target += view;
-
-            somePlayer.pos.x += view.x;
-            somePlayer.pos.y += view.y;
-            somePlayer.pos.z += view.x;
-
-            focus->x += view.x;
-            focus->y += view.y;
-            focus->z += view.z;
-        }
-
-    }
-
-    //if (Application::IsKeyPressed('S'))
-    //{
-    //    view = (target - position).Normalized();
-    //    int offSetCount = 0;
-    //    for (int i = 0; i < InteractablesList.size(); ++i)
-    //    {
-    //        if (InteractablesList[i].canMove == true)
-    //        {
-    //            canMoveInteractable = true;
-    //        }
-    //        else
-    //        {
-    //            canMoveInteractable = false;
-    //            break;
-    //        }
-    //    }
-
-    //    for (int i = 0; i < BuildingsList.size(); ++i)
-    //    {
-    //        if (BuildingsList[i].canMove == true)
-    //        {
-    //            canMoveBuilding = true;
-    //        }
-    //        else
-    //        {
-    //            canMoveBuilding = false;
-    //            break;
-    //        }
-    //    }
-
-    //    if (canMoveBuilding == true && canMoveInteractable == true)
-    //    {
-    //        position = position - view;
-    //        target = target - view;
-
-    //        somePlayer.pos.x -= view.x;
-    //        somePlayer.pos.y -= view.y;
-    //        somePlayer.pos.z -= view.x;
-
-    //        focus->x -= view.x;
-    //        focus->y -= view.y;
-    //        focus->z -= view.z;
-    //    }
-    //}
-
-    //if (Application::IsKeyPressed('D'))
-    //{
-    //    Vector3 right = view.Cross(up);
-    //    right.Normalize();
-    //    view = (target - position).Normalized();
-    //    int offSetCount = 0;
-    //    for (int i = 0; i < InteractablesList.size(); ++i)
-    //    {
-    //        if (InteractablesList[i].canMove == true)
-    //        {
-    //            canMoveInteractable = true;
-    //        }
-    //        else
-    //        {
-    //            canMoveInteractable = false;
-    //            break;
-    //        }
-    //    }
-
-    //    for (int i = 0; i < BuildingsList.size(); ++i)
-    //    {
-    //        if (BuildingsList[i].canMove == true)
-    //        {
-    //            canMoveBuilding = true;
-    //        }
-    //        else
-    //        {
-    //            canMoveBuilding = false;
-    //            break;
-    //        }
-    //    }
-
-    //    if (canMoveBuilding == true && canMoveInteractable == true)
-    //    {
-    //        position += right.Normalized();
-    //        target += right.Normalized();
-
-    //        somePlayer.pos.x += right.Normalized().x;
-    //        somePlayer.pos.z += right.Normalized().z;
-
-    //        focus->x += right.Normalized().x;
-    //        focus->z += right.Normalized().z;
-    //    }
-    //}
-
-    //if (Application::IsKeyPressed('A'))
-    //{
-    //    Vector3 right = view.Cross(up);
-    //    right.Normalize();
-    //    view = (target - position).Normalized();
-    //    int offSetCount = 0;
-    //    for (int i = 0; i < InteractablesList.size(); ++i)
-    //    {
-    //        if (InteractablesList[i].canMove == true)
-    //        {
-    //            canMoveInteractable = true;
-    //        }
-    //        else
-    //        {
-    //            canMoveInteractable = false;
-    //            break;
-    //        }
-    //    }
-
-    //    for (int i = 0; i < BuildingsList.size(); ++i)
-    //    {
-    //        if (BuildingsList[i].canMove == true)
-    //        {
-    //            canMoveBuilding = true;
-    //        }
-    //        else
-    //        {
-    //            canMoveBuilding = false;
-    //            break;
-    //        }
-    //    }
-
-    //    if (canMoveBuilding == true && canMoveInteractable == true)
-    //    {
-    //        position -= right.Normalized();
-    //        target -= right.Normalized();
-
-    //        somePlayer.pos.x -= right.Normalized().x;
-    //        somePlayer.pos.z -= right.Normalized().z;
-
-    //        focus->x -= right.Normalized().x;
-    //        focus->z -= right.Normalized().z;
-    //    }
-    //}
 }
 
 void ThirdPersonCamera::shipTurningAnimation(float yaw, float pitch)

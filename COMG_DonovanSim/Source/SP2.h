@@ -137,7 +137,6 @@ public:
     virtual void Render();
     virtual void Exit();
 private:
-    Position charPos;
 
     unsigned m_vertexArrayID;
     unsigned m_vertexBuffer[NUM_GEOMETRY];
@@ -151,13 +150,16 @@ private:
 
     Player somePlayer;
 
-    // Starting posisiton of player
-    Position startingPos;
-    Position * startingPosPtr;
+	//Starting position for player
+
+	Position startingCharPos;
+    Position charPos;
 
     // Starting position for ship
+
     Position shipStartingPos;
-    Position * shipStartingPosPtr;
+	Position shipPos;
+	
 
     // Variable to allow ship to rotate while moving
     float shipHorizontalRotateAngle;
@@ -178,12 +180,8 @@ private:
     bool toggleLight;
     void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
-    void RenderSkybox();
-    void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
 
-    // Functions to create a room. (initRoomTemplate to have collision, RenderRoomTemplate to render)
-    void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
-    void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
+    void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
 
     // Init Ship Builder & Ship Ptr
     ShipBuilder ShipBuilder;
@@ -197,22 +195,6 @@ private:
 
     Dual_Wings DualWings;
     Quad_Wings QaudWings;
-
-    // Function to Init & Render SpaceShip
-    void initSpaceShip();
-    void RenderSpaceShip();
-
-	void RenderTradingStation();
-	void RenderRecRoom();
-	void RenderCafeRoom();
-
-
-    void RenderText(Mesh* mesh, std::string text, Color color);
-    void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void RenderTokenOnScreen(Mesh* mesh, float size, float x, float y);
-	void RenderCokeOnScreen(Mesh* mesh, float size, float x, float y);
-	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
-	void RenderHandOnScreen(Mesh* mesh, float size, float x, float y);
 
 
 	float TokenTranslate;
@@ -232,12 +214,42 @@ private:
 
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 
+
+
 	//Shorthand codes for easier coding (Gary's)
+
 	void LoadShaderCodes();
 	void LoadLights();
 	void LoadMeshes();
 	void ReadKeyPresses();
 	void RenderCode();
+
+
+
+	// Function to Init & Render SpaceShip
+
+	void initSpaceShip();
+	void RenderSpaceShip();
+
+	void RenderTradingStation();
+	void RenderRecRoom();
+	void RenderCafeRoom();
+
+
+	void RenderSkybox();
+	void RenderText(Mesh* mesh, std::string text, Color color);
+	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderTokenOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderCokeOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderHandOnScreen(Mesh* mesh, float size, float x, float y);
+
+
+
+	// Functions to create a room. (initRoomTemplate to have collision, RenderRoomTemplate to render)
+
+	void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
+	void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 };
 
 #endif

@@ -233,8 +233,8 @@ void SP2::LoadMeshes()
 	InteractablesList.push_back(vending);
 
 	//CHAIR
-	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chair.obj");
-	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//Chair.tga");
+	/*meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chair.obj");
+	meshList[GEO_CHAIR]->textureID = LoadTGA("Image//Chair.tga");*/
 
 	//Token
 	meshList[GEO_TOKEN] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Token.obj");
@@ -348,8 +348,10 @@ void SP2::ReadKeyPresses()
 		TokenOnScreen = true;
 		TokenTranslate = 10.5;
 	}
+}
 
 
+//Main Render code.
 void SP2::RenderCode()
 {
     //RENDER LIGHTBALL
@@ -359,9 +361,20 @@ void SP2::RenderCode()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(charPos.x, charPos.y, charPos.z);
+	modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 	modelStack.PopMatrix();
+
+	if (ShipList.size() > 0)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
+		modelStack.Scale(6, 6, 6);
+		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+		modelStack.PopMatrix();
+
+		RenderSpaceShip();
+	}
 
 
 	//RENDER SKYBOX
@@ -431,11 +444,6 @@ void SP2::RenderCode()
     //modelStack.Scale(4, 4, 4);
     //RenderMesh(meshList[GEO_SHIP], true, toggleLight);
     //modelStack.PopMatrix();
-
-    if (ShipList.size() > 0)
-    {
-        RenderSpaceShip();
-    }
 
 
 
@@ -721,20 +729,20 @@ void SP2::RenderCafeRoom()
 	RenderMesh(meshList[GEO_TABLE], true, toggleLight);
 	modelStack.PopMatrix();
 
-	//CHAIR 1
-	modelStack.PushMatrix();
-	modelStack.Translate(270, 2, 65);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_CHAIR], true, toggleLight);
-	modelStack.PopMatrix();
+	////CHAIR 1
+	//modelStack.PushMatrix();
+	//modelStack.Translate(270, 2, 65);
+	//modelStack.Scale(2, 2, 2);
+	//RenderMesh(meshList[GEO_CHAIR], true, toggleLight);
+	//modelStack.PopMatrix();
 
-	//CHAIR 2
-	modelStack.PushMatrix();
-	modelStack.Translate(290, 2, 65);
-	modelStack.Scale(2, 2, 2);
-	modelStack.Rotate(180, 0, 1, 0);
-	RenderMesh(meshList[GEO_CHAIR], true, toggleLight);
-	modelStack.PopMatrix();
+	////CHAIR 2
+	//modelStack.PushMatrix();
+	//modelStack.Translate(290, 2, 65);
+	//modelStack.Scale(2, 2, 2);
+	//modelStack.Rotate(180, 0, 1, 0);
+	//RenderMesh(meshList[GEO_CHAIR], true, toggleLight);
+	//modelStack.PopMatrix();
 
 	//TOKEN
 	modelStack.PushMatrix();
@@ -865,7 +873,7 @@ void SP2::RenderSpaceShip()
     // Start of SpaceShip
     modelStack.PushMatrix();
 
-    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y -10, thirdPersonCamera.GetFocusPoint()->z + 80);
+	modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
 
     //if (thirdPersonCamera.yawingLeft == true || thirdPersonCamera.yawingRight == true) { modelStack.Rotate(shipHorizontalRotateAngle, 0, 1, 0); }
     //if (thirdPersonCamera.pitchingDown == true || thirdPersonCamera.pitchingUp == true) { modelStack.Rotate(shipVerticalRotateAngle, 0, 0, 1); }

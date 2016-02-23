@@ -19,6 +19,7 @@ private:
 	float maxDistance;
 	float minPitch;
 	float maxPitch;
+	bool mouseEnabled;
 
 public:
 	Vector3 camDirection;
@@ -27,6 +28,8 @@ public:
 	~ThirdPersonCamera();
 	virtual void Init(const Vector3 position, const Vector3 up, Position *focus, const float camDistance);
     virtual void Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer);
+
+	void SetMouseEnabled(const bool &toggle);
 
 	void YawCamera(const float degrees);
 	void PitchCamera(float degrees);
@@ -42,8 +45,6 @@ public:
 
 	Position* GetFocusPoint();
 	void SetFocusPoint(Position *focus);
-
-    void cameraMovement(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer);
 
     // Variables for checking for collision
     bool canMoveInteractable;
