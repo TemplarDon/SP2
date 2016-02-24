@@ -32,13 +32,27 @@ Inventory::~Inventory()
 /******************************************************************************/
 /*!
 \brief
-    Function for adding money to player
+    Function for adding crystals to player
 
-\param  money
-    amount of money to be added
+\param  crystalsNum
+    amount of crystals to be added
 */
 /******************************************************************************/
-void Inventory::addMoney(int money)
+void Inventory::addCrystals(int crystalsNum)
 {
-    this->moneyAmount += money;
+    this->crystalAmount += crystalsNum;
+}
+
+/******************************************************************************/
+/*!
+\brief
+Function for getting crystals to player
+
+\return  
+    amount of crystals player inventory has
+*/
+/******************************************************************************/
+int Inventory::getCrystalsAmount()
+{
+    return this->crystalAmount;
 }

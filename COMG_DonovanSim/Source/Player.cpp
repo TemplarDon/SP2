@@ -175,7 +175,7 @@ void Player::setPlayerStats(string name, string race, int moneyAmount, Position 
     this->name = name;
     this->race = race;
     this->pos = pos;
-    this->playerInventory.addMoney(100);
+    this->playerInventory.addCrystals(100);
     this->cameraPtr = &someCamera;
 }
 

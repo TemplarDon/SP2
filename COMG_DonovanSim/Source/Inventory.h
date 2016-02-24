@@ -24,17 +24,19 @@ public:
     Inventory();
     ~Inventory();
 
-    // Money Amount
-    int moneyAmount;
-
     // List containing Items
     list<InteractableOBJs> itemList;
 
-    // Function to add Money to Player
-    void addMoney(int money);
+    // Function to add crystals to Player
+    void addCrystals(int crystalsNum);
     
+    // Function to get amount of crystals
+    int getCrystalsAmount();
+
 private:
 
+    // Crystal Amount
+    int crystalAmount;
 
 };
 
