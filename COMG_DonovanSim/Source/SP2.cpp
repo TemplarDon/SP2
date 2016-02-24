@@ -103,6 +103,9 @@ void SP2::Init()
 	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
 	thirdPersonCamera.SetCameraDistanceAbsolute(60);
 
+
+	camera5.Reset();
+
 	//Assigning coords to array  
     CrystalNo = 100;
 	for (int i = 0; i < CrystalNo; i++)
@@ -118,11 +121,12 @@ void SP2::Init()
 		InteractablesList.push_back(crystal);
 	}
 	crystalcount = 0;
+
 }
 
 void SP2::Update(double dt)
 {
-    FramesPerSecond = 1 / dt;
+	FramesPerSecond = 1 / dt;
 
 	ReadKeyPresses();
 
@@ -141,8 +145,58 @@ void SP2::Update(double dt)
     	    thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
     	}
     }
+
+	static unsigned firstFrames = 2;
+	if (firstFrames > 0)
+	{
+		camera5.Reset();
+		firstFrames--;
+	}
     
 	TestRotation += float(dt * 100);
+
+
+	//Movements with OBJs. NOTE: Cameras should have a name to define.
+	if (camPointer == &thirdPersonCamera)
+	{
+		Vector3 view = (camPointer->target - camPointer->position).Normalized();
+		if (Application::IsKeyPressed('W'))
+		{
+			shipPos.x += view.x;
+			shipPos.y += view.y;
+			shipPos.z += view.z;
+		}
+	}
+
+	//Interactions with OBJs.
+	if (camPointer == &camera5)
+	{
+		Vector3 viewDirection = (camera5.target - camera5.position).Normalized();
+		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+		{
+			if (!i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection)) continue;
+
+			if (i->name == "vending")
+			{
+				vendingMachineInteractions();
+			}
+
+			else if (i->name == "token")
+			{
+				tokenInteractions();
+			}
+
+			else if (i->name == "counter")
+			{
+				counterInteractions();
+			}
+
+			else if (i->name == "spacesuit")
+            {
+                spaceSuitInteractions();
+            }
+		}
+	}
 
 
     for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)

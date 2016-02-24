@@ -376,7 +376,19 @@ void SP2::LoadMeshes()
 
     initRoomTemplate(Position(120, 2, -100));
 
-    initSpaceShip(); 
+    initSpaceShip();
+
+	//Science Lab (Gary Goh's)
+	meshList[GEO_SCIENCELAB_TABLE] = MeshBuilder::GenerateOBJ("sciencelab_beaker", "OBJ//ScienceLab//table.obj");
+	meshList[GEO_SCIENCELAB_TABLE]->textureID = LoadTGA("Image//ScienceLab//table_uv.tga");
+
+	meshList[GEO_SCIENCELAB_CUPBOARD] = MeshBuilder::GenerateOBJ("sciencelab_cupboard", "OBJ//ScienceLab//cupboard.obj");
+	meshList[GEO_SCIENCELAB_CUPBOARD]->textureID = LoadTGA("Image//ScienceLab//cupboard_uv.tga");
+
+	meshList[GEO_SCIENCELAB_BEAKER] = MeshBuilder::GenerateOBJ("sciencelab_beaker", "OBJ//ScienceLab//beaker.obj");
+	meshList[GEO_SCIENCELAB_BEAKER]->textureID = LoadTGA("Image//ScienceLab//beaker_uv.tga");
+
+    initSpaceShip();
     // Helipad (Ship Spawn)
     meshList[GEO_HELIPAD] = MeshBuilder::GenerateOBJ("helipad", "OBJ//helipad.obj");
     meshList[GEO_HELIPAD]->textureID = LoadTGA("Image//helipadUV.tga");
@@ -500,18 +512,22 @@ void SP2::RenderCode()
 	//RENDER SKYBOX
 	RenderSkybox();
 
-
 	//RENDER CAFE
 	RenderCafeRoom();
 
 	//RENDER BUNK
 	RenderBunkRoom();
 
+
+	//Render Science Lab
+	RenderScienceLab();
+
 	//RENDER RECREATIONAL ROOM   
 	RenderRecRoom();
 
 	//RENDER RANDOM CRYSTAL GENERATION   
 	RenderCrystals();
+
 
 	//GROUND MESH
 	modelStack.PushMatrix();
@@ -1273,6 +1289,91 @@ void SP2::RenderRecRoom()
 
 }
 
+void SP2::RenderScienceLab()
+{
+	MS *m = &modelStack;
+
+	m->PushMatrix();
+	{
+		if (Application::IsKeyPressed(VK_NUMPAD0))
+		{
+			bool debug = true;
+		}
+
+		const float delta = 0.1f;
+
+		static float a = 1;
+		if (Application::IsKeyPressed(VK_NUMPAD4))
+			a += delta;
+		if (Application::IsKeyPressed(VK_NUMPAD1))
+			a -= delta;
+
+		static float b = 0;
+		if (Application::IsKeyPressed(VK_NUMPAD5))
+			b += delta;
+		if (Application::IsKeyPressed(VK_NUMPAD2))
+			b -= delta;
+
+		static float c = 1;
+		if (Application::IsKeyPressed(VK_NUMPAD6))
+			c += delta;
+		if (Application::IsKeyPressed(VK_NUMPAD3))
+			c -= delta;
+
+		m->Translate(120, 2, -100);
+
+		m->PushMatrix();
+		{
+			//Cupboard origin
+			m->Translate(30.5f, 0, -45);
+
+			//Beaker 1
+			m->PushMatrix();
+			{
+				m->Translate(8.5f, 9.6f, 0.5f);
+				m->Rotate(-32, 0, 1, 0);
+				m->Scale(1.9f, 1.9f, 1.9f);
+				RenderMesh(meshList[GEO_SCIENCELAB_BEAKER], false, toggleLight);
+			}
+			m->PopMatrix();
+
+			//Beaker 2
+			m->PushMatrix();
+			{
+				m->Translate(-6.2f, 15.75f, 1.3f);
+				m->Rotate(25, 0, 1, 0);
+				m->Scale(1.9f, 1.9f, 1.9f);
+				RenderMesh(meshList[GEO_SCIENCELAB_BEAKER], false, toggleLight);
+			}
+			m->PopMatrix();
+
+			m->Rotate(270, 0, 1, 0);
+			m->Scale(5.6f, 5.6f, 5.6f);
+			RenderMesh(meshList[GEO_SCIENCELAB_CUPBOARD], false, toggleLight);
+		}
+		m->PopMatrix();
+
+		m->PushMatrix();
+		{
+			m->Translate(16.6f, 0, 2.3f);
+			m->Rotate(0, 0, 1, 0);
+			m->Scale(4.5f, 4.5f, 4.5f);
+			RenderMesh(meshList[GEO_SCIENCELAB_TABLE], false, toggleLight);
+		}
+		m->PopMatrix();
+
+		m->PushMatrix();
+		{
+			m->Translate(-17.8f, 0, -2.3f);
+			m->Rotate(0, 0, 1, 0);
+			m->Scale(4.5f, 4.5f, 4.5f);
+			RenderMesh(meshList[GEO_SCIENCELAB_TABLE], false, toggleLight);
+		}
+		m->PopMatrix();
+	}
+	m->PopMatrix();
+}
+
 void SP2::RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -1493,4 +1594,3 @@ void SP2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float si
 
 	glEnable(GL_DEPTH_TEST);
 }
-
