@@ -38,7 +38,7 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
 	//view.y < 0.9396 && view.y > -09396
 
-	////Mouse - Bugged
+	//Mouse - Bugged
 	//int Angle = 50;
 	//horizontalAngle += mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
 	//if (verticalAngle + mouseSpeed * dt * float(1080 / 2 - Application::mouseY) < Angle && verticalAngle + mouseSpeed * dt * float(1080 / 2 - Application::mouseY) > -Angle)
@@ -55,12 +55,12 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
 	//up = Right.Cross(view);
 
-    //target = position + view.Normalized();
+ //   target = position + view.Normalized();
 
-
-    Vector3 view = (target - position).Normalized();
 
     // Mouse - DonoDon
+    Vector3 view = (target - position).Normalized();
+
     float yaw = 0;
     float pitch = 0;
 
@@ -93,7 +93,7 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
     if (Application::IsKeyPressed('W'))
     {
-        camPos.Set(position.x + view.x, position.y + view.y, position.z + view.z);
+        camPos.Set(position.x + view.x, position.Normalized().y + view.y, position.z + view.z);
         if (createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
         {
             position.x = position.x + view.x; // position = position + view
@@ -108,7 +108,7 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
     if (Application::IsKeyPressed('S'))
     {
-        camPos.Set(position.x - view.x, position.y - view.y, position.z - view.z);
+        camPos.Set(position.x - view.x, position.Normalized().y - view.y, position.z - view.z);
         if (createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
         {
             position.x = position.x - (target - position).Normalized().x; 
@@ -123,7 +123,7 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
     if (Application::IsKeyPressed('A'))
     {
-        camPos.Set(position.x - right.Normalized().x, position.Normalized().y - right.y, position.z - right.Normalized().z);
+        camPos.Set(position.x - right.Normalized().x, position.Normalized().y - right.Normalized().y, position.z - right.Normalized().z);
         if (createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
         {
             position -= right.Normalized();
@@ -136,7 +136,7 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
     if (Application::IsKeyPressed('D'))
     {
-        camPos.Set(position.x + right.Normalized().x, position.y + right.Normalized().y, position.z + right.Normalized().z);
+        camPos.Set(position.x + right.Normalized().x, position.Normalized().y + right.Normalized().y, position.z + right.Normalized().z);
         if (createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
         {
             position += right.Normalized();

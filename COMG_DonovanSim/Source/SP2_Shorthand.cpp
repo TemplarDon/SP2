@@ -183,6 +183,9 @@ void SP2::LoadMeshes()
 	meshList[GEO_GATETOP] = MeshBuilder::GenerateOBJ("wall", "OBJ//TESTDOOR.obj");
 	meshList[GEO_GATETOP]->textureID = LoadTGA("Image//gateTopUV.tga");
 
+    meshList[GEO_GATETOP2] = MeshBuilder::GenerateOBJ("wall", "OBJ//TESTDOOR2.obj");
+    meshList[GEO_GATETOP2]->textureID = LoadTGA("Image//gateTopUV.tga");
+
 	meshList[GEO_GATE] = MeshBuilder::GenerateOBJ("wall", "OBJ//gate.obj");
 	meshList[GEO_GATE]->textureID = LoadTGA("Image//gateUV.tga");
 
@@ -294,8 +297,22 @@ void SP2::LoadMeshes()
 
     initRoomTemplate(Position(250, 2, 30));  //CAFE ROOM
 
+    // Infirmary
     initRoomTemplate(Position(250, 2, -100));
+
+    meshList[GEO_HEALING_TUBE] = MeshBuilder::GenerateOBJ("healing tube", "OBJ//Infirmary Models//healingTube.obj");
+    meshList[GEO_HEALING_TUBE]->textureID = LoadTGA("Image//Infirmary Textures//healingTubeUV.tga");
+    InteractableOBJs healingTube = InteractableOBJs("healing tube", meshList[GEO_HEALING_TUBE]->maxPos, meshList[GEO_HEALING_TUBE]->minPos, Position(120 + 40, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
+    healingTube.setRequirements(25, 15);
+    InteractablesList.push_back(healingTube);
+
+    meshList[GEO_BED] = MeshBuilder::GenerateOBJ("hospital bed", "OBJ//Infirmary Models//hospitalBed.obj");
+    meshList[GEO_BED]->textureID = LoadTGA("Image//Infirmary Textures//hospitalBedUV.tga");
+    InteractableOBJs bed = InteractableOBJs("hospital bed", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(120 + 40, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
+    bed.setRequirements(25, 15);
+    InteractablesList.push_back(bed);
  
+
     // Armoury / Shop
     initRoomTemplate(Position(120, 2, 160));
 
@@ -360,7 +377,7 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	BuildingsList.push_back(rightWall2);
 
 	InteractableOBJs rightGateTop = InteractableOBJs("rightGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 15, pos.z + (groundMeshSize / 2)), 5, 0, Vector3(0, 0, 0));
-    rightGateTop.setRequirements(30, 100);
+    rightGateTop.setRequirements(30, 200);
     InteractablesList.push_back(rightGateTop);
 
 
@@ -371,7 +388,7 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	BuildingsList.push_back(leftWall2);
 
 	InteractableOBJs leftGateTop = InteractableOBJs("leftGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 15, pos.z - (groundMeshSize / 2)), 5, 0, Vector3(0, 0, 0));
-    leftGateTop.setRequirements(30, 100);
+    leftGateTop.setRequirements(30, 200);
     InteractablesList.push_back(leftGateTop);
 
 
@@ -381,8 +398,8 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	Building frontWall2 = Building("frontWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(frontWall2);
 
-    InteractableOBJs frontGateTop = InteractableOBJs("frontGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 15, pos.z), 5, 0, Vector3(0, 0, 0));
-    frontGateTop.setRequirements(30, 100);
+    InteractableOBJs frontGateTop = InteractableOBJs("frontGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 15, pos.z), 5, 0, Vector3(0, 0, 0));
+    frontGateTop.setRequirements(30, 200);
     InteractablesList.push_back(frontGateTop);
 
 
@@ -392,8 +409,8 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	Building backWall2 = Building("backWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(backWall2);
 
-    InteractableOBJs backGateTop = InteractableOBJs("backGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 15, pos.z), 5, 0, Vector3(0, 0, 0));
-    backGateTop.setRequirements(30, 100);
+    InteractableOBJs backGateTop = InteractableOBJs("backGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 15, pos.z), 5, 0, Vector3(0, 0, 0));
+    backGateTop.setRequirements(30, 200);
     InteractablesList.push_back(backGateTop);
 
 }
@@ -502,8 +519,12 @@ void SP2::RenderCode()
 
 	RenderRoomTemplate(Position(250, 2, 30));  //CAFE ROOM
 
+    // Infirmary
+    modelStack.PushMatrix();
 	RenderRoomTemplate(Position(250, 2, -100));
-
+    modelStack.Translate(250, 2, -100);
+    RenderInfirmary();
+    modelStack.PopMatrix();
 
     // Armoury / Shop
     modelStack.PushMatrix();
@@ -1278,6 +1299,55 @@ void SP2::RenderArmouryAndShop()
     RenderMesh(meshList[GEO_TARGET], true, toggleLight);
     modelStack.PopMatrix();
 
+    modelStack.PopMatrix();
+}
+
+void SP2::RenderInfirmary()
+{
+    modelStack.PushMatrix();
+    modelStack.Translate(40, 0, 30);
+    modelStack.Rotate(180, 0, 1, 0);
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_BED], true, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(20, 0, 30);
+    modelStack.Rotate(180, 0, 1, 0);
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_BED], true, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(-40, 0, 30);
+    modelStack.Rotate(180, 0, 1, 0);
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_BED], true, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(-20, 0, 30);
+    modelStack.Rotate(180, 0, 1, 0);
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_BED], true, toggleLight);
+    modelStack.PopMatrix();
+    
+    modelStack.PushMatrix();
+    modelStack.Translate(-30, 15, -30);
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_HEALING_TUBE], true, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(40, 0, -30);
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_BED], true, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(20, 0, -30);
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_BED], true, toggleLight);
     modelStack.PopMatrix();
 }
 

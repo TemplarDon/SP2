@@ -52,6 +52,7 @@ class SP2 : public Scene
 		GEO_WALL,
 		GEO_WALL2,
 		GEO_GATETOP,
+        GEO_GATETOP2,
 		GEO_GATE,
 		GEO_TESTDOOR,
 		GEO_HAND,
@@ -77,6 +78,10 @@ class SP2 : public Scene
         GEO_SHOOTING_RANGE,
         GEO_TARGET,
 
+
+        // Infirmary
+        GEO_BED,
+        GEO_HEALING_TUBE,
 
 		//NPCs
 		GEO_CHEF,
@@ -284,6 +289,7 @@ private:
 	void RenderCrystals();
 
     void RenderArmouryAndShop();
+    void RenderInfirmary();
 
 
 

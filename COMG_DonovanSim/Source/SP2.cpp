@@ -254,35 +254,25 @@ void SP2::Update(double dt)
             }
 
             // Door Opening & Closing - Don't Touch - Donovan
-            else if (i->name.find("frontGate") != string::npos)
+            else if (i->name.find("frontGate") != string::npos) // If InteractableOBJ is a frontGate
             {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
+                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) // If the frontGate is in view
                 {
                     gateOpening = true;
                     doorInteractions(dt, i, frontGateOffset);
                 }
-                else
-                {
-                    gateOpening = false;
-                }
-                
-                //else if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection) == false)
-                if (!gateOpening)
-                {
-                    doorClosing(dt, i, frontGateOffset);
-                }
-                
+                //else 
+                //{
+                //    gateOpening = false;
+                //    doorClosing(dt, i, frontGateOffset);
+                //}
+                //
             }
             else if (i->name.find("backGate") != string::npos)
             {
                 if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
                 {
                     doorInteractions(dt, i, backGateOffset);
-                }
-
-                else if(i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection) == false)
-                {
-                    doorClosing(dt, i, backGateOffset);
                 }
             }
             else if (i->name.find("leftGate") != string::npos)
@@ -291,23 +281,13 @@ void SP2::Update(double dt)
                 {
                     doorInteractions(dt, i, leftGateOffset);
                 }
-                
-                else if(i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection) == false)
-                {
-                    doorClosing(dt, i, leftGateOffset);
-                }
             }
             else if (i->name.find("rightGate") != string::npos)
             {
                 if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
                 {
                     doorInteractions(dt, i, rightGateOffset);
-                }
-                
-                else if(i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection) == false)
-                {
-                    doorClosing(dt, i, rightGateOffset);
-                }
+                }   
             }
 
             
@@ -323,6 +303,7 @@ void SP2::Update(double dt)
             */
         }
     }
+
 
     // Ship Creation - Don't Touch - Donovan
     if (Application::IsKeyPressed('E') && ShipList.size() == 0)
@@ -348,6 +329,8 @@ void SP2::Update(double dt)
 		distance = ((firstvelo * t) + (0.5 * acceleration * t * t));
 		firstPersonCamera.position.y += distance * dt;
         firstPersonCamera.target.y += distance * dt;
+
+        somePlayer.pos.y += distance * dt;
 	}
 
 	if (firstpos >= firstPersonCamera.position.y)
@@ -360,14 +343,11 @@ void SP2::Update(double dt)
 
 void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset)
 {
-    Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-
     if (gateOffset <= 35)
     {
         gateOffset += (float)(10 * dt);
         it->pos.y += (float)(10 * dt);
     }
-
 }
 
 void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset)
