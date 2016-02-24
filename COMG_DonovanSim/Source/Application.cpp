@@ -100,7 +100,8 @@ void Application::Init()
 		//return -1;
 	}
 
-   glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    glfwSetCursorPos(m_window, 1680 / 2, 1080 / 2);
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
 void Application::Run()
@@ -122,6 +123,7 @@ void Application::Run()
 
         glfwGetCursorPos(m_window, &mouseX, &mouseY, &mouseZ);
         glfwSetCursorPos(m_window, 1680 / 2, 1080 / 2);
+        
 
 	} //Check if the ESC key had been pressed or if the window had been closed
 	scene->Exit();

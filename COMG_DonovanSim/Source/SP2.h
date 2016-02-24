@@ -10,7 +10,7 @@
 #include "Application.h"
 #include "Scene.h"
 #include "Camera.h"
-#include "Camera5.h"
+#include "FirstPersonCamera.h"
 #include "ThirdPersonCamera.h"
 #include "Mesh.h"
 #include "MeshBuilder.h"
@@ -22,13 +22,15 @@
 #include "Node.h"
 #include "timer.h"
 
-#include "(SP2)InteractableOBJs.h"
-#include "(SP2)Building.h"
-#include "(SP2)Player.h"
-#include "(SP2)ShipBuilder.h"
+#include "InteractableOBJs.h"
+#include "Building.h"
+#include "Player.h"
+#include "ShipBuilder.h"
 
 #include <vector>
 #include <sstream>
+#include <cstdlib>
+#include <time.h>
 
 class SP2 : public Scene
 {
@@ -51,6 +53,7 @@ class SP2 : public Scene
 		GEO_WALL,
 		GEO_WALL2,
 		GEO_GATETOP,
+        GEO_GATETOP2,
 		GEO_GATE,
 		GEO_TESTDOOR,
 		GEO_HAND,
@@ -71,6 +74,16 @@ class SP2 : public Scene
 		GEO_BUNK,
 		GEO_SPACEMASK,
 
+        // ARMOURY / SHOP
+        GEO_GUN,
+        GEO_GUN_RACK,
+        GEO_SHOOTING_RANGE,
+        GEO_TARGET,
+
+
+        // Infirmary
+        GEO_BED,
+        GEO_HEALING_TUBE,
 
 		//NPCs
 
@@ -170,12 +183,10 @@ private:
     Player somePlayer;
 
 	//Starting position for player
-
 	Position startingCharPos;
     Position charPos;
 
     // Starting position for ship
-
     Position shipStartingPos;
 	Position shipPos;
 	
@@ -190,7 +201,7 @@ private:
 
     Camera *camPointer;
 
-	Camera5 camera5;
+	FirstPersonCamera firstPersonCamera;
 	ThirdPersonCamera thirdPersonCamera;
 
     MS modelStack, viewStack, projectionStack;
@@ -235,22 +246,38 @@ private:
 
     // Bools for Door
     
-    float gateOffset;
+    float leftGateOffset;
+    float rightGateOffset;
+    float frontGateOffset;
+    float backGateOffset;
+
     bool gateOpening;
-    bool gateClosing;
 
 
 
 	//Jump
-	
-	bool isJump = false;
-	bool isFalling = false;
-	float moving = 100;    // modify this value to change speed of jump
+
+	int acceleration;
+	int t;
+	int firstvelo;
+	int secondvelo;
+	int distance;
+	int gravity; 
+	int firstpos;
+
+	bool onGround;
+
 
 	//Mining Interactions     
-	bool NearCrystal;
-	bool HoldCrystal;
+	bool CrystalText;
+	int CrystalNo;
+	int posxcheck; 
+	int poszcheck; 
+	int crystalcount;
 
+	int xcoords[100];
+	int zcoords[100];
+	bool rendercrystal[100];
 
 
 	//Shorthand codes for easier coding (Gary's)
@@ -275,6 +302,12 @@ private:
 	void RenderBunkRoom();
 	void RenderScienceLab();
 
+	void RenderCrystals();
+
+    void RenderArmouryAndShop();
+    void RenderInfirmary();
+
+
 
 
 	void RenderSkybox();
@@ -293,12 +326,16 @@ private:
 	
     
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
-    void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
+    //void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
 	
     void vendingMachineInteractions();
     void tokenInteractions();
     void counterInteractions();
     void spaceSuitInteractions();
+    void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
+    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
+    void shipAnimation(double dt);
+    void shipCreation();
 
 
 	// Functions to create a room. (initRoomTemplate to have collision, RenderRoomTemplate to render)
