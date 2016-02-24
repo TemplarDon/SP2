@@ -71,12 +71,14 @@ class SP2 : public Scene
 		GEO_CAFETEXTBOX,
 		GEO_BUNK,
 		GEO_SPACEMASK,
+        GEO_HELIPAD,
 
         // ARMOURY / SHOP
         GEO_GUN,
         GEO_GUN_RACK,
         GEO_SHOOTING_RANGE,
         GEO_TARGET,
+        GEO_SHOP,
 
 
         // Infirmary
@@ -205,12 +207,14 @@ private:
 
     // Init Ship Parts
     Light_Hull LightHull;
+    Medium_Hull MediumHull;
+    Large_Hull LargeHull;
 
     G1_Engine G1Engine;
     G2_Engine G2Engine;
 
     Dual_Wings DualWings;
-    Quad_Wings QaudWings;
+    Quad_Wings QuadWings;
 
 	float TokenTranslate;
 	float TextTranslate;
