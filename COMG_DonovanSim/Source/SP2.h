@@ -47,6 +47,7 @@ class SP2 : public Scene
 		GEO_HANDS,
 
 		// For Testing / PlaceHolders
+
 		GEO_WALL,
 		GEO_WALL2,
 		GEO_GATETOP,
@@ -54,7 +55,8 @@ class SP2 : public Scene
 		GEO_TESTDOOR,
 		GEO_HAND,
 
-		//Buildings/OBJ   
+		//Buildings/OBJ 
+
 		GEO_TRADEPOST,
 		GEO_SPEAKERS,
 		GEO_SOFA,
@@ -71,11 +73,13 @@ class SP2 : public Scene
 
 
 		//NPCs
+
 		GEO_CHEF,
 		GEO_SPACEGUY,
 		GEO_SPACESUIT,
 
         //Space Ship
+
         GEO_SHIP,
         GEO_HULL,
         GEO_WINGS,
@@ -84,8 +88,17 @@ class SP2 : public Scene
         GEO_GROUND,
 
         //Mine
+
         GEO_MINE,
 		GEO_CRYSTAL,
+
+		//Science Lab
+
+		GEO_SCIENCELAB_TABLE,
+		GEO_SCIENCELAB_CUPBOARD,
+		GEO_SCIENCELAB_BEAKER,
+
+
         NUM_GEOMETRY,
 
     };
@@ -254,10 +267,13 @@ private:
 	void initSpaceShip();
 	void RenderSpaceShip();
 
+	// Rendering shorthands for specific areas.
+
 	void RenderTradingStation();
 	void RenderRecRoom();
 	void RenderCafeRoom();
 	void RenderBunkRoom();
+	void RenderScienceLab();
 
 
 

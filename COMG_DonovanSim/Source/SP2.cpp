@@ -92,11 +92,13 @@ void SP2::Init()
 
 	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
 	thirdPersonCamera.SetCameraDistanceAbsolute(60);
+
+	camera5.Reset();
 }
 
 void SP2::Update(double dt)
 {
-    FramesPerSecond = 1 / dt;
+	FramesPerSecond = 1 / dt;
 
 	ReadKeyPresses();
 
@@ -114,6 +116,13 @@ void SP2::Update(double dt)
     	    thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
     	}
     }
+
+	static unsigned firstFrames = 2;
+	if (firstFrames > 0)
+	{
+		camera5.Reset();
+		firstFrames--;
+	}
     
 	TestRotation += float(dt * 100);
 
@@ -135,75 +144,26 @@ void SP2::Update(double dt)
 		Vector3 viewDirection = (camera5.target - camera5.position).Normalized();
 		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
 		{
+			if (!i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection)) continue;
+
 			if (i->name == "vending")
 			{
-				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
-				{
-					NearVendingText = true;
-					if (Application::IsKeyPressed('Q'))
-					{
-						TextTranslate = 100;
-						TokenOnScreen = false;
-						RenderCoke = true;
-						ConsumeCokeText = true;
-					}
-
-					if (Application::IsKeyPressed('U'))
-					{
-						ConsumeCokeText = false;
-						RenderCoke = false;
-					}
-				}
-				else
-				{
-					NearVendingText = false;
-					ConsumeCokeText = false;
-					RenderCoke = false;
-				}
+				vendingMachineInteractions();
 			}
 
 			else if (i->name == "token")
 			{
-
-				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
-				{
-					PickUpTokenText = true;
-
-					if (Application::IsKeyPressed('Q'))
-					{
-						TokenOnScreen = true;
-						TokenTranslate = 10.5;
-					}
-				}
-				else
-				{
-					PickUpTokenText = false;
-				}
+				tokenInteractions();
 			}
 
 			else if (i->name == "counter")
 			{
-				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
-				{
-					testText = true;
-					if (Application::IsKeyPressed('Y')) YesShowCafeMenu = true;
-					DisplayCafeMenu = YesShowCafeMenu;
-				}
-				else
-				{
-					testText = false;
-					DisplayCafeMenu = false;
-					YesShowCafeMenu = false;
-				}
+				counterInteractions();
 			}
 
 			else if (i->name == "spacesuit")
             {
                 spaceSuitInteractions();
-            }
-            else
-            {
-                wearSuitText = false;
             }
 		}
 	}
