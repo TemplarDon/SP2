@@ -10,6 +10,7 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
 #include "InteractableOBJs.h"
+#include "ShipParts.h"
 
 /*************************************************************************************************/
 /*!
@@ -26,6 +27,7 @@ public:
 
     // List containing Items
     list<InteractableOBJs> itemList;
+    list<ShipParts> shipPartsList;
 
     // Function to add crystals to Player
     void addCrystals(int crystalsNum);

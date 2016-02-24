@@ -338,14 +338,21 @@ private:
     void spaceSuitInteractions();
     void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
     void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
+    void shopInteractions();
     void shipAnimation(double dt);
     void shipCreation();
 
 
 	// Functions to create a room. (initRoomTemplate to have collision, RenderRoomTemplate to render)
-
 	void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 	void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
+
+    // TEMP BOOLS FOR SHIP BUILDING
+    bool askedHull;
+    bool askedWings;
+    bool askedEngine;
+    bool askedShipBuild;
+    bool shipBuilt;
 };
 
 #endif

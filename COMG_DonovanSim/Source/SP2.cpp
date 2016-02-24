@@ -41,6 +41,11 @@ void SP2::Init()
 	wearSuitText = false;
 	wearSuit = false;
 
+    askedEngine = false;
+    askedHull = false;
+    askedWings = false;
+    askedShipBuild = false;
+    shipBuilt = false;
 
 	//JUmp
 	acceleration = -1;
@@ -357,16 +362,33 @@ void SP2::Update(double dt)
             wearSuitText = false;
             }
             */
+
+            else if (i->name == "shop")
+            {
+                //if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection))
+                //{
+                    if (Application::IsKeyPressed('E'))
+                    {
+                        askedShipBuild = true;
+                        askedHull = true;
+                    }
+               /* }*/
+
+            }
         }
     }
 
 
     // Ship Creation - Don't Touch - Donovan
-    if (Application::IsKeyPressed('E') && ShipList.size() == 0)
-    {
-        shipCreation();
-    }
+    //if (Application::IsKeyPressed('E') && ShipList.size() == 0)
+    //{
+    //    shipCreation();
+    //}
 
+    if (askedShipBuild)
+    {
+        shopInteractions();
+    }
 
     
 	//JUMP
@@ -467,7 +489,13 @@ void SP2::shipCreation()
 
     shipTemplatePtr = &someShip;
 
-    ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LargeHull, QuadWings, G1Engine));
+    //for (list<ShipParts>::iterator it = somePlayer.getParts().begin; it != somePlayer.getParts().end(); ++it)
+    //{
+
+    //}
+
+    //ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LargeHull, QuadWings, G1Engine));
+    ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, somePlayer.getParts()));
 
     // Load Meshes for specific ship parts
     for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
@@ -572,6 +600,69 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
             }
         }
     }
+}
+
+void SP2::shopInteractions()
+{
+    if (askedHull)
+    {
+        if (Application::IsKeyPressed('1'))
+        {
+            somePlayer.addPart(LightHull);
+            askedHull = false;
+            askedWings = true;
+        }
+        else if (Application::IsKeyPressed('2'))
+        {
+            somePlayer.addPart(MediumHull);
+            askedHull = false;
+            askedWings = true;
+        }
+        else if (Application::IsKeyPressed('3'))
+        {
+            somePlayer.addPart(LargeHull);
+            askedHull = false;
+            askedWings = true;
+        }
+    }
+
+    if (askedWings)
+    {
+        if (Application::IsKeyPressed('4'))
+        {
+            somePlayer.addPart(DualWings);
+            askedWings = false;
+            askedEngine = true;
+        }
+        else if (Application::IsKeyPressed('5'))
+        {
+            somePlayer.addPart(QuadWings);
+            askedWings = false;
+            askedEngine = true;
+        }
+    }
+
+    if (askedEngine)
+    {
+        if (Application::IsKeyPressed('6'))
+        {
+            somePlayer.addPart(G1Engine);
+            askedEngine = false; 
+            shipCreation();
+            askedShipBuild = false;
+            shipBuilt = true;
+        }
+        else if (Application::IsKeyPressed('7'))
+        {
+            somePlayer.addPart(G2Engine);
+            askedEngine = false;
+            shipCreation();
+            askedShipBuild = false;
+            shipBuilt = true;
+        }
+    }
+    
+
 }
 
 void SP2::vendingMachineInteractions()

@@ -71,6 +71,34 @@ void Player::removeItem(InteractableOBJs itemName)
 /******************************************************************************/
 /*!
 \brief
+    Function for adding ShipPart to player's inventory
+
+\param  partsName
+    ShipParts containing part's name that is to be added
+*/
+/******************************************************************************/
+void Player::addPart(ShipParts partsName)
+{
+    this->playerInventory.shipPartsList.push_back(partsName);
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Function for getting ShipPart from player's inventory
+
+\return  
+    Returns a list of ShipParts
+*/
+/******************************************************************************/
+list<ShipParts> Player::getParts()
+{
+    return this->playerInventory.shipPartsList;
+}
+
+/******************************************************************************/
+/*!
+\brief
     Function for player taking damage
 
 \param  damageTaken

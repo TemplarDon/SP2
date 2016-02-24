@@ -497,7 +497,7 @@ void SP2::RenderCode()
 	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 	modelStack.PopMatrix();
 
-	if (ShipList.size() > 0)
+	if (ShipList.size() > 0 && shipBuilt == true)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
@@ -534,36 +534,6 @@ void SP2::RenderCode()
 	modelStack.Scale(1000, 1000, 1000);
 	RenderMesh(meshList[GEO_QUAD], true, toggleLight);
 	modelStack.PopMatrix();
-
-	////GROUND MESH
-	//modelStack.PushMatrix();
-	//modelStack.Translate(250, 0, 50);
-	//RenderMesh(meshList[GEO_HAND], true, toggleLight);
-	//modelStack.PopMatrix();
-
-	////RenderHand
-	//RenderHandOnScreen(meshList[GEO_HAND], 5, 1, 1);
-
-
-	//TRADING STATION
-	//modelStack.PushMatrix();
-	//RenderRoomTemplate(Position(100, 2, 0));
-	//modelStack.Translate(100, 2, 0);
-	//RenderTradingStation();
-	//modelStack.PopMatrix();
-
-	////RENDER ROOM (WALLS)
-	//RenderRoomTemplate(Position(20, 2, 0));     //RECREATIONAL ROOM
-
-
-	//RENDER ROOM (WALLS)
-	//RenderRoomTemplate(Position(150, 2, 0));   //CAFE
-
-	////RENDER ROOM (WALLS)
-	//RenderRoomTemplate(Position(280, 2, 0));   //SPACE ENGINE ROOM
-
-	////RENDER ROOM (WALLS)
-	//RenderRoomTemplate(Position(150, 2, 150));   //BUNK ROOM
 
 	RenderRoomTemplate(Position(250, 2, 160));   
 
@@ -685,6 +655,20 @@ void SP2::RenderCode()
     else
     {
         RenderTextOnScreen(meshList[GEO_TEXT], "GATE CLOSE", Color(1, 0, 0), 2, 8, 12);
+    }
+
+    // Tests for shipBuilding
+    if (askedHull)
+    {
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light  | 2. Medium | 3. Large ", Color(1, 0, 0), 2, 8, 14);
+    }
+    if (askedWings)
+    {
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual  | 5. Quad ", Color(1, 0, 0), 2, 8, 14);
+    }
+    if (askedEngine)
+    {
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine  | 7. G2 Engine ", Color(1, 0, 0), 2, 8, 14);
     }
 }
 
