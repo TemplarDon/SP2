@@ -10,7 +10,7 @@
 #ifndef INTERACTABLE_OBJ_H
 #define INTERACTABLE_OBJ_H
 
-#include "(SP2)CollisionOBJs.h"
+#include "CollisionOBJs.h"
 
 /*************************************************************************************************/
 /*!

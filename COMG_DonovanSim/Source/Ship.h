@@ -10,9 +10,9 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#include "(SP2)InteractableOBJs.h"
-#include "(SP2)AllParts.h"
-#include "(SP2)AllUpgrades.h"
+#include "InteractableOBJs.h"
+#include "AllParts.h"
+#include "AllUpgrades.h"
 
 /*************************************************************************************************/
 /*!

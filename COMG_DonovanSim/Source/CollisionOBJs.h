@@ -10,7 +10,7 @@
 #ifndef COLLISION_OBJ_H
 #define COLLISION_OBJ_H
 
-#include "(SP2)GameObject.h"
+#include "GameObject.h"
 
 /*************************************************************************************************/
 /*!

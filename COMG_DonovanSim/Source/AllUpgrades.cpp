@@ -1,23 +1,36 @@
 /*************************************************************************************************/
 /*!
-\file   Wings.cpp
+\file   AllUpgrades.cpp
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-    Contains code for Wings class
+Contains code for initialising every ship upgrade and the part's upgrade on the ship
 */
 /*************************************************************************************************/
-#include "(SP2)Wings.h"
+#include "AllUpgrades.h"
 
 /******************************************************************************/
 /*!
 \brief
-    Wings Constructor
+    Nitro_Boost Constructor
+
 \param  name
-    name of Wing Object
+    name of Nitro_Boost Part (Eg. Nitro Boost)
 */
 /******************************************************************************/
-Wings::Wings(string name) : ShipParts(name)
+Nitro_Boost::Nitro_Boost() : Ship_Upgrade("Nitro_Boost")
+{
+
+}
+
+
+/******************************************************************************/
+/*!
+\brief
+    Nitro_Boost Destructor
+*/
+/******************************************************************************/
+Nitro_Boost::~Nitro_Boost()
 {
 
 }
@@ -25,10 +38,10 @@ Wings::Wings(string name) : ShipParts(name)
 /******************************************************************************/
 /*!
 \brief
-    Wings Destructor
+    Function for using a ship upgrade (Not Completed)
 */
 /******************************************************************************/
-Wings::~Wings()
+void Nitro_Boost::useUpgradeEffect()
 {
-
+   
 }

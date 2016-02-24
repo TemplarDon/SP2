@@ -19,7 +19,6 @@ const unsigned int frameTime = 1000 / FPS; // time for each frame
 double Application::mouseX = 0;
 double Application::mouseY = 0;
 double Application::mouseZ = 0;
-bool Application::mouseUnlock = false;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -100,11 +99,9 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
-    if (mouseUnlock == false)
-    {
-        glfwSetCursorPos(m_window, 1680 / 2, 1080 / 2);
-        glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-    }
+
+    glfwSetCursorPos(m_window, 1680 / 2, 1080 / 2);
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
 void Application::Run()
@@ -125,10 +122,8 @@ void Application::Run()
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
 
         glfwGetCursorPos(m_window, &mouseX, &mouseY, &mouseZ);
-        if (mouseUnlock == false)
-        {
-            glfwSetCursorPos(m_window, 1680 / 2, 1080 / 2);
-        }
+        glfwSetCursorPos(m_window, 1680 / 2, 1080 / 2);
+        
 
 	} //Check if the ESC key had been pressed or if the window had been closed
 	scene->Exit();

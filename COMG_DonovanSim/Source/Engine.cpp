@@ -1,36 +1,23 @@
 /*************************************************************************************************/
 /*!
-\file   AllUpgrades.cpp
+\file   Engine.cpp
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-Contains code for initialising every ship upgrade and the part's upgrade on the ship
+    Contains code for Engine class
 */
 /*************************************************************************************************/
-#include "(SP2)AllUpgrades.h"
+#include "Engine.h"
 
 /******************************************************************************/
 /*!
 \brief
-    Nitro_Boost Constructor
-
+    Engine Constructor
 \param  name
-    name of Nitro_Boost Part (Eg. Nitro Boost)
+    name of Engine
 */
 /******************************************************************************/
-Nitro_Boost::Nitro_Boost() : Ship_Upgrade("Nitro_Boost")
-{
-
-}
-
-
-/******************************************************************************/
-/*!
-\brief
-    Nitro_Boost Destructor
-*/
-/******************************************************************************/
-Nitro_Boost::~Nitro_Boost()
+Engine::Engine(string name) : ShipParts(name)
 {
 
 }
@@ -38,10 +25,10 @@ Nitro_Boost::~Nitro_Boost()
 /******************************************************************************/
 /*!
 \brief
-    Function for using a ship upgrade (Not Completed)
+    Engine Destructor
 */
 /******************************************************************************/
-void Nitro_Boost::useUpgradeEffect()
+Engine::~Engine()
 {
-   
+
 }

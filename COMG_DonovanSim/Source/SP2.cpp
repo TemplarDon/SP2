@@ -51,8 +51,7 @@ void SP2::Init()
 	firstpos = 0;
 	onGround = true;
 
-    gateClosing = false;
-    gateOpening = true;
+    gateOpening = false;
 
 	thirdPersonCamera.SetMouseEnabled(true);
 
@@ -64,7 +63,10 @@ void SP2::Init()
 	
 	SuitTranslate = 2;
 
-    gateOffset = 0;
+    leftGateOffset = 0;
+    rightGateOffset = 0;
+    frontGateOffset = 0;
+    backGateOffset = 0;
 
 	heightOfWall = 12;
 
@@ -75,19 +77,19 @@ void SP2::Init()
     shipHorizontalRotateAngle = 0;
     shipVerticalRotateAngle = 0;
     //Initialize camera settings (Gary's)
-    //camera5.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
+    //firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
     //thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
 
     //Initialize camera settings (Don's)
-	camera5.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
+	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
     thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 10);
 
     // Init Cam Pointer
-    camPointer = &camera5;
+    camPointer = &firstPersonCamera;
 
     // Init Player
-	//somePlayer.setPlayerStats("TestMan", "Human", 100, playerStartingPos, camera5); // Name, Race, Money, Pos, camera
-	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, camera5); // Name, Race, Money, Pos, camera
+	//somePlayer.setPlayerStats("TestMan", "Human", 100, playerStartingPos, firstPersonCamera); // Name, Race, Money, Pos, camera
+	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, firstPersonCamera); // Name, Race, Money, Pos, camera
 
     LoadMeshes();
 
@@ -102,6 +104,7 @@ void SP2::Init()
 	thirdPersonCamera.SetCameraDistanceAbsolute(60);
 
 	//Assigning coords to array  
+    CrystalNo = 10;
 	for (int i = 0; i < CrystalNo; i++)
 	{
 		xcoords[i] = rand() % 900 - 450;
@@ -123,14 +126,14 @@ void SP2::Update(double dt)
 
 	ReadKeyPresses();
 
-    createBoundBox(InteractablesList, BuildingsList);
+    //createBoundBox(InteractablesList, BuildingsList);
     interactionCheck(dt, InteractablesList, somePlayer);
 
 	if (!MENUBOOL)
 	{
     	if (somePlayer.getCameraType() == "first")
     	{
-    	    camera5.Update(dt, InteractablesList, BuildingsList, somePlayer);
+    	    firstPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
     	}
     	else
     	{
@@ -157,123 +160,169 @@ void SP2::Update(double dt)
     }
 
 	//Interactions with OBJs.
-	if (camPointer == &camera5)
-	{
-		Vector3 viewDirection = (camera5.target - camera5.position).Normalized();
-		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-		{
-			if (i->name == "crystal")
-			{
-				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
-				{
-					CrystalText = true;
-					posxcheck = i->pos.x; 
-					poszcheck = i->pos.z;
-					if (Application::IsKeyPressed('M'))
-					{
-						for (int i = 0; i < CrystalNo; i++)
-						{
-							if (posxcheck == xcoords[i])
-							{
-								for (int i = 0; i < CrystalNo; i++)
-								{
-									if (poszcheck == zcoords[i])
-									{
-										rendercrystal[i] = 0;
-										crystalcount += 1;
-                                        
-									}
-								}
-							}
-						}
-					}
-				}			
-			}
-			else if (i->name == "vending")
-			{
-				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
-				{
-					NearVendingText = true;
-					if (Application::IsKeyPressed('Q'))
-					{
-						TextTranslate = 100;
-						TokenOnScreen = false;
-						RenderCoke = true;
-						ConsumeCokeText = true;
-					}
-
-					if (Application::IsKeyPressed('U'))
-					{
-						ConsumeCokeText = false;
-						RenderCoke = false;
-					}
-				}
-				else
-				{
-					NearVendingText = false;
-					ConsumeCokeText = false;
-					RenderCoke = false;
-				}
-			}
-
-			else if (i->name == "token")
-			{
-
-				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
-				{
-					PickUpTokenText = true;
-
-					if (Application::IsKeyPressed('Q'))
-					{
-						TokenOnScreen = true;
-						TokenTranslate = 10.5;
-					}
-				}
-				else
-				{
-					PickUpTokenText = false;
-				}
-			}
-
-			else if (i->name == "counter")
-			{
-				if (i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection) == true)
-				{
-					testText = true;
-					if (Application::IsKeyPressed('Y')) YesShowCafeMenu = true;
-					DisplayCafeMenu = YesShowCafeMenu;
-				}
-				else
-				{
-					testText = false;
-					DisplayCafeMenu = false;
-					YesShowCafeMenu = false;
-				}
-			}
-			/*
-			else if (i->name == "spacesuit")
+    if (camPointer == &firstPersonCamera)
+    {
+        Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+        for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+        {
+            if (i->name == "crystal")
             {
-                spaceSuitInteractions();
+                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
+                {
+                    CrystalText = true;
+                    posxcheck = i->pos.x;
+                    poszcheck = i->pos.z;
+                    if (Application::IsKeyPressed('M'))
+                    {
+                        for (int i = 0; i < CrystalNo; i++)
+                        {
+                            if (posxcheck == xcoords[i])
+                            {
+                                for (int i = 0; i < CrystalNo; i++)
+                                {
+                                    if (poszcheck == zcoords[i])
+                                    {
+                                        rendercrystal[i] = 0;
+                                        crystalcount += 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (i->name == "vending")
+            {
+                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
+                {
+                    NearVendingText = true;
+                    if (Application::IsKeyPressed('Q'))
+                    {
+                        TextTranslate = 100;
+                        TokenOnScreen = false;
+                        RenderCoke = true;
+                        ConsumeCokeText = true;
+                    }
+
+                    if (Application::IsKeyPressed('U'))
+                    {
+                        ConsumeCokeText = false;
+                        RenderCoke = false;
+                    }
+                }
+                else
+                {
+                    NearVendingText = false;
+                    ConsumeCokeText = false;
+                    RenderCoke = false;
+                }
+            }
+
+            else if (i->name == "token")
+            {
+
+                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
+                {
+                    PickUpTokenText = true;
+
+                    if (Application::IsKeyPressed('Q'))
+                    {
+                        TokenOnScreen = true;
+                        TokenTranslate = 10.5;
+                    }
+                }
+                else
+                {
+                    PickUpTokenText = false;
+                }
+            }
+
+            else if (i->name == "counter")
+            {
+                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
+                {
+                    testText = true;
+                    if (Application::IsKeyPressed('Y')) YesShowCafeMenu = true;
+                    DisplayCafeMenu = YesShowCafeMenu;
+                }
+                else
+                {
+                    testText = false;
+                    DisplayCafeMenu = false;
+                    YesShowCafeMenu = false;
+                }
+            }
+
+            // Door Opening & Closing - Don't Touch - Donovan
+            else if (i->name.find("frontGate") != string::npos)
+            {
+                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
+                {
+                    gateOpening = true;
+                    doorInteractions(dt, i, frontGateOffset);
+                }
+                else
+                {
+                    gateOpening = false;
+                }
+                
+                //else if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection) == false)
+                if (!gateOpening)
+                {
+                    doorClosing(dt, i, frontGateOffset);
+                }
+                
+            }
+            else if (i->name.find("backGate") != string::npos)
+            {
+                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
+                {
+                    doorInteractions(dt, i, backGateOffset);
+                }
+
+                else if(i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection) == false)
+                {
+                    doorClosing(dt, i, backGateOffset);
+                }
+            }
+            else if (i->name.find("leftGate") != string::npos)
+            {
+                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
+                {
+                    doorInteractions(dt, i, leftGateOffset);
+                }
+                
+                else if(i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection) == false)
+                {
+                    doorClosing(dt, i, leftGateOffset);
+                }
+            }
+            else if (i->name.find("rightGate") != string::npos)
+            {
+                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
+                {
+                    doorInteractions(dt, i, rightGateOffset);
+                }
+                
+                else if(i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection) == false)
+                {
+                    doorClosing(dt, i, rightGateOffset);
+                }
+            }
+
+            
+            /*
+            else if (i->name == "spacesuit")
+            {
+            spaceSuitInteractions();
             }
             else
             {
-                wearSuitText = false;
+            wearSuitText = false;
             }
-			*/
-		}
-	}
-
-    
-    for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
-    {
-        // Gate Interaction - Don't Touch - Donovan
-        string gate = "Gate";
-        if (it->name.find(gate) != string::npos)
-        {
-            doorInteractions(dt);
+            */
         }
     }
-    
 
     // Ship Creation - Don't Touch - Donovan
     if (Application::IsKeyPressed('E') && ShipList.size() == 0)
@@ -281,13 +330,13 @@ void SP2::Update(double dt)
         shipCreation();
     }
 
-    // Ship Creation - Don't Touch - Donovan
+    // Ship Animation - Don't Touch - Donovan
     shipAnimation(dt);
     
 	//JUMP
 	if (Application::IsKeyPressed(VK_SPACE) &&  (onGround == true)) //s = ut + 0.5 at^2
 	{ 
-		firstpos = camera5.position.y;
+		firstpos = firstPersonCamera.position.y;
 		firstvelo = 50;
 		onGround = false;
 	}
@@ -297,80 +346,37 @@ void SP2::Update(double dt)
 		firstvelo = secondvelo;
 
 		distance = ((firstvelo * t) + (0.5 * acceleration * t * t));
-		camera5.position.y += distance * dt;
-		*/
+		firstPersonCamera.position.y += distance * dt;
+        firstPersonCamera.target.y += distance * dt;
 	}
 
-		if (firstpos >= camera5.position.y)
-		{
-			camera5.position.y = firstpos;
-			onGround = true;
-		}
+	if (firstpos >= firstPersonCamera.position.y)
+	{
+		firstPersonCamera.position.y = firstpos;
+		onGround = true;
 	}
+	
 }
 
-void SP2::doorInteractions(double dt)
+void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset)
 {
-    Vector3 view = (camera5.target - camera5.position).Normalized();
-    for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+    Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+
+    if (gateOffset <= 35)
     {
-        if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-        {
-            //it->setEffectOverBool(true);
-            gateOpening = true;
-
-            //Moving Gate Upwards
-            if (gateOpening)
-            {
-                if (gateOffset <= 35)
-                {
-                    gateOffset += (float)(dt);
-                    it->pos.y += gateOffset;
-                }
-
-            }
-
-        }
-        else
-        {
-            //it->setEffectOverBool(false);
-            gateOpening = false;
-
-            //Moving Gate Downwards
-            if (!gateOpening)
-            {
-                if (gateOffset > 0)
-                {
-                    gateOffset -= (float)(dt);
-                    it->pos.y -= gateOffset;
-                }
-            }
-        }
-
-
-
-        ////Moving Gate Upwards
-        //if (it->getEffectOverBool() == true)
-        //{
-        //    if (gateOffset <= 10)
-        //    {
-        //        gateOffset += (float)(dt);
-        //        it->pos.y += gateOffset;
-        //    }
-
-        //}
-
-        //// Moving Gate Downwards
-        //if (it->getEffectOverBool() == false)
-        //{
-        //    if (gateOffset > 0)
-        //    {
-        //        gateOffset -= (float)(dt);
-        //        it->pos.y -= gateOffset;
-        //    }
-        //}
+        gateOffset += (float)(10 * dt);
+        it->pos.y += (float)(10 * dt);
     }
 
+}
+
+void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset)
+{
+    if (gateOffset > 0)
+    {
+        gateOffset -= (float)(10 * dt);
+        it->pos.y -= (float)(10 * dt);
+    }
 }
 
 void SP2::shipAnimation(double dt)
@@ -468,7 +474,7 @@ void SP2::shipCreation()
 
 void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
-	Vector3 view = (camera5.target - camera5.position).Normalized();
+	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
     for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
     {
         if (i->isInView(somePlayer.pos, view) == true)
@@ -482,7 +488,7 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
                 }
                 else
                 {
-                    camPointer = &camera5;
+                    camPointer = &firstPersonCamera;
                     somePlayer.setCameraType("first");
                 }
             }
@@ -556,188 +562,6 @@ void SP2::spaceSuitInteractions()
     {
         wearSuit = false;
     }
-}
-
-void SP2::createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList)
-{
-	Position maxPos;
-	Position minPos;
-
-	Position cameraPos;
-
-	if (somePlayer.getCameraType() == "first")
-	{
-		Vector3 view = (camera5.target - camera5.position).Normalized();
-		cameraPos.x = camera5.position.x + view.x;
-		cameraPos.y = camera5.position.y + view.y;
-		cameraPos.z = camera5.position.z + view.z;
-	}
-	else
-	{
-		Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
-		cameraPos.x = thirdPersonCamera.GetFocusPoint()->x + view.x;
-		cameraPos.y = thirdPersonCamera.GetFocusPoint()->y + view.y;
-		cameraPos.z = thirdPersonCamera.GetFocusPoint()->z + view.z;
-	}
-
-
-	for (int i = 0; i < InteractablesList.size(); ++i)
-	{
-		maxPos.x = InteractablesList[i].maxPos.x;
-		maxPos.y = InteractablesList[i].maxPos.y;
-		maxPos.z = InteractablesList[i].maxPos.z;
-
-		minPos.x = InteractablesList[i].minPos.x;
-		minPos.y = InteractablesList[i].minPos.y;
-		minPos.z = InteractablesList[i].minPos.z;
-
-		// Scaling
-		maxPos.x = maxPos.x * InteractablesList[i].scaleOffSet;
-		maxPos.y = maxPos.y * InteractablesList[i].scaleOffSet;
-		maxPos.z = maxPos.z * InteractablesList[i].scaleOffSet;
-
-		minPos.x = minPos.x * InteractablesList[i].scaleOffSet;
-		minPos.y = minPos.y * InteractablesList[i].scaleOffSet;
-		minPos.z = minPos.z * InteractablesList[i].scaleOffSet;
-
-		// Rotation
-		Mtx44 rotation;
-		Vector3 tempMax;
-		Vector3 tempMin;
-
-		tempMax.x = maxPos.x;
-		tempMax.y = maxPos.y;
-		tempMax.z = maxPos.z;
-
-		tempMin.x = minPos.x;
-		tempMin.y = minPos.y;
-		tempMin.z = minPos.z;
-		if (InteractablesList[i].rotateAxis.x == 1)
-		{
-			rotation.SetToRotation(InteractablesList[i].rotateAngle, 1, 0, 0);
-			tempMax = rotation * tempMax;
-			tempMin = rotation * tempMin;
-		}
-		if (InteractablesList[i].rotateAxis.y == 1)
-		{
-			rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 1, 0);
-			tempMax = rotation * tempMax;
-			tempMin = rotation * tempMin;
-		}
-		if (InteractablesList[i].rotateAxis.z == 1)
-		{
-			rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 0, 1);
-			tempMax = rotation * tempMax;
-			tempMin = rotation * tempMin;
-		}
-
-		maxPos.x = tempMax.x;
-		maxPos.y = tempMax.y;
-		maxPos.z = tempMax.z;
-
-		minPos.x = tempMin.x;
-		minPos.y = tempMin.y;
-		minPos.z = tempMin.z;
-
-		// Translating
-		maxPos.x += InteractablesList[i].pos.x;
-		maxPos.y += InteractablesList[i].pos.y;
-		maxPos.z += InteractablesList[i].pos.z;
-
-		minPos.x += InteractablesList[i].pos.x;
-		minPos.y += InteractablesList[i].pos.y;
-		minPos.z += InteractablesList[i].pos.z;
-
-		if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
-		{
-			InteractablesList[i].canMove = true;
-		}
-		else
-		{
-			InteractablesList[i].canMove = false;
-		}
-	}
-
-
-	for (int i = 0; i < BuildingsList.size(); ++i)
-	{
-		maxPos.x = BuildingsList[i].maxPos.x;
-		maxPos.y = BuildingsList[i].maxPos.y;
-		maxPos.z = BuildingsList[i].maxPos.z;
-
-		minPos.x = BuildingsList[i].minPos.x;
-		minPos.y = BuildingsList[i].minPos.y;
-		minPos.z = BuildingsList[i].minPos.z;
-
-		// Scaling
-		maxPos.x = maxPos.x * BuildingsList[i].scaleOffSet;
-		maxPos.y = maxPos.y * BuildingsList[i].scaleOffSet;
-		maxPos.z = maxPos.z * BuildingsList[i].scaleOffSet;
-
-		minPos.x = minPos.x * BuildingsList[i].scaleOffSet;
-		minPos.y = minPos.y * BuildingsList[i].scaleOffSet;
-		minPos.z = minPos.z * BuildingsList[i].scaleOffSet;
-
-		// Rotation
-		Mtx44 rotation;
-		Vector3 tempMax;
-		Vector3 tempMin;
-
-		tempMax.x = maxPos.x;
-		tempMax.y = maxPos.y;
-		tempMax.z = maxPos.z;
-
-		tempMin.x = minPos.x;
-		tempMin.y = minPos.y;
-		tempMin.z = minPos.z;
-		if (BuildingsList[i].rotateAxis.x == 1)
-		{
-			rotation.SetToRotation(BuildingsList[i].rotateAngle, 1, 0, 0);
-			tempMax = rotation * tempMax;
-			tempMin = rotation * tempMin;
-		}
-		if (BuildingsList[i].rotateAxis.y == 1)
-		{
-			rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 1, 0);
-			tempMax = rotation * tempMax;
-			tempMin = rotation * tempMin;
-		}
-		if (BuildingsList[i].rotateAxis.z == 1)
-		{
-			rotation.SetToRotation(BuildingsList[i].rotateAngle, 0, 0, 1);
-			tempMax = rotation * tempMax;
-			tempMin = rotation * tempMin;
-		}
-
-		maxPos.x = tempMax.x;
-		maxPos.y = tempMax.y;
-		maxPos.z = tempMax.z;
-
-		minPos.x = tempMin.x;
-		minPos.y = tempMin.y;
-		minPos.z = tempMin.z;
-
-		// Translating
-		maxPos.x += BuildingsList[i].pos.x;
-		maxPos.y += BuildingsList[i].pos.y;
-		maxPos.z += BuildingsList[i].pos.z;
-
-		minPos.x += BuildingsList[i].pos.x;
-		minPos.y += BuildingsList[i].pos.y;
-		minPos.z += BuildingsList[i].pos.z;
-
-		if ((cameraPos.x > maxPos.x || cameraPos.x < minPos.x) || (cameraPos.y > maxPos.y || cameraPos.y < minPos.y) || (cameraPos.z > maxPos.z || cameraPos.z < minPos.z))
-		{
-			BuildingsList[i].canMove = true;
-		}
-		else
-		{
-			BuildingsList[i].canMove = false;
-		}
-
-	}
-
-
 }
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)

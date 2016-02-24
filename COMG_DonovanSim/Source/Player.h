@@ -10,9 +10,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "(SP2)InteractableOBJs.h"
-#include "(SP2)Inventory.h"
-#include "(SP2)Ship.h"
+#include "InteractableOBJs.h"
+#include "Inventory.h"
+#include "Ship.h"
 #include "Camera.h"
 
 /*************************************************************************************************/

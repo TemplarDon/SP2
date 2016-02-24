@@ -1,36 +1,34 @@
 /*************************************************************************************************/
 /*!
-\file   GameObject.cpp
+\file   Hull.cpp
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-Contains code for GameObject class
+    Contains code for Hull class
 */
 /*************************************************************************************************/
-#include "(SP2)GameObject.h"
+#include "Hull.h"
 
 /******************************************************************************/
 /*!
 \brief
-    GameObject Constructor
+    Hull Constructor
 \param  name
-    name of GameObject
-\param  pos
-    position of GameObject
+    name of Hull
 */
 /******************************************************************************/
-GameObject::GameObject(std::string name, Position pos)
-{ 
-    this->name = name;
-    this->pos = pos;
+Hull::Hull(string name) : ShipParts(name)
+{
+
 }
 
 /******************************************************************************/
 /*!
 \brief
-    GameObject Destructor
+    Hull Destructor
 */
 /******************************************************************************/
-GameObject::~GameObject()
+Hull::~Hull()
 {
+
 }

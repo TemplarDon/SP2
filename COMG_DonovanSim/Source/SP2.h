@@ -10,7 +10,7 @@
 #include "Application.h"
 #include "Scene.h"
 #include "Camera.h"
-#include "Camera5.h"
+#include "FirstPersonCamera.h"
 #include "ThirdPersonCamera.h"
 #include "Mesh.h"
 #include "MeshBuilder.h"
@@ -22,10 +22,10 @@
 #include "Node.h"
 #include "timer.h"
 
-#include "(SP2)InteractableOBJs.h"
-#include "(SP2)Building.h"
-#include "(SP2)Player.h"
-#include "(SP2)ShipBuilder.h"
+#include "InteractableOBJs.h"
+#include "Building.h"
+#include "Player.h"
+#include "ShipBuilder.h"
 
 #include <vector>
 #include <sstream>
@@ -183,7 +183,7 @@ private:
 
     Camera *camPointer;
 
-	Camera5 camera5;
+	FirstPersonCamera firstPersonCamera;
 	ThirdPersonCamera thirdPersonCamera;
 
     MS modelStack, viewStack, projectionStack;
@@ -228,9 +228,12 @@ private:
 
     // Bools for Door
     
-    float gateOffset;
+    float leftGateOffset;
+    float rightGateOffset;
+    float frontGateOffset;
+    float backGateOffset;
+
     bool gateOpening;
-    bool gateClosing;
 
 
 
@@ -249,7 +252,7 @@ private:
 
 	//Mining Interactions     
 	bool CrystalText;
-	int CrystalNo = 100;
+	int CrystalNo;
 	int posxcheck; 
 	int poszcheck; 
 	int crystalcount;
@@ -301,13 +304,14 @@ private:
 	
     
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
-    void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
+    //void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
 	
     void vendingMachineInteractions();
     void tokenInteractions();
     void counterInteractions();
     void spaceSuitInteractions();
-    void doorInteractions(double dt);
+    void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
+    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
     void shipAnimation(double dt);
     void shipCreation();
 

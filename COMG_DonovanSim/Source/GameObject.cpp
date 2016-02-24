@@ -1,34 +1,36 @@
 /*************************************************************************************************/
 /*!
-\file   Engine.cpp
+\file   GameObject.cpp
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-    Contains code for Engine class
+Contains code for GameObject class
 */
 /*************************************************************************************************/
-#include "(SP2)Engine.h"
+#include "GameObject.h"
 
 /******************************************************************************/
 /*!
 \brief
-    Engine Constructor
+    GameObject Constructor
 \param  name
-    name of Engine
+    name of GameObject
+\param  pos
+    position of GameObject
 */
 /******************************************************************************/
-Engine::Engine(string name) : ShipParts(name)
-{
-
+GameObject::GameObject(std::string name, Position pos)
+{ 
+    this->name = name;
+    this->pos = pos;
 }
 
 /******************************************************************************/
 /*!
 \brief
-    Engine Destructor
+    GameObject Destructor
 */
 /******************************************************************************/
-Engine::~Engine()
+GameObject::~GameObject()
 {
-
 }

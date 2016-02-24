@@ -1,44 +1,43 @@
 /*************************************************************************************************/
 /*!
-\file   Inventory.cpp
+\file   Ship_Upgrade.cpp
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-    Contains code for Inventory class
+    Contains code for Ship_Upgrade class and functions
 */
 /*************************************************************************************************/
-#include "(SP2)Inventory.h"
+#include "Ship_Upgrade.h"
 
 /******************************************************************************/
 /*!
 \brief
-    Inventory Constructor
+    Ship_Upgrade Constructor
+\param name
+    Ship_Upgrade's name
 */
 /******************************************************************************/
-Inventory::Inventory()
+Ship_Upgrade::Ship_Upgrade(string name) : name(name)
 {
+
 }
 
 /******************************************************************************/
 /*!
 \brief
-    Inventory Destructor
+    Ship_Upgrade Destructor
 */
 /******************************************************************************/
-Inventory::~Inventory()
+Ship_Upgrade::~Ship_Upgrade()
 {
+
 }
 
 /******************************************************************************/
 /*!
 \brief
-    Function for adding money to player
-
-\param  money
-    amount of money to be added
+    virtual function
 */
 /******************************************************************************/
-void Inventory::addMoney(int money)
-{
-    this->moneyAmount += money;
-}
+void Ship_Upgrade::useUpgradeEffect()
+{}

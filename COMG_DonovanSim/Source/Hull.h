@@ -10,7 +10,7 @@ Header File for the Hull Class, with parent class ShipParts
 #ifndef HULL_H
 #define HULL_H
 
-#include "(SP2)ShipParts.h"
+#include "ShipParts.h"
 
 /*************************************************************************************************/
 /*!

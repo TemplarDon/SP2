@@ -1,43 +1,58 @@
 /*************************************************************************************************/
 /*!
-\file   Ship_Upgrade.cpp
+\file   ShipParts.cpp
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-    Contains code for Ship_Upgrade class and functions
+    Contains code for ShipParts class and functions
 */
 /*************************************************************************************************/
-#include "(SP2)Ship_Upgrade.h"
+#include "ShipParts.h"
 
 /******************************************************************************/
 /*!
 \brief
-    Ship_Upgrade Constructor
-\param name
-    Ship_Upgrade's name
+    ShipBuilder Constructor
+\param  name
+    name of the Ship Part
 */
 /******************************************************************************/
-Ship_Upgrade::Ship_Upgrade(string name) : name(name)
+ShipParts::ShipParts(string name) : name(name)
 {
-
 }
 
 /******************************************************************************/
 /*!
 \brief
-    Ship_Upgrade Destructor
+    ShipBuilder Destructor
 */
 /******************************************************************************/
-Ship_Upgrade::~Ship_Upgrade()
+ShipParts::~ShipParts()
 {
-
 }
 
 /******************************************************************************/
 /*!
 \brief
-    virtual function
+    Function for getting name of Ship Part
+\return
+    returns a string containing the name of the Ship Part
 */
 /******************************************************************************/
-void Ship_Upgrade::useUpgradeEffect()
-{}
+string ShipParts::getName()
+{
+    return this->name;
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Function for the partsEffect
+\return
+    returns a value that is used to increase the ship's stats
+*/
+/******************************************************************************/
+int ShipParts::partsEffect()
+{
+    return 0;
+}

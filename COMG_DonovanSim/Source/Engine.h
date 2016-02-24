@@ -10,7 +10,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "(SP2)ShipParts.h"
+#include "ShipParts.h"
 
 /*************************************************************************************************/
 /*!

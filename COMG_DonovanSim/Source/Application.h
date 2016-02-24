@@ -18,7 +18,6 @@ public:
     static double mouseX;
     static double mouseY;
 	static double mouseZ;
-    static bool mouseUnlock;
 
 private:
 

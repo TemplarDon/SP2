@@ -11,9 +11,9 @@ Header File for Containing all Different Parts for the Ship
 #ifndef ALL_PARTS_H
 #define ALL_PARTS_H
 
-#include "(SP2)Wings.h"
-#include "(SP2)Engine.h"
-#include "(SP2)Hull.h"
+#include "Wings.h"
+#include "Engine.h"
+#include "Hull.h"
 
 /*************************************************************************************************/
 /*!

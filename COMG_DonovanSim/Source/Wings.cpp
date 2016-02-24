@@ -1,23 +1,23 @@
 /*************************************************************************************************/
 /*!
-\file   Hull.cpp
+\file   Wings.cpp
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-    Contains code for Hull class
+    Contains code for Wings class
 */
 /*************************************************************************************************/
-#include "(SP2)Hull.h"
+#include "Wings.h"
 
 /******************************************************************************/
 /*!
 \brief
-    Hull Constructor
+    Wings Constructor
 \param  name
-    name of Hull
+    name of Wing Object
 */
 /******************************************************************************/
-Hull::Hull(string name) : ShipParts(name)
+Wings::Wings(string name) : ShipParts(name)
 {
 
 }
@@ -25,10 +25,10 @@ Hull::Hull(string name) : ShipParts(name)
 /******************************************************************************/
 /*!
 \brief
-    Hull Destructor
+    Wings Destructor
 */
 /******************************************************************************/
-Hull::~Hull()
+Wings::~Wings()
 {
 
 }

@@ -1,25 +1,25 @@
 /*************************************************************************************************/
 /*!
-\file   Building.cpp
+\file   CollisionOBJs.cpp
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-    Contains code for initialising Building
+    Contains code for CollisionOBJs class
 */
 /*************************************************************************************************/
-#include "(SP2)Building.h"
+#include "CollisionOBJs.h"
 
 /******************************************************************************/
 /*!
 \brief
-    Building Constructor
+CollisionOBJs Constructor
 
 \param  name
-    name of Building (Eg. Wall 1)
+    name of CollisionOBJ (Eg. Wall 1)
 \param maxPos
-    maximum position of the building (used to create a collision box for collision detection)
-\param minPos                          
-    minimum position of the building (used to create a collision box for collision detection)
+    maximum position of the CollisionOBJ (used to create a collision box for collision detection)
+\param minPos
+    minimum position of the CollisionOBJ (used to create a collision box for collision detection)
 \param offSet
     offSet for moving the min and max positions, thus moving the collision box as well
 \param scaleOffSet
@@ -30,18 +30,24 @@
     axis to rotate collision box by (not working)
 */
 /******************************************************************************/
-Building::Building(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis) : CollisionOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
+CollisionOBJs::CollisionOBJs(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis) : GameObject(name, offSet)
 {
-    this->gateOffset = 0;
+    this->maxPos = maxPos;
+    this->minPos = minPos;
+    //this->offSet = offSet;
+    this->scaleOffSet = scaleOffSet;
+
+    this->rotateAngle = rotateAngle;
+    this->rotateAxis = rotateAxis;
 }
 
 /******************************************************************************/
 /*!
 \brief
-    Building Destructor
+    CollisionOBJs Destructor
 */
 /******************************************************************************/
-Building::~Building()
+CollisionOBJs::~CollisionOBJs()
 {
 
 }

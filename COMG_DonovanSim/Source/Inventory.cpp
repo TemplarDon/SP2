@@ -1,58 +1,44 @@
 /*************************************************************************************************/
 /*!
-\file   ShipParts.cpp
+\file   Inventory.cpp
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-    Contains code for ShipParts class and functions
+    Contains code for Inventory class
 */
 /*************************************************************************************************/
-#include "(SP2)ShipParts.h"
+#include "Inventory.h"
 
 /******************************************************************************/
 /*!
 \brief
-    ShipBuilder Constructor
-\param  name
-    name of the Ship Part
+    Inventory Constructor
 */
 /******************************************************************************/
-ShipParts::ShipParts(string name) : name(name)
+Inventory::Inventory()
 {
 }
 
 /******************************************************************************/
 /*!
 \brief
-    ShipBuilder Destructor
+    Inventory Destructor
 */
 /******************************************************************************/
-ShipParts::~ShipParts()
+Inventory::~Inventory()
 {
 }
 
 /******************************************************************************/
 /*!
 \brief
-    Function for getting name of Ship Part
-\return
-    returns a string containing the name of the Ship Part
-*/
-/******************************************************************************/
-string ShipParts::getName()
-{
-    return this->name;
-}
+    Function for adding money to player
 
-/******************************************************************************/
-/*!
-\brief
-    Function for the partsEffect
-\return
-    returns a value that is used to increase the ship's stats
+\param  money
+    amount of money to be added
 */
 /******************************************************************************/
-int ShipParts::partsEffect()
+void Inventory::addMoney(int money)
 {
-    return 0;
+    this->moneyAmount += money;
 }

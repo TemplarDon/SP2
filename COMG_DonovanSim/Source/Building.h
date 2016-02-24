@@ -10,7 +10,7 @@
 #ifndef BUILDING_H
 #define BUILDING_H
 
-#include "(SP2)CollisionOBJs.h"
+#include "CollisionOBJs.h"
 
 /*************************************************************************************************/
 /*!

@@ -7,7 +7,7 @@
 Contains code for initialising every ship part and the part's effect on the ship
 */
 /*************************************************************************************************/
-#include "(SP2)AllParts.h"
+#include "AllParts.h"
 
 /******************************************************************************/
 /*!

@@ -6,9 +6,9 @@
 
 #include "MyMath.h"
 
-#include "(SP2)Player.h"
-#include "(SP2)Building.h"
-#include "(SP2)Ship.h"
+#include "Player.h"
+#include "Building.h"
+#include "Ship.h"
 
 class ThirdPersonCamera : public Camera
 {

@@ -353,47 +353,47 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	BuildingsList.push_back(ceiling1);
 
 
-	Building rightWall1 = Building("rightWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+	Building rightWall1 = Building("rightWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(rightWall1);
 
-	Building rightWall2 = Building("rightWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+	Building rightWall2 = Building("rightWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(rightWall2);
 
 	InteractableOBJs rightGateTop = InteractableOBJs("rightGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 15, pos.z + (groundMeshSize / 2)), 5, 0, Vector3(0, 0, 0));
-    rightGateTop.setRequirements(10, 10);
+    rightGateTop.setRequirements(30, 100);
     InteractablesList.push_back(rightGateTop);
 
 
-	Building leftWall1 = Building("leftWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+	Building leftWall1 = Building("leftWall1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(leftWall1);
 
-	Building leftWall2 = Building("leftWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 12, 0, Vector3(0, 0, 0));
+	Building leftWall2 = Building("leftWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(leftWall2);
 
 	InteractableOBJs leftGateTop = InteractableOBJs("leftGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 15, pos.z - (groundMeshSize / 2)), 5, 0, Vector3(0, 0, 0));
-    leftGateTop.setRequirements(10, 10);
+    leftGateTop.setRequirements(30, 100);
     InteractablesList.push_back(leftGateTop);
 
 
-	Building frontWall1 = Building("frontWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 12, 0, Vector3(0, 0, 0));
+	Building frontWall1 = Building("frontWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(frontWall1);
 
-	Building frontWall2 = Building("frontWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 12, 0, Vector3(0, 0, 0));
+	Building frontWall2 = Building("frontWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(frontWall2);
 
     InteractableOBJs frontGateTop = InteractableOBJs("frontGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 15, pos.z), 5, 0, Vector3(0, 0, 0));
-    frontGateTop.setRequirements(10, 10);
+    frontGateTop.setRequirements(30, 100);
     InteractablesList.push_back(frontGateTop);
 
 
-	Building backWall1 = Building("backWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 12, 0, Vector3(0, 0, 0));
+	Building backWall1 = Building("backWall1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z - 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(backWall1);
 
-	Building backWall2 = Building("backWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 12, 0, Vector3(0, 0, 0));
+	Building backWall2 = Building("backWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(backWall2);
 
     InteractableOBJs backGateTop = InteractableOBJs("backGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 15, pos.z), 5, 0, Vector3(0, 0, 0));
-    backGateTop.setRequirements(10, 10);
+    backGateTop.setRequirements(30, 100);
     InteractablesList.push_back(backGateTop);
 
 }
@@ -532,7 +532,7 @@ void SP2::RenderCode()
 	// POSITION OF X Y Z
 	std::ostringstream ss;
 	ss.str("");
-	ss << "Position: X(" << camera5.position.x << ") Y(" << camera5.position.y << ") Z(" << camera5.position.z << ")";
+	ss << "Position: X(" << firstPersonCamera.position.x << ") Y(" << firstPersonCamera.position.y << ") Z(" << firstPersonCamera.position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
 	std::ostringstream as;
@@ -599,6 +599,16 @@ void SP2::RenderCode()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS M TO MINE THE CRYSTAL", Color(1, 0, 0), 2, 8, 14);
 	}
+
+    // Tests for door opening and closing
+    if (gateOpening == true)
+    {
+        RenderTextOnScreen(meshList[GEO_TEXT], "GATE OPEN", Color(1, 0, 0), 2, 8, 14);
+    }
+    else
+    {
+        RenderTextOnScreen(meshList[GEO_TEXT], "GATE CLOSE", Color(1, 0, 0), 2, 8, 12);
+    }
 }
 
 void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
@@ -646,7 +656,7 @@ void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-    modelStack.Translate(0, 15 + gateOffset, 0);
+    modelStack.Translate(0, 15 + rightGateOffset, 0);
     modelStack.Scale(3, 9, 3);
 	RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
 	modelStack.PopMatrix();
@@ -672,7 +682,7 @@ void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-    modelStack.Translate(0, 15 + gateOffset, 0);
+    modelStack.Translate(0, 15 + leftGateOffset, 0);
     modelStack.Scale(3, 9, 3);
 	RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
 	modelStack.PopMatrix();
@@ -698,7 +708,7 @@ void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-    modelStack.Translate(0, 15 + gateOffset, 0);
+    modelStack.Translate(0, 15 + frontGateOffset, 0);
 	modelStack.Rotate(90, 0, 1, 0);
     modelStack.Scale(3, 9, 3);
 	RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
@@ -725,7 +735,7 @@ void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-    modelStack.Translate(0, 15 + gateOffset, 0);
+    modelStack.Translate(0, 15 + backGateOffset, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(3, 9, 3);
 	RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
@@ -747,7 +757,7 @@ void SP2::RenderSkybox()
 
 	//if (somePlayer.getCameraType() == "first")
 	//{
-	//	modelStack.Translate(camera5.position.x, camera5.position.y, -249.5 + camera5.position.z);
+	//	modelStack.Translate(firstPersonCamera.position.x, firstPersonCamera.position.y, -249.5 + firstPersonCamera.position.z);
 	//}
 	//else
 	//{
@@ -767,7 +777,7 @@ void SP2::RenderSkybox()
 
 	//if (somePlayer.getCameraType() == "first")
 	//{
-	//	modelStack.Translate(camera5.position.x, camera5.position.y, 249.5 + camera5.position.z);
+	//	modelStack.Translate(firstPersonCamera.position.x, firstPersonCamera.position.y, 249.5 + firstPersonCamera.position.z);
 	//}
 	//else
 	//{
@@ -787,7 +797,7 @@ void SP2::RenderSkybox()
 
 	//if (somePlayer.getCameraType() == "first")
 	//{
-	//	modelStack.Translate(-249.5 + camera5.position.x, camera5.position.y, camera5.position.z);
+	//	modelStack.Translate(-249.5 + firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z);
 	//}
 	//else
 	//{
@@ -807,7 +817,7 @@ void SP2::RenderSkybox()
 
 	//if (somePlayer.getCameraType() == "first")
 	//{
-	//	modelStack.Translate(249.5 + camera5.position.x, camera5.position.y, camera5.position.z);
+	//	modelStack.Translate(249.5 + firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z);
 	//}
 	//else
 	//{
@@ -827,7 +837,7 @@ void SP2::RenderSkybox()
 
 	//if (somePlayer.getCameraType() == "first")
 	//{
-	//	modelStack.Translate(camera5.position.x, -249.5 + camera5.position.y, camera5.position.z);
+	//	modelStack.Translate(firstPersonCamera.position.x, -249.5 + firstPersonCamera.position.y, firstPersonCamera.position.z);
 	//}
 	//else
 	//{
@@ -846,7 +856,7 @@ void SP2::RenderSkybox()
 
 	//if (somePlayer.getCameraType() == "first")
 	//{
-	//	modelStack.Translate(camera5.position.x, 249.5 + camera5.position.y, camera5.position.z);
+	//	modelStack.Translate(firstPersonCamera.position.x, 249.5 + firstPersonCamera.position.y, firstPersonCamera.position.z);
 	//}
 	//else
 	//{

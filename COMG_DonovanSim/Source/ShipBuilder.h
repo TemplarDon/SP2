@@ -10,7 +10,7 @@
 #ifndef SHIP_BUILDER_H
 #define SHIP_BUILDER_H
 
-#include "(SP2)Ship.h"
+#include "Ship.h"
 
 /*************************************************************************************************/
 /*!

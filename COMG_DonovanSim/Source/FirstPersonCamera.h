@@ -3,19 +3,19 @@
 
 #include "Camera.h"
 
-#include "(SP2)Building.h"
-#include "(SP2)InteractableOBJs.h"
-#include "(SP2)Player.h"
+#include "Building.h"
+#include "InteractableOBJs.h"
+#include "Player.h"
 
-class Camera5 : public Camera
+class FirstPersonCamera : public Camera
 {
 public:
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;
 	Vector3 defaultUp;
 
-	Camera5();
-	~Camera5();
+	FirstPersonCamera();
+	~FirstPersonCamera();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
     virtual void Update(double dt, std::vector<InteractableOBJs>&InteractablesList, std::vector<Building>&BuildingsList, Player &somePlayer);
 	virtual void Reset();
@@ -26,6 +26,8 @@ public:
 
     bool canMoveBuilding;       // bool to check if camera can move through every obj in BuildingList vector
     bool canMoveInteractable;   // bool to check if camera can move through every obj in InteractableList vector
+
+    bool createBoundary(std::vector<InteractableOBJs>&InteractablesList, std::vector<Building>&BuildingsList, Player &somePlayer, Position camPos);
 };
 
 #endif

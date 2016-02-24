@@ -1,30 +1,31 @@
 /*************************************************************************************************/
 /*!
-\file   AllUpgrades.h
+\file   Wings.h
 \author Donovan Sim Yew Wee
 \par    email:donovandenzel@gmail.com
 \brief
-Header File for Containing all Different Upgrades for the Ship
+    Header File for the Wings Class, with parent class ShipParts
 */
 /*************************************************************************************************/
-#ifndef ALL_UPGRADES_H
-#define ALL_UPGARDES_H
+#ifndef WINGS_H
+#define WINGS_H
 
-#include "(SP2)Ship_Upgrade.h"
+#include "ShipParts.h"
 
 /*************************************************************************************************/
 /*!
-Class Nitro_Boost : public Ship_Upgrade
-\brief  Class Nitro_Boost, with parent class Ship_Upgarde, contains the useUpgradeEffect() function that will activate some effect (not implemented yet)
+Class Ship : public ShipParts
+\brief
+    Class Ship, with parent class ShipParts. Contains Constructor/ Destructor for Ship
 */
 /*************************************************************************************************/
-class Nitro_Boost : public Ship_Upgrade
+class Wings : public ShipParts
 {
 public:
-    Nitro_Boost();
-    ~Nitro_Boost();
+    Wings(string name);
+    ~Wings();
 
-    void useUpgradeEffect();
+private:
 };
 
 #endif
