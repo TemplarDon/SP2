@@ -559,7 +559,7 @@ void SP2::RenderCode()
 	std::ostringstream as;
 	as.str("");
 	as << "Crystals :" << crystalcount;
-	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 5);
+	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 7);
 	//VENDING TEXT
 	if (NearVendingText)
 	{
@@ -775,15 +775,6 @@ void SP2::RenderSkybox()
 {
 	// FRONT
 	modelStack.PushMatrix();
-
-	//if (somePlayer.getCameraType() == "first")
-	//{
-	//	modelStack.Translate(firstPersonCamera.position.x, firstPersonCamera.position.y, -249.5 + firstPersonCamera.position.z);
-	//}
-	//else
-	//{
-	//	modelStack.Translate(thirdPersonCamera.position.x, thirdPersonCamera.position.y, -249.5 + thirdPersonCamera.position.z);
-	//}
 
 	modelStack.Translate(somePlayer.pos.x, somePlayer.pos.y, -500 + somePlayer.pos.z);
 

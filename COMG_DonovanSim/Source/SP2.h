@@ -264,7 +264,7 @@ private:
 
 	int xcoords[100];
 	int zcoords[100];
-	int rendercrystal[100];
+	bool rendercrystal[100];
 
 
 	//Shorthand codes for easier coding (Gary's)

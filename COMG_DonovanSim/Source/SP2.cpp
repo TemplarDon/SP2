@@ -104,7 +104,7 @@ void SP2::Init()
 	thirdPersonCamera.SetCameraDistanceAbsolute(60);
 
 	//Assigning coords to array  
-    CrystalNo = 10;
+    CrystalNo = 100;
 	for (int i = 0; i < CrystalNo; i++)
 	{
 		xcoords[i] = rand() % 900 - 450;
@@ -126,6 +126,7 @@ void SP2::Update(double dt)
 
 	ReadKeyPresses();
 
+	CrystalText = false;
     //createBoundBox(InteractablesList, BuildingsList);
     interactionCheck(dt, InteractablesList, somePlayer);
 
@@ -169,27 +170,25 @@ void SP2::Update(double dt)
             {
                 if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
                 {
-                    CrystalText = true;
-                    posxcheck = i->pos.x;
-                    poszcheck = i->pos.z;
-                    if (Application::IsKeyPressed('M'))
-                    {
-                        for (int i = 0; i < CrystalNo; i++)
-                        {
-                            if (posxcheck == xcoords[i])
-                            {
-                                for (int i = 0; i < CrystalNo; i++)
-                                {
-                                    if (poszcheck == zcoords[i])
-                                    {
-                                        rendercrystal[i] = 0;
-                                        crystalcount += 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
+				CrystalText = true;
+				posxcheck = i->pos.x;
+				poszcheck = i->pos.z;
+				if (Application::IsKeyPressed('M'))
+					{
+					for (int i = 0; i < CrystalNo; i++)
+						{
+						if ((posxcheck == xcoords[i]) && (poszcheck == zcoords[i]) && (rendercrystal[i] == 1))
+							{
+							rendercrystal[i] = 0;
+							crystalcount += rand() % 10 + 1;
+							}
+						}
+					}
                 }
+				else
+				{
+
+				}
             }
             else if (i->name == "vending")
             {
