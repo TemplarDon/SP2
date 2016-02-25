@@ -280,6 +280,8 @@ private:
 	int xcoords[100];
 	int zcoords[100];
 	bool rendercrystal[100];
+	int coord1;
+	int coord2;
 
 
 	//SHORTHAND CODES FOR EASIER CODINGS (GARY'S)
@@ -349,6 +351,10 @@ private:
     bool askedEngine;
     bool askedShipBuild;
     bool shipBuilt;
+
+	//CRYSTAL RELATED STUFF   
+	bool checkCrystalPos(int xcoord, int zcoord, int i);
+
 };
 
 #endif

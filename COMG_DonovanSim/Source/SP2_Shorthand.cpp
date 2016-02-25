@@ -620,14 +620,14 @@ void SP2::RenderCode()
 	// POSITION OF X Y Z
 	std::ostringstream ss;
 	ss.str("");
-	ss << "Position: X(" << firstPersonCamera.position.x << ") Y(" << firstPersonCamera.position.y << ") Z(" << firstPersonCamera.position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
+	ss << "Coords :" << firstPersonCamera.position.x << " , "<< firstPersonCamera.position.y  << " , " << firstPersonCamera.position.z ;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 30);
 
 	//CRYSTAL COUNTS
 	std::ostringstream as;
 	as.str("");
 	as << "Crystals :" << crystalcount;
-	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 7);
+	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 33);
 	
 	//INVENTORY & HANDS
 	if (DisplayInventory == false)
