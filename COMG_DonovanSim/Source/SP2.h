@@ -71,6 +71,10 @@ class SP2 : public Scene
 		GEO_BUNK,
 		GEO_SPACEMASK,
 
+
+        // ARMOURY / SHOP
+
+
 		GEO_WINDOW,
 		GEO_HUD,
 		GEO_INVENTORY,
@@ -80,6 +84,7 @@ class SP2 : public Scene
 
 
         //ARMOURY / SHOP
+
         GEO_GUN,
         GEO_GUN_RACK,
         GEO_SHOOTING_RANGE,
@@ -87,7 +92,8 @@ class SP2 : public Scene
         GEO_SHOP,
 
 
-        //Infirmary
+        // Infirmary
+        
         GEO_BED,
         GEO_HEALING_TUBE,
 
@@ -115,6 +121,9 @@ class SP2 : public Scene
 		GEO_SCIENCELAB_TABLE,
 		GEO_SCIENCELAB_CUPBOARD,
 		GEO_SCIENCELAB_BEAKER,
+
+		//Keypad
+		GEO_KEYPAD,
 
 
         NUM_GEOMETRY,
@@ -259,6 +268,10 @@ private:
     float frontGateOffset;
     float backGateOffset;
     bool gateOpening;
+    bool frontGateOpening;
+    bool backGateOpening;
+    bool leftGateOpening;
+    bool rightGateOpening;
 
 	//JUMP (BECKHAM'S)
 	int acceleration;
@@ -334,8 +347,8 @@ private:
     void tokenInteractions();
     void counterInteractions();
     void spaceSuitInteractions();
-    void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
-    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
+    void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
+    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
     void shopInteractions();
     void shipAnimation(double dt);
     void shipCreation();
