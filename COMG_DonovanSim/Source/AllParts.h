@@ -111,11 +111,11 @@ Class Heavy_Hull : public Hull
 \brief  Class Heavy_Hull, with parent class Hull, contains the partsEffect() function that returns a int to use for increasing the ship's stats
 */
 /*************************************************************************************************/
-class Heavy_Hull : public Hull
+class Large_Hull : public Hull
 {
 public:
-    Heavy_Hull(string name = "LargeHull");
-    ~Heavy_Hull();
+    Large_Hull(string name = "LargeHull");
+    ~Large_Hull();
 
     int partsEffect();
 };

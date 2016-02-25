@@ -55,10 +55,27 @@ void SP2::Init()
 	MENUBOOL = false;
 	wearSuitText = false;
 	wearSuit = false;
+
 	DisplayInventory = false;
 	toggleLight = true;
 	wearSuitText = false;
 	wearSuit = false;
+
+
+    askedEngine = false;
+    askedHull = false;
+    askedWings = false;
+    askedShipBuild = false;
+    shipBuilt = false;
+
+	//JUmp
+	acceleration = -1;
+	firstvelo = 0;
+	secondvelo = 0;
+	t = 1;
+	distance = 0; 
+	firstpos = 0;
+
 	onGround = true;
 	gateOpening = false;
 	CrystalText = false;
@@ -77,7 +94,17 @@ void SP2::Init()
 	//STARTING POSITION OF PLAYER
 	startingCharPos = charPos = { 600, 17, -36 };
 
+
 	//Initialize camera settings (Don's)
+
+	shipStartingPos = shipPos = { -100, 18, 160 };
+    shipHorizontalRotateAngle = 0;
+    shipVerticalRotateAngle = 0;
+    //Initialize camera settings (Gary's)
+    //firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
+    //thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
+
+    //Initialize camera settings (Don's)
 	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
 	thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 10);
 
@@ -91,7 +118,21 @@ void SP2::Init()
     shipVerticalRotateAngle = 0;
 
 
+
 	LoadMeshes();
+
+    //camPointer = &thirdPersonCamera;
+    //somePlayer.setCameraType("third");
+
+    Mtx44 projection;
+    projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
+    projectionStack.LoadMatrix(projection);
+
+	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
+	thirdPersonCamera.SetCameraDistanceAbsolute(60);
+
+
+	firstPersonCamera.Reset();
 
 	//CRYSTAL
 	//ASSIGNING COORD INTO ARRAY   
@@ -110,10 +151,6 @@ void SP2::Init()
 	}
 	crystalcount = 0;
 
-
-	Mtx44 projection;
-	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
-	projectionStack.LoadMatrix(projection);
 }
 
 static float ROT_LIMIT = 45.f;
@@ -286,6 +323,9 @@ void SP2::Update(double dt)
                 shipPos.x = shipPos.x + view.x + i->shipSpeed;
                 shipPos.y = shipPos.y + view.y + i->shipSpeed;
                 shipPos.z = shipPos.z + view.z + i->shipSpeed;
+
+                // Ship Animation - Don't Touch - Donovan
+                shipAnimation(dt);
             }
         }
     }
@@ -354,12 +394,23 @@ void SP2::Update(double dt)
 
     //SHIP CREATION (DONOVAN'S)  - DO NOT TOUCH
     if (Application::IsKeyPressed('E') && ShipList.size() == 0)
+    // Ship Creation - Don't Touch - Donovan
+    //if (Application::IsKeyPressed('E') && ShipList.size() == 0)
+    //{
+    //    shipCreation();
+    //}
+
+    if (askedShipBuild)
+>>>>>>> origin/master
     {
-        shipCreation();
+        shopInteractions();
     }
+
 
     //SHIP ANIMATIONS (DONOVAN'S)  - DO NOT TOUCH
     shipAnimation(dt);
+
+
     
 	//JUMP (BECKHAM'S)
 	if (Application::IsKeyPressed(VK_SPACE) &&  (onGround == true)) //s = ut + 0.5 at^2
@@ -409,45 +460,43 @@ void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& g
 void SP2::shipAnimation(double dt)
 {
     // Ship Animation
-    if (thirdPersonCamera.yawingLeft == true /*&& shipHorizontalRotateAngle >= -20*/) { shipHorizontalRotateAngle += (float)(30 * dt); }
-    if (thirdPersonCamera.yawingRight == true /*&& shipHorizontalRotateAngle <= 20*/) { shipHorizontalRotateAngle -= (float)(30 * dt); }
-    if (thirdPersonCamera.pitchingDown == true /*&& shipVerticalRotateAngle >= -20*/) { shipVerticalRotateAngle += (float)(30 * dt); }
-    if (thirdPersonCamera.pitchingUp == true /*&& shipHorizontalRotateAngle <= 20*/) { shipVerticalRotateAngle -= (float)(30 * dt); }
+    if (thirdPersonCamera.yawingLeft == true /*&& shipHorizontalRotateAngle >= -20*/) { shipHorizontalRotateAngle += (float)(40 * dt); }
+    if (thirdPersonCamera.yawingRight == true /*&& shipHorizontalRotateAngle <= 20*/) { shipHorizontalRotateAngle -= (float)(40 * dt); }
+    if (thirdPersonCamera.pitchingDown == true /*&& shipVerticalRotateAngle >= -20*/) { shipVerticalRotateAngle += (float)(40 * dt); }
+    if (thirdPersonCamera.pitchingUp == true /*&& shipHorizontalRotateAngle <= 20*/) { shipVerticalRotateAngle -= (float)(40 * dt); }
 
     // Reset Ship to original orientation
-    /*if (thirdPersonCamera.yawingRight == false )
+    if (thirdPersonCamera.yawingRight == false )
     {
-    if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
-    {
-    shipHorizontalRotateAngle += (float)(10 * dt);
-    }
+        if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
+        {
+            shipHorizontalRotateAngle += (float)(10 * dt);
+        }
     }
 
     if (thirdPersonCamera.yawingLeft == false)
     {
-    if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
-    {
-    shipHorizontalRotateAngle -= (float)(10 * dt);
-    }
-
+        if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
+        {
+            shipHorizontalRotateAngle -= (float)(10 * dt);
+        }
     }
 
     if (thirdPersonCamera.pitchingDown == false)
     {
-    if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
-    {
-    shipVerticalRotateAngle += (float)(10 * dt);
-    }
+        if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
+        {
+            shipVerticalRotateAngle += (float)(10 * dt);
+        }
     }
 
     if (thirdPersonCamera.pitchingUp == false)
     {
-    if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
-    {
-    shipVerticalRotateAngle -= (float)(10 * dt);
+        if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
+        {
+            shipVerticalRotateAngle -= (float)(10 * dt);
+        }
     }
-
-    }*/
 }
 
 void SP2::shipCreation()
@@ -461,41 +510,92 @@ void SP2::shipCreation()
 
     shipTemplatePtr = &someShip;
 
-    ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LightHull, QaudWings, G1Engine));
+    //for (list<ShipParts>::iterator it = somePlayer.getParts().begin; it != somePlayer.getParts().end(); ++it)
+    //{
+
+    //}
+
+    //ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LargeHull, QuadWings, G1Engine));
+    ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, somePlayer.getParts()));
 
     // Load Meshes for specific ship parts
     for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
     {
+        // Load Meshes for Light Ship
         if (i->hullType == "LightHull")
         {
             meshList[GEO_HULL] = MeshBuilder::GenerateOBJ("shipHull", "OBJ//Ship Models//LightHull.obj");
+
+            if (i->wingType == "DualWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Light_DualWings.obj");
+            }
+            else if (i->wingType == "QuadWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Light_QuadWings.obj");
+            }
+
+            if (i->engineType == "G1Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Light_G1Engine.obj");
+            }
+            else if (i->engineType == "G2Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Light_G2Engine.obj");
+            }
         }
+
+        // Load Meshes for Medium Hull
         else if (i->hullType == "MediumHull")
         {
+            meshList[GEO_HULL] = MeshBuilder::GenerateOBJ("shipHull", "OBJ//Ship Models//MediumHull.obj");
 
+            if (i->wingType == "DualWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Medium_DualWings.obj");
+            }
+            else if (i->wingType == "QuadWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Medium_QuadWings.obj");
+            }
+
+            if (i->engineType == "G1Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Medium_G1Engine.obj");
+            }
+            else if (i->engineType == "G2Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Medium_G2Engine.obj");
+            }
         }
+
+        // Load Meshes for Heavy Hull
         else if (i->hullType == "LargeHull")
         {
+            meshList[GEO_HULL] = MeshBuilder::GenerateOBJ("shipHull", "OBJ//Ship Models//LargeHull.obj");
 
+            if (i->wingType == "DualWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Large_DualWings.obj");
+            }
+            else if (i->wingType == "QuadWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Large_QuadWings.obj");
+            }
+
+            if (i->engineType == "G1Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Large_G1Engine.obj");
+            }
+            else if (i->engineType == "G2Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Large_G2Engine.obj");
+            }
         }
 
-        if (i->wingType == "DualWings")
-        {
-            meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//DualWings.obj");
-        }
-        else if (i->wingType == "QuadWings")
-        {
-            meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//QuadWings.obj");
-        }
+        
 
-        if (i->engineType == "G1Engine")
-        {
-            meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G1Engine.obj");
-        }
-        else if (i->engineType == "G2Engine")
-        {
-            meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G2Engine.obj");
-        }
+        
     }
 }
 

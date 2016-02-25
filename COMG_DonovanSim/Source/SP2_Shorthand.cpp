@@ -324,15 +324,36 @@ void SP2::LoadMeshes()
 	//HEALING TUBE
     meshList[GEO_HEALING_TUBE] = MeshBuilder::GenerateOBJ("healing tube", "OBJ//Infirmary Models//healingTube.obj");
     meshList[GEO_HEALING_TUBE]->textureID = LoadTGA("Image//Infirmary Textures//healingTubeUV.tga");
-    InteractableOBJs healingTube = InteractableOBJs("healing tube", meshList[GEO_HEALING_TUBE]->maxPos, meshList[GEO_HEALING_TUBE]->minPos, Position(120 + 40, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
+    InteractableOBJs healingTube = InteractableOBJs("healing tube", meshList[GEO_HEALING_TUBE]->maxPos, meshList[GEO_HEALING_TUBE]->minPos, Position(250 -30, 2 + 15, -100 -30), 5, 0, Vector3(0, 0, 0));
     healingTube.setRequirements(25, 15);
     InteractablesList.push_back(healingTube);
 	//BED
     meshList[GEO_BED] = MeshBuilder::GenerateOBJ("hospital bed", "OBJ//Infirmary Models//hospitalBed.obj");
     meshList[GEO_BED]->textureID = LoadTGA("Image//Infirmary Textures//hospitalBedUV.tga");
-    InteractableOBJs bed = InteractableOBJs("hospital bed", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(120 + 40, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
-    bed.setRequirements(25, 15);
-    InteractablesList.push_back(bed);
+    
+    InteractableOBJs bed1 = InteractableOBJs("hospital bed 1", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 + 40, 2, -100 + 30), 5, 0, Vector3(0, 0, 0));
+    bed1.setRequirements(25, 15);
+    InteractablesList.push_back(bed1);
+
+    InteractableOBJs bed2 = InteractableOBJs("hospital bed 2", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 + 20, 2, -100 + 30), 5, 0, Vector3(0, 0, 0));
+    bed2.setRequirements(25, 15);
+    InteractablesList.push_back(bed2);
+
+    InteractableOBJs bed3 = InteractableOBJs("hospital bed 3", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 - 40, 2, -100 + 30), 5, 0, Vector3(0, 0, 0));
+    bed3.setRequirements(25, 15);
+    InteractablesList.push_back(bed3);
+
+    InteractableOBJs bed4 = InteractableOBJs("hospital bed 4", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 - 20, 2, -100 + 30), 5, 0, Vector3(0, 0, 0));
+    bed4.setRequirements(25, 15);
+    InteractablesList.push_back(bed4);
+
+    InteractableOBJs bed5 = InteractableOBJs("hospital bed5", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 + 40, 2, -100 - 30), 5, 0, Vector3(0, 0, 0));
+    bed5.setRequirements(25, 15);
+    InteractablesList.push_back(bed5);
+
+    InteractableOBJs bed6 = InteractableOBJs("hospital bed 6", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 + 20, 2, -100 - 30), 5, 0, Vector3(0, 0, 0));
+    bed6.setRequirements(25, 15);
+    InteractablesList.push_back(bed6);
  
 
 
@@ -366,6 +387,13 @@ void SP2::LoadMeshes()
     target.setRequirements(25, 15);
     InteractablesList.push_back(target);
 
+    // Shop
+    meshList[GEO_SHOP] = MeshBuilder::GenerateOBJ("shop", "OBJ//shop.obj");
+    meshList[GEO_SHOP]->textureID = LoadTGA("Image//shopUV.tga");
+    InteractableOBJs shop = InteractableOBJs("shop", meshList[GEO_SHOP]->maxPos, meshList[GEO_SHOP]->minPos, Position(120 + 30, 2, 160 - 35), 12, 0, Vector3(0, 0, 0)); 
+    shop.setRequirements(25, 15);
+    InteractablesList.push_back(shop);
+
     initRoomTemplate(Position(120, 2, 30));
 
     initRoomTemplate(Position(120, 2, -100));
@@ -382,6 +410,7 @@ void SP2::LoadMeshes()
 	meshList[GEO_SCIENCELAB_BEAKER]->textureID = LoadTGA("Image//ScienceLab//beaker_uv.tga");
 
 
+
 	//BECKHAM'S
 	//TRADE POST
 	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
@@ -393,7 +422,16 @@ void SP2::LoadMeshes()
 
 
 	//HANGAR
-    initSpaceShip(); 
+
+
+
+    initSpaceShip();
+    // Helipad (Ship Spawn)
+    meshList[GEO_HELIPAD] = MeshBuilder::GenerateOBJ("helipad", "OBJ//helipad.obj");
+    meshList[GEO_HELIPAD]->textureID = LoadTGA("Image//helipadUV.tga");
+    InteractableOBJs helipad = InteractableOBJs("helipad", meshList[GEO_HELIPAD]->maxPos, meshList[GEO_HELIPAD]->minPos, Position(shipStartingPos.x, shipStartingPos.y - 15, shipStartingPos.z), 1, 0, Vector3(0, 0, 0));
+    helipad.setRequirements(25, 15);
+    InteractablesList.push_back(helipad);
 
 }
 
@@ -497,7 +535,7 @@ void SP2::RenderCode()
 	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 	modelStack.PopMatrix();
 
-	if (ShipList.size() > 0)
+	if (ShipList.size() > 0 && shipBuilt == true)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
@@ -534,7 +572,9 @@ void SP2::RenderCode()
 	RenderMesh(meshList[GEO_QUAD], true, toggleLight);
 	modelStack.PopMatrix();
 
+
 	//RENDER ROOM TEMPLATES
+
 	RenderRoomTemplate(Position(250, 2, 160));   
 
 	RenderRoomTemplate(Position(250, 2, 30));  //CAFE ROOM
@@ -556,6 +596,25 @@ void SP2::RenderCode()
     modelStack.Translate(120, 2, 160);
     RenderArmouryAndShop();
     modelStack.PopMatrix();
+
+
+    modelStack.PushMatrix();
+    modelStack.Translate(shipStartingPos.x, shipStartingPos.y - 15, shipStartingPos.z);
+    modelStack.Rotate(180, 1, 0, 0);
+    modelStack.Scale(10, 10, 10);
+    RenderMesh(meshList[GEO_HELIPAD], true, toggleLight);
+    modelStack.PopMatrix();
+
+
+	//INTERACTION
+
+
+	// Mine
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-100, 2, 50);
+	//modelStack.Scale(4, 4, 4);
+	//RenderMesh(meshList[GEO_MINE], true, toggleLight);
+	//modelStack.PopMatrix();
 
 
 	// POSITION OF X Y Z
@@ -663,6 +722,20 @@ void SP2::RenderCode()
     else
     {
         RenderTextOnScreen(meshList[GEO_TEXT], "GATE CLOSE", Color(1, 0, 0), 2, 8, 12);
+    }
+
+    // Tests for shipBuilding
+    if (askedHull)
+    {
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light  | 2. Medium | 3. Large ", Color(1, 0, 0), 2, 8, 14);
+    }
+    if (askedWings)
+    {
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual  | 5. Quad ", Color(1, 0, 0), 2, 8, 14);
+    }
+    if (askedEngine)
+    {
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine  | 7. G2 Engine ", Color(1, 0, 0), 2, 8, 14);
     }
 }
 
@@ -1440,6 +1513,13 @@ void SP2::RenderArmouryAndShop()
     RenderMesh(meshList[GEO_GUN], true, toggleLight);
     modelStack.PopMatrix();
 
+    modelStack.PopMatrix();
+
+    // Shop
+    modelStack.PushMatrix();
+    modelStack.Translate(30, 0, -35);
+    modelStack.Scale(12, 15, 12);
+    RenderMesh(meshList[GEO_SHOP], true, toggleLight);
     modelStack.PopMatrix();
 
     // Shooting Range + Target

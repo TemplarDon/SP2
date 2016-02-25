@@ -33,6 +33,9 @@ public:
     void addItem(InteractableOBJs itemName);
     void removeItem(InteractableOBJs itemName);
 
+    void addPart(ShipParts partsName);
+    list<ShipParts> getParts();
+
     // Functions for player taking damage and healing health
     void takeDamage(int damageTaken);
     void healHealth(int amountHealed);
