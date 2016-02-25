@@ -1,8 +1,9 @@
 #include "SP2.h"
+#include <fstream>
 
-static float ROT_LIMIT = 45.f;
-static float SCALE_LIMIT = 5.f;
-float FramesPerSecond = 0;
+using std::cout;
+using std::cin;
+using std::endl;
 
 SP2::SP2()
 {
@@ -15,16 +16,34 @@ SP2::~SP2()
 
 void SP2::Init()
 {
+	//FUNCTIONS TO CALL
 	LoadShaderCodes();
 	LoadLights();
+	Dialogues();
 
+
+	//RANDOM (MINING)
 	srand(time(0));
 
-	//variable to rotate geometry
+	//FLOATS
 	rotateAngle = 0;
+	TokenTranslate = 11;
+	TextTranslate = 20;
+	TestRotation = 90;
+	SuitTranslate = 2;
+	leftGateOffset = 0;
+	rightGateOffset = 0;
+	frontGateOffset = 0;
+	backGateOffset = 0;
+	heightOfWall = 12;
+	acceleration = -1;
+	firstvelo = 0;
+	secondvelo = 0;
+	t = 1;
+	distance = 0;
+	firstpos = 0;
 
-	//Bools
-
+	//BOOLEANS
 	NearVendingText = false;
 	TokenOnScreen = false;
 	RenderCoke = false;
@@ -33,81 +52,50 @@ void SP2::Init()
 	PickUpTokenText = false;
 	DisplayCafeMenu = false;
 	YesShowCafeMenu = false;
-	
-	toggleLight = true;
-	
 	MENUBOOL = false;
-	
 	wearSuitText = false;
 	wearSuit = false;
-
-
-	//JUmp
-	acceleration = -1;
-	firstvelo = 0;
-	secondvelo = 0;
-	t = 1;
-	distance = 0; 
-	firstpos = 0;
+	DisplayInventory = false;
+	toggleLight = true;
+	wearSuitText = false;
+	wearSuit = false;
 	onGround = true;
+	gateOpening = false;
+	CrystalText = false;
 
-    gateOpening = false;
+	//FIRST PERSON CAMERA
+	firstPersonCamera.Reset();
 
+	//THRID PERSON CAMERA
 	thirdPersonCamera.SetMouseEnabled(true);
-
-	//Floats
-
-	TokenTranslate = 11;
-	TextTranslate = 20;
-	TestRotation = 90;
-	
-	SuitTranslate = 2;
-
-    leftGateOffset = 0;
-    rightGateOffset = 0;
-    frontGateOffset = 0;
-    backGateOffset = 0;
-
-	heightOfWall = 12;
-
-
-	startingCharPos = charPos = { 600, 17, -36 };
-
-	shipStartingPos = shipPos = { 75, 18, 150 };
-    shipHorizontalRotateAngle = 0;
-    shipVerticalRotateAngle = 0;
-    //Initialize camera settings (Gary's)
-    //firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    //thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
-
-    //Initialize camera settings (Don's)
-	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 10);
-
-    // Init Cam Pointer
-    camPointer = &firstPersonCamera;
-
-    // Init Player
-	//somePlayer.setPlayerStats("TestMan", "Human", 100, playerStartingPos, firstPersonCamera); // Name, Race, Money, Pos, camera
-	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, firstPersonCamera); // Name, Race, Money, Pos, camera
-
-    LoadMeshes();
-
-    //camPointer = &thirdPersonCamera;
-    //somePlayer.setCameraType("third");
-
-    Mtx44 projection;
-    projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
-    projectionStack.LoadMatrix(projection);
-
 	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
 	thirdPersonCamera.SetCameraDistanceAbsolute(60);
 
+	//INIT CAMERA POINTER
+	camPointer = &firstPersonCamera;
 
-	camera5.Reset();
+	//STARTING POSITION OF PLAYER
+	startingCharPos = charPos = { 600, 17, -36 };
 
-	//Assigning coords to array  
-    CrystalNo = 100;
+	//Initialize camera settings (Don's)
+	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
+	thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 10);
+
+	//INIT PLAYER
+	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, firstPersonCamera); // Name, Race, Money, Pos, camera
+
+
+	//SHIP INIT
+	shipStartingPos = shipPos = { 75, 18, 150 };
+    shipHorizontalRotateAngle = 0;
+    shipVerticalRotateAngle = 0;
+
+
+	LoadMeshes();
+
+	//CRYSTAL
+	//ASSIGNING COORD INTO ARRAY   
+    CrystalNo = 10;
 	for (int i = 0; i < CrystalNo; i++)
 	{
 		xcoords[i] = rand() % 900 - 450;
@@ -122,18 +110,28 @@ void SP2::Init()
 	}
 	crystalcount = 0;
 
+
+	Mtx44 projection;
+	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
+	projectionStack.LoadMatrix(projection);
 }
 
+static float ROT_LIMIT = 45.f;
+static float SCALE_LIMIT = 5.f;
+float FramesPerSecond = 0;
 void SP2::Update(double dt)
 {
+	//FPS
 	FramesPerSecond = 1 / dt;
 
+	//READKEYS FUNCTION
 	ReadKeyPresses();
 
-	CrystalText = false;
-    //createBoundBox(InteractablesList, BuildingsList);
+	//COLLISION
     interactionCheck(dt, InteractablesList, somePlayer);
 
+
+	//TESTING FOR CAFE MENU
 	if (!MENUBOOL)
 	{
     	if (somePlayer.getCameraType() == "first")
@@ -146,59 +144,137 @@ void SP2::Update(double dt)
     	}
     }
 
+
+	//WTF IS THIS PLEASE COMMENT
 	static unsigned firstFrames = 2;
 	if (firstFrames > 0)
 	{
-		camera5.Reset();
+		firstPersonCamera.Reset();
 		firstFrames--;
 	}
     
-	TestRotation += float(dt * 100);
 
+	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
+	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 
-	//Movements with OBJs. NOTE: Cameras should have a name to define.
-	if (camPointer == &thirdPersonCamera)
+	for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
 	{
-		Vector3 view = (camPointer->target - camPointer->position).Normalized();
-		if (Application::IsKeyPressed('W'))
+
+		//VENDING MACHINE
+		if (it->name == "vending")
 		{
-			shipPos.x += view.x;
-			shipPos.y += view.y;
-			shipPos.z += view.z;
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				NearVendingText = true;
+				if (Application::IsKeyPressed('Q'))
+				{
+					TextTranslate = 100;
+					TokenOnScreen = false;
+					RenderCoke = true;
+					ConsumeCokeText = true;
+				}
+
+				if (Application::IsKeyPressed('U'))
+				{
+					ConsumeCokeText = false;
+					RenderCoke = false;
+				}
+			}
+			else
+			{
+				NearVendingText = false;
+				ConsumeCokeText = false;
+				RenderCoke = false;
+			}
 		}
+
+
+		//TOKEN
+		if (it->name == "token")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				PickUpTokenText = true;
+
+				if (Application::IsKeyPressed('Q'))
+				{
+					TokenOnScreen = true;
+					TokenTranslate = 10.5;
+				}
+			}
+			else
+			{
+				PickUpTokenText = false;
+			}
+		}
+
+
+		//COUNTER
+		if (it->name == "counter")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				testText = true;
+				if (Application::IsKeyPressed('Y'))
+				{
+					YesShowCafeMenu = true;
+				}
+
+				if (YesShowCafeMenu == true)
+				{
+					DisplayCafeMenu = true;
+				}
+				else
+				{
+					DisplayCafeMenu = false;
+				}
+			}
+			else
+			{
+				testText = false;
+				DisplayCafeMenu = false;
+				YesShowCafeMenu = false;
+			}
+		}
+
+
+
+		//SPACESUIT
+		if (it->name == "spacesuit")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				wearSuitText = true;
+
+				if (Application::IsKeyPressed('T'))
+				{
+					SuitTranslate = -50;
+					wearSuit = true;
+					DisplayInventory = true;
+				}
+
+				if (Application::IsKeyPressed('G'))
+				{
+					wearSuit = false;
+					DisplayInventory = false;
+				}
+			}
+			else
+			{
+				wearSuitText = false;
+
+				if (Application::IsKeyPressed('G'))
+				{
+					wearSuit = false;
+					DisplayInventory = false;
+				}
+			}
+		}
+
 	}
 
-	//Interactions with OBJs.
-	if (camPointer == &camera5)
-	{
-		Vector3 viewDirection = (camera5.target - camera5.position).Normalized();
-		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-		{
-			if (!i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection)) continue;
 
-			if (i->name == "vending")
-			{
-				vendingMachineInteractions();
-			}
-
-			else if (i->name == "token")
-			{
-				tokenInteractions();
-			}
-
-			else if (i->name == "counter")
-			{
-				counterInteractions();
-			}
-
-			else if (i->name == "spacesuit")
-            {
-                spaceSuitInteractions();
-            }
-		}
-	}
-
-
+	//SHIP INTERACTIONS (DONOVAN'S)
     for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
     {
         //Movements with OBJs. NOTE: Cameras should have a name to define.
@@ -214,7 +290,7 @@ void SP2::Update(double dt)
         }
     }
 
-	//Interactions with OBJs.
+	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
     if (camPointer == &firstPersonCamera)
     {
         Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -224,102 +300,32 @@ void SP2::Update(double dt)
             {
                 if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
                 {
-				CrystalText = true;
-				posxcheck = i->pos.x;
-				poszcheck = i->pos.z;
-				if (Application::IsKeyPressed('M'))
+					CrystalText = true;
+					posxcheck = i->pos.x;
+					poszcheck = i->pos.z;
+					
+					if (Application::IsKeyPressed('M'))
 					{
-					for (int i = 0; i < CrystalNo; i++)
+						for (int i = 0; i < CrystalNo; i++)
 						{
-						if ((posxcheck == xcoords[i]) && (poszcheck == zcoords[i]) && (rendercrystal[i] == 1))
+							if ((posxcheck == xcoords[i]) && (poszcheck == zcoords[i]) && (rendercrystal[i] == 1))
 							{
-							rendercrystal[i] = 0;
-							crystalcount += rand() % 10 + 1;
+								rendercrystal[i] = 0;
+								crystalcount += rand() % 10 + 1;
 							}
 						}
 					}
                 }
-				else
-				{
 
-				}
             }
-            else if (i->name == "vending")
+            //DOOR OPEN AND CLOSE (DONOVAN'S)    - DO NOT TOUCH
+            else if (i->name.find("frontGate") != string::npos) //IF InteractableOBJ IS A FRONTGATE
             {
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-                    NearVendingText = true;
-                    if (Application::IsKeyPressed('Q'))
-                    {
-                        TextTranslate = 100;
-                        TokenOnScreen = false;
-                        RenderCoke = true;
-                        ConsumeCokeText = true;
-                    }
-
-                    if (Application::IsKeyPressed('U'))
-                    {
-                        ConsumeCokeText = false;
-                        RenderCoke = false;
-                    }
-                }
-                else
-                {
-                    NearVendingText = false;
-                    ConsumeCokeText = false;
-                    RenderCoke = false;
-                }
-            }
-
-            else if (i->name == "token")
-            {
-
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-                    PickUpTokenText = true;
-
-                    if (Application::IsKeyPressed('Q'))
-                    {
-                        TokenOnScreen = true;
-                        TokenTranslate = 10.5;
-                    }
-                }
-                else
-                {
-                    PickUpTokenText = false;
-                }
-            }
-
-            else if (i->name == "counter")
-            {
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-                    testText = true;
-                    if (Application::IsKeyPressed('Y')) YesShowCafeMenu = true;
-                    DisplayCafeMenu = YesShowCafeMenu;
-                }
-                else
-                {
-                    testText = false;
-                    DisplayCafeMenu = false;
-                    YesShowCafeMenu = false;
-                }
-            }
-
-            // Door Opening & Closing - Don't Touch - Donovan
-            else if (i->name.find("frontGate") != string::npos) // If InteractableOBJ is a frontGate
-            {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) // If the frontGate is in view
+                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) //IF FRONTGATE IS IN VIEW
                 {
                     gateOpening = true;
                     doorInteractions(dt, i, frontGateOffset);
                 }
-                //else 
-                //{
-                //    gateOpening = false;
-                //    doorClosing(dt, i, frontGateOffset);
-                //}
-                //
             }
             else if (i->name.find("backGate") != string::npos)
             {
@@ -342,32 +348,20 @@ void SP2::Update(double dt)
                     doorInteractions(dt, i, rightGateOffset);
                 }   
             }
-
-            
-            /*
-            else if (i->name == "spacesuit")
-            {
-            spaceSuitInteractions();
-            }
-            else
-            {
-            wearSuitText = false;
-            }
-            */
         }
     }
 
 
-    // Ship Creation - Don't Touch - Donovan
+    //SHIP CREATION (DONOVAN'S)  - DO NOT TOUCH
     if (Application::IsKeyPressed('E') && ShipList.size() == 0)
     {
         shipCreation();
     }
 
-    // Ship Animation - Don't Touch - Donovan
+    //SHIP ANIMATIONS (DONOVAN'S)  - DO NOT TOUCH
     shipAnimation(dt);
     
-	//JUMP
+	//JUMP (BECKHAM'S)
 	if (Application::IsKeyPressed(VK_SPACE) &&  (onGround == true)) //s = ut + 0.5 at^2
 	{ 
 		firstpos = firstPersonCamera.position.y;
@@ -529,72 +523,24 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
     }
 }
 
-void SP2::vendingMachineInteractions()
+void SP2::Dialogues()
 {
-    NearVendingText = true;
-    if (Application::IsKeyPressed('Q'))
-    {
-        TextTranslate = 100;
-        TokenOnScreen = false;
-        RenderCoke = true;
-        ConsumeCokeText = true;
-    }
+	std::ifstream file("TextFiles//NPCDialogues.txt");
+	std::string str;
+	while (std::getline(file, str))
+	{
+		file_contents = str;
+		if (str != "end")
+		{
+			dialogue_vec.push_back(file_contents);
+			cout << file_contents << endl;
+		}
+		else
+		{
+			break;
+		}
 
-    if (Application::IsKeyPressed('U'))
-    {
-        ConsumeCokeText = false;
-        RenderCoke = false;
-    }
-}
-
-void SP2::tokenInteractions()
-{
-    PickUpTokenText = true;
-
-    if (Application::IsKeyPressed('Q'))
-    {
-        TokenOnScreen = true;
-        TokenTranslate = 10.5;
-    }
-}
-
-void SP2::counterInteractions()
-{
-    testText = true;
-    if (Application::IsKeyPressed('Y'))
-    {
-        MENUBOOL = true;
-        YesShowCafeMenu = true;
-    }
-
-    if (Application::IsKeyPressed('I'))
-    {
-        MENUBOOL = false;
-    }
-
-    if (YesShowCafeMenu == true)
-    {
-        DisplayCafeMenu = true;
-    }
-    else
-    {
-        DisplayCafeMenu = false;
-    }
-}
-
-void SP2::spaceSuitInteractions()
-{
-    wearSuitText = true;
-    if (Application::IsKeyPressed('T'))
-    {
-        SuitTranslate = -50;
-        wearSuit = true;
-    }
-
-    if (Application::IsKeyPressed('G'))
-    {
-        wearSuit = false;
-    }
+	}
 }
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
