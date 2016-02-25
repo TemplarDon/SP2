@@ -384,14 +384,14 @@ void SP2::LoadMeshes()
     meshList[GEO_TARGET] = MeshBuilder::GenerateOBJ("target dummmy", "OBJ//Armoury Models//target.obj");
     meshList[GEO_TARGET]->textureID = LoadTGA("Image//Armoury Textures//targetUV.tga");
     InteractableOBJs target = InteractableOBJs("target dummmy", meshList[GEO_TARGET]->maxPos, meshList[GEO_TARGET]->minPos, Position(120 - 35, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
-    target.setRequirements(25, 15);
+    target.setRequirements(50, 15);
     InteractablesList.push_back(target);
 
     // Shop
     meshList[GEO_SHOP] = MeshBuilder::GenerateOBJ("shop", "OBJ//shop.obj");
     meshList[GEO_SHOP]->textureID = LoadTGA("Image//shopUV.tga");
     InteractableOBJs shop = InteractableOBJs("shop", meshList[GEO_SHOP]->maxPos, meshList[GEO_SHOP]->minPos, Position(120 + 30, 2, 160 - 35), 12, 0, Vector3(0, 0, 0)); 
-    shop.setRequirements(25, 15);
+    shop.setRequirements(50, 20);
     InteractablesList.push_back(shop);
 
     initRoomTemplate(Position(120, 2, 30));
@@ -455,10 +455,10 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	Building rightWall2 = Building("rightWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(rightWall2);
 
-    Building rightWall1top = Building("rightWall1top", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + 2 * heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
+    Building rightWall1top = Building("rightTop1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + 2 * heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(rightWall1top);
 
-    Building rightWall2top = Building("rightWall2top", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + 2 * heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
+    Building rightWall2top = Building("rightTop2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + 2 * heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(rightWall2top);
 
 	InteractableOBJs rightGateTop = InteractableOBJs("rightGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 15, pos.z + (groundMeshSize / 2)), 5, 0, Vector3(0, 0, 0));
@@ -472,10 +472,10 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	Building leftWall2 = Building("leftWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(leftWall2);
 
-    Building leftWall1top = Building("leftWall1top", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + 2 * heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
+    Building leftWall1top = Building("leftTop1", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + 2 * heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(leftWall1top);
 
-    Building leftWall2top = Building("leftWall2top", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + 2 * heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
+    Building leftWall2top = Building("leftTop2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + 2 * heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(leftWall2top);
 
 	InteractableOBJs leftGateTop = InteractableOBJs("leftGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 15, pos.z - (groundMeshSize / 2)), 5, 0, Vector3(0, 0, 0));
@@ -489,13 +489,13 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	Building frontWall2 = Building("frontWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(frontWall2);
 
-    Building frontWall1top = Building("frontWall1top", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z - 38), 13, 0, Vector3(0, 0, 0));
+    Building frontWall1top = Building("frontTop1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z - 38), 13, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(frontWall1top);
 
-    Building frontWall2top = Building("frontWall2top", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
+    Building frontWall2top = Building("frontTop2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(frontWall2top);
 
-    InteractableOBJs frontGateTop = InteractableOBJs("frontGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y , pos.z), 5, 0, Vector3(0, 0, 0));
+    InteractableOBJs frontGateTop = InteractableOBJs("frontGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 15 , pos.z), 5, 0, Vector3(0, 0, 0));
     frontGateTop.setRequirements(30, 200);
     InteractablesList.push_back(frontGateTop);
 
@@ -506,13 +506,13 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	Building backWall2 = Building("backWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(backWall2);
 
-    Building backWall1top = Building("backWall1top", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z - 38), 13, 0, Vector3(0, 0, 0));
+    Building backWall1top = Building("backTop1", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z - 38), 13, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(backWall1top);
 
-    Building backWall2top = Building("backWall2top", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
+    Building backWall2top = Building("backTop2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
     BuildingsList.push_back(backWall2top);
 
-    InteractableOBJs backGateTop = InteractableOBJs("backGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y , pos.z), 5, 0, Vector3(0, 0, 0));
+    InteractableOBJs backGateTop = InteractableOBJs("backGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 15, pos.z), 5, 0, Vector3(0, 0, 0));
     backGateTop.setRequirements(30, 200);
     InteractablesList.push_back(backGateTop);
 
@@ -729,27 +729,27 @@ void SP2::RenderCode()
 	}
 
     //DOOR OPEN AND CLOSE
-    if (gateOpening == true)
+    if (gateOpening)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "GATE OPEN", Color(1, 0, 0), 2, 8, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "NEAR GATE", Color(1, 0, 0), 2, 8, 14);
     }
     else
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "GATE CLOSE", Color(1, 0, 0), 2, 8, 12);
+        RenderTextOnScreen(meshList[GEO_TEXT], "NOT NEAR GATE", Color(1, 0, 0), 2, 8, 12);
     }
 
     // Tests for shipBuilding
     if (askedHull)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light  | 2. Medium | 3. Large ", Color(1, 0, 0), 2, 3, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light  | 2. Medium | 3. Large ", Color(1, 0, 0), 1, 1, 14);
     }
     if (askedWings)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual  | 5. Quad ", Color(1, 0, 0), 2, 3, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual  | 5. Quad ", Color(1, 0, 0), 1, 1, 14);
     }
     if (askedEngine)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine  | 7. G2 Engine ", Color(1, 0, 0), 2, 3, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine  | 7. G2 Engine ", Color(1, 0, 0), 1, 1, 14);
     }
 }
 
@@ -851,9 +851,8 @@ void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 
 	modelStack.PushMatrix();
     modelStack.Translate(0, 15 + frontGateOffset, 0);
-	modelStack.Rotate(90, 0, 1, 0);
     modelStack.Scale(3, 9, 3);
-	RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
+	RenderMesh(meshList[GEO_GATETOP2], false, toggleLight);
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
@@ -878,9 +877,8 @@ void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 
 	modelStack.PushMatrix();
     modelStack.Translate(0, 15 + backGateOffset, 0);
-	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Scale(3, 9, 3);
-	RenderMesh(meshList[GEO_GATETOP], false, toggleLight);
+	RenderMesh(meshList[GEO_GATETOP2], false, toggleLight);
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
