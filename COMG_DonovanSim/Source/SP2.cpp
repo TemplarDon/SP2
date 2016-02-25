@@ -96,7 +96,6 @@ void SP2::Init()
 
 
 	//Initialize camera settings (Don's)
-
 	shipStartingPos = shipPos = { -100, 18, 160 };
     shipHorizontalRotateAngle = 0;
     shipVerticalRotateAngle = 0;
@@ -110,14 +109,6 @@ void SP2::Init()
 
 	//INIT PLAYER
 	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, firstPersonCamera); // Name, Race, Money, Pos, camera
-
-
-	//SHIP INIT
-	shipStartingPos = shipPos = { 75, 18, 150 };
-    shipHorizontalRotateAngle = 0;
-    shipVerticalRotateAngle = 0;
-
-
 
 	LoadMeshes();
 
@@ -312,7 +303,6 @@ void SP2::Update(double dt)
 
 
 	//SHIP INTERACTIONS (DONOVAN'S)
->>>>>>> origin/master
     for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
     {
         //Movements with OBJs. NOTE: Cameras should have a name to define.
@@ -359,8 +349,9 @@ void SP2::Update(double dt)
                 }
 
             }
+
             //DOOR OPEN AND CLOSE (DONOVAN'S)    - DO NOT TOUCH
-            else if (i->name.find("frontGate") != string::npos) //IF InteractableOBJ IS A FRONTGATE
+            if (i->name.find("frontGate") != string::npos) //IF InteractableOBJ IS A FRONTGATE
             {
                 if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) //IF FRONTGATE IS IN VIEW
                 {
@@ -389,12 +380,22 @@ void SP2::Update(double dt)
                     doorInteractions(dt, i, rightGateOffset);
                 }   
             }
+
+            if (i->name == "shop")
+            {
+                //if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection))
+                //{
+                    if (Application::IsKeyPressed('E'))
+                    {
+                        askedShipBuild = true;
+                        askedHull = true;
+                    }
+                //}
+
+            }
         }
     }
 
-
-    //SHIP CREATION (DONOVAN'S)  - DO NOT TOUCH
-    if (Application::IsKeyPressed('E') && ShipList.size() == 0)
     // Ship Creation - Don't Touch - Donovan
     //if (Application::IsKeyPressed('E') && ShipList.size() == 0)
     //{
@@ -402,17 +403,10 @@ void SP2::Update(double dt)
     //}
 
     if (askedShipBuild)
->>>>>>> origin/master
     {
         shopInteractions();
     }
 
-
-    //SHIP ANIMATIONS (DONOVAN'S)  - DO NOT TOUCH
-    shipAnimation(dt);
-
-
-    
 	//JUMP (BECKHAM'S)
 	if (Application::IsKeyPressed(VK_SPACE) &&  (onGround == true)) //s = ut + 0.5 at^2
 	{ 
@@ -617,6 +611,69 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
             }
         }
     }
+}
+
+void SP2::shopInteractions()
+{
+    if (askedHull)
+    {
+        if (Application::IsKeyPressed('1'))
+        {
+            somePlayer.addPart(LightHull);
+            askedHull = false;
+            askedWings = true;
+        }
+        else if (Application::IsKeyPressed('2'))
+        {
+            somePlayer.addPart(MediumHull);
+            askedHull = false;
+            askedWings = true;
+        }
+        else if (Application::IsKeyPressed('3'))
+        {
+            somePlayer.addPart(LargeHull);
+            askedHull = false;
+            askedWings = true;
+        }
+    }
+
+    if (askedWings)
+    {
+        if (Application::IsKeyPressed('4'))
+        {
+            somePlayer.addPart(DualWings);
+            askedWings = false;
+            askedEngine = true;
+        }
+        else if (Application::IsKeyPressed('5'))
+        {
+            somePlayer.addPart(QuadWings);
+            askedWings = false;
+            askedEngine = true;
+        }
+    }
+
+    if (askedEngine)
+    {
+        if (Application::IsKeyPressed('6'))
+        {
+            somePlayer.addPart(G1Engine);
+            askedEngine = false;
+            shipCreation();
+            askedShipBuild = false;
+            shipBuilt = true;
+        }
+        else if (Application::IsKeyPressed('7'))
+        {
+            somePlayer.addPart(G2Engine);
+            askedEngine = false;
+            shipCreation();
+            askedShipBuild = false;
+            shipBuilt = true;
+        }
+    }
+
+
 }
 
 void SP2::Dialogues()
