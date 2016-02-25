@@ -48,18 +48,15 @@ class SP2 : public Scene
 		GEO_TEXT,
 		GEO_HANDS,
 
-		// For Testing / PlaceHolders
-
+		//ROOM TEMPLATE
 		GEO_WALL,
 		GEO_WALL2,
 		GEO_GATETOP,
         GEO_GATETOP2,
 		GEO_GATE,
 		GEO_TESTDOOR,
-		GEO_HAND,
 
-		//Buildings/OBJ 
-
+		//OBJS
 		GEO_TRADEPOST,
 		GEO_SPEAKERS,
 		GEO_SOFA,
@@ -73,9 +70,16 @@ class SP2 : public Scene
 		GEO_CAFETEXTBOX,
 		GEO_BUNK,
 		GEO_SPACEMASK,
+
+		GEO_WINDOW,
+		GEO_HUD,
+		GEO_INVENTORY,
+		GEO_HAND,
+
         GEO_HELIPAD,
 
-        // ARMOURY / SHOP
+
+        //ARMOURY / SHOP
         GEO_GUN,
         GEO_GUN_RACK,
         GEO_SHOOTING_RANGE,
@@ -83,32 +87,31 @@ class SP2 : public Scene
         GEO_SHOP,
 
 
-        // Infirmary
+        //Infirmary
         GEO_BED,
         GEO_HEALING_TUBE,
 
-		//NPCs
 
+		//NPCs
 		GEO_CHEF,
 		GEO_SPACEGUY,
 		GEO_SPACESUIT,
 
-        //Space Ship
 
+        //SPACE SHIP
         GEO_SHIP,
         GEO_HULL,
         GEO_WINGS,
         GEO_ENGINE,
-
         GEO_GROUND,
 
-        //Mine
 
+		//MINE
         GEO_MINE,
 		GEO_CRYSTAL,
 
-		//Science Lab
 
+		//SCIENCE LAB
 		GEO_SCIENCELAB_TABLE,
 		GEO_SCIENCELAB_CUPBOARD,
 		GEO_SCIENCELAB_BEAKER,
@@ -179,8 +182,8 @@ private:
     Mesh *meshList[NUM_GEOMETRY];
     unsigned m_programID;
 
-    float rotateAngle;
-	float heightOfWall;
+
+	MS modelStack, viewStack, projectionStack;
 
     Player somePlayer;
 
@@ -201,40 +204,41 @@ private:
     vector<Building>BuildingsList;
     vector<Ship>ShipList;
 
+	//CAMERA
     Camera *camPointer;
-
 	FirstPersonCamera firstPersonCamera;
 	ThirdPersonCamera thirdPersonCamera;
 
-    MS modelStack, viewStack, projectionStack;
-
+	//LIGHTS
     Light light[numLights];
     bool toggleLight;
     void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
-
-
-    // Init Ship Builder & Ship Ptr
+    //SHIP BUILDER & SHIP POINTER
     ShipBuilder ShipBuilder;
     Ship* shipTemplatePtr;
 
-    // Init Ship Parts
+    //SHIP PARTS
     Light_Hull LightHull;
+
     Medium_Hull MediumHull;
     Large_Hull LargeHull;
 
+
     G1_Engine G1Engine;
     G2_Engine G2Engine;
-
     Dual_Wings DualWings;
     Quad_Wings QuadWings;
 
+	//FLOATS (SHANIA'S)
 	float TokenTranslate;
 	float TextTranslate;
 	float TestRotation;
 	float SuitTranslate;
+	float rotateAngle;
+	float heightOfWall;
 
-	//Bool for interactions (Shania's)
+	//BOOLEANS (SHANIA'S)
 	bool NearVendingText;
 	bool TokenOnScreen;
 	bool GetCokeText;
@@ -247,20 +251,16 @@ private:
 	bool MENUBOOL;
 	bool wearSuitText;
 	bool wearSuit;
+	bool DisplayInventory;
 
-    // Bools for Door
-    
+    //DOOR (DONOVAN'S)
     float leftGateOffset;
     float rightGateOffset;
     float frontGateOffset;
     float backGateOffset;
-
     bool gateOpening;
 
-
-
-	//Jump
-
+	//JUMP (BECKHAM'S)
 	int acceleration;
 	int t;
 	int firstvelo;
@@ -268,70 +268,66 @@ private:
 	int distance;
 	int gravity; 
 	int firstpos;
-
 	bool onGround;
 
 
-	//Mining Interactions     
+	//MINING INTERACTIONS (BECKHAM'S)    
 	bool CrystalText;
 	int CrystalNo;
 	int posxcheck; 
 	int poszcheck; 
 	int crystalcount;
-
 	int xcoords[100];
 	int zcoords[100];
 	bool rendercrystal[100];
 
 
-	//Shorthand codes for easier coding (Gary's)
-
+	//SHORTHAND CODES FOR EASIER CODINGS (GARY'S)
 	void LoadShaderCodes();
 	void LoadLights();
 	void LoadMeshes();
 	void ReadKeyPresses();
 	void RenderCode();
 
-
-	// Function to Init & Render SpaceShip
-
+	//FUNCTION TO INIT AND RENDER SPACESHIP
 	void initSpaceShip();
 	void RenderSpaceShip();
 
-	// Rendering shorthands for specific areas.
-
+	//RENDERING FUNCTION (IN SHORTHAND.CPP)
+	void RenderSkybox();
 	void RenderTradingStation();
 	void RenderRecRoom();
 	void RenderCafeRoom();
 	void RenderBunkRoom();
 	void RenderScienceLab();
-
 	void RenderCrystals();
-
     void RenderArmouryAndShop();
     void RenderInfirmary();
 
+	//DIALOUGE SYSTEM
+	void Dialogues();
+	string file_contents;
+	vector<string>dialogue_vec;
 
-
-
-	void RenderSkybox();
+	//RENDER TEXT
 	void RenderText(Mesh* mesh, std::string text, Color color);
+
+	//RENDER ON SCREEN
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderTokenOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderCokeOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderHandOnScreen(Mesh* mesh, float size, float x, float y);
-
-
+	void RenderHandOnScreen2(Mesh* mesh, float size, float x, float y);
 	void RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y);
-	
 	void RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y);
-
+	void RenderInventoryOnScreen(Mesh* mesh, float size, float x, float y);
 	
     
+	//INTERACTION DECTECTION
     void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
-    //void createBoundBox(vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList);
 	
+	//INTERACTION FUNCTIONS
     void vendingMachineInteractions();
     void tokenInteractions();
     void counterInteractions();
@@ -343,7 +339,7 @@ private:
     void shipCreation();
 
 
-	// Functions to create a room. (initRoomTemplate to have collision, RenderRoomTemplate to render)
+	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM
 	void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 	void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 
