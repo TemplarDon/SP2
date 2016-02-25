@@ -214,6 +214,48 @@ void SP2::LoadMeshes()
 	meshList[GEO_HAND]->textureID = LoadTGA("Image//Hand.tga");
 
 
+	//NPCS
+	//SHOPKEEPER
+	meshList[GEO_SHOPKEEPER] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Shopkeeper.obj");
+	meshList[GEO_SHOPKEEPER]->textureID = LoadTGA("Image//Shopkeeper.tga");
+	//NURSE
+	meshList[GEO_NURSE] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Nurse.obj");
+	meshList[GEO_NURSE]->textureID = LoadTGA("Image//Nurse.tga");
+	InteractableOBJs nurse = InteractableOBJs("nurse", meshList[GEO_NURSE]->maxPos, meshList[GEO_NURSE]->minPos, Position(261, 2, -70), 2, 0, Vector3(0, 0, 0));
+	nurse.setRequirements(30, 12);
+	InteractablesList.push_back(nurse);
+	//DOCTOR //250, 2, -100
+	meshList[GEO_DOCTOR] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Doctor.obj");
+	meshList[GEO_DOCTOR]->textureID = LoadTGA("Image//Doctor.tga");
+	InteractableOBJs doctor = InteractableOBJs("doctor", meshList[GEO_DOCTOR]->maxPos, meshList[GEO_DOCTOR]->minPos, Position(232, 2, -130), 2, 0, Vector3(0, 0, 0));
+	doctor.setRequirements(30, 12);
+	InteractablesList.push_back(doctor);
+	//TRADER
+	meshList[GEO_TRADER] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Trader.obj");
+	meshList[GEO_TRADER]->textureID = LoadTGA("Image//Trader.tga");
+	InteractableOBJs trader = InteractableOBJs("trader", meshList[GEO_TRADER]->maxPos, meshList[GEO_TRADER]->minPos, Position(140, 2, 125), 2, 0, Vector3(0, 0, 0));
+	trader.setRequirements(30, 12);
+	InteractablesList.push_back(trader);
+	//SOLDIER
+	meshList[GEO_SOLDIER] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Soldier.obj");
+	meshList[GEO_SOLDIER]->textureID = LoadTGA("Image//Soldier.tga");
+	InteractableOBJs soldier = InteractableOBJs("soldier", meshList[GEO_SOLDIER]->maxPos, meshList[GEO_SOLDIER]->minPos, Position(148, 2, 200), 2, 0, Vector3(0, 0, 0));
+	soldier.setRequirements(25, 15);
+	InteractablesList.push_back(soldier);
+	//CHEF
+	meshList[GEO_CHEF] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chef.obj");
+	meshList[GEO_CHEF]->textureID = LoadTGA("Image//Chef.tga");
+	InteractableOBJs chef = InteractableOBJs("chef", meshList[GEO_CHEF]->maxPos, meshList[GEO_CHEF]->minPos, Position(280, 2, -2), 2, 0, Vector3(0, 0, 0));
+	chef.setRequirements(32, 15);
+	InteractablesList.push_back(chef);
+	//SPACEGUY
+	meshList[GEO_SPACEGUY] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spaceman.obj");
+	meshList[GEO_SPACEGUY]->textureID = LoadTGA("Image//Spaceman.tga");
+	InteractableOBJs spaceguy = InteractableOBJs("spaceguy", meshList[GEO_SPACEGUY]->maxPos, meshList[GEO_SPACEGUY]->minPos, Position(271, 1.8, 143), 2, 0, Vector3(0, 0, 0));
+	spaceguy.setRequirements(25, 12);
+	InteractablesList.push_back(spaceguy);
+
+
 	//CAFE
 	initRoomTemplate(Position(250, 2, 30));  
 	//COUNTER
@@ -222,53 +264,41 @@ void SP2::LoadMeshes()
 	InteractableOBJs counter = InteractableOBJs("counter", meshList[GEO_COUNTER]->maxPos, meshList[GEO_COUNTER]->minPos, Position(280, 2, 0), 3, 0, Vector3(0, 0, 0));
 	counter.setRequirements(40, 15);
 	InteractablesList.push_back(counter);
-
 	//FRIDGE
 	meshList[GEO_FRIDGE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Fridge.obj");
 	meshList[GEO_FRIDGE]->textureID = LoadTGA("Image//Fridge.tga");
-
-	//CHEF
-	meshList[GEO_CHEF] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chef.obj");
-	meshList[GEO_CHEF]->textureID = LoadTGA("Image//Chef.tga");
-
 	//TABLE
 	meshList[GEO_TABLE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Table.obj");
 	meshList[GEO_TABLE]->textureID = LoadTGA("Image//Table.tga");
-	InteractableOBJs table = InteractableOBJs("table", meshList[GEO_TABLE]->maxPos, meshList[GEO_TABLE]->minPos, Position(280, 2, 65), 3, 0, Vector3(0, 0, 0));
+	InteractableOBJs table = InteractableOBJs("table", meshList[GEO_TABLE]->maxPos, meshList[GEO_TABLE]->minPos, Position(280, 2, 65), 4, 0, Vector3(0, 0, 0));
 	table.setRequirements(25, 15);
 	InteractablesList.push_back(table);
-
 	//VENDING
 	meshList[GEO_VENDING] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Vending.obj");
 	meshList[GEO_VENDING]->textureID = LoadTGA("Image//Vending.tga");
-	InteractableOBJs vending = InteractableOBJs("vending", meshList[GEO_VENDING]->maxPos, meshList[GEO_VENDING]->minPos, Position(220, 10, 70), 3, 0, Vector3(0, 0, 0));
-	vending.setRequirements(52, 15);  //55, 15
+	InteractableOBJs vending = InteractableOBJs("vending", meshList[GEO_VENDING]->maxPos, meshList[GEO_VENDING]->minPos, Position(210, 2, 88), 3, 0, Vector3(0, 0, 0));
+	vending.setRequirements(52, 10);  //55, 15
 	InteractablesList.push_back(vending);
-
 	//TOKEN
 	meshList[GEO_TOKEN] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Token.obj");
 	meshList[GEO_TOKEN]->textureID = LoadTGA("Image//Token.tga");
 	InteractableOBJs token = InteractableOBJs("token", meshList[GEO_TOKEN]->maxPos, meshList[GEO_TOKEN]->minPos, Position(276, TokenTranslate, 61), 2, 0, Vector3(0, 0, 0));
 	token.setRequirements(30, 5);
 	InteractablesList.push_back(token);
-
 	//COKE
 	meshList[GEO_COKE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Coke.obj");
 	meshList[GEO_COKE]->textureID = LoadTGA("Image//Coke.tga");
-
 	//CAFE MENU TEXT BOX
 	meshList[GEO_CAFETEXTBOX] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//TextBoxCafeMenu.obj");
 	meshList[GEO_CAFETEXTBOX]->textureID = LoadTGA("Image//Token.tga");
 
 
 
-
 	//RECREATIOMAL ROOM
-
+	initRoomTemplate(Position(120, 2, 30));
 	//SPEAKERS
 	meshList[GEO_SPEAKERS] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//RecRoomSpeakers.obj");
 	meshList[GEO_SPEAKERS]->textureID = LoadTGA("Image//RecRoomSpeakers.tga");
-
 	//SOFA
 	meshList[GEO_SOFA] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//sofa.obj");
 	meshList[GEO_SOFA]->textureID = LoadTGA("Image//sofa.tga");
@@ -280,39 +310,30 @@ void SP2::LoadMeshes()
 	//BUNK
 	meshList[GEO_BUNK] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Bunk.obj");
 	meshList[GEO_BUNK]->textureID = LoadTGA("Image//Bunk.tga");
-	InteractableOBJs bunk = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 127), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk2 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 127), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk3 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(210, 3, 127), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk4 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(227, 3, 127), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk5 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 191.5), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk6 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 191.5), 2, 0, Vector3(0, 0, 0));
-	bunk.setRequirements(25, 15);
+	InteractableOBJs bunk = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 127), 3, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk2 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 127), 3, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk3 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(210, 3, 127), 3, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk4 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(227, 3, 127), 3, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk5 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 191.5), 3, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk6 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 191.5), 3, 0, Vector3(0, 0, 0));
 	InteractablesList.push_back(bunk);
 	InteractablesList.push_back(bunk2);
 	InteractablesList.push_back(bunk3);
 	InteractablesList.push_back(bunk4);
 	InteractablesList.push_back(bunk5);
 	InteractablesList.push_back(bunk6);
-
-	//NPC
-	meshList[GEO_SPACEGUY] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spaceman.obj");
-	meshList[GEO_SPACEGUY]->textureID = LoadTGA("Image//Spaceman.tga");
-
 	//SPACESUIT
 	meshList[GEO_SPACESUIT] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spacesuit.obj");
 	meshList[GEO_SPACESUIT]->textureID = LoadTGA("Image//Spacesuit.tga");
 	InteractableOBJs spacesuit = InteractableOBJs("spacesuit", meshList[GEO_SPACESUIT]->maxPos, meshList[GEO_SPACESUIT]->minPos, Position(220, SuitTranslate, 190), 2, 0, Vector3(0, 0, 0));
 	spacesuit.setRequirements(25, 15);
 	InteractablesList.push_back(spacesuit);
-
 	//SPACE MASK
 	meshList[GEO_SPACEMASK] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spacemask.obj");
 	meshList[GEO_SPACEMASK]->textureID = LoadTGA("Image//Spacemask.tga");
-
 	//WINDOW
 	meshList[GEO_WINDOW] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Window.obj");
 	meshList[GEO_WINDOW]->textureID = LoadTGA("Image//Window.tga");
-
 	//HUD
 	meshList[GEO_HUD] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//HUD.obj");
 	meshList[GEO_HUD]->textureID = LoadTGA("Image//HUD.tga");
@@ -330,27 +351,21 @@ void SP2::LoadMeshes()
 	//BED
     meshList[GEO_BED] = MeshBuilder::GenerateOBJ("hospital bed", "OBJ//Infirmary Models//hospitalBed.obj");
     meshList[GEO_BED]->textureID = LoadTGA("Image//Infirmary Textures//hospitalBedUV.tga");
-    
     InteractableOBJs bed1 = InteractableOBJs("hospital bed 1", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 + 40, 2, -100 + 30), 5, 0, Vector3(0, 0, 0));
     bed1.setRequirements(25, 15);
     InteractablesList.push_back(bed1);
-
     InteractableOBJs bed2 = InteractableOBJs("hospital bed 2", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 + 20, 2, -100 + 30), 5, 0, Vector3(0, 0, 0));
     bed2.setRequirements(25, 15);
     InteractablesList.push_back(bed2);
-
     InteractableOBJs bed3 = InteractableOBJs("hospital bed 3", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 - 40, 2, -100 + 30), 5, 0, Vector3(0, 0, 0));
     bed3.setRequirements(25, 15);
     InteractablesList.push_back(bed3);
-
     InteractableOBJs bed4 = InteractableOBJs("hospital bed 4", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 - 20, 2, -100 + 30), 5, 0, Vector3(0, 0, 0));
     bed4.setRequirements(25, 15);
     InteractablesList.push_back(bed4);
-
     InteractableOBJs bed5 = InteractableOBJs("hospital bed5", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 + 40, 2, -100 - 30), 5, 0, Vector3(0, 0, 0));
     bed5.setRequirements(25, 15);
     InteractablesList.push_back(bed5);
-
     InteractableOBJs bed6 = InteractableOBJs("hospital bed 6", meshList[GEO_BED]->maxPos, meshList[GEO_BED]->minPos, Position(250 + 20, 2, -100 - 30), 5, 0, Vector3(0, 0, 0));
     bed6.setRequirements(25, 15);
     InteractablesList.push_back(bed6);
@@ -365,53 +380,49 @@ void SP2::LoadMeshes()
     InteractableOBJs gun = InteractableOBJs("gun", meshList[GEO_GUN]->maxPos, meshList[GEO_GUN]->minPos, Position(120 + 40, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
     gun.setRequirements(25, 15);
     InteractablesList.push_back(gun);
-
     //GUN RACK
     meshList[GEO_GUN_RACK] = MeshBuilder::GenerateOBJ("gun rack", "OBJ//Armoury Models//gunrack.obj");
     meshList[GEO_GUN_RACK]->textureID = LoadTGA("Image//Armoury Textures//gunrackUV.tga");
     InteractableOBJs gunRack = InteractableOBJs("gun rack", meshList[GEO_GUN_RACK]->maxPos, meshList[GEO_GUN_RACK]->minPos, Position(120 + 40, 2, 160 + 40), 6, 0, Vector3(0, 0, 0));
     gunRack.setRequirements(25, 15);
     InteractablesList.push_back(gunRack);
-
     //SHOOTING RANGE
     meshList[GEO_SHOOTING_RANGE] = MeshBuilder::GenerateOBJ("shooting range", "OBJ//Armoury Models//shootingRange.obj");
     meshList[GEO_SHOOTING_RANGE]->textureID = LoadTGA("Image//Armoury Textures//shootingRangeUV.tga");
     InteractableOBJs shootingRange = InteractableOBJs("shooting range", meshList[GEO_SHOOTING_RANGE]->maxPos, meshList[GEO_SHOOTING_RANGE]->minPos, Position(120 + 5, 2, 160 + 40), 6, 0, Vector3(0, 0, 0));
     shootingRange.setRequirements(25, 15);
     InteractablesList.push_back(shootingRange);
-
     //TARGET DUMMY
     meshList[GEO_TARGET] = MeshBuilder::GenerateOBJ("target dummmy", "OBJ//Armoury Models//target.obj");
     meshList[GEO_TARGET]->textureID = LoadTGA("Image//Armoury Textures//targetUV.tga");
     InteractableOBJs target = InteractableOBJs("target dummmy", meshList[GEO_TARGET]->maxPos, meshList[GEO_TARGET]->minPos, Position(120 - 35, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
     target.setRequirements(25, 15);
     InteractablesList.push_back(target);
-
-    // Shop
+    //SHOP
     meshList[GEO_SHOP] = MeshBuilder::GenerateOBJ("shop", "OBJ//shop.obj");
     meshList[GEO_SHOP]->textureID = LoadTGA("Image//shopUV.tga");
     InteractableOBJs shop = InteractableOBJs("shop", meshList[GEO_SHOP]->maxPos, meshList[GEO_SHOP]->minPos, Position(120 + 30, 2, 160 - 35), 12, 0, Vector3(0, 0, 0)); 
     shop.setRequirements(25, 15);
     InteractablesList.push_back(shop);
 
-    initRoomTemplate(Position(120, 2, 30));
-
-    initRoomTemplate(Position(120, 2, -100));
+ 
 
 
-	//Science Lab (Gary Goh's)
+	//SCIENCE LAB (GARY'S)
+	initRoomTemplate(Position(120, 2, -100));
+	//TABLE
 	meshList[GEO_SCIENCELAB_TABLE] = MeshBuilder::GenerateOBJ("sciencelab_beaker", "OBJ//ScienceLab//table.obj");
 	meshList[GEO_SCIENCELAB_TABLE]->textureID = LoadTGA("Image//ScienceLab//table_uv.tga");
-
+	//CUPBOARD
 	meshList[GEO_SCIENCELAB_CUPBOARD] = MeshBuilder::GenerateOBJ("sciencelab_cupboard", "OBJ//ScienceLab//cupboard.obj");
 	meshList[GEO_SCIENCELAB_CUPBOARD]->textureID = LoadTGA("Image//ScienceLab//cupboard_uv.tga");
-
+	//BEAKER
 	meshList[GEO_SCIENCELAB_BEAKER] = MeshBuilder::GenerateOBJ("sciencelab_beaker", "OBJ//ScienceLab//beaker.obj");
 	meshList[GEO_SCIENCELAB_BEAKER]->textureID = LoadTGA("Image//ScienceLab//beaker_uv.tga");
 
 
 
-	//BECKHAM'S
+	//MINING (BECKHAM'S)
 	//TRADE POST
 	meshList[GEO_TRADEPOST] = MeshBuilder::GenerateOBJ("Tradepost", "OBJ//TradingPost.obj");
 	meshList[GEO_TRADEPOST]->textureID = LoadTGA("Image//TradingPostTexture2.tga");
@@ -422,9 +433,6 @@ void SP2::LoadMeshes()
 
 
 	//HANGAR
-
-
-
     initSpaceShip();
     // Helipad (Ship Spawn)
     meshList[GEO_HELIPAD] = MeshBuilder::GenerateOBJ("helipad", "OBJ//helipad.obj");
@@ -645,6 +653,9 @@ void SP2::RenderCode()
 	//CROSS HAIR
 	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
 
+	//NPC DIALOGUES
+	RenderNPCDialogues();
+
 	//VENDING TEXT
 	if (NearVendingText)
 	{
@@ -694,8 +705,8 @@ void SP2::RenderCode()
 		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS T TO PUT ON SPACE SUIT", Color(1, 0, 0), 2, 6, 18);
 		//for (int i = 0; i < dialogue_vec.size(); ++i)
 		//{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.5, 5, 20);
-		//}
+		//RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.5, 5, 20);
+		////}
 	}
 
 	//WEAR SUIT \ MASK ON SCREEN
@@ -737,6 +748,46 @@ void SP2::RenderCode()
     {
         RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine  | 7. G2 Engine ", Color(1, 0, 0), 2, 3, 14);
     }
+}
+
+void SP2::RenderNPCDialogues()
+{
+	if (chefText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[0], Color(1, 0, 0), 1.5, 5, 20);
+	}
+
+	if (spaceguyText == true)
+	{
+
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[1], Color(1, 0, 0), 1.5, 5, 20);
+	}
+
+	if (nurseText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.5, 5, 20);
+	}
+
+	if (doctorText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[3], Color(1, 0, 0), 1.5, 5, 20);
+	}
+
+	if (traderText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[4], Color(1, 0, 0), 1.5, 5, 20);
+	}
+
+	if (soldierText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.5, 5, 20);
+	}
+
+	if (shopkeeperText == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 0, 0), 1.5, 5, 20);
+	}
+
 }
 
 void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
@@ -1042,7 +1093,7 @@ void SP2::RenderBunkRoom()
 
 	//SPACE MAN RANDOM NPC
 	modelStack.PushMatrix();
-	modelStack.Translate(271, 1.9, 143);
+	modelStack.Translate(271, 1.8, 143);
 	modelStack.Scale(3.4, 4.4, 3.4);
 	RenderMesh(meshList[GEO_SPACEGUY], true, toggleLight);
 	modelStack.PopMatrix();
@@ -1051,19 +1102,39 @@ void SP2::RenderBunkRoom()
 	modelStack.PushMatrix();
 	modelStack.Translate(220, SuitTranslate, 190);
 	modelStack.Scale(1.3, 1.3, 1.3);
-	modelStack.Rotate(180 , 0, 1, 0);
+	modelStack.Rotate(180, 0, 1, 0);
 	RenderMesh(meshList[GEO_SPACESUIT], true, toggleLight);
 	modelStack.PopMatrix();
 
-
+	//WINDOW1
 	glBlendFunc(1, 1);
 	modelStack.PushMatrix();
-	modelStack.Translate(220, 10, 190);
+	modelStack.Translate(220, 16, 209.3);
 	modelStack.Scale(2, 2, 2);
 	modelStack.Rotate(180, 0, 1, 0);
-	RenderMesh(meshList[GEO_SPACEMASK], true, toggleLight);
+	RenderMesh(meshList[GEO_WINDOW], true, toggleLight);
 	modelStack.PopMatrix();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+	//WINDOW2
+	glBlendFunc(1, 1);
+	modelStack.PushMatrix();
+	modelStack.Translate(220, 16, 212);
+	modelStack.Scale(2, 2, 2);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[GEO_WINDOW], true, toggleLight);
+	modelStack.PopMatrix();
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//HUD
+	modelStack.PushMatrix();
+	modelStack.Translate(200.5, 16, 190);
+	modelStack.Scale(2, 2, 2);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[GEO_HUD], true, toggleLight);
+	modelStack.PopMatrix();
 }
 
 void SP2::RenderCafeRoom()
@@ -1121,10 +1192,17 @@ void SP2::RenderCafeRoom()
 
 	//VENDING
 	modelStack.PushMatrix();
-	modelStack.Translate(216, 2, 70);
+	modelStack.Translate(210, 2, 88);
 	modelStack.Scale(2.5, 2.5, 2.5);
 	modelStack.Rotate(-90, 0, 1, 0);
 	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//NPC
+	modelStack.PushMatrix();
+	modelStack.Translate(220, 2, -10);
+	modelStack.Scale(3.7, 4, 3.7);
+	RenderMesh(meshList[GEO_SPACEGUY], true, toggleLight);
 	modelStack.PopMatrix();
 }
 
@@ -1359,7 +1437,7 @@ void SP2::RenderRecRoom()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(90, 2, 70);
+	modelStack.Translate(82, 2, 87);
 	modelStack.Scale(2.5 , 2.5 , 2.5);
 	modelStack.Rotate(270, 0, 1, 0);
 	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
@@ -1386,7 +1464,13 @@ void SP2::RenderRecRoom()
 	RenderMesh(meshList[GEO_TABLE], true, toggleLight);
 	modelStack.PopMatrix();
 
-
+	//SPACEMAN
+	modelStack.PushMatrix();
+	modelStack.Translate(105, 2.8, 5);
+	modelStack.Scale(3.4, 4.3, 3.4);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_SPACEGUY], true, toggleLight);
+	modelStack.PopMatrix();
 
 
 }
@@ -1540,6 +1624,25 @@ void SP2::RenderArmouryAndShop()
     RenderMesh(meshList[GEO_TARGET], true, toggleLight);
     modelStack.PopMatrix();
 
+	//TRADER
+	modelStack.PushMatrix();
+	modelStack.Translate(25, 0, -35);
+	modelStack.Scale(3.7, 4, 3.7);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_TRADER], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//SOLDIER
+	modelStack.PushMatrix();
+	modelStack.Translate(28, 0, 40);
+	modelStack.Scale(3.7, 4, 3.7);
+	modelStack.Rotate(180, 0, 1, 0);
+	//modelStack.Rotate(90, 0, 1, 0);
+	//modelStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_SOLDIER], true, toggleLight);
+	modelStack.PopMatrix();
+
     modelStack.PopMatrix();
 }
 
@@ -1590,6 +1693,21 @@ void SP2::RenderInfirmary()
     modelStack.Scale(5, 5, 5);
     RenderMesh(meshList[GEO_BED], true, toggleLight);
     modelStack.PopMatrix();
+
+	//NURSE
+	modelStack.PushMatrix();
+	modelStack.Translate(11, 0, 30);
+	modelStack.Scale(3.5, 3.8, 3.5);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[GEO_NURSE], true, toggleLight);
+	modelStack.PopMatrix();
+
+	//DOCTOR
+	modelStack.PushMatrix();
+	modelStack.Translate(-18, 0, -30);
+	modelStack.Scale(3.5, 3.8, 3.5);
+	RenderMesh(meshList[GEO_DOCTOR], true, toggleLight);
+	modelStack.PopMatrix();
 }
 
 void SP2::RenderTradingStation()

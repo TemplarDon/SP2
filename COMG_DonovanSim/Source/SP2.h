@@ -70,7 +70,7 @@ class SP2 : public Scene
 		GEO_CAFETEXTBOX,
 		GEO_BUNK,
 		GEO_SPACEMASK,
-
+		GEO_SPACESUIT,
 		GEO_WINDOW,
 		GEO_HUD,
 		GEO_INVENTORY,
@@ -95,7 +95,11 @@ class SP2 : public Scene
 		//NPCs
 		GEO_CHEF,
 		GEO_SPACEGUY,
-		GEO_SPACESUIT,
+		GEO_NURSE,
+		GEO_DOCTOR,
+		GEO_TRADER,
+		GEO_SOLDIER,
+		GEO_SHOPKEEPER,
 
 
         //SPACE SHIP
@@ -252,6 +256,13 @@ private:
 	bool wearSuitText;
 	bool wearSuit;
 	bool DisplayInventory;
+	bool chefText;
+	bool spaceguyText;
+	bool nurseText;	
+	bool doctorText;
+	bool traderText;	
+	bool soldierText;
+	bool shopkeeperText;
 
     //DOOR (DONOVAN'S)
     float leftGateOffset;
@@ -308,6 +319,8 @@ private:
 	void Dialogues();
 	string file_contents;
 	vector<string>dialogue_vec;
+	void DialoguesWithNPCs();
+	void RenderNPCDialogues();
 
 	//RENDER TEXT
 	void RenderText(Mesh* mesh, std::string text, Color color);

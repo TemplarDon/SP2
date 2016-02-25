@@ -55,11 +55,17 @@ void SP2::Init()
 	MENUBOOL = false;
 	wearSuitText = false;
 	wearSuit = false;
-
 	DisplayInventory = false;
 	toggleLight = true;
 	wearSuitText = false;
 	wearSuit = false;
+	chefText = false;
+	spaceguyText = false;
+	nurseText = false;
+	doctorText = false;
+	traderText = false;
+	soldierText = false;
+	shopkeeperText = false;
 
 
     askedEngine = false;
@@ -92,7 +98,7 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	startingCharPos = charPos = { 600, 17, -36 };
+	startingCharPos = charPos = { 260, 17, 150 };
 
 
 	//Initialize camera settings (Don's)
@@ -181,6 +187,9 @@ void SP2::Update(double dt)
 		firstFrames--;
 	}
     
+
+	//DIALOGUE
+	DialoguesWithNPCs();
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -407,9 +416,10 @@ void SP2::Update(double dt)
         shopInteractions();
     }
 
+
 	//JUMP (BECKHAM'S)
-	if (Application::IsKeyPressed(VK_SPACE) &&  (onGround == true)) //s = ut + 0.5 at^2
-	{ 
+	if (Application::IsKeyPressed(VK_SPACE) && (onGround == true)) //s = ut + 0.5 at^2
+	{
 		firstpos = firstPersonCamera.position.y;
 		firstvelo = 50;
 		onGround = false;
@@ -421,9 +431,9 @@ void SP2::Update(double dt)
 
 		distance = ((firstvelo * t) + (0.5 * acceleration * t * t));
 		firstPersonCamera.position.y += distance * dt;
-        firstPersonCamera.target.y += distance * dt;
+		firstPersonCamera.target.y += distance * dt;
 
-        somePlayer.pos.y += distance * dt;
+		somePlayer.pos.y += distance * dt;
 	}
 
 	if (firstpos >= firstPersonCamera.position.y)
@@ -431,6 +441,7 @@ void SP2::Update(double dt)
 		firstPersonCamera.position.y = firstpos;
 		onGround = true;
 	}
+
 	
 }
 
@@ -693,6 +704,106 @@ void SP2::Dialogues()
 			break;
 		}
 
+	}
+}
+
+void SP2::DialoguesWithNPCs()
+{
+	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+
+	for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+	{
+
+		//SHOPKEEPER
+		if (it->name == "shopkeeper")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				shopkeeperText = true;
+			}
+			else
+			{
+				shopkeeperText = false;
+			}
+		}
+
+		//NURSE
+		if (it->name == "nurse")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				nurseText = true;
+			}
+			else
+			{
+				nurseText = false;
+			}
+		}
+
+		//DOCTOR
+		if (it->name == "doctor")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				doctorText = true;
+			}
+			else
+			{
+				doctorText = false;
+			}
+		}
+
+		//TRADER
+		if (it->name == "trader")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				traderText = true;
+			}
+			else
+			{
+				traderText = false;
+			}
+		}
+
+		//SOLDIER
+		if (it->name == "soldier")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				soldierText = true;
+			}
+			else
+			{
+				soldierText = false;
+			}
+		}
+
+		//CHEF
+		if (it->name == "chef")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				chefText = true;
+			}
+			else
+			{
+				chefText = false;
+			}
+		}
+
+		//SPACE GUY
+		if (it->name == "spaceguy")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				spaceguyText = true;
+			}
+			else
+			{
+				spaceguyText = false;
+			}
+		}
 	}
 }
 
