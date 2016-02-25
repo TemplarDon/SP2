@@ -240,7 +240,7 @@ int Medium_Hull::partsEffect()
     name of Heavy_Hull Part (Eg. Heavy Hull)
 */
 /******************************************************************************/
-Heavy_Hull::Heavy_Hull(string name) : Hull(name)
+Large_Hull::Large_Hull(string name) : Hull(name)
 {
 }
 
@@ -250,7 +250,7 @@ Heavy_Hull::Heavy_Hull(string name) : Hull(name)
     Heavy_Hull Destructor
 */
 /******************************************************************************/
-Heavy_Hull::~Heavy_Hull()
+Large_Hull::~Large_Hull()
 {
 }
 
@@ -263,7 +263,7 @@ Heavy_Hull::~Heavy_Hull()
     returns an int that is used to increase certain ship stats
 */
 /******************************************************************************/
-int Heavy_Hull::partsEffect()
+int Large_Hull::partsEffect()
 {
     return 0;
 }

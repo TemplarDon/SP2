@@ -37,12 +37,14 @@ ShipBuilder::~ShipBuilder()
     position of the ship to be made
 \param  HullPart
     object of class Hull, used to make the ship
-\param
+\param  WingsPart
     object of class Wings, used to make the ship
-\param
+\param  EngineParts
     object of class Engine, used to make the ship
 \param  upgradesVec
     vector containing the ship's upgrades
+\returns
+    returns a ship
     
 */
 /******************************************************************************/
@@ -51,6 +53,33 @@ Ship ShipBuilder::createShip(Ship* templateShip, Hull HullPart, Wings WingsPart,
     templateShip->addShipPart(HullPart);
     templateShip->addShipPart(WingsPart);
     templateShip->addShipPart(EnginePart);
+    templateShip->calculateShipStats();
+
+    return *templateShip;
+}
+
+
+/******************************************************************************/
+/*!
+\brief
+    Function to create a ship
+\param  name
+    name of ship to be created
+\param  pos
+    position of the ship to be made
+\param  partsList
+    list of parts to be added
+\returns
+    returns a ship
+
+*/
+/******************************************************************************/
+Ship ShipBuilder::createShip(Ship* templateShip, list<ShipParts>partsList)
+{
+    for (list<ShipParts>::iterator it = partsList.begin(); it != partsList.end(); ++it)
+    {
+        templateShip->addShipPart(*it);
+    }
     templateShip->calculateShipStats();
 
     return *templateShip;

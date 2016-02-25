@@ -1,8 +1,9 @@
 #include "SP2.h"
+#include <fstream>
 
-static float ROT_LIMIT = 45.f;
-static float SCALE_LIMIT = 5.f;
-float FramesPerSecond = 0;
+using std::cout;
+using std::cin;
+using std::endl;
 
 SP2::SP2()
 {
@@ -15,16 +16,34 @@ SP2::~SP2()
 
 void SP2::Init()
 {
+	//FUNCTIONS TO CALL
 	LoadShaderCodes();
 	LoadLights();
+	Dialogues();
 
+
+	//RANDOM (MINING)
 	srand(time(0));
 
-	//variable to rotate geometry
+	//FLOATS
 	rotateAngle = 0;
+	TokenTranslate = 11;
+	TextTranslate = 20;
+	TestRotation = 90;
+	SuitTranslate = 2;
+	leftGateOffset = 0;
+	rightGateOffset = 0;
+	frontGateOffset = 0;
+	backGateOffset = 0;
+	heightOfWall = 12;
+	acceleration = -1;
+	firstvelo = 0;
+	secondvelo = 0;
+	t = 1;
+	distance = 0;
+	firstpos = 0;
 
-	//Bools
-
+	//BOOLEANS
 	NearVendingText = false;
 	TokenOnScreen = false;
 	RenderCoke = false;
@@ -33,14 +52,27 @@ void SP2::Init()
 	PickUpTokenText = false;
 	DisplayCafeMenu = false;
 	YesShowCafeMenu = false;
-	
-	toggleLight = true;
-	
 	MENUBOOL = false;
-	
 	wearSuitText = false;
 	wearSuit = false;
 
+	DisplayInventory = false;
+	toggleLight = true;
+	wearSuitText = false;
+	wearSuit = false;
+
+
+    askedEngine = false;
+    askedHull = false;
+    askedWings = false;
+    askedShipBuild = false;
+    shipBuilt = false;
+
+    gateOpening = false;
+    frontGateOpening = false;
+    backGateOpening = false;
+    leftGateOpening = false;
+    rightGateOpening = false;
 
 	//JUmp
 	acceleration = -1;
@@ -49,49 +81,41 @@ void SP2::Init()
 	t = 1;
 	distance = 0; 
 	firstpos = 0;
-	onGround = true;
 
-    gateOpening = false;
+    onGround = true;
+	CrystalText = false;
 
+	//FIRST PERSON CAMERA
+	firstPersonCamera.Reset();
+
+	//THRID PERSON CAMERA
 	thirdPersonCamera.SetMouseEnabled(true);
+	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
+	thirdPersonCamera.SetCameraDistanceAbsolute(60);
 
-	//Floats
+	//INIT CAMERA POINTER
+	camPointer = &firstPersonCamera;
 
-	TokenTranslate = 11;
-	TextTranslate = 20;
-	TestRotation = 90;
-	
-	SuitTranslate = 2;
-
-    leftGateOffset = 0;
-    rightGateOffset = 0;
-    frontGateOffset = 0;
-    backGateOffset = 0;
-
-	heightOfWall = 12;
-
-
+	//STARTING POSITION OF PLAYER
 	startingCharPos = charPos = { 600, 17, -36 };
 
-	shipStartingPos = shipPos = { 75, 18, 150 };
+
+	//Initialize camera settings (Don's)
+	shipStartingPos = shipPos = { -100, 18, 160 };
     shipHorizontalRotateAngle = 0;
     shipVerticalRotateAngle = 0;
-    //Initialize camera settings (Gary's)
-    //firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    //thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
 
     //Initialize camera settings (Don's)
 	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 10);
+    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 20);
 
     // Init Cam Pointer
     camPointer = &firstPersonCamera;
 
-    // Init Player
-	//somePlayer.setPlayerStats("TestMan", "Human", 100, playerStartingPos, firstPersonCamera); // Name, Race, Money, Pos, camera
+	//INIT PLAYER
 	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, firstPersonCamera); // Name, Race, Money, Pos, camera
 
-    LoadMeshes();
+	LoadMeshes();
 
     //camPointer = &thirdPersonCamera;
     //somePlayer.setCameraType("third");
@@ -104,8 +128,11 @@ void SP2::Init()
 	thirdPersonCamera.SetCameraDistanceAbsolute(60);
 
 
-	//Assigning coords to array  
-    CrystalNo = 100;
+	firstPersonCamera.Reset();
+
+	//CRYSTAL
+	//ASSIGNING COORD INTO ARRAY   
+    CrystalNo = 10;
 	for (int i = 0; i < CrystalNo; i++)
 	{
 		xcoords[i] = rand() % 900 - 450;
@@ -122,81 +149,239 @@ void SP2::Init()
 
 }
 
+static float ROT_LIMIT = 45.f;
+static float SCALE_LIMIT = 5.f;
+float FramesPerSecond = 0;
 void SP2::Update(double dt)
 {
-	FramesPerSecond = 1 / dt;
+    //FPS
+    FramesPerSecond = 1 / dt;
 
-	ReadKeyPresses();
+    //READKEYS FUNCTION
+    ReadKeyPresses();
 
-	CrystalText = false;
-    //createBoundBox(InteractablesList, BuildingsList);
+    //COLLISION
     interactionCheck(dt, InteractablesList, somePlayer);
 
-	if (!MENUBOOL)
-	{
-    	if (somePlayer.getCameraType() == "first")
-    	{
-    	    firstPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
-    	}
-    	else
-    	{
-    	    thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
-    	}
-    }
 
-	static unsigned firstFrames = 2;
-	if (firstFrames > 0)
-	{
-		thirdPersonCamera.Reset();
-		firstFrames--;
-	}
+
     
 	TestRotation += float(dt * 100);
 
+    //TESTING FOR CAFE MENU
+    if (!MENUBOOL)
+    {
+        if (somePlayer.getCameraType() == "first")
+        {
+            firstPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
+        }
+        else
+        {
+            thirdPersonCamera.Update(dt, InteractablesList, BuildingsList, somePlayer);
+        }
+    }
 
-	//Movements with OBJs. NOTE: Cameras should have a name to define.
-	if (camPointer == &thirdPersonCamera)
-	{
-		Vector3 view = (camPointer->target - camPointer->position).Normalized();
-		if (Application::IsKeyPressed('W'))
-		{
-			shipPos.x += view.x;
-			shipPos.y += view.y;
-			shipPos.z += view.z;
-		}
-	}
 
-	//Interactions with OBJs.
-	if (camPointer == &thirdPersonCamera)
-	{
-		Vector3 viewDirection = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
-		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-		{
-			if (!i->isInView(Position(thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z), viewDirection)) continue;
+    //WTF IS THIS PLEASE COMMENT
+    static unsigned firstFrames = 2;
+    if (firstFrames > 0)
+    {
+        firstPersonCamera.Reset();
+        firstFrames--;
+    }
 
-			if (i->name == "vending")
-			{
-				vendingMachineInteractions();
-			}
 
-			else if (i->name == "token")
-			{
-				tokenInteractions();
-			}
+    //INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
+    Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 
-			else if (i->name == "counter")
-			{
-				counterInteractions();
-			}
+    for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+    {
 
-			else if (i->name == "spacesuit")
+        //VENDING MACHINE
+        if (it->name == "vending")
+        {
+            if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
             {
-                spaceSuitInteractions();
+                NearVendingText = true;
+                if (Application::IsKeyPressed('Q'))
+                {
+                    TextTranslate = 100;
+                    TokenOnScreen = false;
+                    RenderCoke = true;
+                    ConsumeCokeText = true;
+                }
+
+                if (Application::IsKeyPressed('U'))
+                {
+                    ConsumeCokeText = false;
+                    RenderCoke = false;
+                }
             }
-		}
-	}
+            else
+            {
+                NearVendingText = false;
+                ConsumeCokeText = false;
+                RenderCoke = false;
+            }
+        }
 
 
+        //TOKEN
+        if (it->name == "token")
+        {
+            if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+            {
+                PickUpTokenText = true;
+
+                if (Application::IsKeyPressed('Q'))
+                {
+                    TokenOnScreen = true;
+                    TokenTranslate = 10.5;
+                }
+            }
+            else
+            {
+                PickUpTokenText = false;
+            }
+        }
+
+
+        //COUNTER
+        if (it->name == "counter")
+        {
+            if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+            {
+                testText = true;
+                if (Application::IsKeyPressed('Y'))
+                {
+                    YesShowCafeMenu = true;
+                }
+
+                if (YesShowCafeMenu == true)
+                {
+                    DisplayCafeMenu = true;
+                }
+                else
+                {
+                    DisplayCafeMenu = false;
+                }
+            }
+            else
+            {
+                testText = false;
+                DisplayCafeMenu = false;
+                YesShowCafeMenu = false;
+            }
+        }
+
+
+
+        //SPACESUIT
+        if (it->name == "spacesuit")
+        {
+            if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+            {
+                wearSuitText = true;
+
+                if (Application::IsKeyPressed('T'))
+                {
+                    SuitTranslate = -50;
+                    wearSuit = true;
+                    DisplayInventory = true;
+                }
+
+                if (Application::IsKeyPressed('G'))
+                {
+                    wearSuit = false;
+                    DisplayInventory = false;
+                }
+            }
+            else
+            {
+                wearSuitText = false;
+
+                if (Application::IsKeyPressed('G'))
+                {
+                    wearSuit = false;
+                    DisplayInventory = false;
+                }
+            }
+        }
+
+
+        // Door Opening & Closing
+        if (it->name.find("frontGate") != string::npos)
+        {
+            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF FRONTGATE IS IN VIEW
+            {
+                gateOpening = true;
+                if (Application::IsKeyPressed('E'))
+                {
+                    frontGateOpening = true;
+                }
+                if (frontGateOpening) { doorInteractions(dt, it, frontGateOffset, frontGateOpening); }
+                if (!frontGateOpening) { doorClosing(dt, it, frontGateOffset, frontGateOpening); }
+            }
+        }
+
+        if (it->name.find("rightGate") != string::npos)
+        {
+            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF rightGATE IS IN VIEW
+            {
+                gateOpening = true;
+                if (Application::IsKeyPressed('E'))
+                {
+                    rightGateOpening = true;
+                }
+                if (rightGateOpening) { doorInteractions(dt, it, rightGateOffset, rightGateOpening); }
+                if (!rightGateOpening) { doorClosing(dt, it, rightGateOffset, rightGateOpening); }
+            }
+        }
+
+        if (it->name.find("backGate") != string::npos)
+        {
+            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF backGATE IS IN VIEW
+            {
+                gateOpening = true;
+                if (Application::IsKeyPressed('E'))
+                {
+                    backGateOpening = true;
+                }
+                if (backGateOpening) { doorInteractions(dt, it, backGateOffset, backGateOpening); }
+                if (!backGateOpening) { doorClosing(dt, it, backGateOffset, backGateOpening); }
+            }
+        }
+
+        if (it->name.find("leftGate") != string::npos)
+        {
+            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF leftGATE IS IN VIEW
+            {
+                gateOpening = true;
+                if (Application::IsKeyPressed('E'))
+                {
+                    leftGateOpening = true;
+                }
+                if (leftGateOpening) { doorInteractions(dt, it, leftGateOffset, leftGateOpening); }
+                if (!leftGateOpening) { doorClosing(dt, it, leftGateOffset, leftGateOpening); }
+            }
+        }
+
+        // Shop
+        if (it->name == "shop")
+        {
+            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+            {
+                if (Application::IsKeyPressed('E'))
+                {
+                    askedShipBuild = true;
+                    askedHull = true;
+                }
+            }
+        }
+    }
+
+
+    //SHIP INTERACTIONS (DONOVAN'S)
     for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
     {
         //Movements with OBJs. NOTE: Cameras should have a name to define.
@@ -208,11 +393,14 @@ void SP2::Update(double dt)
                 shipPos.x = shipPos.x + view.x + i->shipSpeed;
                 shipPos.y = shipPos.y + view.y + i->shipSpeed;
                 shipPos.z = shipPos.z + view.z + i->shipSpeed;
+
+                // Ship Animation - Don't Touch - Donovan
+                shipAnimation(dt);
             }
         }
     }
 
-	//Interactions with OBJs.
+    //INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
     if (camPointer == &firstPersonCamera)
     {
         Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -222,236 +410,202 @@ void SP2::Update(double dt)
             {
                 if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
                 {
-				CrystalText = true;
-				posxcheck = i->pos.x;
-				poszcheck = i->pos.z;
-				if (Application::IsKeyPressed('M'))
-					{
-					for (int i = 0; i < CrystalNo; i++)
-						{
-						if ((posxcheck == xcoords[i]) && (poszcheck == zcoords[i]) && (rendercrystal[i] == 1))
-							{
-							rendercrystal[i] = 0;
-							crystalcount += rand() % 10 + 1;
-							}
-						}
-					}
-                }
-				else
-				{
+                    CrystalText = true;
+                    posxcheck = i->pos.x;
+                    poszcheck = i->pos.z;
 
-				}
-            }
-            else if (i->name == "vending")
-            {
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-                    NearVendingText = true;
-                    if (Application::IsKeyPressed('Q'))
+                    if (Application::IsKeyPressed('M'))
                     {
-                        TextTranslate = 100;
-                        TokenOnScreen = false;
-                        RenderCoke = true;
-                        ConsumeCokeText = true;
-                    }
-
-                    if (Application::IsKeyPressed('U'))
-                    {
-                        ConsumeCokeText = false;
-                        RenderCoke = false;
+                        for (int i = 0; i < CrystalNo; i++)
+                        {
+                            if ((posxcheck == xcoords[i]) && (poszcheck == zcoords[i]) && (rendercrystal[i] == 1))
+                            {
+                                rendercrystal[i] = 0;
+                                crystalcount += rand() % 10 + 1;
+                            }
+                        }
                     }
                 }
-                else
-                {
-                    NearVendingText = false;
-                    ConsumeCokeText = false;
-                    RenderCoke = false;
-                }
             }
 
-            else if (i->name == "token")
-            {
+            ////DOOR OPEN AND CLOSE (DONOVAN'S)    - DO NOT TOUCH
+            //if (i->name.find("frontGate") != string::npos) //IF InteractableOBJ IS A FRONTGATE
+            //{
+            //    //if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) //IF FRONTGATE IS IN VIEW
+            //    if (somePlayer.pos.x < i->pos.x + 15 && somePlayer.pos.x > i->pos.x - 15 && somePlayer.pos.z < i->pos.z + 15 && somePlayer.pos.z > i->pos.z - 15)
+            //    {
+            //        if (Application::IsKeyPressed('E'))
+            //        {
+            //            frontGateOpening = true;
+            //        }
+            //        if (frontGateOpening) { doorInteractions(dt, i, frontGateOffset, frontGateOpening); }
+            //    }
+            //    else
+            //    {
+            //        doorClosing(dt, i, frontGateOffset, frontGateOpening);
+            //    }
+            //}
 
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-                    PickUpTokenText = true;
+            //if (i->name.find("backGate") != string::npos)
+            //{
+            //    if (!backGateOpening) { doorClosing(dt, i, backGateOffset, backGateOpening); }
 
-                    if (Application::IsKeyPressed('Q'))
-                    {
-                        TokenOnScreen = true;
-                        TokenTranslate = 10.5;
-                    }
-                }
-                else
-                {
-                    PickUpTokenText = false;
-                }
-            }
+            //    if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) //IF backGATE IS IN VIEW
+            //    {
+            //        if (Application::IsKeyPressed('E'))
+            //        {
+            //            backGateOpening = true;
+            //        }
+            //        if (backGateOpening) { doorInteractions(dt, i, backGateOffset, backGateOpening); }
+            //    }
+            //}
+            //if (i->name.find("leftGate") != string::npos)
+            //{
+            //    if (!leftGateOpening) { doorClosing(dt, i, leftGateOffset, leftGateOpening); }
 
-            else if (i->name == "counter")
-            {
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-                    testText = true;
-                    if (Application::IsKeyPressed('Y')) YesShowCafeMenu = true;
-                    DisplayCafeMenu = YesShowCafeMenu;
-                }
-                else
-                {
-                    testText = false;
-                    DisplayCafeMenu = false;
-                    YesShowCafeMenu = false;
-                }
-            }
+            //    if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) //IF leftGATE IS IN VIEW
+            //    {
+            //        if (Application::IsKeyPressed('E'))
+            //        {
+            //            leftGateOpening = true;
+            //        }
+            //        if (leftGateOpening) { doorInteractions(dt, i, leftGateOffset, leftGateOpening); }
+            //    }
+            //}
+            //if (i->name.find("rightGate") != string::npos)
+            //{
+            //    if (!rightGateOpening) { doorClosing(dt, i, rightGateOffset, rightGateOpening); }
 
-            // Door Opening & Closing - Don't Touch - Donovan
-            else if (i->name.find("frontGate") != string::npos) // If InteractableOBJ is a frontGate
-            {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) // If the frontGate is in view
-                {
-                    gateOpening = true;
-                    doorInteractions(dt, i, frontGateOffset);
-                }
-                //else 
-                //{
-                //    gateOpening = false;
-                //    doorClosing(dt, i, frontGateOffset);
-                //}
-                //
-            }
-            else if (i->name.find("backGate") != string::npos)
-            {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
-                {
-                    doorInteractions(dt, i, backGateOffset);
-                }
-            }
-            else if (i->name.find("leftGate") != string::npos)
-            {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
-                {
-                    doorInteractions(dt, i, leftGateOffset);
-                }
-            }
-            else if (i->name.find("rightGate") != string::npos)
-            {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
-                {
-                    doorInteractions(dt, i, rightGateOffset);
-                }   
-            }
+            //    if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) //IF rightGATE IS IN VIEW
+            //    {
+            //        if (Application::IsKeyPressed('E'))
+            //        {
+            //            rightGateOpening = true;
+            //        }
+            //        if (rightGateOpening) { doorInteractions(dt, i, rightGateOffset, rightGateOpening); }
+            //    }
+            //}
 
-            
-            /*
-            else if (i->name == "spacesuit")
-            {
-            spaceSuitInteractions();
-            }
-            else
-            {
-            wearSuitText = false;
-            }
-            */
+
+
+            //if (i->name == "shop")
+            //{
+            //    if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection))
+            //    {
+            //        if (Application::IsKeyPressed('E'))
+            //        {
+            //            askedShipBuild = true;
+            //            askedHull = true;
+            //        }
+            //    }
+            //}
         }
+
+        if (askedShipBuild)
+        {
+            shopInteractions();
+        }
+
+
+        //JUMP (BECKHAM'S)
+        if (Application::IsKeyPressed(VK_SPACE) && (onGround == true)) //s = ut + 0.5 at^2
+        {
+            firstpos = firstPersonCamera.position.y;
+            firstvelo = 50;
+            onGround = false;
+        }
+        if (onGround == false)
+        {
+            secondvelo = firstvelo + (acceleration * t * t); // a = -2 , t = 1 
+            firstvelo = secondvelo;
+
+            distance = ((firstvelo * t) + (0.5 * acceleration * t * t));
+            firstPersonCamera.position.y += distance * dt;
+            firstPersonCamera.target.y += distance * dt;
+
+            somePlayer.pos.y += distance * dt;
+        }
+
+        if (firstpos >= firstPersonCamera.position.y)
+        {
+            firstPersonCamera.position.y = firstpos;
+            onGround = true;
+        }
+
     }
-
-
-    // Ship Creation - Don't Touch - Donovan
-    if (Application::IsKeyPressed('E') && ShipList.size() == 0)
-    {
-        shipCreation();
-    }
-
-    // Ship Animation - Don't Touch - Donovan
-    shipAnimation(dt);
-    
-	//JUMP
-	if (Application::IsKeyPressed(VK_SPACE) &&  (onGround == true)) //s = ut + 0.5 at^2
-	{ 
-		firstpos = firstPersonCamera.position.y;
-		firstvelo = 50;
-		onGround = false;
-	}
-	if (onGround == false)
-	{
-		secondvelo = firstvelo + (acceleration * t * t); // a = -2 , t = 1 
-		firstvelo = secondvelo;
-
-		distance = ((firstvelo * t) + (0.5 * acceleration * t * t));
-		firstPersonCamera.position.y += distance * dt;
-        firstPersonCamera.target.y += distance * dt;
-
-        somePlayer.pos.y += distance * dt;
-	}
-
-	if (firstpos >= firstPersonCamera.position.y)
-	{
-		firstPersonCamera.position.y = firstpos;
-		onGround = true;
-	}
-	
 }
 
-void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset)
+void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
 {
-    if (gateOffset <= 35)
+    if (gateOffset < 30)
     {
-        gateOffset += (float)(10 * dt);
-        it->pos.y += (float)(10 * dt);
+        gateOffset += (float)(40 * dt);
+    }
+
+    if (it->pos.y < 30)
+    {
+        it->pos.y += (float)(40 * dt);
+    }
+
+    if (gateOffset >= 30 && it->pos.y >= 30)
+    {
+        gateOpening = false;
     }
 }
 
-void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset)
+void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
 {
     if (gateOffset > 0)
     {
-        gateOffset -= (float)(10 * dt);
-        it->pos.y -= (float)(10 * dt);
+        gateOffset -= (float)(60 * dt);
+    }
+
+    if (it->pos.y > 17)
+    {
+        it->pos.y -= (float)(60 * dt);
     }
 }
 
 void SP2::shipAnimation(double dt)
 {
     // Ship Animation
-    if (thirdPersonCamera.yawingLeft == true /*&& shipHorizontalRotateAngle >= -20*/) { shipHorizontalRotateAngle += (float)(30 * dt); }
-    if (thirdPersonCamera.yawingRight == true /*&& shipHorizontalRotateAngle <= 20*/) { shipHorizontalRotateAngle -= (float)(30 * dt); }
-    if (thirdPersonCamera.pitchingDown == true /*&& shipVerticalRotateAngle >= -20*/) { shipVerticalRotateAngle += (float)(30 * dt); }
-    if (thirdPersonCamera.pitchingUp == true /*&& shipHorizontalRotateAngle <= 20*/) { shipVerticalRotateAngle -= (float)(30 * dt); }
+    if (thirdPersonCamera.yawingLeft == true /*&& shipHorizontalRotateAngle >= -20*/) { shipHorizontalRotateAngle += (float)(40 * dt); }
+    if (thirdPersonCamera.yawingRight == true /*&& shipHorizontalRotateAngle <= 20*/) { shipHorizontalRotateAngle -= (float)(40 * dt); }
+    if (thirdPersonCamera.pitchingDown == true /*&& shipVerticalRotateAngle >= -20*/) { shipVerticalRotateAngle += (float)(40 * dt); }
+    if (thirdPersonCamera.pitchingUp == true /*&& shipHorizontalRotateAngle <= 20*/) { shipVerticalRotateAngle -= (float)(40 * dt); }
 
     // Reset Ship to original orientation
-    /*if (thirdPersonCamera.yawingRight == false )
+    if (thirdPersonCamera.yawingRight == false )
     {
-    if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
-    {
-    shipHorizontalRotateAngle += (float)(10 * dt);
-    }
+        if (shipHorizontalRotateAngle >= -20 && shipHorizontalRotateAngle < 0)
+        {
+            shipHorizontalRotateAngle += (float)(10 * dt);
+        }
     }
 
     if (thirdPersonCamera.yawingLeft == false)
     {
-    if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
-    {
-    shipHorizontalRotateAngle -= (float)(10 * dt);
-    }
-
+        if (shipHorizontalRotateAngle <= 20 && shipHorizontalRotateAngle > 0)
+        {
+            shipHorizontalRotateAngle -= (float)(10 * dt);
+        }
     }
 
     if (thirdPersonCamera.pitchingDown == false)
     {
-    if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
-    {
-    shipVerticalRotateAngle += (float)(10 * dt);
-    }
+        if (shipVerticalRotateAngle >= -20 && shipVerticalRotateAngle < 0)
+        {
+            shipVerticalRotateAngle += (float)(10 * dt);
+        }
     }
 
     if (thirdPersonCamera.pitchingUp == false)
     {
-    if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
-    {
-    shipVerticalRotateAngle -= (float)(10 * dt);
+        if (shipVerticalRotateAngle <= 20 && shipVerticalRotateAngle > 0)
+        {
+            shipVerticalRotateAngle -= (float)(10 * dt);
+        }
     }
-
-    }*/
 }
 
 void SP2::shipCreation()
@@ -465,41 +619,87 @@ void SP2::shipCreation()
 
     shipTemplatePtr = &someShip;
 
-    ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LightHull, QaudWings, G1Engine));
+    //ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LargeHull, QuadWings, G1Engine));
+    ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, somePlayer.getParts()));
 
     // Load Meshes for specific ship parts
     for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
     {
+        // Load Meshes for Light Ship
         if (i->hullType == "LightHull")
         {
             meshList[GEO_HULL] = MeshBuilder::GenerateOBJ("shipHull", "OBJ//Ship Models//LightHull.obj");
+
+            if (i->wingType == "DualWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Light_DualWings.obj");
+            }
+            else if (i->wingType == "QuadWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Light_QuadWings.obj");
+            }
+
+            if (i->engineType == "G1Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Light_G1Engine.obj");
+            }
+            else if (i->engineType == "G2Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Light_G2Engine.obj");
+            }
         }
+
+        // Load Meshes for Medium Hull
         else if (i->hullType == "MediumHull")
         {
+            meshList[GEO_HULL] = MeshBuilder::GenerateOBJ("shipHull", "OBJ//Ship Models//MediumHull.obj");
 
+            if (i->wingType == "DualWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Medium_DualWings.obj");
+            }
+            else if (i->wingType == "QuadWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Medium_QuadWings.obj");
+            }
+
+            if (i->engineType == "G1Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Medium_G1Engine.obj");
+            }
+            else if (i->engineType == "G2Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Medium_G2Engine.obj");
+            }
         }
+
+        // Load Meshes for Heavy Hull
         else if (i->hullType == "LargeHull")
         {
+            meshList[GEO_HULL] = MeshBuilder::GenerateOBJ("shipHull", "OBJ//Ship Models//LargeHull.obj");
 
+            if (i->wingType == "DualWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Large_DualWings.obj");
+            }
+            else if (i->wingType == "QuadWings")
+            {
+                meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//Large_QuadWings.obj");
+            }
+
+            if (i->engineType == "G1Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Large_G1Engine.obj");
+            }
+            else if (i->engineType == "G2Engine")
+            {
+                meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Large_G2Engine.obj");
+            }
         }
 
-        if (i->wingType == "DualWings")
-        {
-            meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//DualWings.obj");
-        }
-        else if (i->wingType == "QuadWings")
-        {
-            meshList[GEO_WINGS] = MeshBuilder::GenerateOBJ("shipWings", "OBJ//Ship Models//QuadWings.obj");
-        }
+        
 
-        if (i->engineType == "G1Engine")
-        {
-            meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G1Engine.obj");
-        }
-        else if (i->engineType == "G2Engine")
-        {
-            meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//G2Engine.obj");
-        }
+        
     }
 }
 
@@ -527,72 +727,87 @@ void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList
     }
 }
 
-void SP2::vendingMachineInteractions()
+void SP2::shopInteractions()
 {
-    NearVendingText = true;
-    if (Application::IsKeyPressed('Q'))
+    if (askedHull)
     {
-        TextTranslate = 100;
-        TokenOnScreen = false;
-        RenderCoke = true;
-        ConsumeCokeText = true;
+        if (Application::IsKeyPressed('1'))
+        {
+            somePlayer.addPart(LightHull);
+            askedHull = false;
+            askedWings = true;
+        }
+        else if (Application::IsKeyPressed('2'))
+        {
+            somePlayer.addPart(MediumHull);
+            askedHull = false;
+            askedWings = true;
+        }
+        else if (Application::IsKeyPressed('3'))
+        {
+            somePlayer.addPart(LargeHull);
+            askedHull = false;
+            askedWings = true;
+        }
     }
 
-    if (Application::IsKeyPressed('U'))
+    if (askedWings)
     {
-        ConsumeCokeText = false;
-        RenderCoke = false;
+        if (Application::IsKeyPressed('4'))
+        {
+            somePlayer.addPart(DualWings);
+            askedWings = false;
+            askedEngine = true;
+        }
+        else if (Application::IsKeyPressed('5'))
+        {
+            somePlayer.addPart(QuadWings);
+            askedWings = false;
+            askedEngine = true;
+        }
     }
+
+    if (askedEngine)
+    {
+        if (Application::IsKeyPressed('6'))
+        {
+            somePlayer.addPart(G1Engine);
+            askedEngine = false;
+            shipCreation();
+            askedShipBuild = false;
+            shipBuilt = true;
+        }
+        else if (Application::IsKeyPressed('7'))
+        {
+            somePlayer.addPart(G2Engine);
+            askedEngine = false;
+            shipCreation();
+            askedShipBuild = false;
+            shipBuilt = true;
+        }
+    }
+
+
 }
 
-void SP2::tokenInteractions()
+void SP2::Dialogues()
 {
-    PickUpTokenText = true;
+	std::ifstream file("TextFiles//NPCDialogues.txt");
+	std::string str;
+	while (std::getline(file, str))
+	{
+		file_contents = str;
+		if (str != "end")
+		{
+			dialogue_vec.push_back(file_contents);
+			cout << file_contents << endl;
+		}
+		else
+		{
+			break;
+		}
 
-    if (Application::IsKeyPressed('Q'))
-    {
-        TokenOnScreen = true;
-        TokenTranslate = 10.5;
-    }
-}
-
-void SP2::counterInteractions()
-{
-    testText = true;
-    if (Application::IsKeyPressed('Y'))
-    {
-        MENUBOOL = true;
-        YesShowCafeMenu = true;
-    }
-
-    if (Application::IsKeyPressed('I'))
-    {
-        MENUBOOL = false;
-    }
-
-    if (YesShowCafeMenu == true)
-    {
-        DisplayCafeMenu = true;
-    }
-    else
-    {
-        DisplayCafeMenu = false;
-    }
-}
-
-void SP2::spaceSuitInteractions()
-{
-    wearSuitText = true;
-    if (Application::IsKeyPressed('T'))
-    {
-        SuitTranslate = -50;
-        wearSuit = true;
-    }
-
-    if (Application::IsKeyPressed('G'))
-    {
-        wearSuit = false;
-    }
+	}
 }
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)

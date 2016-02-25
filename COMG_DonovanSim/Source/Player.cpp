@@ -71,6 +71,34 @@ void Player::removeItem(InteractableOBJs itemName)
 /******************************************************************************/
 /*!
 \brief
+    Function for adding ShipPart to player's inventory
+
+\param  partsName
+    ShipParts containing part's name that is to be added
+*/
+/******************************************************************************/
+void Player::addPart(ShipParts partsName)
+{
+    this->playerInventory.shipPartsList.push_back(partsName);
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Function for getting ShipPart from player's inventory
+
+\return  
+    Returns a list of ShipParts
+*/
+/******************************************************************************/
+list<ShipParts> Player::getParts()
+{
+    return this->playerInventory.shipPartsList;
+}
+
+/******************************************************************************/
+/*!
+\brief
     Function for player taking damage
 
 \param  damageTaken
@@ -175,7 +203,7 @@ void Player::setPlayerStats(string name, string race, int moneyAmount, Position 
     this->name = name;
     this->race = race;
     this->pos = pos;
-    this->playerInventory.addMoney(100);
+    this->playerInventory.addCrystals(100);
     this->cameraPtr = &someCamera;
 }
 

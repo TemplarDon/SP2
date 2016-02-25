@@ -46,9 +46,11 @@ void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
 		YawCamera(horizontalAngle);
 		PitchCamera(verticalAngle);
+
+        shipTurningAnimation(Application::mouseX, Application::mouseY);
 	}
 
-	shipTurningAnimation(Application::mouseX, Application::mouseY);
+
 
     
 
