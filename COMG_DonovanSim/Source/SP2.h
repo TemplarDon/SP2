@@ -259,6 +259,10 @@ private:
     float frontGateOffset;
     float backGateOffset;
     bool gateOpening;
+    bool frontGateOpening;
+    bool backGateOpening;
+    bool leftGateOpening;
+    bool rightGateOpening;
 
 	//JUMP (BECKHAM'S)
 	int acceleration;
@@ -332,8 +336,8 @@ private:
     void tokenInteractions();
     void counterInteractions();
     void spaceSuitInteractions();
-    void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
-    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
+    void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
+    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
     void shopInteractions();
     void shipAnimation(double dt);
     void shipCreation();

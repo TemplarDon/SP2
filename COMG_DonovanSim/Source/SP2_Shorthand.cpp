@@ -281,11 +281,11 @@ void SP2::LoadMeshes()
 	meshList[GEO_BUNK] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Bunk.obj");
 	meshList[GEO_BUNK]->textureID = LoadTGA("Image//Bunk.tga");
 	InteractableOBJs bunk = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 127), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk2 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 127), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk3 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(210, 3, 127), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk4 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(227, 3, 127), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk5 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 191.5), 2, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk6 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 191.5), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk2 = InteractableOBJs("bunk2", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 127), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk3 = InteractableOBJs("bunk3", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(210, 3, 127), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk4 = InteractableOBJs("bunk4", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(227, 3, 127), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk5 = InteractableOBJs("bunk5", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 191.5), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk6 = InteractableOBJs("bunk6", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 191.5), 2, 0, Vector3(0, 0, 0));
 	bunk.setRequirements(25, 15);
 	InteractablesList.push_back(bunk);
 	InteractablesList.push_back(bunk2);
@@ -420,11 +420,6 @@ void SP2::LoadMeshes()
 	meshList[GEO_CRYSTAL] = MeshBuilder::GenerateOBJ("Crystal", "OBJ//crystal2.obj");
 	meshList[GEO_CRYSTAL]->textureID = LoadTGA("Image//crystal_Tile.tga");
 
-
-	//HANGAR
-
-
-
     initSpaceShip();
     // Helipad (Ship Spawn)
     meshList[GEO_HELIPAD] = MeshBuilder::GenerateOBJ("helipad", "OBJ//helipad.obj");
@@ -460,6 +455,12 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	Building rightWall2 = Building("rightWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(rightWall2);
 
+    Building rightWall1top = Building("rightWall1top", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + 2 * heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(rightWall1top);
+
+    Building rightWall2top = Building("rightWall2top", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + 2 * heightOfWall, pos.z + (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(rightWall2top);
+
 	InteractableOBJs rightGateTop = InteractableOBJs("rightGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 15, pos.z + (groundMeshSize / 2)), 5, 0, Vector3(0, 0, 0));
     rightGateTop.setRequirements(30, 200);
     InteractablesList.push_back(rightGateTop);
@@ -470,6 +471,12 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 
 	Building leftWall2 = Building("leftWall2", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(leftWall2);
+
+    Building leftWall1top = Building("leftWall1top", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x + 38, pos.y + 2 * heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(leftWall1top);
+
+    Building leftWall2top = Building("leftWall2top", meshList[GEO_WALL]->maxPos, meshList[GEO_WALL]->minPos, Position(pos.x - 38, pos.y + 2 * heightOfWall, pos.z - (groundMeshSize / 2)), 13, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(leftWall2top);
 
 	InteractableOBJs leftGateTop = InteractableOBJs("leftGateTop", meshList[GEO_GATETOP]->maxPos, meshList[GEO_GATETOP]->minPos, Position(pos.x, pos.y + 15, pos.z - (groundMeshSize / 2)), 5, 0, Vector3(0, 0, 0));
     leftGateTop.setRequirements(30, 200);
@@ -482,7 +489,13 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	Building frontWall2 = Building("frontWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(frontWall2);
 
-    InteractableOBJs frontGateTop = InteractableOBJs("frontGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 15, pos.z), 5, 0, Vector3(0, 0, 0));
+    Building frontWall1top = Building("frontWall1top", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z - 38), 13, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(frontWall1top);
+
+    Building frontWall2top = Building("frontWall2top", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(frontWall2top);
+
+    InteractableOBJs frontGateTop = InteractableOBJs("frontGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x + (groundMeshSize / 2), pos.y , pos.z), 5, 0, Vector3(0, 0, 0));
     frontGateTop.setRequirements(30, 200);
     InteractablesList.push_back(frontGateTop);
 
@@ -493,7 +506,13 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 	Building backWall2 = Building("backWall2", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(backWall2);
 
-    InteractableOBJs backGateTop = InteractableOBJs("backGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 15, pos.z), 5, 0, Vector3(0, 0, 0));
+    Building backWall1top = Building("backWall1top", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z - 38), 13, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(backWall1top);
+
+    Building backWall2top = Building("backWall2top", meshList[GEO_WALL2]->maxPos, meshList[GEO_WALL2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y + 2 * heightOfWall, pos.z + 38), 13, 0, Vector3(0, 0, 0));
+    BuildingsList.push_back(backWall2top);
+
+    InteractableOBJs backGateTop = InteractableOBJs("backGateTop", meshList[GEO_GATETOP2]->maxPos, meshList[GEO_GATETOP2]->minPos, Position(pos.x - (groundMeshSize / 2), pos.y , pos.z), 5, 0, Vector3(0, 0, 0));
     backGateTop.setRequirements(30, 200);
     InteractablesList.push_back(backGateTop);
 
@@ -597,7 +616,7 @@ void SP2::RenderCode()
     RenderArmouryAndShop();
     modelStack.PopMatrix();
 
-
+    // Helipad
     modelStack.PushMatrix();
     modelStack.Translate(shipStartingPos.x, shipStartingPos.y - 15, shipStartingPos.z);
     modelStack.Rotate(180, 1, 0, 0);
@@ -606,22 +625,17 @@ void SP2::RenderCode()
     modelStack.PopMatrix();
 
 
-	//INTERACTION
-
-
-	// Mine
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-100, 2, 50);
-	//modelStack.Scale(4, 4, 4);
-	//RenderMesh(meshList[GEO_MINE], true, toggleLight);
-	//modelStack.PopMatrix();
-
-
 	// POSITION OF X Y Z
 	std::ostringstream ss;
 	ss.str("");
 	ss << "Position: X(" << firstPersonCamera.position.x << ") Y(" << firstPersonCamera.position.y << ") Z(" << firstPersonCamera.position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
+
+    // Player POS
+    std::ostringstream playerpos;
+    playerpos.str("");
+    playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
+    RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
 	//CRYSTAL COUNTS
 	std::ostringstream as;

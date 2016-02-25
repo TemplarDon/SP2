@@ -68,6 +68,12 @@ void SP2::Init()
     askedShipBuild = false;
     shipBuilt = false;
 
+    gateOpening = false;
+    frontGateOpening = false;
+    backGateOpening = false;
+    leftGateOpening = false;
+    rightGateOpening = false;
+
 	//JUmp
 	acceleration = -1;
 	firstvelo = 0;
@@ -76,8 +82,7 @@ void SP2::Init()
 	distance = 0; 
 	firstpos = 0;
 
-	onGround = true;
-	gateOpening = false;
+    onGround = true;
 	CrystalText = false;
 
 	//FIRST PERSON CAMERA
@@ -353,33 +358,43 @@ void SP2::Update(double dt)
             //DOOR OPEN AND CLOSE (DONOVAN'S)    - DO NOT TOUCH
             if (i->name.find("frontGate") != string::npos) //IF InteractableOBJ IS A FRONTGATE
             {
+                if (!frontGateOpening) { doorClosing(dt, i, frontGateOffset, frontGateOpening); }
+
                 if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) //IF FRONTGATE IS IN VIEW
                 {
-                    gateOpening = true;
-                    doorInteractions(dt, i, frontGateOffset);
+                    if (Application::IsKeyPressed('E'))
+                    {
+                        frontGateOpening = true;
+                    }
+                    if (frontGateOpening) { doorInteractions(dt, i, frontGateOffset, frontGateOpening); }
                 }
             }
             else if (i->name.find("backGate") != string::npos)
             {
                 if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
                 {
-                    doorInteractions(dt, i, backGateOffset);
+                    backGateOpening = true;
+                    //doorInteractions(dt, i, backGateOffset);
                 }
             }
             else if (i->name.find("leftGate") != string::npos)
             {
                 if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
                 {
-                    doorInteractions(dt, i, leftGateOffset);
+                    leftGateOpening = true;
+                    //doorInteractions(dt, i, leftGateOffset);
                 }
             }
             else if (i->name.find("rightGate") != string::npos)
             {
                 if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
                 {
-                    doorInteractions(dt, i, rightGateOffset);
+                    rightGateOpening = true;
+                    //doorInteractions(dt, i, rightGateOffset);
                 }   
             }
+
+
 
             if (i->name == "shop")
             {
@@ -396,16 +411,11 @@ void SP2::Update(double dt)
         }
     }
 
-    // Ship Creation - Don't Touch - Donovan
-    //if (Application::IsKeyPressed('E') && ShipList.size() == 0)
-    //{
-    //    shipCreation();
-    //}
-
     if (askedShipBuild)
     {
         shopInteractions();
     }
+
 
 	//JUMP (BECKHAM'S)
 	if (Application::IsKeyPressed(VK_SPACE) &&  (onGround == true)) //s = ut + 0.5 at^2
@@ -434,16 +444,20 @@ void SP2::Update(double dt)
 	
 }
 
-void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset)
+void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
 {
-    if (gateOffset <= 35)
+    if (gateOffset <= 35 && gateOpening == true)
     {
         gateOffset += (float)(10 * dt);
         it->pos.y += (float)(10 * dt);
+        if (gateOffset >= 35)
+        {
+            gateOpening = false;
+        }
     }
 }
 
-void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset)
+void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
 {
     if (gateOffset > 0)
     {
