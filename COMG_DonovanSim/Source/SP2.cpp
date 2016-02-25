@@ -81,13 +81,10 @@ void SP2::Init()
 	shipStartingPos = shipPos = { -100, 18, 160 };
     shipHorizontalRotateAngle = 0;
     shipVerticalRotateAngle = 0;
-    //Initialize camera settings (Gary's)
-    //firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    //thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &charPos, 10);
 
     //Initialize camera settings (Don's)
 	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
-    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 10);
+    thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 20);
 
     // Init Cam Pointer
     camPointer = &firstPersonCamera;
@@ -173,37 +170,6 @@ void SP2::Update(double dt)
 		}
 	}
 
-	//Interactions with OBJs.
-	if (camPointer == &firstPersonCamera)
-	{
-		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-		{
-			if (!i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection)) continue;
-
-			if (i->name == "vending")
-			{
-				vendingMachineInteractions();
-			}
-
-			else if (i->name == "token")
-			{
-				tokenInteractions();
-			}
-
-			else if (i->name == "counter")
-			{
-				counterInteractions();
-			}
-
-			else if (i->name == "spacesuit")
-            {
-                spaceSuitInteractions();
-            }
-		}
-	}
-
-
     for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
     {
         //Movements with OBJs. NOTE: Cameras should have a name to define.
@@ -223,160 +189,161 @@ void SP2::Update(double dt)
     }
 
 	//Interactions with OBJs.
-    if (camPointer == &firstPersonCamera)
-    {
-        Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-        for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-        {
-            if (i->name == "crystal")
-            {
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-				CrystalText = true;
-				posxcheck = i->pos.x;
-				poszcheck = i->pos.z;
-				if (Application::IsKeyPressed('M'))
-					{
-					for (int i = 0; i < CrystalNo; i++)
-						{
-						if ((posxcheck == xcoords[i]) && (poszcheck == zcoords[i]) && (rendercrystal[i] == 1))
-							{
-							rendercrystal[i] = 0;
-							crystalcount += rand() % 10 + 1;
-							}
-						}
-					}
-                }
-				else
-				{
+    //if (camPointer == &firstPersonCamera)
+    //{
+    //    Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+    //    for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+    //    {
+    //        if (i->name == "crystal")
+    //        {
+    //            if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
+    //            {
+				//CrystalText = true;
+				//posxcheck = i->pos.x;
+				//poszcheck = i->pos.z;
+				//if (Application::IsKeyPressed('M'))
+				//	{
+				//	for (int i = 0; i < CrystalNo; i++)
+				//		{
+				//		if ((posxcheck == xcoords[i]) && (poszcheck == zcoords[i]) && (rendercrystal[i] == 1))
+				//			{
+				//			rendercrystal[i] = 0;
+				//			crystalcount += rand() % 10 + 1;
+				//			}
+				//		}
+				//	}
+    //            }
+				//else
+				//{
 
-				}
-            }
-            else if (i->name == "vending")
-            {
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-                    NearVendingText = true;
-                    if (Application::IsKeyPressed('Q'))
-                    {
-                        TextTranslate = 100;
-                        TokenOnScreen = false;
-                        RenderCoke = true;
-                        ConsumeCokeText = true;
-                    }
+				//}
+    //        }
+    //        
+    //        if (i->name == "vending")
+    //        {
+    //            if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
+    //            {
+    //                NearVendingText = true;
+    //                if (Application::IsKeyPressed('Q'))
+    //                {
+    //                    TextTranslate = 100;
+    //                    TokenOnScreen = false;
+    //                    RenderCoke = true;
+    //                    ConsumeCokeText = true;
+    //                }
 
-                    if (Application::IsKeyPressed('U'))
-                    {
-                        ConsumeCokeText = false;
-                        RenderCoke = false;
-                    }
-                }
-                else
-                {
-                    NearVendingText = false;
-                    ConsumeCokeText = false;
-                    RenderCoke = false;
-                }
-            }
+    //                if (Application::IsKeyPressed('U'))
+    //                {
+    //                    ConsumeCokeText = false;
+    //                    RenderCoke = false;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                NearVendingText = false;
+    //                ConsumeCokeText = false;
+    //                RenderCoke = false;
+    //            }
+    //        }
 
-            else if (i->name == "token")
-            {
+    //        if (i->name == "token")
+    //        {
 
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-                    PickUpTokenText = true;
+    //            if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
+    //            {
+    //                PickUpTokenText = true;
 
-                    if (Application::IsKeyPressed('Q'))
-                    {
-                        TokenOnScreen = true;
-                        TokenTranslate = 10.5;
-                    }
-                }
-                else
-                {
-                    PickUpTokenText = false;
-                }
-            }
+    //                if (Application::IsKeyPressed('Q'))
+    //                {
+    //                    TokenOnScreen = true;
+    //                    TokenTranslate = 10.5;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                PickUpTokenText = false;
+    //            }
+    //        }
 
-            else if (i->name == "counter")
-            {
-                if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
-                {
-                    testText = true;
-                    if (Application::IsKeyPressed('Y')) YesShowCafeMenu = true;
-                    DisplayCafeMenu = YesShowCafeMenu;
-                }
-                else
-                {
-                    testText = false;
-                    DisplayCafeMenu = false;
-                    YesShowCafeMenu = false;
-                }
-            }
+    //        if (i->name == "counter")
+    //        {
+    //            if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
+    //            {
+    //                testText = true;
+    //                if (Application::IsKeyPressed('Y')) YesShowCafeMenu = true;
+    //                DisplayCafeMenu = YesShowCafeMenu;
+    //            }
+    //            else
+    //            {
+    //                testText = false;
+    //                DisplayCafeMenu = false;
+    //                YesShowCafeMenu = false;
+    //            }
+    //        }
 
-            // Door Opening & Closing - Don't Touch - Donovan
-            else if (i->name.find("frontGate") != string::npos) // If InteractableOBJ is a frontGate
-            {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) // If the frontGate is in view
-                {
-                    gateOpening = true;
-                    doorInteractions(dt, i, frontGateOffset);
-                }
-                //else 
-                //{
-                //    gateOpening = false;
-                //    doorClosing(dt, i, frontGateOffset);
-                //}
-                //
-            }
-            else if (i->name.find("backGate") != string::npos)
-            {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
-                {
-                    doorInteractions(dt, i, backGateOffset);
-                }
-            }
-            else if (i->name.find("leftGate") != string::npos)
-            {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
-                {
-                    doorInteractions(dt, i, leftGateOffset);
-                }
-            }
-            else if (i->name.find("rightGate") != string::npos)
-            {
-                if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
-                {
-                    doorInteractions(dt, i, rightGateOffset);
-                }   
-            }
+    //        // Door Opening & Closing - Don't Touch - Donovan
+    //        if (i->name.find("frontGate") != string::npos) // If InteractableOBJ is a frontGate
+    //        {
+    //            if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection)) // If the frontGate is in view
+    //            {
+    //                gateOpening = true;
+    //                doorInteractions(dt, i, frontGateOffset);
+    //            }
+    //            //else 
+    //            //{
+    //            //    gateOpening = false;
+    //            //    doorClosing(dt, i, frontGateOffset);
+    //            //}
+    //            //
+    //        }
+    //        else if (i->name.find("backGate") != string::npos)
+    //        {
+    //            if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
+    //            {
+    //                doorInteractions(dt, i, backGateOffset);
+    //            }
+    //        }
+    //        else if (i->name.find("leftGate") != string::npos)
+    //        {
+    //            if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
+    //            {
+    //                doorInteractions(dt, i, leftGateOffset);
+    //            }
+    //        }
+    //        else if (i->name.find("rightGate") != string::npos)
+    //        {
+    //            if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), viewDirection))
+    //            {
+    //                doorInteractions(dt, i, rightGateOffset);
+    //            }   
+    //        }
 
-            
-            /*
-            else if (i->name == "spacesuit")
-            {
-            spaceSuitInteractions();
-            }
-            else
-            {
-            wearSuitText = false;
-            }
-            */
+    //        
+    //        /*
+    //        else if (i->name == "spacesuit")
+    //        {
+    //        spaceSuitInteractions();
+    //        }
+    //        else
+    //        {
+    //        wearSuitText = false;
+    //        }
+    //        */
 
-            else if (i->name == "shop")
-            {
-                //if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection))
-                //{
-                    if (Application::IsKeyPressed('E'))
-                    {
-                        askedShipBuild = true;
-                        askedHull = true;
-                    }
-               /* }*/
+    //        if (i->name == "shop")
+    //        {
+    //            //if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection))
+    //            //{
+    //                if (Application::IsKeyPressed('E'))
+    //                {
+    //                    askedShipBuild = true;
+    //                    askedHull = true;
+    //                }
+    //            //}
 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
 
     // Ship Creation - Don't Touch - Donovan
@@ -488,11 +455,6 @@ void SP2::shipCreation()
     someShip.setRequirements(50, 500);
 
     shipTemplatePtr = &someShip;
-
-    //for (list<ShipParts>::iterator it = somePlayer.getParts().begin; it != somePlayer.getParts().end(); ++it)
-    //{
-
-    //}
 
     //ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, LargeHull, QuadWings, G1Engine));
     ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, somePlayer.getParts()));

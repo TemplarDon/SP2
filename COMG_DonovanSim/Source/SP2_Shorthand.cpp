@@ -660,15 +660,15 @@ void SP2::RenderCode()
     // Tests for shipBuilding
     if (askedHull)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light  | 2. Medium | 3. Large ", Color(1, 0, 0), 2, 8, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light  | 2. Medium | 3. Large ", Color(1, 0, 0), 2, 3, 14);
     }
     if (askedWings)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual  | 5. Quad ", Color(1, 0, 0), 2, 8, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual  | 5. Quad ", Color(1, 0, 0), 2, 3, 14);
     }
     if (askedEngine)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine  | 7. G2 Engine ", Color(1, 0, 0), 2, 8, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine  | 7. G2 Engine ", Color(1, 0, 0), 2, 3, 14);
     }
 }
 
