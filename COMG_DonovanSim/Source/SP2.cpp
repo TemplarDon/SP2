@@ -104,8 +104,6 @@ void SP2::Init()
 	thirdPersonCamera.SetCameraDistanceAbsolute(60);
 
 
-	camera5.Reset();
-
 	//Assigning coords to array  
     CrystalNo = 100;
 	for (int i = 0; i < CrystalNo; i++)
@@ -149,7 +147,7 @@ void SP2::Update(double dt)
 	static unsigned firstFrames = 2;
 	if (firstFrames > 0)
 	{
-		camera5.Reset();
+		thirdPersonCamera.Reset();
 		firstFrames--;
 	}
     
@@ -169,12 +167,12 @@ void SP2::Update(double dt)
 	}
 
 	//Interactions with OBJs.
-	if (camPointer == &camera5)
+	if (camPointer == &thirdPersonCamera)
 	{
-		Vector3 viewDirection = (camera5.target - camera5.position).Normalized();
+		Vector3 viewDirection = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
 		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
 		{
-			if (!i->isInView(Position(camera5.position.x, camera5.position.y, camera5.position.z), viewDirection)) continue;
+			if (!i->isInView(Position(thirdPersonCamera.position.x, thirdPersonCamera.position.y, thirdPersonCamera.position.z), viewDirection)) continue;
 
 			if (i->name == "vending")
 			{

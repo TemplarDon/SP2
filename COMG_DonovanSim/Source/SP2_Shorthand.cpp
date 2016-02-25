@@ -360,6 +360,10 @@ void SP2::LoadMeshes()
 	meshList[GEO_SCIENCELAB_BEAKER] = MeshBuilder::GenerateOBJ("sciencelab_beaker", "OBJ//ScienceLab//beaker.obj");
 	meshList[GEO_SCIENCELAB_BEAKER]->textureID = LoadTGA("Image//ScienceLab//beaker_uv.tga");
 
+	//Keypad (Gary Goh's)
+	meshList[GEO_KEYPAD] = MeshBuilder::GenerateOBJ("kaypad", "OBJ//keypad.obj");
+	meshList[GEO_KEYPAD]->textureID = LoadTGA("Image//keypad_uv.tga");
+
     initSpaceShip(); 
 
 }
@@ -552,7 +556,7 @@ void SP2::RenderCode()
 
 	RenderRoomTemplate(Position(120, 2, 30));
 
-    RenderRoomTemplate(Position(120, 2, -100));
+	RenderRoomTemplate(Position(120, 2, -100));
 
 	//RenderRoomTemplate(Position(120, 2, -100));
 
@@ -566,8 +570,18 @@ void SP2::RenderCode()
 	//RenderMesh(meshList[GEO_MINE], true, toggleLight);
 	//modelStack.PopMatrix();
 
+	//Keypad
+	modelStack.PushMatrix();
+	{
+		modelStack.Translate(500, 18, 0);
+		modelStack.Scale(4.2f, 4.2f, 4.2f);
+		RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
+	}
+	modelStack.PopMatrix();
+
 
 	// POSITION OF X Y Z
+
 	std::ostringstream ss;
 	ss.str("");
 	ss << "Position: X(" << firstPersonCamera.position.x << ") Y(" << firstPersonCamera.position.y << ") Z(" << firstPersonCamera.position.z << ")";

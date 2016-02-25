@@ -75,6 +75,7 @@ class SP2 : public Scene
 		GEO_SPACEMASK,
 
         // ARMOURY / SHOP
+
         GEO_GUN,
         GEO_GUN_RACK,
         GEO_SHOOTING_RANGE,
@@ -82,6 +83,7 @@ class SP2 : public Scene
 
 
         // Infirmary
+
         GEO_BED,
         GEO_HEALING_TUBE,
 
@@ -110,6 +112,9 @@ class SP2 : public Scene
 		GEO_SCIENCELAB_TABLE,
 		GEO_SCIENCELAB_CUPBOARD,
 		GEO_SCIENCELAB_BEAKER,
+
+		//Keypad
+		GEO_KEYPAD,
 
 
         NUM_GEOMETRY,
