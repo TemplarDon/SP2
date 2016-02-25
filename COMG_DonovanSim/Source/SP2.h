@@ -71,6 +71,11 @@ class SP2 : public Scene
 		GEO_BUNK,
 		GEO_SPACEMASK,
 		GEO_SPACESUIT,
+
+
+
+        // ARMOURY / SHOP
+
 		GEO_WINDOW,
 		GEO_HUD,
 		GEO_INVENTORY,
@@ -80,6 +85,7 @@ class SP2 : public Scene
 
 
         //ARMOURY / SHOP
+
         GEO_GUN,
         GEO_GUN_RACK,
         GEO_SHOOTING_RANGE,
@@ -87,7 +93,8 @@ class SP2 : public Scene
         GEO_SHOP,
 
 
-        //Infirmary
+        // Infirmary
+        
         GEO_BED,
         GEO_HEALING_TUBE,
 
@@ -119,6 +126,9 @@ class SP2 : public Scene
 		GEO_SCIENCELAB_TABLE,
 		GEO_SCIENCELAB_CUPBOARD,
 		GEO_SCIENCELAB_BEAKER,
+
+		//Keypad
+		GEO_KEYPAD,
 
 
         NUM_GEOMETRY,
@@ -270,6 +280,10 @@ private:
     float frontGateOffset;
     float backGateOffset;
     bool gateOpening;
+    bool frontGateOpening;
+    bool backGateOpening;
+    bool leftGateOpening;
+    bool rightGateOpening;
 
 	//JUMP (BECKHAM'S)
 	int acceleration;
@@ -291,6 +305,8 @@ private:
 	int xcoords[100];
 	int zcoords[100];
 	bool rendercrystal[100];
+	int coord1;
+	int coord2;
 
 
 	//SHORTHAND CODES FOR EASIER CODINGS (GARY'S)
@@ -345,8 +361,8 @@ private:
     void tokenInteractions();
     void counterInteractions();
     void spaceSuitInteractions();
-    void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
-    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset);
+    void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
+    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
     void shopInteractions();
     void shipAnimation(double dt);
     void shipCreation();
@@ -362,6 +378,10 @@ private:
     bool askedEngine;
     bool askedShipBuild;
     bool shipBuilt;
+
+	//CRYSTAL RELATED STUFF   
+	bool checkCrystalPos(int xcoord, int zcoord, int i);
+
 };
 
 #endif

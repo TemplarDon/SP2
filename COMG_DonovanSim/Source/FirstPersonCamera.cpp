@@ -93,22 +93,23 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
     if (Application::IsKeyPressed('W'))
     {
-        camPos.Set(position.x + view.x, position.Normalized().y + view.y, position.z + view.z);
+        camPos.Set(somePlayer.pos.x + view.Normalized().x, somePlayer.pos.y + view.Normalized().y, somePlayer.pos.z + view.Normalized().z);
         if (createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
         {
-            position.x = position.x + view.x; // position = position + view
-            position.z = position.z + view.z; // position = position + view
-            target.x = target.x + view.x; // target = target + view
-            target.z = target.z + view.z; // target = target + view
+            position.x = position.x + view.Normalized().x; // position = position + view
+            position.z = position.z + view.Normalized().z; // position = position + view
+            target.x = target.x + view.Normalized().x; // target = target + view
+            target.z = target.z + view.Normalized().z; // target = target + view
 
-            somePlayer.pos.x += view.x;
-            somePlayer.pos.z += view.z;
+            somePlayer.pos.x += view.Normalized().x;
+            somePlayer.pos.z += view.Normalized().z;
         }
     }
 
     if (Application::IsKeyPressed('S'))
     {
-        camPos.Set(position.x - view.x, position.Normalized().y - view.y, position.z - view.z);
+        //camPos.Set(position.x - view.x, position.Normalized().y - view.y, position.z - view.z);
+        camPos.Set(somePlayer.pos.x - view.Normalized().x, somePlayer.pos.y - view.Normalized().y, somePlayer.pos.z - view.Normalized().z);
         if (createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
         {
             position.x = position.x - (target - position).Normalized().x; 
@@ -116,14 +117,15 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
             target.x = target.x - (target - position).Normalized().x; 
             target.z = target.z - (target - position).Normalized().z; 
 
-            somePlayer.pos.x -= view.x;
-            somePlayer.pos.z -= view.z;
+            somePlayer.pos.x -= view.Normalized().x;
+            somePlayer.pos.z -= view.Normalized().z;
         }
     }
 
     if (Application::IsKeyPressed('A'))
     {
-        camPos.Set(position.x - right.Normalized().x, position.Normalized().y - right.Normalized().y, position.z - right.Normalized().z);
+        //camPos.Set(position.x - right.Normalized().x, position.Normalized().y - right.Normalized().y, position.z - right.Normalized().z);
+        camPos.Set(somePlayer.pos.x - right.Normalized().x, somePlayer.pos.y - right.Normalized().y, somePlayer.pos.z - right.Normalized().z);
         if (createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
         {
             position -= right.Normalized();
@@ -136,7 +138,8 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
     if (Application::IsKeyPressed('D'))
     {
-        camPos.Set(position.x + right.Normalized().x, position.Normalized().y + right.Normalized().y, position.z + right.Normalized().z);
+        //camPos.Set(position.x + right.Normalized().x, position.Normalized().y + right.Normalized().y, position.z + right.Normalized().z);
+        camPos.Set(somePlayer.pos.x + right.Normalized().x, somePlayer.pos.y + right.Normalized().y, somePlayer.pos.z + right.Normalized().z);
         if (createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
         {
             position += right.Normalized();
