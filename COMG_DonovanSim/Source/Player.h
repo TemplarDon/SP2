@@ -39,6 +39,7 @@ public:
 
     // Function for adding and getting Crystals to player
     void addCrystals(int crystalAmount);
+    bool removeCrystals(int crystalAmount);
     int getCrystals();
 
     // Functions for player taking damage and healing health

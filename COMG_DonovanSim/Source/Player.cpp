@@ -17,7 +17,6 @@
 /******************************************************************************/
 Player::Player() : GameObject("", Position(0, 0, 0)), health(100), cameraType("first"), cameraPtr(0)
 {
-
 }
 
 /******************************************************************************/
@@ -122,6 +121,28 @@ void Player::addCrystals(int crystalsAmount)
 int Player::getCrystals()
 {
     return this->playerInventory.getCrystalsAmount();
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Function for removing crystals from player inventory
+
+\return
+    returns bool, true if sccessful, false if removing crystals leads to neagtive value
+*/
+/******************************************************************************/
+bool Player::removeCrystals(int crystalsAmount)
+{
+    if (playerInventory.getCrystalsAmount() - crystalsAmount < 0)
+    {
+        return false;
+    }
+    else
+    {
+        playerInventory.addCrystals(-1 * crystalsAmount);
+        return true;
+    }
 }
 
 /******************************************************************************/

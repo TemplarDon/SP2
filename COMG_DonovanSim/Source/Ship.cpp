@@ -74,6 +74,7 @@ void Ship::addShipPart(ShipParts* somePart)
 /******************************************************************************/
 void Ship::addShipUpgrade(Ship_Upgrade &someUpgrade)
 {
+
     this->ShipUpgradeVector.push_back(someUpgrade);
 }
 
