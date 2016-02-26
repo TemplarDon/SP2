@@ -405,8 +405,6 @@ void SP2::LoadMeshes()
     shop.setRequirements(50, 20);
     InteractablesList.push_back(shop);
 
- 
-
 
 	//SCIENCE LAB (GARY'S)
 	initRoomTemplate(Position(120, 2, -100));
@@ -424,6 +422,9 @@ void SP2::LoadMeshes()
 
 	meshList[GEO_KEYPAD] = MeshBuilder::GenerateOBJ("kaypad", "OBJ//keypad.obj");
 	meshList[GEO_KEYPAD]->textureID = LoadTGA("Image//keypad_uv.tga");
+	InteractableOBJs keypad = InteractableOBJs("keypad", meshList[GEO_SHOP]->maxPos, meshList[GEO_SHOP]->minPos, Position(0,0,0), 12, 0, Vector3(0, 0, 0));
+	keypad.setRequirements(20, 8);
+	InteractablesList.push_back(shop);
 
 	//MINING (BECKHAM'S)
 	//TRADE POST
@@ -776,6 +777,7 @@ void SP2::RenderCode()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, TextTranslate);
 	}
+
 	//TEST TEXT
 	if (testText == true)
 	{
