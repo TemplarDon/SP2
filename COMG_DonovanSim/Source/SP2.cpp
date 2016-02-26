@@ -227,8 +227,8 @@ void SP2::Update(double dt)
 	//DIALOGUE
 	DialoguesWithNPCs();
 
-    //INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
-    Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
+	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 
     for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
     {

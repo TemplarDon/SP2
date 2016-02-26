@@ -687,13 +687,6 @@ void SP2::RenderCode()
         shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
         RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
     }
-
-
-	//CRYSTAL COUNTS
-	std::ostringstream as;
-	as.str("");
-	as << "Crystals :" << crystalcount;
-	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 33);
 	
 	//INVENTORY & HANDS
 	if (DisplayInventory == false)
@@ -707,6 +700,12 @@ void SP2::RenderCode()
 		//Hand 2
 		RenderHandOnScreen2(meshList[GEO_HAND], 5, 15.3, 1);
 	}
+
+	//CRYSTAL COUNTS
+	std::ostringstream as;
+	as.str("");
+	as << crystalcount;
+	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.5, 16.2, 5);
 
 	//CROSS HAIR
 	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
