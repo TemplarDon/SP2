@@ -133,7 +133,7 @@ void SP2::Init()
     // Init Cam Pointer
     camPointer = &firstPersonCamera;
 
-	//INIT PLAYER
+	//Init Player + Stats
 	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, firstPersonCamera); // Name, Race, Money, Pos, camera
 
 	LoadMeshes();
@@ -240,8 +240,8 @@ void SP2::Update(double dt)
 	//DIALOGUE
 	DialoguesWithNPCs();
 
-    //INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
-    Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
+	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 
     for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
     {
@@ -451,8 +451,10 @@ void SP2::Update(double dt)
 								rendercrystal[a] = 0;
 								crystalcount += rand() % 10 + 1;
 								
+                                somePlayer.addCrystals(rand() % 10 + 1);
+
 								i = this->InteractablesList.erase(i);
-										i = InteractablesList.begin();
+								i = InteractablesList.begin();
 								
 							}
 						}
@@ -738,18 +740,21 @@ void SP2::shopInteractions()
         if (Application::IsKeyPressed('1'))
         {
             somePlayer.addPart(LightHull);
+            somePlayer.removeCrystals(10);
             askedHull = false;
             askedWings = true;
         }
         else if (Application::IsKeyPressed('2'))
         {
             somePlayer.addPart(MediumHull);
+            somePlayer.removeCrystals(20);
             askedHull = false;
             askedWings = true;
         }
         else if (Application::IsKeyPressed('3'))
         {
             somePlayer.addPart(LargeHull);
+            somePlayer.removeCrystals(30);
             askedHull = false;
             askedWings = true;
         }
@@ -760,12 +765,14 @@ void SP2::shopInteractions()
         if (Application::IsKeyPressed('4'))
         {
             somePlayer.addPart(DualWings);
+            somePlayer.removeCrystals(20);
             askedWings = false;
             askedEngine = true;
         }
         else if (Application::IsKeyPressed('5'))
         {
             somePlayer.addPart(QuadWings);
+            somePlayer.removeCrystals(30);
             askedWings = false;
             askedEngine = true;
         }
@@ -776,6 +783,7 @@ void SP2::shopInteractions()
         if (Application::IsKeyPressed('6'))
         {
             somePlayer.addPart(G1Engine);
+            somePlayer.removeCrystals(20);
             askedEngine = false;
             shipCreation();
             askedShipBuild = false;
@@ -784,6 +792,7 @@ void SP2::shopInteractions()
         else if (Application::IsKeyPressed('7'))
         {
             somePlayer.addPart(G2Engine);
+            somePlayer.removeCrystals(30);
             askedEngine = false;
             shipCreation();
             askedShipBuild = false;
