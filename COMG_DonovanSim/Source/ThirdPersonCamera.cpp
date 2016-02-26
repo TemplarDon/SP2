@@ -20,7 +20,7 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 	camDirection = (F - position).Normalized();
 
 	Vector3 right = camDirection.Cross(up);
-
+ 
 	this->camDistance = camDistance;
 	this->focus = focus;
 	this->position = F - camDirection * camDistance;
@@ -30,6 +30,8 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
     this->yawingRight = false;
     this->pitchingDown = false;
     this->pitchingUp = false;
+    this->defaultRightVec = right;
+    this->defaultUpVec = up;
 
 	SetCameraPitchBounds(-30, 15);
 	SetCameraDistanceBounds(10, 100);
@@ -338,41 +340,34 @@ void ThirdPersonCamera::SetFocusPoint(Position *focus)
 
 void ThirdPersonCamera::shipTurningAnimation(float yaw, float pitch)
 {
-    if (pitch > 0 && pitch < 540)
-    { 
-        pitchingUp = true; 
-    }
-    else 
-    { 
-        pitchingUp = false; 
-    }
+    if (pitch > 0 && pitch < 540) { pitchingUp = true; }
+    else { pitchingUp = false; }
 
-    if (pitch > 540 && pitch < 1080) 
-    { 
-        pitchingDown = true;
-    }
-    else 
-    { 
-        pitchingDown = false; 
-    }
+    if (pitch > 540 && pitch < 1080) { pitchingDown = true; }
+    else { pitchingDown = false; }
+
+    if (yaw > 0 && yaw < 840) { yawingLeft = true; }
+    else { yawingLeft = false; }
+
+    if (yaw > 840 && yaw < 1680) { yawingRight = true; }
+    else { yawingRight = false; }
 
 
-    if (yaw > 0 && yaw < 840) 
-    { 
-        yawingLeft = true; 
-    }
-    else 
-    {
-        yawingLeft = false;
-    }
+    //float upAngleDiff = acos((defaultUpVec.Dot(up)) / (defaultUpVec.Length() * up.Length()));
 
-    if (yaw > 840 && yaw < 1680) 
-    { 
-        yawingRight = true;
-    }
-    else 
-    { 
-        yawingRight = false; 
-    }
-    
+    //Vector3 right = camDirection.Cross(up);
+
+    //float rightAngleDiff = acos((defaultRightVec.Dot(right)) / (defaultRightVec.Length() * right.Length()));
+
+    //if (upAngleDiff < 180) { pitchingDown = true; }
+    //else { pitchingDown = false; }
+
+    //if (upAngleDiff > 180) { pitchingUp = true; }
+    //else { pitchingUp = false; }
+
+    //if (rightAngleDiff < 180) { yawingLeft = true; }
+    //else { yawingLeft = false; }
+
+    //if (rightAngleDiff > 180){ yawingRight = true; }
+    //else{ yawingRight = false; }
 }

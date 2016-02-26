@@ -33,8 +33,13 @@ public:
     void addItem(InteractableOBJs itemName);
     void removeItem(InteractableOBJs itemName);
 
-    void addPart(ShipParts partsName);
-    list<ShipParts> getParts();
+    // Functions for adding and removing Ship Parts from players inventory
+    void addPart(ShipParts* partsName);
+    list<ShipParts*> getParts();
+
+    // Function for adding and getting Crystals to player
+    void addCrystals(int crystalAmount);
+    int getCrystals();
 
     // Functions for player taking damage and healing health
     void takeDamage(int damageTaken);

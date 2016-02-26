@@ -52,7 +52,7 @@ string ShipParts::getName()
     returns a value that is used to increase the ship's stats
 */
 /******************************************************************************/
-int ShipParts::partsEffect()
+float ShipParts::partsEffect()
 {
     return 0;
 }

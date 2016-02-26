@@ -71,10 +71,11 @@ class SP2 : public Scene
 		GEO_CAFETEXTBOX,
 		GEO_BUNK,
 		GEO_SPACEMASK,
+		GEO_SPACESUIT,
+
 
 
         // ARMOURY / SHOP
-
 
 		GEO_WINDOW,
 		GEO_HUD,
@@ -102,7 +103,11 @@ class SP2 : public Scene
 		//NPCs
 		GEO_CHEF,
 		GEO_SPACEGUY,
-		GEO_SPACESUIT,
+		GEO_NURSE,
+		GEO_DOCTOR,
+		GEO_TRADER,
+		GEO_SOLDIER,
+		GEO_SHOPKEEPER,
 
 
         //SPACE SHIP
@@ -229,16 +234,15 @@ private:
     Ship* shipTemplatePtr;
 
     //SHIP PARTS
-    Light_Hull LightHull;
+    Light_Hull* LightHull;
 
-    Medium_Hull MediumHull;
-    Large_Hull LargeHull;
+    Medium_Hull* MediumHull;
+    Large_Hull* LargeHull;
 
-
-    G1_Engine G1Engine;
-    G2_Engine G2Engine;
-    Dual_Wings DualWings;
-    Quad_Wings QuadWings;
+    G1_Engine* G1Engine;
+    G2_Engine* G2Engine;
+    Dual_Wings* DualWings;
+    Quad_Wings* QuadWings;
 
 	//FLOATS (SHANIA'S)
 	float TokenTranslate;
@@ -262,6 +266,13 @@ private:
 	bool wearSuitText;
 	bool wearSuit;
 	bool DisplayInventory;
+	bool chefText;
+	bool spaceguyText;
+	bool nurseText;	
+	bool doctorText;
+	bool traderText;	
+	bool soldierText;
+	bool shopkeeperText;
 
     //DOOR (DONOVAN'S)
     float leftGateOffset;
@@ -294,6 +305,8 @@ private:
 	int xcoords[100];
 	int zcoords[100];
 	bool rendercrystal[100];
+	int coord1;
+	int coord2;
 
 	//Keypad testing
 	vector<Keypad> keypads;
@@ -325,6 +338,8 @@ private:
 	void Dialogues();
 	string file_contents;
 	vector<string>dialogue_vec;
+	void DialoguesWithNPCs();
+	void RenderNPCDialogues();
 
 	//RENDER TEXT
 	void RenderText(Mesh* mesh, std::string text, Color color);
@@ -352,7 +367,7 @@ private:
     void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
     void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
     void shopInteractions();
-    void shipAnimation(double dt);
+    void shipAnimation(double dt, vector<Ship>::iterator i);
     void shipCreation();
 
 
@@ -366,6 +381,10 @@ private:
     bool askedEngine;
     bool askedShipBuild;
     bool shipBuilt;
+
+	//CRYSTAL RELATED STUFF   
+	bool checkCrystalPos(int xcoord, int zcoord, int i);
+
 };
 
 #endif

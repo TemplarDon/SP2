@@ -25,7 +25,9 @@ public:
     Engine(string name);
     ~Engine();
 
-private:
+    virtual float partsEffect();
+protected:
+
 };
 
 #endif

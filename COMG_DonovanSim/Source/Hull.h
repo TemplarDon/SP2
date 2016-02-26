@@ -25,7 +25,9 @@ public:
     Hull(string name);
     ~Hull();
 
-private:
+    virtual float partsEffect();
+protected:
+
 };
 
 #endif

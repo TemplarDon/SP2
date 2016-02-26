@@ -26,9 +26,10 @@ protected:
     ShipParts(string name);
     string name;
 
+
 public:
+    virtual float partsEffect() = 0;
     string getName();
-    virtual int partsEffect();
     ~ShipParts();
 
 };

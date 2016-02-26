@@ -77,7 +77,7 @@ void Player::removeItem(InteractableOBJs itemName)
     ShipParts containing part's name that is to be added
 */
 /******************************************************************************/
-void Player::addPart(ShipParts partsName)
+void Player::addPart(ShipParts* partsName)
 {
     this->playerInventory.shipPartsList.push_back(partsName);
 }
@@ -91,9 +91,37 @@ void Player::addPart(ShipParts partsName)
     Returns a list of ShipParts
 */
 /******************************************************************************/
-list<ShipParts> Player::getParts()
+list<ShipParts*> Player::getParts()
 {
     return this->playerInventory.shipPartsList;
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Function for adding crystals to player inventory
+
+\param  damageTaken
+    int of damage the player will take
+*/
+/******************************************************************************/
+void Player::addCrystals(int crystalsAmount)
+{
+    this->playerInventory.addCrystals(crystalsAmount);
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Function for grtting crystals from player inventory
+
+\return  
+    returns crystals that player has
+*/
+/******************************************************************************/
+int Player::getCrystals()
+{
+    return this->playerInventory.getCrystalsAmount();
 }
 
 /******************************************************************************/

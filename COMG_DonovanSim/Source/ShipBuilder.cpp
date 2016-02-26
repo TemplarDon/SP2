@@ -48,15 +48,15 @@ ShipBuilder::~ShipBuilder()
     
 */
 /******************************************************************************/
-Ship ShipBuilder::createShip(Ship* templateShip, Hull HullPart, Wings WingsPart, Engine EnginePart)
-{
-    templateShip->addShipPart(HullPart);
-    templateShip->addShipPart(WingsPart);
-    templateShip->addShipPart(EnginePart);
-    templateShip->calculateShipStats();
-
-    return *templateShip;
-}
+//Ship ShipBuilder::createShip(Ship* templateShip, Hull HullPart, Wings WingsPart, Engine EnginePart)
+//{
+//    templateShip->addShipPart(HullPart);
+//    templateShip->addShipPart(WingsPart);
+//    templateShip->addShipPart(EnginePart);
+//    templateShip->calculateShipStats();
+//
+//    return *templateShip;
+//}
 
 
 /******************************************************************************/
@@ -74,9 +74,9 @@ Ship ShipBuilder::createShip(Ship* templateShip, Hull HullPart, Wings WingsPart,
 
 */
 /******************************************************************************/
-Ship ShipBuilder::createShip(Ship* templateShip, list<ShipParts>partsList)
+Ship ShipBuilder::createShip(Ship* templateShip, list<ShipParts*>partsList)
 {
-    for (list<ShipParts>::iterator it = partsList.begin(); it != partsList.end(); ++it)
+    for (list<ShipParts*>::iterator it = partsList.begin(); it != partsList.end(); ++it)
     {
         templateShip->addShipPart(*it);
     }

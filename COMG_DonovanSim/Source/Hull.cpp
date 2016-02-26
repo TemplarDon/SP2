@@ -32,3 +32,16 @@ Hull::~Hull()
 {
 
 }
+
+/******************************************************************************/
+/*!
+\brief
+    Function for the partsEffect
+\return
+    returns a value that is used to increase the ship's stats
+*/
+/******************************************************************************/
+float Hull::partsEffect()
+{
+    return 0;
+}
