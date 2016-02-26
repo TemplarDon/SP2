@@ -671,7 +671,7 @@ void SP2::RenderCode()
 	std::ostringstream ss;
 	ss.str("");
 	ss << "Coords :" << firstPersonCamera.position.x << " , "<< firstPersonCamera.position.y  << " , " << firstPersonCamera.position.z ;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 30);
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 30);
 
     // Player POS
     std::ostringstream playerpos;
@@ -692,7 +692,7 @@ void SP2::RenderCode()
 	//CRYSTAL COUNTS
 	std::ostringstream as;
 	as.str("");
-	as << "Crystals :" << crystalcount;
+	as << "Crystals :" << somePlayer.getCrystals();
 	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 33);
 	
 	//INVENTORY & HANDS
@@ -786,25 +786,25 @@ void SP2::RenderCode()
     //DOOR OPEN AND CLOSE
     if (gateOpening)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "NEAR GATE", Color(1, 0, 0), 2, 8, 14);
+        //RenderTextOnScreen(meshList[GEO_TEXT], "NEAR GATE", Color(1, 0, 0), 2, 8, 14);
     }
     else
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "NOT NEAR GATE", Color(1, 0, 0), 2, 8, 12);
+        //RenderTextOnScreen(meshList[GEO_TEXT], "NOT NEAR GATE", Color(1, 0, 0), 2, 8, 12);
     }
 
     // Tests for shipBuilding
     if (askedHull)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light  | 2. Medium | 3. Large ", Color(1, 0, 0), 1, 1, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light (10) | 2. Medium (20) | 3. Large (30) ", Color(1, 0, 0), 1, 0, 14);
     }
     if (askedWings)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual  | 5. Quad ", Color(1, 0, 0), 1, 1, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual (20) | 5. Quad (30)", Color(1, 0, 0), 1, 0, 14);
     }
     if (askedEngine)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine  | 7. G2 Engine ", Color(1, 0, 0), 1, 1, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine (20)  | 7. G2 Engine (30) ", Color(1, 0, 0), 1, 0, 14);
     }
 }
 
