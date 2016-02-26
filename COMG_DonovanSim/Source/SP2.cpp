@@ -14,6 +14,10 @@ SP2::~SP2()
 
 }
 
+static float ROT_LIMIT = 45.f;
+static float SCALE_LIMIT = 5.f;
+float FramesPerSecond = 0;
+
 void SP2::Init()
 {
 	//FUNCTIONS TO CALL
@@ -180,18 +184,21 @@ void SP2::Init()
 	keypads.clear();
 
 	{
-		Keypad K(Position(400, 0, -13), 0);
+		Keypad K;
 
+		K = { { 400, 0, -13 }, 0 };
+		K.targetBool.setTargetLocation(0);
+		keypads.push_back(K);
+
+		K = { { 302.5f, 0, 13 }, 90 };
+		K.targetBool.setTargetLocation(0);
 		keypads.push_back(K);
 	}
 }
 
-static float ROT_LIMIT = 45.f;
-static float SCALE_LIMIT = 5.f;
-float FramesPerSecond = 0;
 void SP2::Update(double dt)
 {
-    //FPS
+	//FPS
     FramesPerSecond = 1 / dt;
 
     //READKEYS FUNCTION
@@ -216,7 +223,6 @@ void SP2::Update(double dt)
     }
 
 
-    //WTF IS THIS PLEASE COMMENT
     static unsigned firstFrames = 2;
     if (firstFrames > 0)
     {

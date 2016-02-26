@@ -308,8 +308,10 @@ private:
 	int coord1;
 	int coord2;
 
-	//Keypad testing
+	//Keypad stuff (Gary's)
+
 	vector<Keypad> keypads;
+	void InitKeypads();
 
 
 	//SHORTHAND CODES FOR EASIER CODINGS (GARY'S)
