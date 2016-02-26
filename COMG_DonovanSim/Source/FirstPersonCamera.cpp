@@ -31,10 +31,10 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 	mouseSpeed = 12;
 
 	static const float CAMERA_SPEED = 50.f;
-	if (Application::IsKeyPressed('R'))
-	{
-		Reset();
-	}
+	//if (Application::IsKeyPressed('R'))
+	//{
+	//	Reset();
+	//}
 
 	//view.y < 0.9396 && view.y > -09396
 
@@ -314,5 +314,5 @@ void FirstPersonCamera::Reset()
 {
 	position = defaultPosition;
 	target = defaultTarget;
-	up = defaultUp;
+    up = defaultUp;
 }

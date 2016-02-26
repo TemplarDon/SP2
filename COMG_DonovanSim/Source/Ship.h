@@ -30,17 +30,26 @@ public:
     // Ship's Speed
     float shipSpeed;
 
+    // Const rate which speed is gained
+    float shipSpeedGain;
+
+    // Speed needed to land
+    float shipLandingSpeed;
+
+    // Ship's Max Speed
+    float shipMaxSpeed;
+
     // Ship's Turning Speed
     float turningSpeed;
 
     // Vector Containing the Ships's Parts
-    vector<ShipParts> ShipPartsVector;
+    vector<ShipParts*> ShipPartsVector;
 
     // Vector Containing the Ship's Upgrades
     vector<Ship_Upgrade> ShipUpgradeVector;
 
     // Function to add a part to the ship
-    void addShipPart(ShipParts &somePart);
+    void addShipPart(ShipParts* somePart);
 
     // Function to add a upgrade to the ship
     void addShipUpgrade(Ship_Upgrade &someUpgrade);
@@ -51,6 +60,8 @@ public:
     string hullType;
     string wingType;
     string engineType;
+
+    bool shipTakeoff;
 };
 
 #endif

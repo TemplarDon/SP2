@@ -27,7 +27,7 @@ public:
 
     // List containing Items
     list<InteractableOBJs> itemList;
-    list<ShipParts> shipPartsList;
+    list<ShipParts*> shipPartsList;
 
     // Function to add crystals to Player
     void addCrystals(int crystalsNum);

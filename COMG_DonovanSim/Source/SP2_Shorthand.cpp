@@ -310,12 +310,12 @@ void SP2::LoadMeshes()
 	//BUNK
 	meshList[GEO_BUNK] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Bunk.obj");
 	meshList[GEO_BUNK]->textureID = LoadTGA("Image//Bunk.tga");
-	InteractableOBJs bunk = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 127), 3, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk2 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 127), 3, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk3 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(210, 3, 127), 3, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk4 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(227, 3, 127), 3, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk5 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 191.5), 3, 0, Vector3(0, 0, 0));
-	InteractableOBJs bunk6 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 191.5), 3, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 127), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk2 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 127), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk3 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(210, 3, 127), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk4 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(227, 3, 127), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk5 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(288, 3, 191.5), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs bunk6 = InteractableOBJs("bunk", meshList[GEO_BUNK]->maxPos, meshList[GEO_BUNK]->minPos, Position(271, 3, 191.5), 2, 0, Vector3(0, 0, 0));
 	InteractablesList.push_back(bunk);
 	InteractablesList.push_back(bunk2);
 	InteractablesList.push_back(bunk3);
@@ -672,6 +672,21 @@ void SP2::RenderCode()
 	ss.str("");
 	ss << "Coords :" << firstPersonCamera.position.x << " , "<< firstPersonCamera.position.y  << " , " << firstPersonCamera.position.z ;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 30);
+
+    // Player POS
+    std::ostringstream playerpos;
+    playerpos.str("");
+    playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
+    //RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
+
+    // Ship Stats
+    std::ostringstream shipStats;
+    shipStats.str("");
+    if (ShipList.size() > 0)
+    {
+        shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
+        RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
+    }
 
 
 	//CRYSTAL COUNTS
@@ -1534,7 +1549,7 @@ void SP2::RenderScienceLab()
 			a += delta;
 		if (Application::IsKeyPressed(VK_NUMPAD1))
 			a -= delta;
-
+            
 		static float b = 0;
 		if (Application::IsKeyPressed(VK_NUMPAD5))
 			b += delta;

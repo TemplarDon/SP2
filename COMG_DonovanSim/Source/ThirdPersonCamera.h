@@ -21,6 +21,10 @@ private:
 	float maxPitch;
 	bool mouseEnabled;
 
+    // Default Values to check if ship is pitching / yawing
+    Vector3 defaultRightVec;
+    Vector3 defaultUpVec;
+
 public:
 	Vector3 camDirection;
 

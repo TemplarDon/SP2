@@ -32,7 +32,11 @@
 Ship::Ship(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis) : InteractableOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
 {
     shipSpeed = 0;
+    shipMaxSpeed = 0;
+    shipSpeedGain = 0;
     turningSpeed = 0;
+    shipLandingSpeed = 2;
+    shipTakeoff = false;
 }
 
 /******************************************************************************/
@@ -54,8 +58,9 @@ Ship::~Ship()
     part to be added into the ship
 */
 /******************************************************************************/
-void Ship::addShipPart(ShipParts &somePart)
+void Ship::addShipPart(ShipParts* somePart)
 {
+    //this->ShipPartsVector.push_back(somePart);
     this->ShipPartsVector.push_back(somePart);
 }
 
@@ -69,7 +74,7 @@ void Ship::addShipPart(ShipParts &somePart)
 /******************************************************************************/
 void Ship::addShipUpgrade(Ship_Upgrade &someUpgrade)
 {
-    this->addShipUpgrade(someUpgrade);
+    this->ShipUpgradeVector.push_back(someUpgrade);
 }
 
 /******************************************************************************/
@@ -83,22 +88,41 @@ void Ship::calculateShipStats()
     string wings = "Wings";
     string engine = "Engine";
     string hull = "Hull";
-    for (vector<ShipParts>::iterator it = ShipPartsVector.begin(); it != ShipPartsVector.end(); ++it)
+    //for (vector<ShipParts*>::iterator it = ShipPartsVector.begin(); it != ShipPartsVector.end(); ++it)
+    //{
+    //    if (*it->getName().find(wings) != string::npos)
+    //    {
+    //        this->turningSpeed = *it->partsEffect();
+    //        this->wingType = it->getName();
+    //    }
+    //    if (it->getName().find(engine) != string::npos)
+    //    {
+    //        this->shipSpeedGain = *it->partsEffect();
+    //        this->engineType = it->getName();
+    //    }
+    //    if (it->getName().find(hull) != string::npos)
+    //    {
+    //        this->shipMaxSpeed = *it->partsEffect();
+    //        this->hullType = it->getName();
+    //    }
+    //}
+    //
+    for (size_t i = 0; i < ShipPartsVector.size(); ++i)
     {
-        if (it->getName().find(wings) != string::npos)
+        if (ShipPartsVector[i]->getName().find(wings) != string::npos)
         {
-            this->turningSpeed += it->partsEffect();
-            this->wingType = it->getName();
+            this->turningSpeed = ShipPartsVector[i]->partsEffect();
+            this->wingType = ShipPartsVector[i]->getName();
         }
-        if (it->getName().find(engine) != string::npos)
+        if (ShipPartsVector[i]->getName().find(engine) != string::npos)
         {
-            this->shipSpeed += it->partsEffect();
-            this->engineType = it->getName();
+            this->shipSpeedGain = ShipPartsVector[i]->partsEffect();
+            this->engineType = ShipPartsVector[i]->getName();
         }
-        if (it->getName().find(hull) != string::npos)
+        if (ShipPartsVector[i]->getName().find(hull) != string::npos)
         {
-            this->hullType = it->getName();
+            this->shipMaxSpeed = ShipPartsVector[i]->partsEffect();
+            this->hullType = ShipPartsVector[i]->getName();
         }
-
     }
 }

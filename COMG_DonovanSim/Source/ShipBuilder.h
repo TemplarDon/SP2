@@ -27,8 +27,8 @@ public:
 
     // Function to create a ship 
     //Ship* createShip(string name, Position pos, Hull Hull, Wings Wings, Engine Engine, vector<Ship_Upgrade>upgradesVec);
-    Ship createShip(Ship* templateShip, Hull Hull, Wings Wings, Engine Engine);
-    Ship createShip(Ship* templateShip, list<ShipParts> partsList);
+    //Ship createShip(Ship* templateShip, Hull Hull, Wings Wings, Engine Engine);
+    Ship createShip(Ship* templateShip, list<ShipParts*> partsList);
 };
 
 #endif

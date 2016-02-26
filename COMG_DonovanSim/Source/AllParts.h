@@ -27,7 +27,7 @@ public:
     Dual_Wings(string name = "DualWings");
     ~Dual_Wings();
 
-    int partsEffect();
+    virtual float partsEffect();
 };
 
 /*************************************************************************************************/
@@ -42,7 +42,7 @@ public:
     Quad_Wings(string name = "QuadWings");
     ~Quad_Wings();
 
-    int partsEffect();
+    virtual float partsEffect();
 };
 
 /*************************************************************************************************/
@@ -57,7 +57,7 @@ public:
     G1_Engine(string name = "G1Engine");
     ~G1_Engine();
 
-    int partsEffect();
+    virtual float partsEffect();
 };
 
 /*************************************************************************************************/
@@ -72,7 +72,7 @@ public:
     G2_Engine(string name = "G2Engine");
     ~G2_Engine();
 
-    int partsEffect();
+    virtual float partsEffect();
 };
 
 /*************************************************************************************************/
@@ -87,7 +87,7 @@ public:
     Light_Hull(string name = "LightHull");
     ~Light_Hull();
 
-    int partsEffect();
+    virtual float partsEffect();
 };
 
 /*************************************************************************************************/
@@ -102,7 +102,7 @@ public:
     Medium_Hull(string name = "MediumHull");
     ~Medium_Hull();
 
-    int partsEffect();
+    virtual float partsEffect();
 };
 
 /*************************************************************************************************/
@@ -117,7 +117,7 @@ public:
     Large_Hull(string name = "LargeHull");
     ~Large_Hull();
 
-    int partsEffect();
+    virtual float partsEffect();
 };
 
 

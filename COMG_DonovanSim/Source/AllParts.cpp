@@ -38,12 +38,12 @@ Dual_Wings::~Dual_Wings()
     Function for getting a number used to increase certain ship stats
 
 \return  
-    returns an int that is used to increase certain ship stats
+    returns an float that is used to increase certain ship stats
 */
 /******************************************************************************/
-int Dual_Wings::partsEffect()
+float Dual_Wings::partsEffect()
 {
-    return 3;
+    return 20;
 }
 
 /******************************************************************************/
@@ -75,12 +75,12 @@ Quad_Wings::~Quad_Wings()
     Function for getting a number used to increase certain ship stats
 
 \return  
-    returns an int that is used to increase certain ship stats
+    returns an float that is used to increase certain ship stats
 */
 /******************************************************************************/
-int Quad_Wings::partsEffect()
+float Quad_Wings::partsEffect()
 {
-    return 5;
+    return 40;
 }
 
 /******************************************************************************/
@@ -112,10 +112,10 @@ G1_Engine::~G1_Engine()
     Function for getting a number used to increase certain ship stats
 
 \return  
-    returns an int that is used to increase certain ship stats
+    returns an float that is used to increase certain ship stats
 */
 /******************************************************************************/
-int G1_Engine::partsEffect()
+float G1_Engine::partsEffect()
 {
     return 3;
 }
@@ -149,10 +149,10 @@ G2_Engine::~G2_Engine()
     Function for getting a number used to increase certain ship stats
 
 \return
-    returns an int that is used to increase certain ship stats
+    returns an float that is used to increase certain ship stats
 */
 /******************************************************************************/
-int G2_Engine::partsEffect()
+float G2_Engine::partsEffect()
 {
     return 5;
 }
@@ -186,12 +186,12 @@ Light_Hull::~Light_Hull()
     Function for getting a number used to increase certain ship stats
     
 \return
-    returns an int that is used to increase certain ship stats
+    returns an float that is used to increase certain ship stats
 */
 /******************************************************************************/
-int Light_Hull::partsEffect()
+float Light_Hull::partsEffect()
 {
-    return 0;
+    return 15;
 }
 
 /******************************************************************************/
@@ -223,12 +223,12 @@ Medium_Hull::~Medium_Hull()
     Function for getting a number used to increase certain ship stats
 
 \return
-    returns an int that is used to increase certain ship stats
+    returns an float that is used to increase certain ship stats
 */
 /******************************************************************************/
-int Medium_Hull::partsEffect()
+float Medium_Hull::partsEffect()
 {
-    return 0;
+    return 8;
 }
 
 /******************************************************************************/
@@ -260,12 +260,12 @@ Large_Hull::~Large_Hull()
     Function for getting a number used to increase certain ship stats
 
 \return
-    returns an int that is used to increase certain ship stats
+    returns an float that is used to increase certain ship stats
 */
 /******************************************************************************/
-int Large_Hull::partsEffect()
+float Large_Hull::partsEffect()
 {
-    return 0;
+    return 3;
 }
 
 

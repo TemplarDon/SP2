@@ -25,7 +25,9 @@ public:
     Wings(string name);
     ~Wings();
 
-private:
+    virtual float partsEffect();
+protected:
+
 };
 
 #endif

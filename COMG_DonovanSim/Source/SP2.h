@@ -233,16 +233,15 @@ private:
     Ship* shipTemplatePtr;
 
     //SHIP PARTS
-    Light_Hull LightHull;
+    Light_Hull* LightHull;
 
-    Medium_Hull MediumHull;
-    Large_Hull LargeHull;
+    Medium_Hull* MediumHull;
+    Large_Hull* LargeHull;
 
-
-    G1_Engine G1Engine;
-    G2_Engine G2Engine;
-    Dual_Wings DualWings;
-    Quad_Wings QuadWings;
+    G1_Engine* G1Engine;
+    G2_Engine* G2Engine;
+    Dual_Wings* DualWings;
+    Quad_Wings* QuadWings;
 
 	//FLOATS (SHANIA'S)
 	float TokenTranslate;
@@ -364,7 +363,7 @@ private:
     void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
     void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
     void shopInteractions();
-    void shipAnimation(double dt);
+    void shipAnimation(double dt, vector<Ship>::iterator i);
     void shipCreation();
 
 
