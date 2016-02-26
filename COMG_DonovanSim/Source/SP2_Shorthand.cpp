@@ -421,6 +421,7 @@ void SP2::LoadMeshes()
 	meshList[GEO_SCIENCELAB_BEAKER]->textureID = LoadTGA("Image//ScienceLab//beaker_uv.tga");
 
 	//Keypad (Gary Goh's)
+
 	meshList[GEO_KEYPAD] = MeshBuilder::GenerateOBJ("kaypad", "OBJ//keypad.obj");
 	meshList[GEO_KEYPAD]->textureID = LoadTGA("Image//keypad_uv.tga");
 
@@ -570,6 +571,24 @@ void SP2::RenderCode()
 	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 	modelStack.PopMatrix();
 
+	/*modelStack.PushMatrix();
+	{
+		Vector3 v =
+		{
+			firstPersonCamera.target.x - firstPersonCamera.position.x,
+			firstPersonCamera.target.y - firstPersonCamera.position.y,
+			firstPersonCamera.target.z - firstPersonCamera.position.z
+		};
+
+		v.Normalize();
+
+		v = 20 * v;
+
+		modelStack.Translate(firstPersonCamera.position.x + v.x, firstPersonCamera.position.y + v.y, firstPersonCamera.position.z + v.z);
+		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+	}
+	modelStack.PopMatrix();*/
+
 	if (ShipList.size() > 0 && shipBuilt == true)
 	{
 		modelStack.PushMatrix();
@@ -657,14 +676,50 @@ void SP2::RenderCode()
     modelStack.PopMatrix();
 
 	//Keypad
-	modelStack.PushMatrix();
+	for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
 	{
-		modelStack.Translate(500, 18, 0);
-		modelStack.Scale(4.2f, 4.2f, 4.2f);
-		RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(i->pos.x, i->pos.y + 15, i->pos.z);
+			modelStack.Rotate(i->orientation, 0, 1, 0);
+			modelStack.Scale(4.2f, 4.2f, 4.2f);
+			RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
+		}
+		modelStack.PopMatrix();
 	}
-	modelStack.PopMatrix();
+	
+	//INVENTORY & HANDS
+	if (DisplayInventory == false)
+	{
+		//Inventory
+		RenderInventoryOnScreen(meshList[GEO_INVENTORY], 5, 8, 2);
 
+		//Hand 1
+		RenderHandOnScreen(meshList[GEO_HAND], 5, 0.8, 1);
+
+		//Hand 2
+		RenderHandOnScreen2(meshList[GEO_HAND], 5, 15.3, 1);
+	}
+
+	//Note from Gary Goh: It's best to render the sprites first then the text.
+
+	if (TokenOnScreen == true)
+	{
+		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
+	}
+
+
+	//PICK UP COKE
+	if (RenderCoke == true)
+	{
+		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
+	}
+
+	//CAFE MENU
+	if (DisplayCafeMenu == true)
+	{
+		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
+	}
 
 	// POSITION OF X Y Z
 
@@ -677,17 +732,7 @@ void SP2::RenderCode()
     std::ostringstream playerpos;
     playerpos.str("");
     playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
-    //RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
-
-    // Ship Stats
-    std::ostringstream shipStats;
-    shipStats.str("");
-    if (ShipList.size() > 0)
-    {
-        shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
-        RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
-    }
-
+	RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
 	//CRYSTAL COUNTS
 	std::ostringstream as;
@@ -719,28 +764,25 @@ void SP2::RenderCode()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, TextTranslate);
 	}
-
-	if (TokenOnScreen == true)
-	{
-		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
-	}
-
 	//TEST TEXT
 	if (testText == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "testTESTtest", Color(1, 0, 0), 2, 6, 14);
 	}
+	
+	// Ship Stats
+    std::ostringstream shipStats;
+    shipStats.str("");
+    if (ShipList.size() > 0)
+    {
+        shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
+        RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
+    }
 
 	//PICK UP TOKEN
 	if (PickUpTokenText == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS Q TO PICK UP TOKEN", Color(1, 0, 0), 2, 6, 18);
-	}
-
-	//PICK UP COKE
-	if (RenderCoke == true)
-	{
-		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
 	}
 
 	//CONSUME COKE TEXT
@@ -751,11 +793,6 @@ void SP2::RenderCode()
 		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS U TO DRINK COKE", Color(1, 0, 0), 2, 6, 18);
 	}
 
-	//CAFE MENU
-	if (DisplayCafeMenu == true)
-	{
-		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
-	}
 
 	//WEAR SUIT TEXT
 	if (wearSuitText == true)

@@ -177,6 +177,13 @@ void SP2::Init()
 	}
 	crystalcount = 0;
 
+	keypads.clear();
+
+	{
+		Keypad K(Position(400, 0, -13), 0);
+
+		keypads.push_back(K);
+	}
 }
 
 static float ROT_LIMIT = 45.f;
