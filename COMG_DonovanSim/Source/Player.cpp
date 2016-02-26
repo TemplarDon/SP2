@@ -17,6 +17,7 @@
 /******************************************************************************/
 Player::Player() : GameObject("", Position(0, 0, 0)), health(100), cameraType("first"), cameraPtr(0)
 {
+    weaponEquipped = false;
 }
 
 /******************************************************************************/
@@ -185,6 +186,37 @@ void Player::healHealth(int amountHealed)
 string Player::getCameraType()
 {
     return this->cameraType;
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Function for setting Player's weapon
+
+*/
+/******************************************************************************/
+void Player::setWeapon()
+{
+    if (this->weaponEquipped)
+    {
+        weaponEquipped = false;
+    }
+    else
+    {
+        weaponEquipped = true;
+    }
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Function for getting Player's weapon
+
+*/
+/******************************************************************************/
+bool Player::checkWeapon()
+{
+    return this->weaponEquipped;
 }
 
 /******************************************************************************/

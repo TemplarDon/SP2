@@ -393,10 +393,10 @@ void SP2::LoadMeshes()
     shootingRange.setRequirements(25, 15);
     InteractablesList.push_back(shootingRange);
     //TARGET DUMMY
-    meshList[GEO_TARGET] = MeshBuilder::GenerateOBJ("target dummmy", "OBJ//Armoury Models//target.obj");
+    meshList[GEO_TARGET] = MeshBuilder::GenerateOBJ("target dummy", "OBJ//Armoury Models//target.obj");
     meshList[GEO_TARGET]->textureID = LoadTGA("Image//Armoury Textures//targetUV.tga");
-    InteractableOBJs target = InteractableOBJs("target dummmy", meshList[GEO_TARGET]->maxPos, meshList[GEO_TARGET]->minPos, Position(120 - 35, 2, 160 + 40), 1, 0, Vector3(0, 0, 0));
-    target.setRequirements(50, 15);
+    InteractableOBJs target = InteractableOBJs("target dummy", meshList[GEO_TARGET]->maxPos, meshList[GEO_TARGET]->minPos, Position(120 - 35, 17, 160 + 38), 7, 0, Vector3(0, 0, 0));
+    target.setRequirements(50, 10);
     InteractablesList.push_back(target);
     //SHOP
     meshList[GEO_SHOP] = MeshBuilder::GenerateOBJ("shop", "OBJ//shop.obj");
@@ -444,6 +444,9 @@ void SP2::LoadMeshes()
     InteractableOBJs helipad = InteractableOBJs("helipad", meshList[GEO_HELIPAD]->maxPos, meshList[GEO_HELIPAD]->minPos, Position(shipStartingPos.x, shipStartingPos.y - 15, shipStartingPos.z), 1, 0, Vector3(0, 0, 0));
     helipad.setRequirements(25, 15);
     InteractablesList.push_back(helipad);
+
+
+    // MAZE
 
 }
 
@@ -732,25 +735,8 @@ void SP2::RenderCode()
     std::ostringstream playerpos;
     playerpos.str("");
     playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
-
-    //RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
-
-    // Ship Stats
-    std::ostringstream shipStats;
-    shipStats.str("");
-    if (ShipList.size() > 0)
-    {
-        shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
-        RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
-    }
-
 	RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
-	//CRYSTAL COUNTS
-	std::ostringstream as;
-	as.str("");
-	as << "Crystals :" << somePlayer.getCrystals();
-	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 33);
 
 	
 	//INVENTORY & HANDS
@@ -766,11 +752,18 @@ void SP2::RenderCode()
 		RenderHandOnScreen2(meshList[GEO_HAND], 5, 15.3, 1);
 	}
 
-	//CRYSTAL COUNTS
-	std::ostringstream as;
-	as.str("");
-	as << crystalcount;
-	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.5, 16.2, 5);
+    //CRYSTAL COUNTS
+    std::ostringstream as;
+    as.str("");
+    as << somePlayer.getCrystals();
+    RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.5, 16.2, 5);
+
+    //weapon 
+    std::ostringstream weapon;
+    weapon.str("");
+    if (somePlayer.checkWeapon()) { weapon << "true"; }
+    else { weapon << "false"; }
+    RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(0, 1, 0), 1.5, 16.2, 8);
 
 	//CROSS HAIR
 	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
@@ -1723,14 +1716,14 @@ void SP2::RenderArmouryAndShop()
 
     // Shooting Range
     modelStack.PushMatrix();
-    modelStack.Translate(5, 0, 40);
+    modelStack.Translate(5, 0, 38);
     modelStack.Scale(6, 6, 6);
     RenderMesh(meshList[GEO_SHOOTING_RANGE], true, toggleLight);
     modelStack.PopMatrix();
 
     // Target
     modelStack.PushMatrix();
-    modelStack.Translate(-35, 0, 40);
+    modelStack.Translate(-35, 0, 38);
     modelStack.Rotate(90, 0, 1, 0);
     modelStack.Scale(6, 6, 6);
     RenderMesh(meshList[GEO_TARGET], true, toggleLight);
@@ -1841,7 +1834,7 @@ void SP2::RenderSpaceShip()
 
     // Rotate Ship By its own Axis
     modelStack.Rotate(shipHorizontalRotateAngle, 0, 1, 0);
-    modelStack.Rotate(shipVerticalRotateAngle, 1, 0, 1);
+    modelStack.Rotate(shipVerticalRotateAngle, 1, 0, 0);
 
     // Scale Ship
     modelStack.Scale(4, 4, 4); 
