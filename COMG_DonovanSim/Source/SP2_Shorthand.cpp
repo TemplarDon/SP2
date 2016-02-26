@@ -410,6 +410,7 @@ void SP2::LoadMeshes()
 	meshList[GEO_SCIENCELAB_BEAKER]->textureID = LoadTGA("Image//ScienceLab//beaker_uv.tga");
 
 	//Keypad (Gary Goh's)
+
 	meshList[GEO_KEYPAD] = MeshBuilder::GenerateOBJ("kaypad", "OBJ//keypad.obj");
 	meshList[GEO_KEYPAD]->textureID = LoadTGA("Image//keypad_uv.tga");
 
@@ -556,6 +557,24 @@ void SP2::RenderCode()
 	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 	modelStack.PopMatrix();
 
+	/*modelStack.PushMatrix();
+	{
+		Vector3 v =
+		{
+			firstPersonCamera.target.x - firstPersonCamera.position.x,
+			firstPersonCamera.target.y - firstPersonCamera.position.y,
+			firstPersonCamera.target.z - firstPersonCamera.position.z
+		};
+
+		v.Normalize();
+
+		v = 20 * v;
+
+		modelStack.Translate(firstPersonCamera.position.x + v.x, firstPersonCamera.position.y + v.y, firstPersonCamera.position.z + v.z);
+		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+	}
+	modelStack.PopMatrix();*/
+
 	if (ShipList.size() > 0 && shipBuilt == true)
 	{
 		modelStack.PushMatrix();
@@ -643,33 +662,17 @@ void SP2::RenderCode()
     modelStack.PopMatrix();
 
 	//Keypad
-	modelStack.PushMatrix();
+	for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
 	{
-		modelStack.Translate(500, 18, 0);
-		modelStack.Scale(4.2f, 4.2f, 4.2f);
-		RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(i->pos.x, i->pos.y + 15, i->pos.z);
+			modelStack.Rotate(i->orientation, 0, 1, 0);
+			modelStack.Scale(4.2f, 4.2f, 4.2f);
+			RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
+		}
+		modelStack.PopMatrix();
 	}
-	modelStack.PopMatrix();
-
-
-	// POSITION OF X Y Z
-
-	std::ostringstream ss;
-	ss.str("");
-	ss << "Position: X(" << firstPersonCamera.position.x << ") Y(" << firstPersonCamera.position.y << ") Z(" << firstPersonCamera.position.z << ")";
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
-
-    // Player POS
-    std::ostringstream playerpos;
-    playerpos.str("");
-    playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
-    RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
-
-	//CRYSTAL COUNTS
-	std::ostringstream as;
-	as.str("");
-	as << "Crystals :" << crystalcount;
-	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 7);
 	
 	//INVENTORY & HANDS
 	if (DisplayInventory == false)
@@ -684,20 +687,50 @@ void SP2::RenderCode()
 		RenderHandOnScreen2(meshList[GEO_HAND], 5, 15.3, 1);
 	}
 
-	//CROSS HAIR
-	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
-
-	//VENDING TEXT
-	if (NearVendingText)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, TextTranslate);
-	}
+	//Note from Gary Goh: It's best to render the sprites first then the text.
 
 	if (TokenOnScreen == true)
 	{
 		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
 	}
 
+
+	//PICK UP COKE
+	if (RenderCoke == true)
+	{
+		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
+	}
+
+	//CAFE MENU
+	if (DisplayCafeMenu == true)
+	{
+		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
+	}
+
+	// POSITION OF X Y Z
+
+	std::ostringstream ss;
+	ss.str("");
+	ss << "Position: X(" << firstPersonCamera.position.x << ") Y(" << firstPersonCamera.position.y << ") Z(" << firstPersonCamera.position.z << ")";
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 4);
+
+	// Player POS
+	std::ostringstream playerpos;
+	playerpos.str("");
+	playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
+
+	//CRYSTAL COUNTS
+	std::ostringstream as;
+	as.str("");
+	as << "Crystals :" << crystalcount;
+	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 7);
+
+	//VENDING TEXT
+	if (NearVendingText)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, TextTranslate);
+	}
 	//TEST TEXT
 	if (testText == true)
 	{
@@ -710,12 +743,6 @@ void SP2::RenderCode()
 		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS Q TO PICK UP TOKEN", Color(1, 0, 0), 2, 6, 18);
 	}
 
-	//PICK UP COKE
-	if (RenderCoke == true)
-	{
-		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
-	}
-
 	//CONSUME COKE TEXT
 	if (ConsumeCokeText == true)
 	{
@@ -724,11 +751,6 @@ void SP2::RenderCode()
 		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS U TO DRINK COKE", Color(1, 0, 0), 2, 6, 18);
 	}
 
-	//CAFE MENU
-	if (DisplayCafeMenu == true)
-	{
-		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
-	}
 
 	//WEAR SUIT TEXT
 	if (wearSuitText == true)
@@ -778,7 +800,10 @@ void SP2::RenderCode()
     if (askedEngine)
     {
         RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine  | 7. G2 Engine ", Color(1, 0, 0), 1, 1, 14);
-    }
+	}
+
+	//CROSS HAIR
+	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 19.75f, 14.5f);
 }
 
 void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)

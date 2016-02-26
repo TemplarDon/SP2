@@ -69,7 +69,7 @@ void Ship::addShipPart(ShipParts &somePart)
 /******************************************************************************/
 void Ship::addShipUpgrade(Ship_Upgrade &someUpgrade)
 {
-    this->addShipUpgrade(someUpgrade);
+    //this->addShipUpgrade(someUpgrade);
 }
 
 /******************************************************************************/

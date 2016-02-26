@@ -26,6 +26,7 @@
 #include "Building.h"
 #include "Player.h"
 #include "ShipBuilder.h"
+#include "Keypad.h"
 
 #include <vector>
 #include <sstream>
@@ -293,6 +294,9 @@ private:
 	int xcoords[100];
 	int zcoords[100];
 	bool rendercrystal[100];
+
+	//Keypad testing
+	vector<Keypad> keypads;
 
 
 	//SHORTHAND CODES FOR EASIER CODINGS (GARY'S)
