@@ -422,9 +422,6 @@ void SP2::LoadMeshes()
 
 	meshList[GEO_KEYPAD] = MeshBuilder::GenerateOBJ("kaypad", "OBJ//keypad.obj");
 	meshList[GEO_KEYPAD]->textureID = LoadTGA("Image//keypad_uv.tga");
-	InteractableOBJs keypad = InteractableOBJs("keypad", meshList[GEO_SHOP]->maxPos, meshList[GEO_SHOP]->minPos, Position(0,0,0), 12, 0, Vector3(0, 0, 0));
-	keypad.setRequirements(20, 8);
-	InteractablesList.push_back(shop);
 
 	//MINING (BECKHAM'S)
 	//TRADE POST
@@ -536,8 +533,50 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 
 }
 
+void SP2::InitKeypads()
+{
+	Keypad K;
+	InteractableOBJs keypadOBJ =
+	{
+		"keypad",
+		meshList[GEO_KEYPAD]->maxPos,
+		meshList[GEO_KEYPAD]->minPos,
+		{},
+		1,
+		0,
+		{}
+	};
+
+	K =
+	{
+		{ 400, 15, -13 },
+		0
+	};
+	K.targetBool.setTargetLocation(0);
+	keypads.push_back(K);
+
+	keypadOBJ.setRequirements(14, 0.6f);
+	keypadOBJ.minPos = { 0.5f, 0.5f, 0.5f };
+	keypadOBJ.maxPos = { 0.5f, 0.5f, 0.5f };
+	keypadOBJ.name = "keypadButton1";
+
+	keypadOBJ.pos = K.pos;
+	keypadOBJ.pos.z += 1;
+
+	InteractablesList.push_back(keypadOBJ);
+}
+
 void SP2::ReadKeyPresses()
 {
+	if (Application::IsKeyPressed('1'))
+	{
+		glEnable(GL_CULL_FACE);
+	}
+	if (Application::IsKeyPressed('2'))
+	{
+		glDisable(GL_CULL_FACE);
+	}
+	
 	if (Application::IsKeyPressed('B'))
 	{
 		if (toggleLight == true)
@@ -556,6 +595,16 @@ void SP2::ReadKeyPresses()
 		TokenOnScreen = true;
 		TokenTranslate = 10.5;
 	}
+
+	if (Application::IsKeyPressed('C'))
+	{
+		isInViewSpheres = true;
+	}
+
+	if (Application::IsKeyPressed('V'))
+	{
+		isInViewSpheres = false;
+	}
 }
 
 //MAIN RENDER CODE
@@ -571,6 +620,48 @@ void SP2::RenderCode()
 	modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
 	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 	modelStack.PopMatrix();
+
+	//Debug for the Interactables list. 
+	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+	{
+		if (i->name != "keypadButton1") continue;
+		modelStack.PushMatrix();
+		modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
+		float s = i->getRequiredFocus();
+		modelStack.Scale(s, s, s);
+		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+		modelStack.PopMatrix();
+	}
+
+	if (isInViewSpheres)
+	{
+		Position P = { firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z };
+		Vector3 V = firstPersonCamera.target - firstPersonCamera.position;
+
+		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+		{
+			if (!i->isInView(P, V)) continue;
+			modelStack.PushMatrix();
+			modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
+			float s = i->getRequiredFocus();
+			modelStack.Scale(s, s, s);
+			RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+			modelStack.PopMatrix();
+		}
+	}
+	
+
+	for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
+	{
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
+			modelStack.Rotate(i->orientation, 0, 1, 0);
+			modelStack.Scale(4.2f, 4.2f, 4.2f);
+			RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
+		}
+		modelStack.PopMatrix();
+	}
 
 	/*modelStack.PushMatrix();
 	{
@@ -675,19 +766,6 @@ void SP2::RenderCode()
     modelStack.Scale(10, 10, 10);
     RenderMesh(meshList[GEO_HELIPAD], true, toggleLight);
     modelStack.PopMatrix();
-
-	//Keypad
-	for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
-	{
-		modelStack.PushMatrix();
-		{
-			modelStack.Translate(i->pos.x, i->pos.y + 15, i->pos.z);
-			modelStack.Rotate(i->orientation, 0, 1, 0);
-			modelStack.Scale(4.2f, 4.2f, 4.2f);
-			RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
-		}
-		modelStack.PopMatrix();
-	}
 	
 	//INVENTORY & HANDS
 	if (DisplayInventory == false)
@@ -736,24 +814,8 @@ void SP2::RenderCode()
 
     //RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
-    // Ship Stats
-    std::ostringstream shipStats;
-    shipStats.str("");
-    if (ShipList.size() > 0)
-    {
-        shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
-        RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
-    }
-
 	RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
-	//CRYSTAL COUNTS
-	std::ostringstream as;
-	as.str("");
-	as << "Crystals :" << somePlayer.getCrystals();
-	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.2f, 1, 33);
-
-	
 	//INVENTORY & HANDS
 	if (DisplayInventory == false)
 	{
@@ -773,8 +835,31 @@ void SP2::RenderCode()
 	as << crystalcount;
 	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.5, 16.2, 5);
 
+	{
+		unsigned j = 0;
+		Position C = { firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z };
+		Vector3 V = firstPersonCamera.target - firstPersonCamera.position;
+		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+		{
+			std::string S;
+			S = "Is in view: ";
+			S += i->name;
+			if (i->isInView(C, V))
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], S, { 1, 1, 1 }, 1.2f, 1, j++ + 1);
+			}
+		}
+	}
+
+	if (isInViewSpheres)
+		RenderTextOnScreen(meshList[GEO_TEXT], "IsInView spheres: ON  (C/V to toggle on/off)", { 1, 1, 1 }, 1.2f, 1, 48);
+	else
+		RenderTextOnScreen(meshList[GEO_TEXT], "IsInView spheres: OFF (C/V to toggle on/off)", { 1, 1, 1 }, 1.2f, 1, 48);
+
+	RenderTextOnScreen(meshList[GEO_TEXT], "Press 1/2 to enable/disable culling (for interact. spheres)", { 1, 1, 1 }, 1.2f, 1, 47);
+
 	//CROSS HAIR
-	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
+	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 19.74f, 14.5f);
 
 	//NPC DIALOGUES
 	RenderNPCDialogues();

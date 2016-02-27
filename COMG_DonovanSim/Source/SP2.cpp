@@ -84,6 +84,8 @@ void SP2::Init()
     leftGateOpening = false;
     rightGateOpening = false;
 
+	keypadBool = false;
+
     // Assign Pointers for Ship Building
     LightHull = new Light_Hull;
     MediumHull = new Medium_Hull;
@@ -105,6 +107,8 @@ void SP2::Init()
 
     onGround = true;
 	CrystalText = false;
+
+	isInViewSpheres = false;
 
 	//FIRST PERSON CAMERA
 	firstPersonCamera.Reset();
@@ -183,17 +187,7 @@ void SP2::Init()
 
 	keypads.clear();
 
-	{
-		Keypad K;
-
-		K = { { 400, 0, -13 }, 0 };
-		K.targetBool.setTargetLocation(0);
-		keypads.push_back(K);
-
-		K = { { 302.5f, 0, 13 }, 90 };
-		K.targetBool.setTargetLocation(0);
-		keypads.push_back(K);
-	}
+	InitKeypads();
 }
 
 void SP2::Update(double dt)
@@ -244,7 +238,7 @@ void SP2::Update(double dt)
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 
     for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
-    {
+	{
         //VENDING MACHINE
         if (it->name == "vending")
         {
@@ -497,7 +491,6 @@ void SP2::Update(double dt)
     //SHIP INTERACTIONS (DONOVAN'S)
     for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
     {
-        //Movements with OBJs. NOTE: Cameras should have a name to define.
         if (camPointer == &thirdPersonCamera)
         {
             Vector3 view = (camPointer->target - camPointer->position).Normalized();

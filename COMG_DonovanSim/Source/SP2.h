@@ -295,6 +295,10 @@ private:
 	int firstpos;
 	bool onGround;
 
+	//Booleans by Gary Goh.
+
+	bool isInViewSpheres;
+
 
 	//MINING INTERACTIONS (BECKHAM'S)    
 	bool CrystalText;
@@ -310,6 +314,7 @@ private:
 
 	//Keypad stuff (Gary's)
 
+	bool keypadBool;
 	vector<Keypad> keypads;
 	void InitKeypads();
 
