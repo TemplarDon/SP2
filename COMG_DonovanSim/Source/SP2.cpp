@@ -420,6 +420,31 @@ void SP2::Update(double dt)
                 }
             }
         }
+
+        // Weapon
+        if (it->name == "gun rack")
+        {
+            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+            {
+                if (Application::IsKeyPressed('E'))
+                {
+                    somePlayer.setWeapon();
+                }
+            }
+
+        }
+
+        // Target
+        if (it->name == "target dummy")
+        {
+            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+            {
+                if (Application::IsKeyPressed('E') && somePlayer.checkWeapon() == true)
+                {
+                    somePlayer.addCrystals(1);
+                }
+            }
+        }
     }
 
 
@@ -497,34 +522,119 @@ void SP2::Update(double dt)
             Vector3 up = camPointer->up;
             Vector3 right = view.Cross(up);
 
-            if (Application::IsKeyPressed(VK_SPACE) && i->shipTakeoff == false) { i->shipTakeoff = true; }
+            if (!i->shipTakeoff) { i->setDirectionalVectors(view.Normalized()); }
+
+            if (Application::IsKeyPressed(VK_SPACE) && i->shipTakeoff == false) { i->shipTakeoff = true; } /// Press 'SpaceBar' to take off
 
             if (i->shipTakeoff)
             {
-                shipPos.x = shipPos.x + view.x + (float)(i->shipSpeed * dt);
-                shipPos.y = shipPos.y + view.y + (float)(i->shipSpeed * dt);
-                shipPos.z = shipPos.z + view.z + (float)(i->shipSpeed * dt);
-
                 // Ship Animation - Don't Touch - Donovan
                 shipAnimation(dt, i);
-            }
 
-            if (Application::IsKeyPressed('W'))
-            {
-                if (i->shipSpeed <= i->shipMaxSpeed)
+                // Set ship's new direction
+                i->setDirectionalVectors((i->shipDirection + view).Normalized());
+
+                shipPos.x = shipPos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
+                shipPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                shipPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+
+                if (Application::IsKeyPressed('W')) // Increase Speed
                 {
-                    i->shipSpeed += (float)(i->shipSpeedGain * dt);
+                    if (i->shipSpeed <= i->shipMaxSpeed)
+                    {
+                        i->shipSpeed += (float)(i->shipSpeedGain * dt);
+                    }
                 }
-            }
 
-            if (Application::IsKeyPressed('S'))
-            {
-                if (i->shipSpeed >= i->shipLandingSpeed)
+                if (Application::IsKeyPressed('S')) // Decrease Speed
                 {
-                    i->shipSpeed -= (float)(i->shipSpeedGain * dt);
+                    if (i->shipSpeed >= i->shipLandingSpeed)
+                    {
+                        i->shipSpeed -= (float)(i->shipSpeedGain * dt);
+                    }
                 }
             }
         }
+    }
+}
+
+void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
+{
+    // Ship Animation
+    Vector3 view = (camPointer->target - camPointer->position).Normalized();
+    Vector3 up = camPointer->up;
+    Vector3 right = view.Cross(up);
+
+    bool pitchDown = false;
+    bool pitchUp = false;
+    bool yawLeft = false;
+    bool yawRight = false;
+
+    //if (view.y > i->shipDirection.y) { pitchUp = true; }
+    //else if (view.y < i->shipDirection.y) { pitchDown = true; }
+    //else 
+    //{ 
+    //    pitchUp = false;
+    //    pitchDown = false;
+    //}
+
+    //if (view.z > 0)
+    //{
+    //    if (i->shipDirection.x > view.x) { yawRight = true; }
+    //    else if (i->shipDirection.x < view.x) { yawLeft = true; }
+    //    else
+    //    {
+    //        yawRight = false;
+    //        yawLeft = false;
+    //    }
+    //}
+    //else if (view.z < 0)
+    //{
+    //    if (i->shipDirection.x > view.x) { yawLeft = true; }
+    //    else if (i->shipDirection.x < view.x) { yawRight = true; }
+    //    else
+    //    {
+    //        yawRight = false;
+    //        yawLeft = false;
+    //    }
+    //}
+
+    float pitchAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultUpVec.Dot(up)) / (thirdPersonCamera.defaultUpVec.Length() * up.Length()));
+
+    float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
+
+    //if (yawLeft == true && shipHorizontalRotateAngle <= yawAngleDiff) 
+    //{ shipHorizontalRotateAngle += (float)(i->turningSpeed * dt); }
+
+    //if (yawRight == true && shipHorizontalRotateAngle >= -yawAngleDiff)
+    //{ shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt); }
+
+    //if (pitchDown == true && shipVerticalRotateAngle <= pitchAngleDiff)
+    //{ shipVerticalRotateAngle += (float)(i->turningSpeed * dt); }
+
+    //if (pitchUp == true && shipVerticalRotateAngle >= -pitchAngleDiff)
+    //{ shipVerticalRotateAngle -= (float)(i->turningSpeed * dt); }
+
+
+
+    if (thirdPersonCamera.yawingLeft == true && shipHorizontalRotateAngle <= yawAngleDiff)
+    {
+        shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
+    }
+
+    if (thirdPersonCamera.yawingRight == true && shipHorizontalRotateAngle >= -yawAngleDiff)
+    {
+        shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
+    }
+
+    if (thirdPersonCamera.pitchingDown == true && shipVerticalRotateAngle <= pitchAngleDiff)
+    {
+        shipVerticalRotateAngle += (float)(i->turningSpeed * dt);
+    }
+
+    if (thirdPersonCamera.pitchingUp == true && shipVerticalRotateAngle >= -pitchAngleDiff)
+    {
+        shipVerticalRotateAngle -= (float)(i->turningSpeed * dt);
     }
 }
 
@@ -560,48 +670,6 @@ void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& g
     }
 }
 
-void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
-{
-    // Ship Animation
-    if (thirdPersonCamera.yawingLeft == true && shipHorizontalRotateAngle >= -30) { shipHorizontalRotateAngle += (float)(i->turningSpeed * dt); }
-    if (thirdPersonCamera.yawingRight == true && shipHorizontalRotateAngle <= 30) { shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt); }
-    if (thirdPersonCamera.pitchingDown == true && shipVerticalRotateAngle >= -30) { shipVerticalRotateAngle += (float)(i->turningSpeed * dt); }
-    if (thirdPersonCamera.pitchingUp == true && shipHorizontalRotateAngle <= 30) { shipVerticalRotateAngle -= (float)(i->turningSpeed * dt); }
-
-    // Reset Ship to original orientation
-    /*if (!thirdPersonCamera.yawingRight)
-    {
-        if (shipHorizontalRotateAngle < 0)
-        {
-            shipHorizontalRotateAngle += (float)(10 * dt);
-        }
-    }
-
-    if (!thirdPersonCamera.yawingLeft)
-    {
-        if (shipHorizontalRotateAngle > 0)
-        {
-            shipHorizontalRotateAngle -= (float)(10 * dt);
-        }
-    }
-
-    if (!thirdPersonCamera.pitchingDown)
-    {
-        if (shipVerticalRotateAngle < 0)
-        {
-            shipVerticalRotateAngle += (float)(10 * dt);
-        }
-    }
-
-    if (!thirdPersonCamera.pitchingUp)
-    {
-        if (shipVerticalRotateAngle > 0)
-        {
-            shipVerticalRotateAngle -= (float)(10 * dt);
-        }
-    }*/
-}
-
 void SP2::shipCreation()
 {
     // Space Ship Template
@@ -614,6 +682,14 @@ void SP2::shipCreation()
     shipTemplatePtr = &someShip;
 
     ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, somePlayer.getParts()));
+    
+    Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
+    Vector3 up = thirdPersonCamera.up;
+    Vector3 right = view.Cross(up);
+    for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
+    {
+        i->setDirectionalVectors(view, right);
+    }
 
     // Load Meshes for specific ship parts
     for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)

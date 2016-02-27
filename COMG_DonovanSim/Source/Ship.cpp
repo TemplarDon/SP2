@@ -60,7 +60,6 @@ Ship::~Ship()
 /******************************************************************************/
 void Ship::addShipPart(ShipParts* somePart)
 {
-    //this->ShipPartsVector.push_back(somePart);
     this->ShipPartsVector.push_back(somePart);
 }
 
@@ -89,25 +88,7 @@ void Ship::calculateShipStats()
     string wings = "Wings";
     string engine = "Engine";
     string hull = "Hull";
-    //for (vector<ShipParts*>::iterator it = ShipPartsVector.begin(); it != ShipPartsVector.end(); ++it)
-    //{
-    //    if (*it->getName().find(wings) != string::npos)
-    //    {
-    //        this->turningSpeed = *it->partsEffect();
-    //        this->wingType = it->getName();
-    //    }
-    //    if (it->getName().find(engine) != string::npos)
-    //    {
-    //        this->shipSpeedGain = *it->partsEffect();
-    //        this->engineType = it->getName();
-    //    }
-    //    if (it->getName().find(hull) != string::npos)
-    //    {
-    //        this->shipMaxSpeed = *it->partsEffect();
-    //        this->hullType = it->getName();
-    //    }
-    //}
-    //
+
     for (size_t i = 0; i < ShipPartsVector.size(); ++i)
     {
         if (ShipPartsVector[i]->getName().find(wings) != string::npos)
@@ -126,4 +107,27 @@ void Ship::calculateShipStats()
             this->hullType = ShipPartsVector[i]->getName();
         }
     }
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Function to set ship's direction
+*/
+/******************************************************************************/
+void Ship::setDirectionalVectors(Vector3 direction, Vector3 right)
+{
+    this->shipDirection = direction;
+    this->shipRightVec = right;
+}
+
+/******************************************************************************/
+/*!
+\brief
+    Overloaded Function to set ship's direction only
+*/
+/******************************************************************************/
+void Ship::setDirectionalVectors(Vector3 direction)
+{
+    this->shipDirection = direction;
 }

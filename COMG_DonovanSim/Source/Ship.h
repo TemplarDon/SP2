@@ -33,6 +33,10 @@ public:
     // Const rate which speed is gained
     float shipSpeedGain;
 
+    // Ship Direction
+    Vector3 shipDirection;
+    Vector3 shipRightVec;
+
     // Speed needed to land
     float shipLandingSpeed;
 
@@ -56,6 +60,10 @@ public:
 
     // Function to calculate the ship's stats using its parts and upgrades
     void calculateShipStats();
+
+    // Function to set Ship's Directional Vectors
+    void setDirectionalVectors(Vector3 direction, Vector3 right);
+    void setDirectionalVectors(Vector3 direction);
 
     string hullType;
     string wingType;

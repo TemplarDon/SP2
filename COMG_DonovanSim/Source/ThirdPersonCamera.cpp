@@ -351,23 +351,4 @@ void ThirdPersonCamera::shipTurningAnimation(float yaw, float pitch)
 
     if (yaw > 840 && yaw < 1680) { yawingRight = true; }
     else { yawingRight = false; }
-
-
-    //float upAngleDiff = acos((defaultUpVec.Dot(up)) / (defaultUpVec.Length() * up.Length()));
-
-    //Vector3 right = camDirection.Cross(up);
-
-    //float rightAngleDiff = acos((defaultRightVec.Dot(right)) / (defaultRightVec.Length() * right.Length()));
-
-    //if (upAngleDiff < 180) { pitchingDown = true; }
-    //else { pitchingDown = false; }
-
-    //if (upAngleDiff > 180) { pitchingUp = true; }
-    //else { pitchingUp = false; }
-
-    //if (rightAngleDiff < 180) { yawingLeft = true; }
-    //else { yawingLeft = false; }
-
-    //if (rightAngleDiff > 180){ yawingRight = true; }
-    //else{ yawingRight = false; }
 }

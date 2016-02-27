@@ -57,6 +57,10 @@ public:
     // Function to set player stats
     void setPlayerStats(string name, string race, int moneyAmount, Position pos, Camera someCamera);
 
+    // Function to set weapon Equipped
+    void setWeapon();
+    bool checkWeapon();
+
     // Check if player is dead
     bool ifDead();
     
@@ -76,6 +80,8 @@ private:
 
     // Camera Pointer to access Camera values
     Camera* cameraPtr;
+
+    bool weaponEquipped;
 };
 
 #endif
