@@ -46,6 +46,7 @@ void SP2::Init()
 	t = 1;
 	distance = 0;
 	firstpos = 0;
+	translatePointer = -30;
 
 	//BOOLEANS
 	NearVendingText = false;
@@ -70,6 +71,7 @@ void SP2::Init()
 	traderText = false;
 	soldierText = false;
 	shopkeeperText = false;
+	equipPickaxe = false;
 
 
     askedEngine = false;
@@ -122,7 +124,7 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	startingCharPos = charPos = { 600, 17, 150 };
+	startingCharPos = charPos = { 250, 17, 40 };
 
 
 	//Initialize camera settings (Don's)
@@ -233,6 +235,13 @@ void SP2::Update(double dt)
 
 	//DIALOGUE
 	DialoguesWithNPCs();
+
+	//EQUIP PICKAXE , HAND DISAPPEAR
+	if (Application::IsKeyPressed(VK_F2))
+	{
+		equipPickaxe = true;
+		translatePointer = 141;
+	}
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();

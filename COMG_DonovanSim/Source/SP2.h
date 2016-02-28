@@ -73,9 +73,22 @@ class SP2 : public Scene
 		GEO_SPACEMASK,
 		GEO_SPACESUIT,
 
+		//WEAPON
+		GEO_HOLDGUN,
+		GEO_HOLDPICKAXE,
+		GEO_POINTER,
+
+		//INVENTORY
+		GEO_FIRSTBOX,
+		GEO_SECONDBOX,
+		GEO_THIRDBOX,
+		GEO_FOURTHBOX,
+		GEO_FIFTHBOX,
+		GEO_SIXTHBOX,
+		GEO_SEVENTHBOX,
 
 
-        // ARMOURY / SHOP
+        //ARMOURY / SHOP
 
 		GEO_WINDOW,
 		GEO_HUD,
@@ -251,6 +264,7 @@ private:
 	float SuitTranslate;
 	float rotateAngle;
 	float heightOfWall;
+	float translatePointer;
 
 	//BOOLEANS (SHANIA'S)
 	bool NearVendingText;
@@ -273,6 +287,7 @@ private:
 	bool traderText;	
 	bool soldierText;
 	bool shopkeeperText;
+	bool equipPickaxe;
 
     //DOOR (DONOVAN'S)
     float leftGateOffset;
@@ -361,6 +376,9 @@ private:
 	void RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderInventoryOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderWeaponOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderPointerOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y);
 	
     
 	//INTERACTION DECTECTION
