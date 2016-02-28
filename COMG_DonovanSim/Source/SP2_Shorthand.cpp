@@ -868,7 +868,10 @@ void SP2::RenderCode()
 
 		//POINTER
 		RenderPointerOnScreen(meshList[GEO_POINTER], 0.4, translatePointer, 37);     //127, 141
+	}
 
+	if (HandDisappear == false)
+	{
 		//Hand 1
 		RenderHandOnScreen(meshList[GEO_HAND], 5, 0.8, 1);
 

@@ -288,6 +288,7 @@ private:
 	bool soldierText;
 	bool shopkeeperText;
 	bool equipPickaxe;
+	bool HandDisappear;
 
     //DOOR (DONOVAN'S)
     float leftGateOffset;

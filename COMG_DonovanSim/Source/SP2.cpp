@@ -72,6 +72,7 @@ void SP2::Init()
 	soldierText = false;
 	shopkeeperText = false;
 	equipPickaxe = false;
+	HandDisappear = false;
 
 
     askedEngine = false;
@@ -241,7 +242,9 @@ void SP2::Update(double dt)
 	{
 		equipPickaxe = true;
 		translatePointer = 141;
+		HandDisappear = true;
 	}
+
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
