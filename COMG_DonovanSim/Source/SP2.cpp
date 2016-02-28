@@ -46,6 +46,7 @@ void SP2::Init()
 	t = 1;
 	distance = 0;
 	firstpos = 0;
+	translatePointer = -30;
 
 	//BOOLEANS
 	NearVendingText = false;
@@ -70,6 +71,8 @@ void SP2::Init()
 	traderText = false;
 	soldierText = false;
 	shopkeeperText = false;
+	equipPickaxe = false;
+	HandDisappear = false;
 
 
     askedEngine = false;
@@ -122,7 +125,7 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	startingCharPos = charPos = { 600, 17, 150 };
+	startingCharPos = charPos = { 260, 17, -100 };
 
 
 	//Initialize camera settings (Don's)
@@ -198,11 +201,6 @@ void SP2::Update(double dt)
     //READKEYS FUNCTION
     ReadKeyPresses();
 
-    //COLLISION
-    interactionCheck(dt, InteractablesList, somePlayer);
-
-	TestRotation += float(dt * 100);
-
     //TESTING FOR CAFE MENU
     if (!MENUBOOL)
     {
@@ -233,6 +231,15 @@ void SP2::Update(double dt)
 
 	//DIALOGUE
 	DialoguesWithNPCs();
+
+	//EQUIP PICKAXE , HAND DISAPPEAR
+	if (Application::IsKeyPressed(VK_F2))
+	{
+		equipPickaxe = true;
+		translatePointer = 141;
+		HandDisappear = true;
+	}
+
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -356,7 +363,6 @@ void SP2::Update(double dt)
         {
             if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF FRONTGATE IS IN VIEW
             {
-                gateOpening = true;
                 if (Application::IsKeyPressed('E'))
                 {
                     frontGateOpening = true;
@@ -370,7 +376,6 @@ void SP2::Update(double dt)
         {
             if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF rightGATE IS IN VIEW
             {
-                gateOpening = true;
                 if (Application::IsKeyPressed('E'))
                 {
                     rightGateOpening = true;
@@ -384,7 +389,6 @@ void SP2::Update(double dt)
         {
             if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF backGATE IS IN VIEW
             {
-                gateOpening = true;
                 if (Application::IsKeyPressed('E'))
                 {
                     backGateOpening = true;
@@ -398,7 +402,6 @@ void SP2::Update(double dt)
         {
             if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF leftGATE IS IN VIEW
             {
-                gateOpening = true;
                 if (Application::IsKeyPressed('E'))
                 {
                     leftGateOpening = true;
@@ -513,6 +516,17 @@ void SP2::Update(double dt)
 		}
 	}
 
+
+    //Entering / Exiting Ship
+    interactionCheck(dt, InteractablesList, somePlayer);
+
+    // Ship Flying + Animation
+    shipFlying(dt);
+    
+}
+
+void SP2::shipFlying(double dt)
+{
     //SHIP INTERACTIONS (DONOVAN'S)
     for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
     {
@@ -716,6 +730,11 @@ void SP2::shipCreation()
             {
                 meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Light_G2Engine.obj");
             }
+
+            meshList[GEO_HULL]->textureID = LoadTGA("Image//Ship//lightShip.tga");
+            meshList[GEO_WINGS]->textureID = LoadTGA("Image//Ship//lightShip.tga");
+            meshList[GEO_ENGINE]->textureID = LoadTGA("Image//Ship//lightShip.tga");
+            thirdPersonCamera.SetCameraDistanceAbsolute(150);
         }
 
         // Load Meshes for Medium Hull
@@ -740,6 +759,11 @@ void SP2::shipCreation()
             {
                 meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Medium_G2Engine.obj");
             }
+
+            meshList[GEO_HULL]->textureID = LoadTGA("Image//Ship//mediumShip.tga");
+            meshList[GEO_WINGS]->textureID = LoadTGA("Image//Ship//mediumShip.tga");
+            meshList[GEO_ENGINE]->textureID = LoadTGA("Image//Ship//mediumShip.tga");
+            thirdPersonCamera.SetCameraDistanceAbsolute(100);
         }
 
         // Load Meshes for Heavy Hull
@@ -764,6 +788,11 @@ void SP2::shipCreation()
             {
                 meshList[GEO_ENGINE] = MeshBuilder::GenerateOBJ("shipEngine", "OBJ//Ship Models//Large_G2Engine.obj");
             }
+
+            meshList[GEO_HULL]->textureID = LoadTGA("Image//Ship//largeShip.tga");
+            meshList[GEO_WINGS]->textureID = LoadTGA("Image//Ship//largeShip.tga");
+            meshList[GEO_ENGINE]->textureID = LoadTGA("Image//Ship//largeShip.tga");
+            thirdPersonCamera.SetCameraDistanceAbsolute(100);
         }
     }
 }
