@@ -34,6 +34,7 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
     this->defaultUpVec = up;
 
 	SetCameraPitchBounds(-30, 15);
+	SetCameraYawBounds(30, -30);
 	SetCameraDistanceBounds(10, 100);
 }
 
@@ -46,15 +47,13 @@ void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 		float horizontalAngle = mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
 		float verticalAngle = mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
 
+		RotateYawBoundsDirection(float(dt) * 60);
+
 		YawCamera(horizontalAngle);
 		PitchCamera(verticalAngle);
 
         shipTurningAnimation(Application::mouseX, Application::mouseY);
 	}
-
-
-
-    
 
 	Refocus();
 }
@@ -64,9 +63,39 @@ void ThirdPersonCamera::SetMouseEnabled(const bool &toggle)
 	mouseEnabled = toggle;
 }
 
-void ThirdPersonCamera::YawCamera(const float degrees)
+void ThirdPersonCamera::YawCamera(float degrees)
 {
 	Mtx44 rotationMatrix;
+
+	Vector3 C = camDirection;
+	C.y = 0;
+	C.Normalize();
+
+	bool isDifferencePositive = yawBoundsDirection.Cross(C).y >= 0;
+	float angleOffset = Math::RadianToDegree(acos(yawBoundsDirection.Dot(C)));
+
+	Vector3 LB, RB;
+
+	rotationMatrix.SetToRotation(yawBoundsRange, 0, 1, 0);
+	LB = rotationMatrix * yawBoundsDirection;
+	rotationMatrix.SetToRotation(-yawBoundsRange, 0, 1, 0);
+	RB = rotationMatrix * yawBoundsDirection;
+
+	float A;
+
+	if (degrees >= 0)
+	{
+		A = angleOffset * (isDifferencePositive ? 1.0f : -1.0f);
+		if (A + degrees > yawBoundsRange) degrees = yawBoundsRange - A;
+		if (A + degrees < -yawBoundsRange) degrees = -yawBoundsRange - A;
+	}
+	else
+	{
+		A = angleOffset * (isDifferencePositive ? -1.0f : 1.0f);
+		if (A - degrees > yawBoundsRange) degrees = A - yawBoundsRange;
+		if (A - degrees < -yawBoundsRange) degrees = A + yawBoundsRange;
+	}
+
 	rotationMatrix.SetToRotation(degrees, 0, 1, 0);
 
 	camDirection = rotationMatrix * camDirection;
@@ -97,6 +126,37 @@ void ThirdPersonCamera::SetCameraPitchBounds(float min, float max)
 {
 	this->minPitch = min;
 	this->maxPitch = max;
+}
+
+//Taking in a vector direction on the xz plane and bounding angle.
+void ThirdPersonCamera::SetCameraYawBounds(Vector3 direction, float range)
+{
+	direction.y = 0;
+
+	yawBoundsDirection = direction.Normalized();
+
+	yawBoundsRange = range;
+}
+
+//Taking in left and right bounds in degrees (CCW-based).
+void ThirdPersonCamera::SetCameraYawBounds(float boundsLeft, float boundsRight)
+{
+	if (boundsLeft < boundsRight) boundsLeft += 360;
+	Mtx44 rotationMatrix;
+	rotationMatrix.SetToRotation((boundsLeft + boundsRight) / 2, 0, 1, 0);
+
+	yawBoundsDirection = rotationMatrix * Vector3(1, 0, 0);
+
+	yawBoundsRange = boundsLeft / 2 - boundsRight / 2;
+}
+
+//Rotates CCW the direction for Yaw bounding along the y-axis.
+void ThirdPersonCamera::RotateYawBoundsDirection(float degrees)
+{
+	Mtx44 rotationMatrix;
+	rotationMatrix.SetToRotation(degrees, 0, 1, 0);
+
+	yawBoundsDirection = rotationMatrix * yawBoundsDirection;
 }
 
 void ThirdPersonCamera::Refocus()
@@ -138,6 +198,8 @@ float ThirdPersonCamera::GetCameraPitch()
 {
 	return Math::RadianToDegree(asin(camDirection.y));
 }
+
+
 
 Position* ThirdPersonCamera::GetFocusPoint()
 {
