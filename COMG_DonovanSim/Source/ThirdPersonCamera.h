@@ -21,6 +21,9 @@ private:
 	float maxPitch;
 	bool mouseEnabled;
 
+	Vector3 yawBoundsDirection; //Direction is based on xz-plane.
+	float yawBoundsRange; //In degrees from 0 to 180.
+
 public:
     // Default Values to check if ship is pitching / yawing
     Vector3 defaultRightVec;
@@ -35,7 +38,7 @@ public:
 
 	void SetMouseEnabled(const bool &toggle);
 
-	void YawCamera(const float degrees);
+	void YawCamera(float degrees);
 	void PitchCamera(float degrees);
 	void Refocus();
 
@@ -46,6 +49,11 @@ public:
 
 	float GetCameraPitch();
 	void SetCameraPitchBounds(float min, float max);
+
+	void SetCameraYawBounds(Vector3 direction, float range);
+	void SetCameraYawBounds(float boundsLeft, float boundsRight);
+
+	void RotateYawBoundsDirection(float degrees);
 
 	Position* GetFocusPoint();
 	void SetFocusPoint(Position *focus);
