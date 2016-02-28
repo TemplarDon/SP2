@@ -77,6 +77,7 @@ class SP2 : public Scene
 		GEO_HOLDGUN,
 		GEO_HOLDPICKAXE,
 		GEO_POINTER,
+		GEO_ASTEROID,
 
 		//INVENTORY
 		GEO_FIRSTBOX,
@@ -355,6 +356,7 @@ private:
 	void RenderCrystals();
     void RenderArmouryAndShop();
     void RenderInfirmary();
+	void RenderAsteroids();
 
 	//DIALOUGE SYSTEM
 	void Dialogues();
