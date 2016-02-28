@@ -37,56 +37,52 @@ class SP2 : public Scene
 {
     enum GEOMETRY_TYPE
     {
-		GEO_AXES,
-		GEO_QUAD,
-		GEO_LEFT,
-		GEO_RIGHT,
-		GEO_TOP,
-		GEO_BOTTOM,
-		GEO_FRONT,
-		GEO_BACK,
-		GEO_LIGHTBALL,
-		GEO_TEXT,
-		GEO_HANDS,
+        GEO_AXES,
+        GEO_QUAD,
+        GEO_LEFT,
+        GEO_RIGHT,
+        GEO_TOP,
+        GEO_BOTTOM,
+        GEO_FRONT,
+        GEO_BACK,
+        GEO_LIGHTBALL,
+        GEO_TEXT,
+        GEO_HANDS,
 
-		//ROOM TEMPLATE
-		GEO_WALL,
-		GEO_WALL2,
-		GEO_GATETOP,
+        //ROOM TEMPLATE
+        GEO_WALL,
+        GEO_WALL2,
+        GEO_GATETOP,
         GEO_GATETOP2,
-		GEO_GATE,
-		GEO_TESTDOOR,
+        GEO_GATE,
+        GEO_TESTDOOR,
 
-		//OBJS
-		GEO_TRADEPOST,
-		GEO_SPEAKERS,
-		GEO_SOFA,
-		GEO_COUNTER,
-		GEO_FRIDGE,
-		GEO_TABLE,
-		GEO_VENDING,
-		GEO_CHAIR,
-		GEO_TOKEN,
-		GEO_COKE,
-		GEO_CAFETEXTBOX,
-		GEO_BUNK,
-		GEO_SPACEMASK,
-		GEO_SPACESUIT,
+        //OBJS
+        GEO_TRADEPOST,
+        GEO_SPEAKERS,
+        GEO_SOFA,
+        GEO_COUNTER,
+        GEO_FRIDGE,
+        GEO_TABLE,
+        GEO_VENDING,
+        GEO_CHAIR,
+        GEO_TOKEN,
+        GEO_COKE,
+        GEO_CAFETEXTBOX,
+        GEO_BUNK,
+        GEO_SPACEMASK,
+        GEO_SPACESUIT,
 
 
-
-        // ARMOURY / SHOP
-
-		GEO_WINDOW,
-		GEO_HUD,
-		GEO_INVENTORY,
-		GEO_HAND,
+        GEO_WINDOW,
+        GEO_HUD,
+        GEO_INVENTORY,
+        GEO_HAND,
 
         GEO_HELIPAD,
 
 
         //ARMOURY / SHOP
-
         GEO_GUN,
         GEO_GUN_RACK,
         GEO_SHOOTING_RANGE,
@@ -95,19 +91,18 @@ class SP2 : public Scene
 
 
         // Infirmary
-        
         GEO_BED,
         GEO_HEALING_TUBE,
 
 
-		//NPCs
-		GEO_CHEF,
-		GEO_SPACEGUY,
-		GEO_NURSE,
-		GEO_DOCTOR,
-		GEO_TRADER,
-		GEO_SOLDIER,
-		GEO_SHOPKEEPER,
+        //NPCs
+        GEO_CHEF,
+        GEO_SPACEGUY,
+        GEO_NURSE,
+        GEO_DOCTOR,
+        GEO_TRADER,
+        GEO_SOLDIER,
+        GEO_SHOPKEEPER,
 
 
         //SPACE SHIP
@@ -118,20 +113,45 @@ class SP2 : public Scene
         GEO_GROUND,
 
 
-		//MINE
+        //MINE
         GEO_MINE,
-		GEO_CRYSTAL,
+        GEO_CRYSTAL,
 
 
-		//SCIENCE LAB
-		GEO_SCIENCELAB_TABLE,
-		GEO_SCIENCELAB_CUPBOARD,
-		GEO_SCIENCELAB_BEAKER,
+        //SCIENCE LAB
+        GEO_SCIENCELAB_TABLE,
+        GEO_SCIENCELAB_CUPBOARD,
+        GEO_SCIENCELAB_BEAKER,
 
-		//Keypad
-		GEO_KEYPAD,
+        //Keypad
+        GEO_KEYPAD,
 
+        //Maze Walls
+        GEO_MAZE_LEFT_WALL,
+        GEO_MAZE_RIGHT_WALL,
+        GEO_MAZE_TREASURE_BACK_WALL,
+        GEO_MAZE_TREASURE_LEFT_WALL1,
+        GEO_MAZE_TREASURE_LEFT_WALL2,
+        GEO_MAZE_TREASURE_RIGHT_WALL1,
+        GEO_MAZE_TREASURE_RIGHT_WALL2,
+        GEO_MAZE_OBSTACLE1,
+        GEO_MAZE_OBSTACLE2,
+        GEO_MAZE_OBSTACLE3,
+        GEO_MAZE_OBSTACLE4,
+        GEO_MAZE_OBSTACLE5,
+        GEO_MAZE_OBSTACLE6,
+        GEO_MAZE_OBSTACLE7,
+        GEO_MAZE_OBSTACLE8,
+        GEO_MAZE_OBSTACLE9,
+        GEO_MAZE_OBSTACLE10,
+        GEO_MAZE_OBSTACLE11,
 
+        // Mountains for Boundary
+        GEO_MOUNTAIN,
+
+        // Base
+        GEO_BASE,
+       
         NUM_GEOMETRY,
 
     };
@@ -309,7 +329,6 @@ private:
 	int coord2;
 
 	//Keypad stuff (Gary's)
-
 	vector<Keypad> keypads;
 	void InitKeypads();
 
@@ -369,6 +388,7 @@ private:
     void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
     void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
     void shopInteractions();
+    void shipFlying(double dt);
     void shipAnimation(double dt, vector<Ship>::iterator i);
     void shipCreation();
 
@@ -377,12 +397,22 @@ private:
 	void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 	void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 
+    //Functions to init & render Maze
+    void initMaze();
+    void renderMaze();
+     
+    //Functions to init & render Mountains (For Boundary)
+    void initMountains();
+    void renderMountains();
+
     // TEMP BOOLS FOR SHIP BUILDING
     bool askedHull;
     bool askedWings;
     bool askedEngine;
     bool askedShipBuild;
     bool shipBuilt;
+
+  
 
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);
