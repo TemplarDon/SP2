@@ -54,6 +54,7 @@ class SP2 : public Scene
         GEO_WALL2,
         GEO_GATETOP,
         GEO_GATETOP2,
+
         GEO_GATE,
         GEO_TESTDOOR,
 
@@ -78,6 +79,20 @@ class SP2 : public Scene
         GEO_HUD,
         GEO_INVENTORY,
         GEO_HAND,
+
+		//WEAPON
+		GEO_HOLDGUN,
+		GEO_HOLDPICKAXE,
+		GEO_POINTER,
+
+		//INVENTORY
+		GEO_FIRSTBOX,
+		GEO_SECONDBOX,
+		GEO_THIRDBOX,
+		GEO_FOURTHBOX,
+		GEO_FIFTHBOX,
+		GEO_SIXTHBOX,
+		GEO_SEVENTHBOX,
 
         GEO_HELIPAD,
 
@@ -271,6 +286,7 @@ private:
 	float SuitTranslate;
 	float rotateAngle;
 	float heightOfWall;
+	float translatePointer;
 
 	//BOOLEANS (SHANIA'S)
 	bool NearVendingText;
@@ -293,6 +309,8 @@ private:
 	bool traderText;	
 	bool soldierText;
 	bool shopkeeperText;
+	bool equipPickaxe;
+	bool HandDisappear;
 
     //DOOR (DONOVAN'S)
     float leftGateOffset;
@@ -315,6 +333,10 @@ private:
 	int firstpos;
 	bool onGround;
 
+	//Booleans by Gary Goh.
+
+	bool isInViewSpheres;
+
 
 	//MINING INTERACTIONS (BECKHAM'S)    
 	bool CrystalText;
@@ -329,6 +351,8 @@ private:
 	int coord2;
 
 	//Keypad stuff (Gary's)
+
+	bool keypadBool;
 	vector<Keypad> keypads;
 	void InitKeypads();
 
@@ -375,6 +399,9 @@ private:
 	void RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderInventoryOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderWeaponOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderPointerOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y);
 	
     
 	//INTERACTION DECTECTION

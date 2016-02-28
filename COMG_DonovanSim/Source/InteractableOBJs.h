@@ -36,6 +36,7 @@ public:
     bool getEffectOverBool();
 
 	void setRequirements(const float distance, const float focus);
+	float getRequiredFocus();
 
 	bool isInView(const Position &pos, const Vector3 &viewDirection);
 };

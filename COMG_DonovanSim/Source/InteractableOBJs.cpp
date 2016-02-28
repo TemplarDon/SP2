@@ -85,6 +85,11 @@ void InteractableOBJs::setRequirements(const float distance, const float focus)
 	requiredDistanceSquared = distance* distance;
 }
 
+float InteractableOBJs::getRequiredFocus()
+{
+	return sqrt(requiredFocusSquared);
+}
+
 void InteractableOBJs::setEffectOverBool(bool someBool)
 {
     this->effectOver = someBool;

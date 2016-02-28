@@ -46,6 +46,7 @@ void SP2::Init()
 	t = 1;
 	distance = 0;
 	firstpos = 0;
+	translatePointer = -30;
 
 	//BOOLEANS
 	NearVendingText = false;
@@ -70,6 +71,8 @@ void SP2::Init()
 	traderText = false;
 	soldierText = false;
 	shopkeeperText = false;
+	equipPickaxe = false;
+	HandDisappear = false;
 
 
     askedEngine = false;
@@ -83,6 +86,8 @@ void SP2::Init()
     backGateOpening = false;
     leftGateOpening = false;
     rightGateOpening = false;
+
+	keypadBool = false;
 
     // Assign Pointers for Ship Building
     LightHull = new Light_Hull;
@@ -105,6 +110,8 @@ void SP2::Init()
 
     onGround = true;
 	CrystalText = false;
+
+	isInViewSpheres = false;
 
 	//FIRST PERSON CAMERA
 	firstPersonCamera.Reset();
@@ -183,17 +190,7 @@ void SP2::Init()
 
 	keypads.clear();
 
-	{
-		Keypad K;
-
-		K = { { 400, 0, -13 }, 0 };
-		K.targetBool.setTargetLocation(0);
-		keypads.push_back(K);
-
-		K = { { 302.5f, 0, 13 }, 90 };
-		K.targetBool.setTargetLocation(0);
-		keypads.push_back(K);
-	}
+	InitKeypads();
 }
 
 void SP2::Update(double dt)
@@ -235,11 +232,20 @@ void SP2::Update(double dt)
 	//DIALOGUE
 	DialoguesWithNPCs();
 
+	//EQUIP PICKAXE , HAND DISAPPEAR
+	if (Application::IsKeyPressed(VK_F2))
+	{
+		equipPickaxe = true;
+		translatePointer = 141;
+		HandDisappear = true;
+	}
+
+
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 
     for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
-    {
+	{
         //VENDING MACHINE
         if (it->name == "vending")
         {
@@ -524,7 +530,6 @@ void SP2::shipFlying(double dt)
     //SHIP INTERACTIONS (DONOVAN'S)
     for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
     {
-        //Movements with OBJs. NOTE: Cameras should have a name to define.
         if (camPointer == &thirdPersonCamera)
         {
             Vector3 view = (camPointer->target - camPointer->position).Normalized();
