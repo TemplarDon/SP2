@@ -725,8 +725,7 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
     float pitchAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultUpVec.Dot(up)) / (thirdPersonCamera.defaultUpVec.Length() * up.Length()));
 
     // Find angle to yaw
-    //float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
-    float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.camDirection.Dot(i->shipDirection)));
+    float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
 
     // Check which direction ship is turning in and rotate ship
     if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle <= yawAngleDiff)
@@ -825,7 +824,6 @@ void SP2::mazeTranslate(double dt)
 }
 
 void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
-
 {
 	if (gateOffset < 30)
 	{

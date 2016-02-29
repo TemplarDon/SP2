@@ -153,17 +153,6 @@ class SP2 : public Scene
 		GEO_COFFEE,
 		GEO_APPLE,
 
-
-
-
-        //SCIENCE LAB
-        GEO_SCIENCELAB_TABLE,
-        GEO_SCIENCELAB_CUPBOARD,
-        GEO_SCIENCELAB_BEAKER,
-
-        //Keypad
-        GEO_KEYPAD,
-
         //Maze Walls
         GEO_MAZE_LEFT_WALL,
         GEO_MAZE_RIGHT_WALL,
@@ -192,8 +181,7 @@ class SP2 : public Scene
 
         // Base
         GEO_BASE,
-       
->>>>>>> origin/master
+      
         NUM_GEOMETRY,
 
     };
