@@ -308,3 +308,4 @@ bool Player::ifDead()
         return false;
     }
 }
+

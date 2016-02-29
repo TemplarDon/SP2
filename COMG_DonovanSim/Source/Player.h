@@ -63,6 +63,8 @@ public:
 
     // Check if player is dead
     bool ifDead();
+
+
     
 private:
 
