@@ -152,7 +152,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 
-	startingCharPos = charPos = { 260, 18, -100 };
+	startingCharPos = charPos = { 260, 80, -100 };
 
 	//Initialize camera settings (Don's)
 	shipStartingPos = shipPos = { -100, 18, 160 };
@@ -214,6 +214,10 @@ void SP2::Init()
 		asteroidx[i] = coord1;
 		asteroidy[i] = coord3;   
 		asteroidz[i] = coord2;
+		coord1 = rand() % 10 -5  ;   
+		coord2 = rand() % 10 - 5;    
+		movex[i] = coord1;
+		movez[i] = coord2;
 	}
 	for (int i = 0; i < AsteroidNo; i++)
 	{
@@ -585,7 +589,7 @@ void SP2::Update(double dt)
 				CrystalText = true;
 				posxcheck = it->pos.x;
 				poszcheck = it->pos.z;
-				if (Application::IsKeyPressed('M'))
+				if (Application::IsKeyPressed('E'))
 				{
 					for (int a = 0; a < CrystalNo; a++)
 					{
@@ -623,7 +627,7 @@ void SP2::Update(double dt)
 	if (Application::IsKeyPressed(VK_SPACE) && (onGround == true)) //s = ut + 0.5 at^2
 	{
 		firstpos = firstPersonCamera.position.y;
-		firstvelo = 50;
+		firstvelo = 35;
 		onGround = false;
 	}
 	if (onGround == false)
@@ -655,7 +659,12 @@ void SP2::Update(double dt)
 		}
 	}
 
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		asteroidx[i] += movex[i] * dt;
+		asteroidz[i] += movez[i] * dt;
 
+	}
     //Entering / Exiting Ship
     shipToggle(dt, InteractablesList, somePlayer);
 
