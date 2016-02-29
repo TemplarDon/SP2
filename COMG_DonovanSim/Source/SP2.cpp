@@ -113,6 +113,16 @@ void SP2::Init()
 
 	isInViewSpheres = false;
 
+    // Maze
+    mazeTranslateValue = 0;
+    mazeRandomTranslate = (float)((rand() % 10 + 1));
+    lavaTranslation = 0;
+    for (int i = 0; i < 10; ++i)
+    {
+        mazeRandomTranslateVec.push_back((float)((rand() % 100 - 50)));    
+    }
+    deadText = false;
+
 	//FIRST PERSON CAMERA
 	firstPersonCamera.Reset();
 
@@ -125,8 +135,8 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	startingCharPos = charPos = { 260, 18, -100 };
 
+	startingCharPos = charPos = { 260, 18, -100 };
 
 	//Initialize camera settings (Don's)
 	shipStartingPos = shipPos = { -100, 18, 160 };
@@ -539,11 +549,13 @@ void SP2::Update(double dt)
 
 
     //Entering / Exiting Ship
-    interactionCheck(dt, InteractablesList, somePlayer);
+    shipToggle(dt, InteractablesList, somePlayer);
 
     // Ship Flying + Animation
     shipFlying(dt);
 
+    // Maze Movement
+    mazeTranslate(dt);
 }
 
 void SP2::shipFlying(double dt)
@@ -671,6 +683,77 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
     {
         shipVerticalRotateAngle -= (float)(i->turningSpeed * dt);
     }
+}
+
+void SP2::mazeTranslate(double dt)
+{
+    //float randomScale = (float)((rand() % 10 + 1));
+    //for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+    //{
+    //    if (it->name == "leftObstacle" || it->name == "rightObstacle")
+    //    {
+    //        if (mazeTranslateValue <= 10 && !mazeOpening)
+    //        {
+    //            mazeTranslateValue += (float)(randomScale * dt);
+    //            it->pos.z += (float)(randomScale * dt);
+    //            if (mazeTranslateValue >= 10)
+    //            {
+    //                mazeOpening = true;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            mazeTranslateValue -= (float)(randomScale * dt);
+    //            it->pos.z -= (float)(randomScale * dt);
+    //            if (mazeTranslateValue <= 0)
+    //            {
+    //                mazeOpening = false;
+    //            }
+    //        }
+
+    //        //if ((somePlayer.pos.x < it->maxPos.x * it->scaleOffSet + it->pos.x && somePlayer.pos.x > it->minPos.x * it->scaleOffSet + it->pos.x) && (somePlayer.pos.z < it->maxPos.z * it->scaleOffSet + it->pos.z && somePlayer.pos.z > it->minPos.z * it->scaleOffSet + it->pos.z))
+    //        //{
+    //        //    firstPersonCamera.Reset();
+    //        //}
+
+    //        for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
+    //        {
+    //            //-330 to -350
+    //            if (somePlayer.pos.x >= -350 && somePlayer.pos.x <= -330 && somePlayer.pos.z >= zAxis - 3 && somePlayer.pos.z <= zAxis + 3)
+    //            {
+    //                if (!mazeOpening)
+    //                firstPersonCamera.Reset();
+    //            }
+    //        }
+
+    //    }
+    //}
+
+    // Lava Movement
+    if (lavaTranslation <= 140)
+    {
+        lavaTranslation += (float)(10 * dt);
+        if (lavaTranslation >= 140)
+        {
+            lavaTranslation = 0;
+        }
+    }
+
+    for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+    {
+        if (it->name == "lava")
+        {
+            if ((somePlayer.pos.z <= 350 && somePlayer.pos.z >= -350) && (somePlayer.pos.x <= -420 + lavaTranslation + 5 && somePlayer.pos.x >= -420 + lavaTranslation - 5) && (somePlayer.pos.y <= 17))
+            {
+                deadText = true;
+            }
+            else
+            {
+                deadText = false;
+            }
+        }
+    }
+
 }
 
 void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
@@ -818,7 +901,7 @@ void SP2::shipCreation()
     }
 }
 
-void SP2::interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
+void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
     for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)

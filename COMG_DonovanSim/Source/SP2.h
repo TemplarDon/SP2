@@ -161,8 +161,9 @@ class SP2 : public Scene
         GEO_MAZE_OBSTACLE9,
         GEO_MAZE_OBSTACLE10,
         GEO_MAZE_OBSTACLE11,
-		GEO_MAZE_SIDE_WALL,
-		GEO_MAZE_OBSTACLE,
+        GEO_MAZE_OBSTACLE,
+        GEO_MAZE_SIDE_WALL,
+        GEO_LAVA,
 
         // Mountains for Boundary
         GEO_MOUNTAIN,
@@ -326,8 +327,13 @@ private:
     bool leftGateOpening;
     bool rightGateOpening;
 
-	//Maze
-	float mazeTranslateValue;
+    // Maze
+    float mazeTranslateValue;
+    float mazeRandomTranslate;
+    float lavaTranslation;
+    vector<float>mazeRandomTranslateVec;
+    bool mazeOpening;
+    bool deadText;
 
 	//JUMP (BECKHAM'S)
 	int acceleration;
@@ -423,8 +429,8 @@ private:
 	void RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y);
 	
     
-	//INTERACTION DECTECTION
-    void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
+	// Toggle between 1st and 3rd person camera
+    void shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 	
 	//INTERACTION FUNCTIONS
     void vendingMachineInteractions();
@@ -437,6 +443,7 @@ private:
     void shipFlying(double dt);
     void shipAnimation(double dt, vector<Ship>::iterator i);
     void shipCreation();
+    void mazeTranslate(double dt);
 
 
 	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM
