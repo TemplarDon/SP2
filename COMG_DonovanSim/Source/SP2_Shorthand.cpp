@@ -247,10 +247,13 @@ void SP2::LoadMeshes()
 
 
 
-	//POINTER
+	//POINTERS
+	//INVENTORY
 	meshList[GEO_POINTER] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Pointer.obj");
 	meshList[GEO_POINTER]->textureID = LoadTGA("Image//Pointer.tga");
-
+	//CAFE MENU
+	meshList[GEO_CAFEPOINTER] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Pointer.obj");
+	meshList[GEO_CAFEPOINTER]->textureID = LoadTGA("Image//Pointer.tga");
 
 
 	//NPCS
@@ -329,7 +332,18 @@ void SP2::LoadMeshes()
 	meshList[GEO_COKE]->textureID = LoadTGA("Image//Coke.tga");
 	//CAFE MENU TEXT BOX
 	meshList[GEO_CAFETEXTBOX] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//TextBoxCafeMenu.obj");
-	meshList[GEO_CAFETEXTBOX]->textureID = LoadTGA("Image//Token.tga");
+	meshList[GEO_CAFETEXTBOX]->textureID = LoadTGA("Image//CafeMenu.tga");
+	//BREAD
+	meshList[GEO_BREAD] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Bread.obj");
+	meshList[GEO_BREAD]->textureID = LoadTGA("Image//Bread.tga");
+	//COFFEE
+	meshList[GEO_COFFEE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Coffee.obj");
+	meshList[GEO_COFFEE]->textureID = LoadTGA("Image//Coffee.tga");
+	//APPLE
+	meshList[GEO_APPLE] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Apple.obj");
+	meshList[GEO_APPLE]->textureID = LoadTGA("Image//Apple.tga");
+
+
 
 
 
@@ -801,6 +815,23 @@ void SP2::RenderCode()
 	RenderMesh(meshList[GEO_HELIPAD], true, toggleLight);
 	modelStack.PopMatrix();
  
+	//APPLE
+	if (AppleAppear == true)
+	{
+		RenderApple();
+	}
+
+	//COFFEE
+	if (CoffeeAppear == true)
+	{
+		RenderCoffee();
+	}
+
+	//BREAD
+	if (BreadAppear == true)
+	{
+		RenderBread();
+	}
 
 	////Keypad
 	//for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
@@ -833,10 +864,14 @@ void SP2::RenderCode()
 	}
 
 	//CAFE MENU
-	if (DisplayCafeMenu == true)
+	if (DisplayCafeMenu == true)  //true
 	{
 		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
+
+		RenderCafePointerOnScreen(meshList[GEO_CAFEPOINTER], 0.6, 44, cafeMenuPointer);     //62, 50, 38t
 	}
+
+	
 
 	// POSITION OF X Y Z
 
@@ -851,8 +886,6 @@ void SP2::RenderCode()
 	playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
 
 	RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
-
-
 
 
 	//INVENTORY & HANDS
@@ -884,7 +917,7 @@ void SP2::RenderCode()
 	std::ostringstream as;
 	as.str("");
 	as << somePlayer.getCrystals();
-	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.5, 16.2, 5);
+	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 1, 0), 1.5, 16.2, 5);
 
 	//weapon 
 	std::ostringstream weapon;
@@ -1492,10 +1525,62 @@ for (int i = 0; i < CrystalNo; i++)
 	
 }
 
+void SP2::RenderApple()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(266, 12.4, -0.5);
+	modelStack.Scale(0.4, 0.4, 0.4);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[GEO_APPLE], true, toggleLight);
+	modelStack.PopMatrix();
+
+}
+
+void SP2::RenderCoffee()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(266, 12, -0.5);
+	modelStack.Scale(0.5, 0.5, 0.5);
+	modelStack.Rotate(-90, 0, 1, 0);
+	RenderMesh(meshList[GEO_COFFEE], true, toggleLight);
+	modelStack.PopMatrix();
+
+}
+
+void SP2::RenderBread()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(267, 11, -0.5);
+	modelStack.Scale(1.2, 1.2, 1.2);
+	RenderMesh(meshList[GEO_BREAD], true, toggleLight);
+	modelStack.PopMatrix();
+
+}
+
+void SP2::RenderGunOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -500, 500); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	//modelStack.Rotate(10, 1, 0, 0);
+	RenderMesh(mesh, false, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
 void SP2::RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -100, 100); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
@@ -1513,6 +1598,27 @@ void SP2::RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y)
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
+}
+
+void SP2::RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(90, 0, 0, 1);
+	RenderMesh(mesh, false, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+
 }
 
 void SP2::RenderPointerOnScreen(Mesh* mesh, float size, float x, float y)
@@ -1609,7 +1715,7 @@ void SP2::RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.Scale(size, size, size);
 	modelStack.Translate(x, y, 0);
 	modelStack.Rotate(90, 0, 0, 1);
-	RenderMesh(mesh, true, toggleLight);
+	RenderMesh(mesh, false, toggleLight);
 
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
@@ -1619,7 +1725,7 @@ void SP2::RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y)
 void SP2::RenderHandOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -500, 500); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
@@ -1644,7 +1750,7 @@ void SP2::RenderHandOnScreen(Mesh* mesh, float size, float x, float y)
 void SP2::RenderHandOnScreen2(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -500, 500); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
