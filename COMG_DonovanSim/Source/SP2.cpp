@@ -142,7 +142,7 @@ void SP2::Init()
 	//THRID PERSON CAMERA
 	thirdPersonCamera.SetMouseEnabled(true);
 	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
-	thirdPersonCamera.SetCameraDistanceAbsolute(60);
+	thirdPersonCamera.SetCameraDistanceAbsolute(30);
 
 	//INIT CAMERA POINTER
 	camPointer = &firstPersonCamera;
@@ -152,9 +152,9 @@ void SP2::Init()
 	startingCharPos = charPos = { 250, 18, 40 };
 
 	//Initialize camera settings (Don's)
-	shipStartingPos = shipPos = { -100, 18, 160 };
-	shipHorizontalRotateAngle = 0;
-	shipVerticalRotateAngle = 0;
+	shipStartingPos = shipPos = { 375, 18, -105 };
+    shipHorizontalRotateAngle = 0;
+    shipVerticalRotateAngle = 0;
 
 	//Initialize camera settings (Don's)
 	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
@@ -168,15 +168,12 @@ void SP2::Init()
 
 	LoadMeshes();
 
-	//camPointer = &thirdPersonCamera;
-	//somePlayer.setCameraType("third");
-
     Mtx44 projection;
     projection.SetToPerspective(45.f, 16.f / 9.f, 0.1f, 2000.f);
     projectionStack.LoadMatrix(projection);
 
 	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
-	thirdPersonCamera.SetCameraDistanceAbsolute(60);
+	thirdPersonCamera.SetCameraDistanceAbsolute(30);
 
 
 	firstPersonCamera.Reset();
@@ -705,6 +702,10 @@ void SP2::shipFlying(double dt)
                 shipPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
                 shipPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
 
+                somePlayer.pos.x = somePlayer.pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
+                somePlayer.pos.y = somePlayer.pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                somePlayer.pos.z = somePlayer.pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+
                 if (Application::IsKeyPressed('W')) // Increase Speed
                 {
                     if (i->shipSpeed <= i->shipMaxSpeed)
@@ -727,82 +728,41 @@ void SP2::shipFlying(double dt)
 
 void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
 {
-	// Ship Animation
-	Vector3 view = (camPointer->target - camPointer->position).Normalized();
-	Vector3 up = camPointer->up;
-	Vector3 right = view.Cross(up);
+    // Ship Animation
+    Vector3 view = (camPointer->target - camPointer->position).Normalized();
+    Vector3 up = camPointer->up;
+    Vector3 right = view.Cross(up);
 
-	bool pitchDown = false;
-	bool pitchUp = false;
-	bool yawLeft = false;
-	bool yawRight = false;
+    // Find angle to pitch
+    float pitchAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultUpVec.Dot(up)) / (thirdPersonCamera.defaultUpVec.Length() * up.Length()));
 
-	//if (view.y > i->shipDirection.y) { pitchUp = true; }
-	//else if (view.y < i->shipDirection.y) { pitchDown = true; }
-	//else 
-	//{ 
-	//    pitchUp = false;
-	//    pitchDown = false;
-	//}
+    // Find angle to yaw
+    //float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
+    float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.camDirection.Dot(i->shipDirection)));
 
-	//if (view.z > 0)
-	//{
-	//    if (i->shipDirection.x > view.x) { yawRight = true; }
-	//    else if (i->shipDirection.x < view.x) { yawLeft = true; }
-	//    else
-	//    {
-	//        yawRight = false;
-	//        yawLeft = false;
-	//    }
-	//}
-	//else if (view.z < 0)
-	//{
-	//    if (i->shipDirection.x > view.x) { yawLeft = true; }
-	//    else if (i->shipDirection.x < view.x) { yawRight = true; }
-	//    else
-	//    {
-	//        yawRight = false;
-	//        yawLeft = false;
-	//    }
-	//}
+    // Check which direction ship is turning in and rotate ship
+    if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle <= yawAngleDiff)
+    {
+        shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
+    }
 
-	float pitchAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultUpVec.Dot(up)) / (thirdPersonCamera.defaultUpVec.Length() * up.Length()));
+    if (thirdPersonCamera.yawingRight && shipHorizontalRotateAngle >= -yawAngleDiff)
+    {
+        shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
+    }
 
-	float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
+    if (thirdPersonCamera.pitchingDown && shipVerticalRotateAngle <= pitchAngleDiff)
+    {
+        shipVerticalRotateAngle += (float)(i->turningSpeed * dt);
+    }
 
-	//if (yawLeft == true && shipHorizontalRotateAngle <= yawAngleDiff) 
-	//{ shipHorizontalRotateAngle += (float)(i->turningSpeed * dt); }
-
-	//if (yawRight == true && shipHorizontalRotateAngle >= -yawAngleDiff)
-	//{ shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt); }
-
-	//if (pitchDown == true && shipVerticalRotateAngle <= pitchAngleDiff)
-	//{ shipVerticalRotateAngle += (float)(i->turningSpeed * dt); }
-
-	//if (pitchUp == true && shipVerticalRotateAngle >= -pitchAngleDiff)
-	//{ shipVerticalRotateAngle -= (float)(i->turningSpeed * dt); }
-
-
-
-	if (thirdPersonCamera.yawingLeft == true && shipHorizontalRotateAngle <= yawAngleDiff)
-	{
-		shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
-	}
-
-	if (thirdPersonCamera.yawingRight == true && shipHorizontalRotateAngle >= -yawAngleDiff)
-	{
-		shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
-	}
-
-	if (thirdPersonCamera.pitchingDown == true && shipVerticalRotateAngle <= pitchAngleDiff)
-	{
-		shipVerticalRotateAngle += (float)(i->turningSpeed * dt);
-	}
-
-	if (thirdPersonCamera.pitchingUp == true && shipVerticalRotateAngle >= -pitchAngleDiff)
-	{
-		shipVerticalRotateAngle -= (float)(i->turningSpeed * dt);
-	}
+    if (thirdPersonCamera.pitchingUp && shipVerticalRotateAngle >= -pitchAngleDiff)
+    {
+        shipVerticalRotateAngle -= (float)(i->turningSpeed * dt);
+    }
+    
+    if (shipVerticalRotateAngle >= 360) { shipVerticalRotateAngle = 0; }
+    if (shipHorizontalRotateAngle >= 360) { shipHorizontalRotateAngle = 0; }
 }
 
 void SP2::mazeTranslate(double dt)
@@ -958,7 +918,7 @@ void SP2::shipCreation()
             meshList[GEO_HULL]->textureID = LoadTGA("Image//Ship//lightShip.tga");
             meshList[GEO_WINGS]->textureID = LoadTGA("Image//Ship//lightShip.tga");
             meshList[GEO_ENGINE]->textureID = LoadTGA("Image//Ship//lightShip.tga");
-            thirdPersonCamera.SetCameraDistanceAbsolute(150);
+            thirdPersonCamera.SetCameraDistanceAbsolute(100);
         }
 
         // Load Meshes for Medium Hull
@@ -1057,70 +1017,96 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
 
 void SP2::shopInteractions()
 {
-	if (askedHull)
-	{
-		if (Application::IsKeyPressed('1'))
-		{
-			somePlayer.addPart(LightHull);
-			somePlayer.removeCrystals(10);
-			askedHull = false;
-			askedWings = true;
-		}
-		else if (Application::IsKeyPressed('2'))
-		{
-			somePlayer.addPart(MediumHull);
-			somePlayer.removeCrystals(20);
-			askedHull = false;
-			askedWings = true;
-		}
-		else if (Application::IsKeyPressed('3'))
-		{
-			somePlayer.addPart(LargeHull);
-			somePlayer.removeCrystals(30);
-			askedHull = false;
-			askedWings = true;
-		}
-	}
+    if (askedHull)
+    {
+        if (Application::IsKeyPressed('1'))
+        {
+            if (somePlayer.removeCrystals(10))
+            {
+                somePlayer.removeCrystals(10); 
+                somePlayer.addPart(LightHull);
+                askedHull = false;
+                askedWings = true;
+            }
+ 
+        }
+        else if (Application::IsKeyPressed('2'))
+        {
+            if (somePlayer.removeCrystals(20)) 
+            {
+                somePlayer.removeCrystals(20); 
+                somePlayer.addPart(MediumHull);
+                askedHull = false;
+                askedWings = true;
+            }
 
-	if (askedWings)
-	{
-		if (Application::IsKeyPressed('4'))
-		{
-			somePlayer.addPart(DualWings);
-			somePlayer.removeCrystals(20);
-			askedWings = false;
-			askedEngine = true;
-		}
-		else if (Application::IsKeyPressed('5'))
-		{
-			somePlayer.addPart(QuadWings);
-			somePlayer.removeCrystals(30);
-			askedWings = false;
-			askedEngine = true;
-		}
-	}
+        }
+        else if (Application::IsKeyPressed('3'))
+        {
+            if (somePlayer.removeCrystals(30)) 
+            { 
+                somePlayer.removeCrystals(30); 
+                somePlayer.addPart(LargeHull);
+                askedHull = false;
+                askedWings = true;
+            }
+        }
+    }
 
-	if (askedEngine)
-	{
-		if (Application::IsKeyPressed('6'))
-		{
-			somePlayer.addPart(G1Engine);
-			somePlayer.removeCrystals(20);
-			askedEngine = false;
-			shipCreation();
-			askedShipBuild = false;
-			shipBuilt = true;
-		}
-		else if (Application::IsKeyPressed('7'))
-		{
-			somePlayer.addPart(G2Engine);
-			somePlayer.removeCrystals(30);
-			askedEngine = false;
-			shipCreation();
-			askedShipBuild = false;
-			shipBuilt = true;
-		}
-	}
+    if (askedWings)
+    {
+        if (Application::IsKeyPressed('1'))
+        {
+            if (somePlayer.removeCrystals(20)) 
+            { 
+                somePlayer.removeCrystals(20); 
+                somePlayer.addPart(DualWings);
+                askedWings = false;
+                askedEngine = true;
+            }
+        }
+        else if (Application::IsKeyPressed('2'))
+        {
+            if (somePlayer.removeCrystals(30)) 
+            { 
+                somePlayer.removeCrystals(30); 
+                somePlayer.addPart(QuadWings);
+                askedWings = false;
+                askedEngine = true;
+            }
+
+        }
+    }
+
+    if (askedEngine)
+    {
+        if (Application::IsKeyPressed('1'))
+        {
+
+            if (somePlayer.removeCrystals(20)) 
+            {
+                somePlayer.removeCrystals(20); 
+                somePlayer.addPart(G1Engine);
+                askedEngine = false;
+                shipCreation();
+                askedShipBuild = false;
+                shipBuilt = true;
+            }
+
+        }
+        else if (Application::IsKeyPressed('2'))
+        {
+            if (somePlayer.removeCrystals(30)) 
+            { 
+                somePlayer.removeCrystals(30);
+                somePlayer.addPart(G2Engine);
+                askedEngine = false;
+                shipCreation();
+                askedShipBuild = false;
+                shipBuilt = true;
+            }
+        }
+    }
 
 
 }

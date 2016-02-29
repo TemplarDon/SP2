@@ -557,27 +557,29 @@ void SP2::RenderCode()
 	}
 
 
-	for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
-	{
-		modelStack.PushMatrix();
-		{
-			modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
-			modelStack.Rotate(i->orientation, 0, 1, 0);
-			modelStack.Scale(4.2f, 4.2f, 4.2f);
-			RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
-		}
-		modelStack.PopMatrix();
-	}
+    for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
+    {
+        modelStack.PushMatrix();
+        {
+            modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
+            modelStack.Rotate(i->orientation, 0, 1, 0);
+            modelStack.Scale(4.2f, 4.2f, 4.2f);
+            RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
+        }
+        modelStack.PopMatrix();
+    }
 
-	if (ShipList.size() > 0 && shipBuilt == true)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
-		modelStack.Scale(6, 6, 6);
-		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+    if (ShipList.size() > 0 && shipBuilt == true)
+    {
+        modelStack.PushMatrix();
+        RenderSpaceShip();
+        modelStack.PopMatrix();
 
-		RenderSpaceShip();
-		modelStack.PopMatrix();
+        modelStack.PushMatrix();
+        modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
+        modelStack.Scale(6, 6, 6);
+        RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+        modelStack.PopMatrix();
 	}
 
 
@@ -802,6 +804,69 @@ void SP2::RenderCode()
         modelStack.PopMatrix();
     }
 
+    //Note from Gary Goh: It's best to render the sprites first then the text.
+
+    if (TokenOnScreen == true)
+    {
+        RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
+    }
+
+
+    //PICK UP COKE
+    if (RenderCoke == true)
+    {
+        RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
+    }
+
+    //CAFE MENU
+    if (DisplayCafeMenu == true)
+    {
+        RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
+    }
+
+    // POSITION OF X Y Z
+
+    std::ostringstream ss;
+    ss.str("");
+    ss << "Coords :" << firstPersonCamera.position.x << " , " << firstPersonCamera.position.y << " , " << firstPersonCamera.position.z;
+    //RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 30);
+
+
+
+    //INVENTORY & HANDS
+    if (DisplayInventory == false)
+    {
+        //Inventory
+        RenderInventoryOnScreen(meshList[GEO_INVENTORY], 5, 8, 2);
+
+        //Hand 1
+        RenderHandOnScreen(meshList[GEO_HAND], 5, 0.8, 1);
+
+        //Hand 2
+        RenderHandOnScreen2(meshList[GEO_HAND], 5, 15.3, 1);
+    }
+
+    // Player POS
+    std::ostringstream playerpos;
+    playerpos.str("");
+    playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
+    RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
+
+
+
+    //CRYSTAL COUNTS
+    std::ostringstream as;
+    as.str("");
+    as << somePlayer.getCrystals();
+    RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.5, 16.2, 5);
+
+    //weapon 
+    std::ostringstream weapon;
+    weapon.str("");
+    if (somePlayer.checkWeapon()) { weapon << "true"; }
+    else { weapon << "false"; }
+    RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(0, 1, 0), 1.5, 16.2, 8);
+
     //CROSS HAIR
     RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
 
@@ -829,6 +894,16 @@ void SP2::RenderCode()
         shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
         RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
     }
+
+    //std::ostringstream shipyaw;
+    //shipyaw.str("");
+    //// Ship Animation
+    //Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
+    //Vector3 up = thirdPersonCamera.up;
+    //Vector3 right = view.Cross(up);
+    //float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
+    //shipyaw << yawAngleDiff;
+    //RenderTextOnScreen(meshList[GEO_TEXT], shipyaw.str(), Color(0, 1, 0), 2, 7, 12);
 
     //PICK UP TOKEN
     if (PickUpTokenText == true)
@@ -2355,7 +2430,7 @@ void SP2::RenderSpaceShip()
 	RenderMesh(meshList[GEO_ENGINE], true, toggleLight);
 
 	modelStack.PopMatrix();
-	// End of 
+	// End of Ship
 }
 
 void SP2::RenderText(Mesh* mesh, std::string text, Color color)
