@@ -53,10 +53,6 @@ void SP2::Init()
 	BounceTime = 0;
 	CoolDownTime = 0;
 
-
-	//Doubles
-	BounceTime = 0.3;
-
 	//BOOLEANS
 	NearVendingText = false;
 	TokenOnScreen = false;
@@ -81,6 +77,7 @@ void SP2::Init()
 	soldierText = false;
 	shopkeeperText = false;
 	equipPickaxe = false;
+	equipGun = false;
 	HandDisappear = false;
 
 	BreadAppear = false;
@@ -152,7 +149,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 
-	startingCharPos = charPos = { 260, 18, -100 };
+	startingCharPos = charPos = { 250, 18, 40 };
 
 	//Initialize camera settings (Don's)
 	shipStartingPos = shipPos = { -100, 18, 160 };
@@ -270,6 +267,13 @@ void SP2::Update(double dt)
 	//DIALOGUE
 	DialoguesWithNPCs();
 
+	//EQUIP GUN, HAND DISAPPEAR
+	if (Application::IsKeyPressed(VK_F1))
+	{
+		equipGun = true;
+		translatePointer = 127;
+		HandDisappear = true;
+	}
 
 	//EQUIP PICKAXE , HAND DISAPPEAR
 	if (Application::IsKeyPressed(VK_F2))
@@ -282,6 +286,7 @@ void SP2::Update(double dt)
 	//F3 TO MAKE INVENTORY AND HAND APPEAR
 	if (Application::IsKeyPressed(VK_F3))
 	{
+		equipGun = false;
 		equipPickaxe = false;
 		translatePointer = -10;
 		HandDisappear = false;
@@ -433,20 +438,27 @@ void SP2::Update(double dt)
                 testText = true;
                 if (Application::IsKeyPressed('Y'))
                 {
+					testText = false;
+					chefText = false;
                     YesShowCafeMenu = true;
                 }
 
                 if (YesShowCafeMenu == true)
                 {
+					testText = false;
+					chefText = false;
                     DisplayCafeMenu = true;
                 }
                 else
                 {
+					testText = true;
+					chefText = true;
                     DisplayCafeMenu = false;
                 }
             }
             else
             {
+				testText = false;
                 testText = false;
                 DisplayCafeMenu = false;
                 YesShowCafeMenu = false;

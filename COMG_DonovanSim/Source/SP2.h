@@ -134,17 +134,7 @@ class SP2 : public Scene
 
         //MINE
         GEO_MINE,
-
 		GEO_CRYSTAL,
-
-
-		//SCIENCE LAB
-		GEO_SCIENCELAB_TABLE,
-		GEO_SCIENCELAB_CUPBOARD,
-		GEO_SCIENCELAB_BEAKER,
-
-		//Keypad
-		GEO_KEYPAD,
 
 
 		//CAFE MENU
@@ -193,7 +183,7 @@ class SP2 : public Scene
         // Base
         GEO_BASE,
        
->>>>>>> origin/master
+
         NUM_GEOMETRY,
 
     };
@@ -353,6 +343,7 @@ private:
 	bool soldierText;
 	bool shopkeeperText;
 	bool equipPickaxe;
+	bool equipGun;
 	bool HandDisappear;
 	bool BreadAppear;
 	bool CoffeeAppear;
