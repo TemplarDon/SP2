@@ -149,7 +149,7 @@ void SP2::Init()
     //somePlayer.setCameraType("third");
 
     Mtx44 projection;
-    projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
+    projection.SetToPerspective(45.f, 16.f / 9.f, 0.1f, 2000.f);
     projectionStack.LoadMatrix(projection);
 
 	thirdPersonCamera.SetCameraDistanceBounds(10, 200);

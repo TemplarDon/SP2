@@ -558,14 +558,62 @@ void SP2::InitKeypads()
 	K.targetBool.setTargetLocation(0);
 	keypads.push_back(K);
 
-	keypadOBJ.setRequirements(14, 0.6f);
+	keypadOBJ.setRequirements(14, 0.45f);
 	keypadOBJ.minPos = { 0.5f, 0.5f, 0.5f };
 	keypadOBJ.maxPos = { 0.5f, 0.5f, 0.5f };
-	keypadOBJ.name = "keypadButton1";
-
 	keypadOBJ.pos = K.pos;
 	keypadOBJ.pos.z += 1;
 
+	const float d = 1.25f;
+
+	keypadOBJ.name = "keypadButton1";
+	keypadOBJ.pos.x += d * -1;
+	keypadOBJ.pos.y += d * 1;
+	InteractablesList.push_back(keypadOBJ);
+
+	keypadOBJ.name = "keypadButton2";
+	keypadOBJ.pos.x += d * 1;
+	keypadOBJ.pos.y += d * 0;
+	InteractablesList.push_back(keypadOBJ);
+
+	keypadOBJ.name = "keypadButton3";
+	keypadOBJ.pos.x += d * 1;
+	keypadOBJ.pos.y += d * 0;
+	InteractablesList.push_back(keypadOBJ);
+
+	keypadOBJ.name = "keypadButton4";
+	keypadOBJ.pos.x += d * -2;
+	keypadOBJ.pos.y += d * -1;
+	InteractablesList.push_back(keypadOBJ);
+
+	keypadOBJ.name = "keypadButton5";
+	keypadOBJ.pos.x += d * 1;
+	keypadOBJ.pos.y += d * 0;
+	InteractablesList.push_back(keypadOBJ);
+
+	keypadOBJ.name = "keypadButton6";
+	keypadOBJ.pos.x += d * 1;
+	keypadOBJ.pos.y += d * 0;
+	InteractablesList.push_back(keypadOBJ);
+
+	keypadOBJ.name = "keypadButton7";
+	keypadOBJ.pos.x += d * -2;
+	keypadOBJ.pos.y += d * -1;
+	InteractablesList.push_back(keypadOBJ);
+
+	keypadOBJ.name = "keypadButton8";
+	keypadOBJ.pos.x += d * 1;
+	keypadOBJ.pos.y += d * 0;
+	InteractablesList.push_back(keypadOBJ);
+
+	keypadOBJ.name = "keypadButton9";
+	keypadOBJ.pos.x += d * 1;
+	keypadOBJ.pos.y += d * 0;
+	InteractablesList.push_back(keypadOBJ);
+
+	keypadOBJ.name = "keypadButton0";
+	keypadOBJ.pos.x += d * -1;
+	keypadOBJ.pos.y += d * -1;
 	InteractablesList.push_back(keypadOBJ);
 }
 
@@ -2007,7 +2055,7 @@ void SP2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float si
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.55f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
