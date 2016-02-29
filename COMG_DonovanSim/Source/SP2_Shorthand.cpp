@@ -810,11 +810,7 @@ void SP2::RenderCode()
         RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
     }
 
-    //CAFE MENU
-    if (DisplayCafeMenu == true)
-    {
-        RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
-    }
+
 
     //CROSS HAIR
     RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
@@ -1795,7 +1791,7 @@ void SP2::RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y)
 void SP2::RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -500, 500); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();

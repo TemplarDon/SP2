@@ -1,37 +1,88 @@
-﻿Build started 27/2/2016 10:49:52 PM.
+﻿Build started 29/2/2016 10:59:44 PM.
      1>Project "C:\Users\Shania\Desktop\NEW SP2\COMG_DonovanSim\COMG_DonovanSim.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Shania\Desktop\NEW SP2\\Common\Source" /I"C:\Users\Shania\Desktop\NEW SP2\\glfw\include" /I"C:\Users\Shania\Desktop\NEW SP2\\glew\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\AllParts.cpp Source\AllUpgrades.cpp Source\Building.cpp Source\Camera.cpp Source\CollisionOBJs.cpp Source\Engine.cpp Source\FirstPersonCamera.cpp Source\GameObject.cpp Source\Hull.cpp Source\InteractableOBJs.cpp Source\LoadOBJ.cpp Source\LoadTGA.cpp Source\Menu.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\SP2.cpp Source\ShipBuilder.cpp Source\ShipParts.cpp Source\Ship_Upgrade.cpp Source\ThirdPersonCamera.cpp Source\Utility.cpp Source\Wings.cpp Source\main.cpp Source\shader.cpp
-         SP2.cpp
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.h(393): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.h(394): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(26): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(175): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(197): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(446): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(447): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(477): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(486): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(487): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(488): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(490): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.cpp(495): warning C4244: '=' : conversion from 'int' to 'float', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Shania\Desktop\NEW SP2\\Common\Source" /I"C:\Users\Shania\Desktop\NEW SP2\\glfw\include" /I"C:\Users\Shania\Desktop\NEW SP2\\glew\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\AllUpgrades.cpp Source\Building.cpp Source\Camera.cpp Source\CollisionOBJs.cpp Source\Engine.cpp Source\FirstPersonCamera.cpp Source\GameObject.cpp Source\Hull.cpp Source\LoadOBJ.cpp Source\LoadTGA.cpp Source\Menu.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\SP2_Shorthand.cpp Source\ShipParts.cpp Source\Ship_Upgrade.cpp Source\Utility.cpp Source\Wings.cpp Source\main.cpp Source\shader.cpp
+         SP2_Shorthand.cpp
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.h(498): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2.h(499): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(202): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(203): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(295): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(715): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(736): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(737): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(738): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(740): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(741): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(744): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(750): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(753): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(760): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(766): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(781): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(788): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(892): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(941): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(944): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(953): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(972): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(979): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1001): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1017): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1020): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1023): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1029): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1032): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1044): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1051): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1058): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1068): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1075): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1298): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1305): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1316): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1342): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1368): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1394): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1541): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1548): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1556): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1563): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1572): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1580): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1587): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1588): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1595): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1603): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1636): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1650): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1695): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1711): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1724): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1725): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1747): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1865): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(1867): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(2113): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(2114): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(2240): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(2274): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(2283): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(2344): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\shania\desktop\new sp2\comg_donovansim\source\sp2_shorthand.cpp(2352): warning C4305: 'argument' : truncation from 'double' to 'float'
          Generating Code...
          Skipping... (no relevant changes detected)
          shader.cpp
          main.cpp
          Wings.cpp
          Utility.cpp
-         ThirdPersonCamera.cpp
          Ship_Upgrade.cpp
          ShipParts.cpp
-         ShipBuilder.cpp
          MeshBuilder.cpp
          Mesh.cpp
          Menu.cpp
          LoadTGA.cpp
          LoadOBJ.cpp
-         InteractableOBJs.cpp
          Hull.cpp
          GameObject.cpp
          FirstPersonCamera.cpp
@@ -40,7 +91,6 @@
          Camera.cpp
          Building.cpp
          AllUpgrades.cpp
-         AllParts.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Shania\Desktop\NEW SP2\Debug\COMG_DonovanSim.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Shania\Desktop\NEW SP2\Debug" /LIBPATH:"C:\Users\Shania\Desktop\NEW SP2\\glfw\lib-msvc120" /LIBPATH:"C:\Users\Shania\Desktop\NEW SP2\\glew\lib" glew32.lib glfw3.lib opengl32.lib winmm.lib Common.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Shania\Desktop\NEW SP2\Debug\COMG_DonovanSim.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Shania\Desktop\NEW SP2\Debug\COMG_DonovanSim.lib" /MACHINE:X86 Debug\AllParts.obj
          Debug\AllUpgrades.obj
@@ -49,7 +99,6 @@
          Debug\Hull.obj
          Debug\InteractableOBJs.obj
          Debug\Inventory.obj
-         Debug\Keypad.obj
          Debug\Player.obj
          Debug\Ship.obj
          Debug\ShipBuilder.obj
@@ -77,4 +126,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.18
+Time Elapsed 00:00:02.63
