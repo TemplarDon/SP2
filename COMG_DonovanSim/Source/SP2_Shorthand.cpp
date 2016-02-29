@@ -533,12 +533,15 @@ void SP2::RenderCode()
     if (ShipList.size() > 0 && shipBuilt == true)
     {
         modelStack.PushMatrix();
+        RenderSpaceShip();
+        modelStack.PopMatrix();
+
+        modelStack.PushMatrix();
         modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
         modelStack.Scale(6, 6, 6);
         RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-
-        RenderSpaceShip();
         modelStack.PopMatrix();
+
     }
 
 
@@ -668,7 +671,7 @@ void SP2::RenderCode()
     if (DisplayInventory == false)
     {
         //Inventory
-        //RenderInventoryOnScreen(meshList[GEO_INVENTORY], 5, 8, 2);
+        RenderInventoryOnScreen(meshList[GEO_INVENTORY], 5, 8, 2);
 
         //Hand 1
         RenderHandOnScreen(meshList[GEO_HAND], 5, 0.8, 1);
@@ -724,6 +727,16 @@ void SP2::RenderCode()
         shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
         RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
     }
+
+    //std::ostringstream shipyaw;
+    //shipyaw.str("");
+    //// Ship Animation
+    //Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
+    //Vector3 up = thirdPersonCamera.up;
+    //Vector3 right = view.Cross(up);
+    //float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
+    //shipyaw << yawAngleDiff;
+    //RenderTextOnScreen(meshList[GEO_TEXT], shipyaw.str(), Color(0, 1, 0), 2, 7, 12);
 
     //PICK UP TOKEN
     if (PickUpTokenText == true)
@@ -2482,7 +2495,7 @@ void SP2::RenderSpaceShip()
 	RenderMesh(meshList[GEO_ENGINE], true, toggleLight);
 
 	modelStack.PopMatrix();
-	// End of 
+	// End of Ship
 }
 
 void SP2::RenderText(Mesh* mesh, std::string text, Color color)
