@@ -364,6 +364,9 @@ private:
 	int renderasteroid[50];
 	int coord3;
 	int asteroidrotatex;
+	int posycheck;
+	double between;
+	bool AsteroidCollision;
 
 	//Keypad stuff (Gary's)
 

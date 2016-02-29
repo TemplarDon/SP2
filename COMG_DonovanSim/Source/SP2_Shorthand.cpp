@@ -435,6 +435,10 @@ void SP2::LoadMeshes()
 	meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
 	meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga");
 
+    //ASTEROIDS   
+	meshList[GEO_ASTEROID] = MeshBuilder::GenerateOBJ("asteroid", "OBJ//Rock1.obj");
+	meshList[GEO_ASTEROID]->textureID = LoadTGA("Image//Asteroid.tga");
+	
 	//HANGAR
 	initSpaceShip();
 	// Helipad (Ship Spawn)
@@ -484,7 +488,7 @@ void SP2::renderMaze()
 	// Left & Right Side Walls
 	for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
 	{
-<<<<<<< HEAD
+
 		// Left Wall
 		modelStack.PushMatrix();
 		modelStack.Translate(-420 + mazeTranslateValue, 8, zAxis);
@@ -622,6 +626,8 @@ void SP2::RenderCode()
 	//RENDER RANDOM CRYSTAL GENERATION   
 	RenderCrystals();
 
+	//RENDER RANDOM ASTEROID GENERATION  
+	RenderAsteroids();
 	// Render Maze
 	renderMaze();
 
@@ -724,7 +730,10 @@ void SP2::RenderCode()
 	ss << "Coords :" << firstPersonCamera.position.x << " , " << firstPersonCamera.position.y << " , " << firstPersonCamera.position.z;
 	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 30);
 
-
+	std::ostringstream os;
+	os.str("");
+	os << "Collision with asteroids :" << AsteroidCollision;    
+	RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
 
 	//INVENTORY & HANDS
 	if (DisplayInventory == false)
@@ -1604,8 +1613,19 @@ void SP2::RenderCrystals()
 			modelStack.PopMatrix();
 		}
 	}
+}
 
-
+void SP2::RenderAsteroids()
+{
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(asteroidx[i], asteroidy[i], asteroidz[i]);
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(asteroidrotatex, 1, 0, 0);
+		RenderMesh(meshList[GEO_ASTEROID], true, toggleLight);
+		modelStack.PopMatrix();
+	}
 }
 
 void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)
