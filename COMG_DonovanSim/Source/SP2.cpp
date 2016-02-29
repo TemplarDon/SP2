@@ -82,9 +82,13 @@ void SP2::Init()
 	shopkeeperText = false;
 	equipPickaxe = false;
 	HandDisappear = false;
+
 	BreadAppear = false;
 	CoffeeAppear = false;
 
+
+
+	AsteroidCollision = false;
 
 
 	askedEngine = false;
@@ -147,7 +151,8 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	startingCharPos = charPos = { -350, 17, -370 };
+
+	startingCharPos = charPos = { 260, 18, -100 };
 
 	//Initialize camera settings (Don's)
 	shipStartingPos = shipPos = { -100, 18, 160 };
@@ -184,8 +189,8 @@ void SP2::Init()
 	CrystalNo = 20;
 	for (int i = 0; i < CrystalNo; i++)
 	{
-		coord1 = rand() % 900 - 450;
-		coord2 = rand() % 900 - 450;
+		coord1 = rand() % 474 - 42;
+		coord2 = rand() % 763 - 381;
 		if (((coord1 < 30) || coord1 > 350) || ((coord2 < -190) || (coord2 > 250)))
 		{
 			xcoords[i] = coord1;
@@ -196,16 +201,25 @@ void SP2::Init()
 	}
 	for (int i = 0; i < CrystalNo; i++)
 	{
-		if ((((xcoords[i] > 30) && (xcoords[i] < 350)) && ((zcoords[i] > -190) && (zcoords[i] < 250))))
-		{
-
-		}
-		else
-		{
 			InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(xcoords[i], 0, zcoords[i]), 5, 0, Vector3(0, 0, 0));
 			crystal.setRequirements(30, 5);
 			InteractablesList.push_back(crystal);
-		}
+	}
+	AsteroidNo = 40;
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		coord1 = rand() % 1000 - 500;
+		coord2 = rand() % 1000 - 500;   
+		coord3 = rand() % 20 + 90;   
+		asteroidx[i] = coord1;
+		asteroidy[i] = coord3;   
+		asteroidz[i] = coord2;
+	}
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		InteractableOBJs asteroid = InteractableOBJs("asteroid", meshList[GEO_ASTEROID]->maxPos, meshList[GEO_ASTEROID]->minPos, Position(asteroidx[i],asteroidy[i],asteroidz[i]), 1, 0, Vector3(0, 0, 0));
+		asteroid.setRequirements(30, 5);
+		InteractablesList.push_back(asteroid);
 	}
 	crystalcount = 0;
 
@@ -216,6 +230,9 @@ void SP2::Init()
 
 void SP2::Update(double dt)
 {
+	//Dont touch this code 
+	CrystalText = false;
+	AsteroidCollision = false;
 	//FPS
 	FramesPerSecond = 1 / dt;
 
@@ -561,71 +578,80 @@ void SP2::Update(double dt)
                 }
             }
         }
-    }
-
-
-	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
-	if (camPointer == &firstPersonCamera)
-	{
-		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+		if (it->name == "crystal")
 		{
-			if (i->name == "crystal")
+			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 			{
-				if (i->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), viewDirection) == true)
+				CrystalText = true;
+				posxcheck = it->pos.x;
+				poszcheck = it->pos.z;
+				if (Application::IsKeyPressed('M'))
 				{
-					CrystalText = true;
-					posxcheck = i->pos.x;
-					poszcheck = i->pos.z;
-					if (Application::IsKeyPressed('M'))
+					for (int a = 0; a < CrystalNo; a++)
 					{
-						for (int a = 0; a < CrystalNo; a++)
+						if (checkCrystalPos(posxcheck, poszcheck, a))
 						{
-							if (checkCrystalPos(posxcheck, poszcheck, a))
-							{
-								rendercrystal[a] = 0;
-								crystalcount += rand() % 10 + 1;
 
-								somePlayer.addCrystals(rand() % 10 + 1);
+							rendercrystal[a] = 0;
+							crystalcount += rand() % 10 + 1;
 
-								i = this->InteractablesList.erase(i);
-								i = InteractablesList.begin();
+							somePlayer.addCrystals(rand() % 10 + 1);
 
-							}
+							it = this->InteractablesList.erase(it);
+							it = InteractablesList.begin();
 						}
 					}
 				}
 			}
 		}
+		if (it->name == "asteroid") 
+		{
+			posxcheck = it->pos.x;
+			poszcheck = it->pos.z;
+			posycheck = it->pos.y;
+			posxcheck = (posxcheck - somePlayer.pos.x) * (posxcheck - somePlayer.pos.x);
+			posycheck = (posycheck - somePlayer.pos.y) * (posycheck - somePlayer.pos.y);
+			poszcheck = (poszcheck - somePlayer.pos.z) * (poszcheck - somePlayer.pos.z);
+			between = posxcheck + posycheck + poszcheck; 
+			between = sqrt(between);
+			if (between <= 30)
+			{
+				AsteroidCollision = true;
+			}
+		}
+    }
+	if (Application::IsKeyPressed(VK_SPACE) && (onGround == true)) //s = ut + 0.5 at^2
+	{
+		firstpos = firstPersonCamera.position.y;
+		firstvelo = 50;
+		onGround = false;
+	}
+	if (onGround == false)
+	{
+		secondvelo = firstvelo + (acceleration * t * t); // a = -2 , t = 1 
+		firstvelo = secondvelo;
 
+		distance = ((firstvelo * t) + (0.3 * acceleration * t * t));
+		firstPersonCamera.position.y += distance * dt;
+		firstPersonCamera.target.y += distance * dt;
+
+		somePlayer.pos.y += distance * dt;
+	}
+
+	if (firstpos >= firstPersonCamera.position.y)
+	{
+		firstPersonCamera.position.y = firstpos;
+		onGround = true;
+	}
+
+	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
+	if (camPointer == &firstPersonCamera)
+	{
+		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+	
 		if (askedShipBuild)
 		{
 			shopInteractions();
-		}
-
-		//JUMP (BECKHAM'S)
-		if (Application::IsKeyPressed(VK_SPACE) && (onGround == true)) //s = ut + 0.5 at^2
-		{
-			firstpos = firstPersonCamera.position.y;
-			firstvelo = 50;
-			onGround = false;
-		}
-		if (onGround == false)
-		{
-			secondvelo = firstvelo + (acceleration * t * t); // a = -2 , t = 1 
-			firstvelo = secondvelo;
-
-			distance = ((firstvelo * t) + (0.5 * acceleration * t * t));
-			firstPersonCamera.position.y += distance * dt;
-			firstPersonCamera.target.y += distance * dt;
-
-			somePlayer.pos.y += distance * dt;
-		}
-
-		if (firstpos >= firstPersonCamera.position.y)
-		{
-			firstPersonCamera.position.y = firstpos;
-			onGround = true;
 		}
 	}
 
@@ -638,7 +664,6 @@ void SP2::Update(double dt)
 
     // Maze Movement
     mazeTranslate(dt);
-    
 }
 
 void SP2::shipFlying(double dt)

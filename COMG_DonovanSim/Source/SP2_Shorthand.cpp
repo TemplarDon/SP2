@@ -466,6 +466,10 @@ void SP2::LoadMeshes()
 	meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
 	meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga");
 
+    //ASTEROIDS   
+	meshList[GEO_ASTEROID] = MeshBuilder::GenerateOBJ("asteroid", "OBJ//Rock1.obj");
+	meshList[GEO_ASTEROID]->textureID = LoadTGA("Image//Asteroid.tga");
+	
 	//HANGAR
 	initSpaceShip();
 	// Helipad (Ship Spawn)
@@ -490,160 +494,245 @@ void SP2::LoadMeshes()
 //MAIN RENDER CODE
 void SP2::RenderCode()
 {
-    //RENDER LIGHTBALL
-    modelStack.PushMatrix();
-    modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-    RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-    modelStack.PopMatrix();
 
-    modelStack.PushMatrix();
-    modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
-    RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-    modelStack.PopMatrix();
+	//RENDER LIGHTBALL
+	modelStack.PushMatrix();
+	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+	modelStack.PopMatrix();
 
-    /*modelStack.PushMatrix();
-    {
-    Vector3 v =
-    {
-    firstPersonCamera.target.x - firstPersonCamera.position.x,
-    firstPersonCamera.target.y - firstPersonCamera.position.y,
-    firstPersonCamera.target.z - firstPersonCamera.position.z
-    };
+	modelStack.PushMatrix();
+	modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
+	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+	modelStack.PopMatrix();
 
-    v.Normalize();
+	/*modelStack.PushMatrix();
+	{
+	Vector3 v =
+	{
+	firstPersonCamera.target.x - firstPersonCamera.position.x,
+	firstPersonCamera.target.y - firstPersonCamera.position.y,
+	firstPersonCamera.target.z - firstPersonCamera.position.z
+	};
 
-    v = 20 * v;
+	v.Normalize();
 
-    modelStack.Translate(firstPersonCamera.position.x + v.x, firstPersonCamera.position.y + v.y, firstPersonCamera.position.z + v.z);
-    RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-    }
-    modelStack.PopMatrix();*/
+	v = 20 * v;
 
-    //Debug for the Interactables list. 
-    for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-    {
-        if (i->name != "keypadButton1") continue;
-        modelStack.PushMatrix();
-        modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
-        float s = i->getRequiredFocus();
-        modelStack.Scale(s, s, s);
-        RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-        modelStack.PopMatrix();
-    }
+	modelStack.Translate(firstPersonCamera.position.x + v.x, firstPersonCamera.position.y + v.y, firstPersonCamera.position.z + v.z);
+	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+	}
+	modelStack.PopMatrix();*/
 
-    if (isInViewSpheres)
-    {
-        Position P = { firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z };
-        Vector3 V = firstPersonCamera.target - firstPersonCamera.position;
+	//Debug for the Interactables list. 
+	for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+	{
+		if (i->name != "keypadButton1") continue;
+		modelStack.PushMatrix();
+		modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
+		float s = i->getRequiredFocus();
+		modelStack.Scale(s, s, s);
+		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+		modelStack.PopMatrix();
+	}
 
-        for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-        {
-            if (!i->isInView(P, V)) continue;
-            modelStack.PushMatrix();
-            modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
-            float s = i->getRequiredFocus();
-            modelStack.Scale(s, s, s);
-            RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-            modelStack.PopMatrix();
-        }
-    }
+	if (isInViewSpheres)
+	{
+		Position P = { firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z };
+		Vector3 V = firstPersonCamera.target - firstPersonCamera.position;
 
-
-    for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
-    {
-        modelStack.PushMatrix();
-        {
-            modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
-            modelStack.Rotate(i->orientation, 0, 1, 0);
-            modelStack.Scale(4.2f, 4.2f, 4.2f);
-            RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
-        }
-        modelStack.PopMatrix();
-    }
-
-    if (ShipList.size() > 0 && shipBuilt == true)
-    {
-        modelStack.PushMatrix();
-        modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
-        modelStack.Scale(6, 6, 6);
-        RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-
-        RenderSpaceShip();
-        modelStack.PopMatrix();
-    }
+		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
+		{
+			if (!i->isInView(P, V)) continue;
+			modelStack.PushMatrix();
+			modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
+			float s = i->getRequiredFocus();
+			modelStack.Scale(s, s, s);
+			RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+			modelStack.PopMatrix();
+		}
+	}
 
 
-    //RENDER SKYBOX
-    RenderSkybox();
+	for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
+	{
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
+			modelStack.Rotate(i->orientation, 0, 1, 0);
+			modelStack.Scale(4.2f, 4.2f, 4.2f);
+			RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
+		}
+		modelStack.PopMatrix();
+	}
 
-    //RENDER CAFE
-    RenderCafeRoom();
+	if (ShipList.size() > 0 && shipBuilt == true)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
+		modelStack.Scale(6, 6, 6);
+		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 
-    //RENDER BUNK
-    RenderBunkRoom();
-
-    //RENDER SCIENCE LAB
-    RenderScienceLab();
-
-    //RENDER RECREATIONAL ROOM   
-    RenderRecRoom();
-
-    //RENDER RANDOM CRYSTAL GENERATION   
-    RenderCrystals();
-
-    // Render Maze
-    renderMaze();
-
-    // Render Mountains
-    modelStack.PushMatrix();
-    renderMountains();
-    modelStack.PopMatrix();
-
-    // Base Top
-    modelStack.PushMatrix();
-    modelStack.Translate(185, 50, 30);
-    modelStack.Scale(83, 25, 82);
-    RenderMesh(meshList[GEO_BASE], false, toggleLight);
-    modelStack.PopMatrix();
-
-    //GROUND MESH
-    modelStack.PushMatrix();
-    modelStack.Scale(1000, 1000, 1000);
-    RenderMesh(meshList[GEO_QUAD], true, toggleLight);
-    modelStack.PopMatrix();
+		RenderSpaceShip();
+		modelStack.PopMatrix();
+	}
 
 
-    //RENDER ROOM TEMPLATES
+	//RENDER SKYBOX
+	RenderSkybox();
 
-    RenderRoomTemplate(Position(250, 2, 160));
+	//RENDER CAFE
+	RenderCafeRoom();
 
-    RenderRoomTemplate(Position(250, 2, 30));  //CAFE ROOM
+	//RENDER BUNK
+	RenderBunkRoom();
 
-    RenderRoomTemplate(Position(120, 2, 30));
+	//RENDER SCIENCE LAB
+	RenderScienceLab();
 
-    RenderRoomTemplate(Position(120, 2, -100));
+	//RENDER RECREATIONAL ROOM   
+	RenderRecRoom();
+
+	//RENDER RANDOM CRYSTAL GENERATION   
+	RenderCrystals();
+
+	//RENDER RANDOM ASTEROID GENERATION  
+	RenderAsteroids();
+	// Render Maze
+	renderMaze();
+
+	// Render Mountains
+	modelStack.PushMatrix();
+	renderMountains();
+	modelStack.PopMatrix();
+
+	// Base Top
+	modelStack.PushMatrix();
+	modelStack.Translate(185, 50, 30);
+	modelStack.Scale(83, 25, 82);
+	RenderMesh(meshList[GEO_BASE], false, toggleLight);
+	modelStack.PopMatrix();
+
+	//GROUND MESH
+	modelStack.PushMatrix();
+	modelStack.Scale(1000, 1000, 1000);
+	RenderMesh(meshList[GEO_QUAD], true, toggleLight);
+	modelStack.PopMatrix();
 
 
-    //INFIRMARY
-    modelStack.PushMatrix();
-    RenderRoomTemplate(Position(250, 2, -100));
-    modelStack.Translate(250, 2, -100);
-    RenderInfirmary();
-    modelStack.PopMatrix();
+	//RENDER ROOM TEMPLATES
 
-    //ARMOURY / SHOP
-    modelStack.PushMatrix();
-    RenderRoomTemplate(Position(120, 2, 160));
-    modelStack.Translate(120, 2, 160);
-    RenderArmouryAndShop();
-    modelStack.PopMatrix();
+	RenderRoomTemplate(Position(250, 2, 160));
 
-    // Mine
-    //modelStack.PushMatrix();
-    //modelStack.Translate(-100, 2, 50);
-    //modelStack.Scale(4, 4, 4);
-    //RenderMesh(meshList[GEO_MINE], true, toggleLight);
-    //modelStack.PopMatrix();
+	RenderRoomTemplate(Position(250, 2, 30));  //CAFE ROOM
+
+	RenderRoomTemplate(Position(120, 2, 30));
+
+	RenderRoomTemplate(Position(120, 2, -100));
+
+
+	//INFIRMARY
+	modelStack.PushMatrix();
+	RenderRoomTemplate(Position(250, 2, -100));
+	modelStack.Translate(250, 2, -100);
+	RenderInfirmary();
+	modelStack.PopMatrix();
+
+	//ARMOURY / SHOP
+	modelStack.PushMatrix();
+	RenderRoomTemplate(Position(120, 2, 160));
+	modelStack.Translate(120, 2, 160);
+	RenderArmouryAndShop();
+	modelStack.PopMatrix();
+
+	// Mine
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-100, 2, 50);
+	//modelStack.Scale(4, 4, 4);
+	//RenderMesh(meshList[GEO_MINE], true, toggleLight);
+	//modelStack.PopMatrix();
+
+	//Keypad
+	for (vector<Keypad>::iterator i = keypads.begin(); i < keypads.end(); i++)
+	{
+		modelStack.PushMatrix();
+		{
+			modelStack.Translate(i->pos.x, i->pos.y + 15, i->pos.z);
+			modelStack.Rotate(i->orientation, 0, 1, 0);
+			modelStack.Scale(4.2f, 4.2f, 4.2f);
+			RenderMesh(meshList[GEO_KEYPAD], true, toggleLight);
+		}
+		modelStack.PopMatrix();
+	}
+
+	//Note from Gary Goh: It's best to render the sprites first then the text.
+
+	if (TokenOnScreen == true)
+	{
+		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
+	}
+
+
+	//PICK UP COKE
+	if (RenderCoke == true)
+	{
+		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
+	}
+
+	//CAFE MENU
+	if (DisplayCafeMenu == true)
+	{
+		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
+	}
+
+	// POSITION OF X Y Z
+
+	std::ostringstream ss;
+	ss.str("");
+	ss << "Coords :" << firstPersonCamera.position.x << " , " << firstPersonCamera.position.y << " , " << firstPersonCamera.position.z;
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 30);
+
+	std::ostringstream os;
+	os.str("");
+	os << "Collision with asteroids :" << AsteroidCollision;    
+	RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
+
+	//INVENTORY & HANDS
+	if (DisplayInventory == false)
+	{
+		//Inventory
+		//RenderInventoryOnScreen(meshList[GEO_INVENTORY], 5, 8, 2);
+
+		//Hand 1
+		RenderHandOnScreen(meshList[GEO_HAND], 5, 0.8, 1);
+
+		//Hand 2
+		RenderHandOnScreen2(meshList[GEO_HAND], 5, 15.3, 1);
+	}
+
+	// Player POS
+	std::ostringstream playerpos;
+	playerpos.str("");
+	playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
+
+
+
+	//CRYSTAL COUNTS
+	std::ostringstream as;
+	as.str("");
+	as << somePlayer.getCrystals();
+	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.5, 16.2, 5);
+
+	//weapon 
+	std::ostringstream weapon;
+	weapon.str("");
+	if (somePlayer.checkWeapon()) { weapon << "true"; }
+	else { weapon << "false"; }
+	RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(0, 1, 0), 1.5, 16.2, 8);
+
+	//NPC DIALOGUES
+	RenderNPCDialogues();
 
     // Helipad
     modelStack.PushMatrix();
@@ -665,69 +754,6 @@ void SP2::RenderCode()
         }
         modelStack.PopMatrix();
     }
-
-    //Note from Gary Goh: It's best to render the sprites first then the text.
-
-    if (TokenOnScreen == true)
-    {
-        RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
-    }
-
-
-    //PICK UP COKE
-    if (RenderCoke == true)
-    {
-        RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
-    }
-
-    //CAFE MENU
-    if (DisplayCafeMenu == true)
-    {
-        RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
-    }
-
-    // POSITION OF X Y Z
-
-    std::ostringstream ss;
-    ss.str("");
-    ss << "Coords :" << firstPersonCamera.position.x << " , " << firstPersonCamera.position.y << " , " << firstPersonCamera.position.z;
-    //RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 1.2f, 3, 30);
-
-
-
-    //INVENTORY & HANDS
-    if (DisplayInventory == false)
-    {
-        //Inventory
-        //RenderInventoryOnScreen(meshList[GEO_INVENTORY], 5, 8, 2);
-
-        //Hand 1
-        RenderHandOnScreen(meshList[GEO_HAND], 5, 0.8, 1);
-
-        //Hand 2
-        RenderHandOnScreen2(meshList[GEO_HAND], 5, 15.3, 1);
-    }
-
-    // Player POS
-    std::ostringstream playerpos;
-    playerpos.str("");
-    playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
-    RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
-
-
-
-    //CRYSTAL COUNTS
-    std::ostringstream as;
-    as.str("");
-    as << somePlayer.getCrystals();
-    RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.5, 16.2, 5);
-
-    //weapon 
-    std::ostringstream weapon;
-    weapon.str("");
-    if (somePlayer.checkWeapon()) { weapon << "true"; }
-    else { weapon << "false"; }
-    RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(0, 1, 0), 1.5, 16.2, 8);
 
     //CROSS HAIR
     RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
@@ -817,16 +843,9 @@ void SP2::RenderCode()
     if (thirdPersonCamera.pitchingUp) { RenderTextOnScreen(meshList[GEO_TEXT], "Up", Color(1, 0, 0), 1, 0, 13); }
     if (thirdPersonCamera.pitchingDown) { RenderTextOnScreen(meshList[GEO_TEXT], "Down", Color(1, 0, 0), 1, 0, 12); }
 
-    // Dead Text
-    if (deadText)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "YOU DEAD", Color(1, 0, 0), 2, 5, 14);
-    }
-    else
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "YOU NOT DEAD", Color(1, 0, 0), 2, 5, 14);
-    }
+    
 }
+
 
 void SP2::initMaze()
 {
@@ -2383,6 +2402,7 @@ void SP2::RenderCrystals()
 			modelStack.PopMatrix();
 		}
 	}
+
 	
 }
 
@@ -2521,6 +2541,21 @@ void SP2::RenderWeaponOnScreen(Mesh* mesh, float size, float x, float y)
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
+
+
+}
+
+void SP2::RenderAsteroids()
+{
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(asteroidx[i], asteroidy[i], asteroidz[i]);
+		modelStack.Scale(20, 20, 20);
+		modelStack.Rotate(asteroidrotatex, 1, 0, 0);
+		RenderMesh(meshList[GEO_ASTEROID], true, toggleLight);
+		modelStack.PopMatrix();
+	}
 
 }
 
