@@ -34,7 +34,7 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
     this->defaultUpVec = up;
 
 	SetCameraPitchBounds(-30, 15);
-	SetCameraYawBounds(30, -30);
+	SetCameraYawBounds(15, -15);
 	SetCameraDistanceBounds(10, 100);
 }
 
@@ -47,7 +47,8 @@ void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 		float horizontalAngle = mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
 		float verticalAngle = mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
 
-		RotateYawBoundsDirection(float(dt) * 60);
+        //RotateYawBoundsDirection(abs(horizontalAngle) + 15 > yawBoundsRange ? float(horizontalAngle >= 0 ? 1 : -1) * 10 * float(dt) : 0);
+        RotateYawBoundsDirection(horizontalAngle);
 
 		YawCamera(horizontalAngle);
 		PitchCamera(verticalAngle);
@@ -95,6 +96,8 @@ void ThirdPersonCamera::YawCamera(float degrees)
 		if (A - degrees > yawBoundsRange) degrees = A - yawBoundsRange;
 		if (A - degrees < -yawBoundsRange) degrees = A + yawBoundsRange;
 	}
+
+    std::cout << yawBoundsDirection << std::endl;
 
 	rotationMatrix.SetToRotation(degrees, 0, 1, 0);
 
