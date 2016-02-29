@@ -161,6 +161,8 @@ class SP2 : public Scene
         GEO_MAZE_OBSTACLE9,
         GEO_MAZE_OBSTACLE10,
         GEO_MAZE_OBSTACLE11,
+		GEO_MAZE_SIDE_WALL,
+		GEO_MAZE_OBSTACLE,
 
         // Mountains for Boundary
         GEO_MOUNTAIN,
@@ -323,6 +325,9 @@ private:
     bool backGateOpening;
     bool leftGateOpening;
     bool rightGateOpening;
+
+	//Maze
+	float mazeTranslateValue;
 
 	//JUMP (BECKHAM'S)
 	int acceleration;
