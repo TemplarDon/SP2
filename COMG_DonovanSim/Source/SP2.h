@@ -73,6 +73,7 @@ class SP2 : public Scene
         GEO_BUNK,
         GEO_SPACEMASK,
         GEO_SPACESUIT,
+		GEO_SHOPLIST,
 
 
         GEO_WINDOW,
@@ -343,6 +344,7 @@ private:
 	bool BreadAppear;
 	bool CoffeeAppear;
 	bool AppleAppear;
+	bool DisplayShopList;
 
 
 
@@ -453,6 +455,8 @@ private:
 
 	//MENU POINTER
 	void CafeMenuPointerInteraction();
+	void ShopMenuPointerInteraction();
+
 
 	//RENDER TEXT
 	void RenderText(Mesh* mesh, std::string text, Color color);

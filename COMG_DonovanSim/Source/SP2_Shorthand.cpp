@@ -343,7 +343,9 @@ void SP2::LoadMeshes()
 	meshList[GEO_APPLE]->textureID = LoadTGA("Image//Apple.tga");
 
 
-
+	//SHOP LIST
+	meshList[GEO_SHOPLIST] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//TextBoxCafeMenu.obj");
+	meshList[GEO_SHOPLIST]->textureID = LoadTGA("Image//ShopList1.tga");
 
 
 	//RECREATIOMAL ROOM
@@ -717,6 +719,12 @@ void SP2::RenderCode()
 		RenderCafePointerOnScreen(meshList[GEO_CAFEPOINTER], 0.6, 44, cafeMenuPointer);     //62, 50, 38t
 	}
 
+
+	//DO NOT DELETE SHOP LIST STUFF
+	if (DisplayShopList == true)
+	{
+		RenderCafeTextboxOnScreen(meshList[GEO_SHOPLIST], 5, 8, 6);
+	}
 
 	//INVENTORY & HANDS
 	if (DisplayInventory == false)
@@ -1237,8 +1245,6 @@ void SP2::ReadKeyPresses()
 	}
 }
 
-
-
 void SP2::RenderNPCDialogues()
 {
 	if (chefText == true)
@@ -1265,6 +1271,7 @@ void SP2::RenderNPCDialogues()
 	if (traderText == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[4], Color(1, 0, 0), 1.5, 5, 20);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(0, 1, 0), 1.5, 5, 18);
 	}
 
 	if (soldierText == true)

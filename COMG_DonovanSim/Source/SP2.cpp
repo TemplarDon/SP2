@@ -79,7 +79,7 @@ void SP2::Init()
 	equipPickaxe = false;
 	equipGun = false;
 	HandDisappear = false;
-
+	DisplayShopList = false;
 	BreadAppear = false;
 	CoffeeAppear = false;
 
@@ -151,7 +151,7 @@ void SP2::Init()
 
 
 	//startingCharPos = charPos = { -350, 17, -370 }; // STARTING POS OF MAZERUNNER
-    startingCharPos = charPos = { 350, 17, 370 };
+    startingCharPos = charPos = { 108, 17, 130 };
 
 
 
@@ -277,7 +277,7 @@ void SP2::Update(double dt)
     }
 
 
-	//DIALOGUE
+	//DIALOGUE DO NOT DELETE THIS 
 	DialoguesWithNPCs();
 
 	//DO NOT DELETE EQUIP WEAPON STUFF
@@ -286,6 +286,9 @@ void SP2::Update(double dt)
 	//DO NOT DELETE CAFE MENU STUFF 
 	//CAFE MENU
 	CafeMenuPointerInteraction();
+
+	//DO NOT DELETE SHOP MENU STUFF
+	//ShopMenuPointerInteraction();
 
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
@@ -410,6 +413,27 @@ void SP2::Update(double dt)
                 }
             }
         }
+
+		//SHOP LIST
+		if (it->name == "trader")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				if (Application::IsKeyPressed('Y'))
+				{
+					DisplayShopList = true;
+				}
+			}
+			else
+			{
+
+				DisplayShopList = false;
+			}
+		}
+
+
+
+
 
 
         // Door Opening & Closing
