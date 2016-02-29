@@ -307,7 +307,7 @@ void SP2::Update(double dt)
 
 
 
-
+	//DO NOT DELETE CAFE MENU STUFF 
 	//CAFE MENU
 	if (CoolDownTime > 0)
 	{

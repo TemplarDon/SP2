@@ -707,7 +707,9 @@ void SP2::RenderCode()
 		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
 	}
 
-	//CAFE MENU
+
+	//DO NOT DELETE CAFE MENU STUFF
+	//CAFE MENU   
 	if (DisplayCafeMenu == true)  //true
 	{
 		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
@@ -1777,11 +1779,10 @@ void SP2::RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.LoadIdentity(); //Reset modelStack
 	modelStack.Scale(size, size, size);
 	modelStack.Translate(x, y, 0);
-
-	//modelStack.Rotate(10, 1, 0, 0);
-	modelStack.Rotate(-36, 0, 1, 0);
-	modelStack.Rotate(-56, 0, 0, 1);
-	RenderMesh(mesh, false, toggleLight);
+	modelStack.Rotate(-75, 0, 1, 0);
+	modelStack.Rotate(34, 0, 0, 1);
+	modelStack.Rotate(-90, 0, 0, 1);
+	RenderMesh(mesh, true, toggleLight);
 
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
