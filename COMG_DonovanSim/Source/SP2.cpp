@@ -53,10 +53,6 @@ void SP2::Init()
 	BounceTime = 0;
 	CoolDownTime = 0;
 
-
-	//Doubles
-	BounceTime = 0.3;
-
 	//BOOLEANS
 	NearVendingText = false;
 	TokenOnScreen = false;
@@ -81,6 +77,7 @@ void SP2::Init()
 	soldierText = false;
 	shopkeeperText = false;
 	equipPickaxe = false;
+	equipGun = false;
 	HandDisappear = false;
 
 	BreadAppear = false;
@@ -151,8 +148,12 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
+
+
 	//startingCharPos = charPos = { -350, 17, -370 }; // STARTING POS OF MAZERUNNER
     startingCharPos = charPos = { 350, 17, 370 };
+
+
 
 	//Initialize camera settings (Don's)
 	shipStartingPos = shipPos = { 375, 18, -105 };
@@ -211,6 +212,18 @@ void SP2::Init()
 		asteroidx[i] = coord1;
 		asteroidy[i] = coord3;   
 		asteroidz[i] = coord2;
+		coord1 = rand() % 10 -5 ;   
+		if (coord1 == 0)
+		{
+			coord1 = 1;
+		}
+		coord2 = rand() % 10 - 5;    
+		if (coord2 == 0)
+		{
+			coord1 = 1;
+		}
+		movex[i] = coord1;
+		movez[i] = coord2;
 	}
 	for (int i = 0; i < AsteroidNo; i++)
 	{
@@ -267,6 +280,13 @@ void SP2::Update(double dt)
 	//DIALOGUE
 	DialoguesWithNPCs();
 
+	//EQUIP GUN, HAND DISAPPEAR
+	if (Application::IsKeyPressed(VK_F1))
+	{
+		equipGun = true;
+		translatePointer = 127;
+		HandDisappear = true;
+	}
 
 	//EQUIP PICKAXE , HAND DISAPPEAR
 	if (Application::IsKeyPressed(VK_F2))
@@ -279,6 +299,7 @@ void SP2::Update(double dt)
 	//F3 TO MAKE INVENTORY AND HAND APPEAR
 	if (Application::IsKeyPressed(VK_F3))
 	{
+		equipGun = false;
 		equipPickaxe = false;
 		translatePointer = -10;
 		HandDisappear = false;
@@ -430,20 +451,27 @@ void SP2::Update(double dt)
                 testText = true;
                 if (Application::IsKeyPressed('Y'))
                 {
+					testText = false;
+					chefText = false;
                     YesShowCafeMenu = true;
                 }
 
                 if (YesShowCafeMenu == true)
                 {
+					testText = false;
+					chefText = false;
                     DisplayCafeMenu = true;
                 }
                 else
                 {
+					testText = true;
+					chefText = true;
                     DisplayCafeMenu = false;
                 }
             }
             else
             {
+				testText = false;
                 testText = false;
                 DisplayCafeMenu = false;
                 YesShowCafeMenu = false;
@@ -582,7 +610,7 @@ void SP2::Update(double dt)
 				CrystalText = true;
 				posxcheck = it->pos.x;
 				poszcheck = it->pos.z;
-				if (Application::IsKeyPressed('M'))
+				if (Application::IsKeyPressed('E'))
 				{
 					for (int a = 0; a < CrystalNo; a++)
 					{
@@ -620,7 +648,7 @@ void SP2::Update(double dt)
 	if (Application::IsKeyPressed(VK_SPACE) && (onGround == true)) //s = ut + 0.5 at^2
 	{
 		firstpos = firstPersonCamera.position.y;
-		firstvelo = 50;
+		firstvelo = 35;
 		onGround = false;
 	}
 	if (onGround == false)
@@ -652,7 +680,20 @@ void SP2::Update(double dt)
 		}
 	}
 
-
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		asteroidx[i] += movex[i] + 0.05 * dt;
+		asteroidz[i] += movez[i] + 0.5 * dt;
+		if (asteroidx[i] > 1000 || asteroidx[i] < -1000)
+		{
+			asteroidx[i] *= -1;
+		}
+		if (asteroidz[i] > 1000 || asteroidz[i] < -1000)
+		{
+			asteroidz[i] *= -1;
+		}
+	}
+	
     //Entering / Exiting Ship
     shipToggle(dt, InteractablesList, somePlayer);
 

@@ -134,17 +134,7 @@ class SP2 : public Scene
 
         //MINE
         GEO_MINE,
-
 		GEO_CRYSTAL,
-
-
-		//SCIENCE LAB
-		GEO_SCIENCELAB_TABLE,
-		GEO_SCIENCELAB_CUPBOARD,
-		GEO_SCIENCELAB_BEAKER,
-
-		//Keypad
-		GEO_KEYPAD,
 
 
 		//CAFE MENU
@@ -341,6 +331,7 @@ private:
 	bool soldierText;
 	bool shopkeeperText;
 	bool equipPickaxe;
+	bool equipGun;
 	bool HandDisappear;
 	bool BreadAppear;
 	bool CoffeeAppear;
@@ -397,7 +388,9 @@ private:
 	//ASTEROID RELATED    
 	int AsteroidNo;
 	int asteroidx[50];
+	int movex[50];
 	int asteroidz[50];
+	int movez[50];
 	int asteroidy[50];
 	int renderasteroid[50];
 	int coord3;
