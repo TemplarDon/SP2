@@ -356,6 +356,15 @@ private:
 	int coord1;
 	int coord2;
 
+	//ASTEROID RELATED    
+	int AsteroidNo;
+	int asteroidx[50];
+	int asteroidz[50];
+	int asteroidy[50];
+	int renderasteroid[50];
+	int coord3;
+	int asteroidrotatex;
+
 	//Keypad stuff (Gary's)
 
 	bool keypadBool;
