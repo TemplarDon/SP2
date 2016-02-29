@@ -84,7 +84,10 @@ class SP2 : public Scene
 		GEO_HOLDGUN,
 		GEO_HOLDPICKAXE,
 		GEO_POINTER,
+		GEO_THISGUNBETTERWORKS,
+
 		GEO_ASTEROID,
+
 
 		//INVENTORY
 		GEO_FIRSTBOX,
@@ -131,7 +134,26 @@ class SP2 : public Scene
 
         //MINE
         GEO_MINE,
-        GEO_CRYSTAL,
+
+		GEO_CRYSTAL,
+
+
+		//SCIENCE LAB
+		GEO_SCIENCELAB_TABLE,
+		GEO_SCIENCELAB_CUPBOARD,
+		GEO_SCIENCELAB_BEAKER,
+
+		//Keypad
+		GEO_KEYPAD,
+
+
+		//CAFE MENU
+		GEO_CAFEPOINTER,
+		GEO_BREAD,
+		GEO_COFFEE,
+		GEO_APPLE,
+
+
 
 
         //SCIENCE LAB
@@ -171,6 +193,7 @@ class SP2 : public Scene
         // Base
         GEO_BASE,
        
+>>>>>>> origin/master
         NUM_GEOMETRY,
 
     };
@@ -212,6 +235,13 @@ class SP2 : public Scene
 		UL_EXPONENT,
 
 		UL_TOTAL,
+	};
+
+	enum CafeMenu
+	{
+		PLACE1,
+		PLACE2,
+		PLACE3,
 	};
 
 	static const size_t numLights = 3;
@@ -283,6 +313,9 @@ private:
     Dual_Wings* DualWings;
     Quad_Wings* QuadWings;
 
+	//CAFE MENU
+	CafeMenu S;
+
 	//FLOATS (SHANIA'S)
 	float TokenTranslate;
 	float TextTranslate;
@@ -291,6 +324,12 @@ private:
 	float rotateAngle;
 	float heightOfWall;
 	float translatePointer;
+	float cafeMenuPointer;
+	double BounceTime;
+	float CoolDownTime;
+
+	//DOUBLE
+	double testDouble;
 
 	//BOOLEANS (SHANIA'S)
 	bool NearVendingText;
@@ -315,6 +354,11 @@ private:
 	bool shopkeeperText;
 	bool equipPickaxe;
 	bool HandDisappear;
+	bool BreadAppear;
+	bool CoffeeAppear;
+	bool AppleAppear;
+
+
 
     //DOOR (DONOVAN'S)
     float leftGateOffset;
@@ -370,6 +414,9 @@ private:
 	int renderasteroid[50];
 	int coord3;
 	int asteroidrotatex;
+	int posycheck;
+	double between;
+	bool AsteroidCollision;
 
 	//Keypad stuff (Gary's)
 
@@ -399,7 +446,15 @@ private:
 	void RenderCrystals();
     void RenderArmouryAndShop();
     void RenderInfirmary();
+
+	void RenderBread();
+	void RenderCoffee();
+	void RenderApple();
+
+
+
 	void RenderAsteroids();
+
 
 	//DIALOUGE SYSTEM
 	void Dialogues();
@@ -407,6 +462,9 @@ private:
 	vector<string>dialogue_vec;
 	void DialoguesWithNPCs();
 	void RenderNPCDialogues();
+
+	//MENU POINTER
+	void MenuPointer();
 
 	//RENDER TEXT
 	void RenderText(Mesh* mesh, std::string text, Color color);
@@ -423,7 +481,9 @@ private:
 	void RenderInventoryOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderWeaponOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderPointerOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderGunOnScreen(Mesh* mesh, float size, float x, float y);
 	
     
 	// Toggle between 1st and 3rd person camera
