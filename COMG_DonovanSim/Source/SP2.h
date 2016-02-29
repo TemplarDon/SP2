@@ -89,6 +89,14 @@ class SP2 : public Scene
 		GEO_ASTEROID,
 
 
+        //SCIENCE LAB
+        GEO_SCIENCELAB_TABLE,
+        GEO_SCIENCELAB_CUPBOARD,
+        GEO_SCIENCELAB_BEAKER,
+
+        // Keypad
+        GEO_KEYPAD,
+
 		//INVENTORY
 		GEO_FIRSTBOX,
 		GEO_SECONDBOX,
