@@ -767,6 +767,10 @@ void SP2::shipFlying(double dt)
                 shipPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
                 shipPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
 
+                i->pos.x = i->pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
+                i->pos.y = i->pos.x + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                i->pos.z = i->pos.x + i->shipDirection.z + (float)(i->shipSpeed * dt);
+
                 somePlayer.pos.x = somePlayer.pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
                 somePlayer.pos.y = somePlayer.pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
                 somePlayer.pos.z = somePlayer.pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
@@ -1046,36 +1050,64 @@ void SP2::shipCreation()
 
 void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
-	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-	for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)
-	{
-		if (shipIt->isInView(somePlayer.pos, view) == true)
-		{
-			if (Application::IsKeyPressed('F'))
-			{
-				if (somePlayer.getCameraType() == "first")
-				{
-					camPointer = &thirdPersonCamera;
-					somePlayer.setCameraType("third");
-				}
-				else
-				{
-					view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
-					for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-					{
-						if (i->name == "helipad")
-						{
-							if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view) && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
-							{
-								camPointer = &firstPersonCamera;
-								somePlayer.setCameraType("first");
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	//Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+	//for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)
+	//{
+	//	if (shipIt->isInView(somePlayer.pos, view) == true)
+	//	{
+	//		if (Application::IsKeyPressed('F'))
+	//		{
+	//			if (somePlayer.getCameraType() == "first")
+	//			{
+	//				camPointer = &thirdPersonCamera;
+	//				somePlayer.setCameraType("third");
+	//			}
+	//			else
+	//			{
+ //                   if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
+ //                   {
+ //                       camPointer = &firstPersonCamera;
+ //                       somePlayer.setCameraType("first");
+ //                   }
+
+	//			}
+	//		}
+	//	}
+	//}
+
+    Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+    for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)
+    {
+        // Getting into Ship
+        if (shipIt->isInView(somePlayer.pos, view))
+        {
+            if (somePlayer.getCameraType() == "first")
+            {
+                if (Application::IsKeyPressed('F'))
+                {
+                    camPointer = &thirdPersonCamera;
+                    somePlayer.setCameraType("third");
+                }
+            }
+        }
+
+        // Getting out of ship
+        if (somePlayer.getCameraType() == "third")
+        {
+            if (Application::IsKeyPressed('F'))
+            {
+                if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
+                {
+                    camPointer = &firstPersonCamera;
+                    somePlayer.setCameraType("first");
+
+                    camPointer->position.x = somePlayer.pos.x;
+                    camPointer->position.y = somePlayer.pos.y;
+                    camPointer->position.z = somePlayer.pos.z;
+                }
+            }
+        }
+    }
 }
 
 void SP2::shopInteractions()
