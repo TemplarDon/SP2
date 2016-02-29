@@ -122,6 +122,13 @@ class SP2 : public Scene
         GEO_HEALING_TUBE,
 
 
+		//SCience Lab
+		GEO_SCIENCELAB_TABLE,
+		GEO_SCIENCELAB_CUPBOARD,
+		GEO_SCIENCELAB_BEAKER,
+		GEO_KEYPAD,
+
+
         //NPCs
         GEO_CHEF,
         GEO_SPACEGUY,
@@ -453,7 +460,7 @@ private:
 	void RenderNPCDialogues();
 
 	//MENU POINTER
-	void MenuPointer();
+	void CafeMenuPointerInteraction();
 
 	//RENDER TEXT
 	void RenderText(Mesh* mesh, std::string text, Color color);
@@ -490,6 +497,7 @@ private:
     void shipAnimation(double dt, vector<Ship>::iterator i);
     void shipCreation();
     void mazeTranslate(double dt);
+	void EquippingWeapons();
 
 
 	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM

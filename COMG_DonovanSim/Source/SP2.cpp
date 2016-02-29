@@ -280,113 +280,12 @@ void SP2::Update(double dt)
 	//DIALOGUE
 	DialoguesWithNPCs();
 
-	//EQUIP GUN, HAND DISAPPEAR
-	if (Application::IsKeyPressed(VK_F1))
-	{
-		equipGun = true;
-		translatePointer = 127;
-		HandDisappear = true;
-	}
+	//DO NOT DELETE EQUIP WEAPON STUFF
+	EquippingWeapons();
 
-	//EQUIP PICKAXE , HAND DISAPPEAR
-	if (Application::IsKeyPressed(VK_F2))
-	{
-		equipPickaxe = true;
-		translatePointer = 141;
-		HandDisappear = true;
-	}
-
-	//F3 TO MAKE INVENTORY AND HAND APPEAR
-	if (Application::IsKeyPressed(VK_F3))
-	{
-		equipGun = false;
-		equipPickaxe = false;
-		translatePointer = -10;
-		HandDisappear = false;
-	}
-
-
-
-
+	//DO NOT DELETE CAFE MENU STUFF 
 	//CAFE MENU
-	if (CoolDownTime > 0)
-	{
-		CoolDownTime--;
-	}
-	else
-	{
-		CoolDownTime == 0;
-	}
-
-	switch (S)
-	{
-	case PLACE1:
-		cafeMenuPointer = 62;
-		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
-		{
-			CoolDownTime = 20;
-			S = PLACE3;
-		}
-		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
-		{
-			CoolDownTime = 20;
-			S = PLACE2;
-		}
-		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
-		{
-			CoolDownTime = 20;
-			AppleAppear = true;
-		}
-		if (Application::IsKeyPressed('U'))
-		{
-			AppleAppear = false;
-		}
-		break;
-	case PLACE2:
-		cafeMenuPointer = 50;
-		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
-		{
-			CoolDownTime = 20;
-			S = PLACE1;
-		}
-		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
-		{
-			CoolDownTime = 20;
-			S = PLACE3;
-		}
-		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
-		{
-			CoolDownTime = 20;
-			CoffeeAppear = true;
-		}
-		if (Application::IsKeyPressed('U'))
-		{
-			CoffeeAppear = false;
-		}
-		break;
-	case PLACE3:
-		cafeMenuPointer = 38;
-		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
-		{
-			CoolDownTime = 20;
-			S = PLACE2;
-		}
-		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
-		{
-			CoolDownTime = 20;
-			S = PLACE1;
-		}
-		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
-		{
-			CoolDownTime = 20;
-			BreadAppear = true;
-		}
-		if (Application::IsKeyPressed('U'))
-		{
-			BreadAppear = false;
-		}
-		break;
-	}
+	CafeMenuPointerInteraction();
 
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
@@ -702,6 +601,119 @@ void SP2::Update(double dt)
 
     // Maze Movement
     mazeTranslate(dt);
+}
+
+//PLEASE DO NOT DELETE THIS !!!!
+void SP2::CafeMenuPointerInteraction()
+{
+	if (CoolDownTime > 0)
+	{
+		CoolDownTime--;
+	}
+	else
+	{
+		CoolDownTime == 0;
+	}
+
+	switch (S)
+	{
+	case PLACE1:
+		cafeMenuPointer = 62;
+		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
+		{
+			CoolDownTime = 20;
+			S = PLACE3;
+		}
+		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
+		{
+			CoolDownTime = 20;
+			S = PLACE2;
+		}
+		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
+		{
+			CoolDownTime = 20;
+			AppleAppear = true;
+		}
+		if (Application::IsKeyPressed('U'))
+		{
+			AppleAppear = false;
+		}
+		break;
+	case PLACE2:
+		cafeMenuPointer = 50;
+		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
+		{
+			CoolDownTime = 20;
+			S = PLACE1;
+		}
+		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
+		{
+			CoolDownTime = 20;
+			S = PLACE3;
+		}
+		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
+		{
+			CoolDownTime = 20;
+			CoffeeAppear = true;
+		}
+		if (Application::IsKeyPressed('U'))
+		{
+			CoffeeAppear = false;
+		}
+		break;
+	case PLACE3:
+		cafeMenuPointer = 38;
+		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
+		{
+			CoolDownTime = 20;
+			S = PLACE2;
+		}
+		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
+		{
+			CoolDownTime = 20;
+			S = PLACE1;
+		}
+		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
+		{
+			CoolDownTime = 20;
+			BreadAppear = true;
+		}
+		if (Application::IsKeyPressed('U'))
+		{
+			BreadAppear = false;
+		}
+		break;
+	}
+
+}
+
+//PLEASE DO NOT DELETE THIS TOO !!!!
+void SP2::EquippingWeapons()
+{
+	//EQUIP GUN, HAND DISAPPEAR
+	if (Application::IsKeyPressed(VK_F1))
+	{
+		equipGun = true;
+		translatePointer = 127;
+		HandDisappear = true;
+	}
+
+	//EQUIP PICKAXE , HAND DISAPPEAR
+	if (Application::IsKeyPressed(VK_F2))
+	{
+		equipPickaxe = true;
+		translatePointer = 141;
+		HandDisappear = true;
+	}
+
+	//F3 TO MAKE INVENTORY AND HAND APPEAR
+	if (Application::IsKeyPressed(VK_F3))
+	{
+		equipGun = false;
+		equipPickaxe = false;
+		translatePointer = -10;
+		HandDisappear = false;
+	}
 }
 
 void SP2::shipFlying(double dt)
