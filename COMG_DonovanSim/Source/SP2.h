@@ -153,9 +153,7 @@ class SP2 : public Scene
 		GEO_COFFEE,
 		GEO_APPLE,
 
-        //Maze Walls
-        GEO_MAZE_OBSTACLE,
-        GEO_MAZE_SIDE_WALL,
+
 
 
 
@@ -180,7 +178,7 @@ class SP2 : public Scene
         GEO_MAZE_OBSTACLE9,
         GEO_MAZE_OBSTACLE10,
         GEO_MAZE_OBSTACLE11,
->>>>>>> Stashed changes
+
         GEO_LAVA,
 
         // Mountains for Boundary
