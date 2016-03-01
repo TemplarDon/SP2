@@ -73,6 +73,7 @@ class SP2 : public Scene
         GEO_BUNK,
         GEO_SPACEMASK,
         GEO_SPACESUIT,
+		GEO_SHOPLIST,
 
 
         GEO_WINDOW,
@@ -84,6 +85,18 @@ class SP2 : public Scene
 		GEO_HOLDGUN,
 		GEO_HOLDPICKAXE,
 		GEO_POINTER,
+		GEO_THISGUNBETTERWORKS,
+
+		GEO_ASTEROID,
+
+
+        //SCIENCE LAB
+        GEO_SCIENCELAB_TABLE,
+        GEO_SCIENCELAB_CUPBOARD,
+        GEO_SCIENCELAB_BEAKER,
+
+        // Keypad
+        GEO_KEYPAD,
 
 		//INVENTORY
 		GEO_FIRSTBOX,
@@ -109,7 +122,6 @@ class SP2 : public Scene
         GEO_BED,
         GEO_HEALING_TUBE,
 
-
         //NPCs
         GEO_CHEF,
         GEO_SPACEGUY,
@@ -130,7 +142,7 @@ class SP2 : public Scene
 
         //MINE
         GEO_MINE,
-        GEO_CRYSTAL,
+		GEO_CRYSTAL,
 
 
         //SCIENCE LAB
@@ -143,6 +155,12 @@ class SP2 : public Scene
         GEO_KEYPAD,
 		GEO_SAFE_BOX,
 		GEO_SAFE_DOOR,
+		
+		//CAFE MENU
+		GEO_CAFEPOINTER,
+		GEO_BREAD,
+		GEO_COFFEE,
+		GEO_APPLE,
 
         //Maze Walls
 		GEO_MAZE_SIDE_WALL,
@@ -165,13 +183,15 @@ class SP2 : public Scene
         GEO_MAZE_OBSTACLE9,
         GEO_MAZE_OBSTACLE10,
         GEO_MAZE_OBSTACLE11,
+        GEO_MAZE_OBSTACLE,
+        GEO_MAZE_SIDE_WALL,
+        GEO_LAVA,
 
         // Mountains for Boundary
         GEO_MOUNTAIN,
 
         // Base
         GEO_BASE,
-       
         NUM_GEOMETRY,
 
     };
@@ -213,6 +233,13 @@ class SP2 : public Scene
 		UL_EXPONENT,
 
 		UL_TOTAL,
+	};
+
+	enum CafeMenu
+	{
+		PLACE1,
+		PLACE2,
+		PLACE3,
 	};
 
 	static const size_t numLights = 3;
@@ -284,6 +311,9 @@ private:
     Dual_Wings* DualWings;
     Quad_Wings* QuadWings;
 
+	//CAFE MENU
+	CafeMenu S;
+
 	//FLOATS (SHANIA'S)
 	float TokenTranslate;
 	float TextTranslate;
@@ -292,6 +322,12 @@ private:
 	float rotateAngle;
 	float heightOfWall;
 	float translatePointer;
+	float cafeMenuPointer;
+	double BounceTime;
+	float CoolDownTime;
+
+	//DOUBLE
+	double testDouble;
 
 	//BOOLEANS (SHANIA'S)
 	bool NearVendingText;
@@ -315,7 +351,14 @@ private:
 	bool soldierText;
 	bool shopkeeperText;
 	bool equipPickaxe;
+	bool equipGun;
 	bool HandDisappear;
+	bool BreadAppear;
+	bool CoffeeAppear;
+	bool AppleAppear;
+	bool DisplayShopList;
+
+
 
     //DOOR (DONOVAN'S)
     float leftGateOffset;
@@ -327,6 +370,14 @@ private:
     bool backGateOpening;
     bool leftGateOpening;
     bool rightGateOpening;
+
+    // Maze
+    float mazeTranslateValue;
+    float mazeRandomTranslate;
+    float lavaTranslation;
+    vector<float>mazeRandomTranslateVec;
+    bool mazeOpening;
+    bool deadText;
 
 	//JUMP (BECKHAM'S)
 	int acceleration;
@@ -354,6 +405,20 @@ private:
 	bool rendercrystal[100];
 	int coord1;
 	int coord2;
+
+	//ASTEROID RELATED    
+	int AsteroidNo;
+	int asteroidx[50];
+	int movex[50];
+	int asteroidz[50];
+	int movez[50];
+	int asteroidy[50];
+	int renderasteroid[50];
+	int coord3;
+	int asteroidrotatex;
+	int posycheck;
+	double between;
+	bool AsteroidCollision;
 
 	//Keypad stuff (Gary's)
 
@@ -385,12 +450,26 @@ private:
     void RenderArmouryAndShop();
     void RenderInfirmary();
 
+	void RenderBread();
+	void RenderCoffee();
+	void RenderApple();
+
+
+
+	void RenderAsteroids();
+
+
 	//DIALOUGE SYSTEM
 	void Dialogues();
 	string file_contents;
 	vector<string>dialogue_vec;
 	void DialoguesWithNPCs();
 	void RenderNPCDialogues();
+
+	//MENU POINTER
+	void CafeMenuPointerInteraction();
+	void ShopMenuPointerInteraction();
+
 
 	//RENDER TEXT
 	void RenderText(Mesh* mesh, std::string text, Color color);
@@ -407,11 +486,13 @@ private:
 	void RenderInventoryOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderWeaponOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderPointerOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderGunOnScreen(Mesh* mesh, float size, float x, float y);
 	
     
-	//INTERACTION DECTECTION
-    void interactionCheck(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
+	// Toggle between 1st and 3rd person camera
+    void shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 	
 	//INTERACTION FUNCTIONS
     void vendingMachineInteractions();
@@ -424,6 +505,8 @@ private:
     void shipFlying(double dt);
     void shipAnimation(double dt, vector<Ship>::iterator i);
     void shipCreation();
+    void mazeTranslate(double dt);
+	void EquippingWeapons();
 
 
 	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM
@@ -444,6 +527,7 @@ private:
     bool askedEngine;
     bool askedShipBuild;
     bool shipBuilt;
+    bool noMoney;
 
   
 

@@ -33,7 +33,7 @@ public:
     void addItem(InteractableOBJs itemName);
     void removeItem(InteractableOBJs itemName);
 
-    // Functions for adding and removing Ship Parts from players inventory
+    // Functions for adding and getting Ship Parts from players inventory
     void addPart(ShipParts* partsName);
     list<ShipParts*> getParts();
 

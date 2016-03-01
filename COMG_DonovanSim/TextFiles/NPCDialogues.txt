@@ -4,5 +4,5 @@ Hi there, I'm Mary, your nurse. How can I help you?
 Hi there, I'm Dave, your doctor. How are you today? 
 Welcome to my shop! Do you have anything to trade?
 Hi there, pick your gun please.
-I AM YOUR BLODDY SHOPKEEPER WTF.
+Press Y to look at the list.
 end
