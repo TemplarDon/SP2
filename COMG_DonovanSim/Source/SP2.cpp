@@ -495,18 +495,18 @@ void SP2::Update(double dt)
 		//SHOP LIST
 		if (it->name == "trader")
 		{
-			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-			{
-				if (Application::IsKeyPressed('Y'))
-				{
-					DisplayShopList = true;
-				}
-			}
-			else
-			{
+			//if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			//{
+			//	if (Application::IsKeyPressed('Y'))
+			//	{
+			//		DisplayShopList = true;
+			//	}
+			//}
+			//else
+			//{
 
-				DisplayShopList = false;
-			}
+			//	DisplayShopList = false;
+			//}
 		}
 
 
@@ -613,6 +613,10 @@ void SP2::Update(double dt)
 					askedHull = true;
 				}
 			}
+            else
+            {
+                askedShipBuild = false;
+            }
 		}
 
 		// Weapon
@@ -705,46 +709,63 @@ void SP2::Update(double dt)
 		if (it->name == "crystal")
 
 		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+
+			// Target
+			if (i->name == "target dummy")
 			{
-				CrystalText = true;
-				posxcheck = it->pos.x;
-				poszcheck = it->pos.z;
-				if (Application::IsKeyPressed('E'))
+				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 				{
-					for (int a = 0; a < CrystalNo; a++)
+					if (Application::IsKeyPressed(VK_LEFT) && somePlayer.checkWeapon() == true)
 					{
-						if (checkCrystalPos(posxcheck, poszcheck, a))
+						somePlayer.addCrystals(1);
+					}
+				}
+			}
+			if (i->name == "crystal")
+			{
+				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+				{
+					CrystalText = true;
+					posxcheck = i->pos.x;
+					poszcheck = i->pos.z;
+					if (Application::IsKeyPressed('E'))
+					{
+						for (int a = 0; a < CrystalNo; a++)
 						{
+							if (checkCrystalPos(posxcheck, poszcheck, a))
+							{
 
-							rendercrystal[a] = 0;
-							crystalcount += rand() % 10 + 1;
+								rendercrystal[a] = 0;
+								crystalcount += rand() % 10 + 1;
 
-							somePlayer.addCrystals(rand() % 10 + 1);
+								somePlayer.addCrystals(rand() % 10 + 1);
 
-							it = this->InteractablesList.erase(it);
-							it = InteractablesList.begin();
+								i = this->InteractablesList.erase(i);
+								i = InteractablesList.begin();
+							}
 						}
 					}
 				}
 			}
-		}
-		if (it->name == "asteroid") 
-		{
-			posxcheck = it->pos.x;
-			poszcheck = it->pos.z;
-			posycheck = it->pos.y;
-			posxcheck = (posxcheck - somePlayer.pos.x) * (posxcheck - somePlayer.pos.x);
-			posycheck = (posycheck - somePlayer.pos.y) * (posycheck - somePlayer.pos.y);
-			poszcheck = (poszcheck - somePlayer.pos.z) * (poszcheck - somePlayer.pos.z);
-			between = posxcheck + posycheck + poszcheck; 
-			between = sqrt(between);
-			if (between <= 30)
+			if (i->name == "asteroid")
 			{
-				AsteroidCollision = true;
+				posxcheck = i->pos.x;
+				poszcheck = i->pos.z;
+				posycheck = i->pos.y;
+				posxcheck = (posxcheck - somePlayer.pos.x) * (posxcheck - somePlayer.pos.x);
+				posycheck = (posycheck - somePlayer.pos.y) * (posycheck - somePlayer.pos.y);
+				poszcheck = (poszcheck - somePlayer.pos.z) * (poszcheck - somePlayer.pos.z);
+				between = posxcheck + posycheck + poszcheck;
+				between = sqrt(between);
+				if (between <= 30)
+				{
+					AsteroidCollision = true;
+				}
 			}
 		}
     }
+
+	
 	if (Application::IsKeyPressed(VK_SPACE) && (onGround == true)) //s = ut + 0.5 at^2
 	{
 		firstpos = firstPersonCamera.position.y;

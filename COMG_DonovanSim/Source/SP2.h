@@ -90,14 +90,6 @@ class SP2 : public Scene
 		GEO_ASTEROID,
 
 
-        //SCIENCE LAB
-        GEO_SCIENCELAB_TABLE,
-        GEO_SCIENCELAB_CUPBOARD,
-        GEO_SCIENCELAB_BEAKER,
-
-        // Keypad
-        GEO_KEYPAD,
-
 		//INVENTORY
 		GEO_FIRSTBOX,
 		GEO_SECONDBOX,
@@ -151,16 +143,20 @@ class SP2 : public Scene
         GEO_SCIENCELAB_BEAKER,
 
         //Keypad + Safe
-
         GEO_KEYPAD,
 		GEO_SAFE_BOX,
 		GEO_SAFE_DOOR,
-		
+
 		//CAFE MENU
 		GEO_CAFEPOINTER,
 		GEO_BREAD,
 		GEO_COFFEE,
 		GEO_APPLE,
+
+
+
+
+
 
         //Maze Walls
 		GEO_MAZE_SIDE_WALL,
@@ -183,8 +179,7 @@ class SP2 : public Scene
         GEO_MAZE_OBSTACLE9,
         GEO_MAZE_OBSTACLE10,
         GEO_MAZE_OBSTACLE11,
-        GEO_MAZE_OBSTACLE,
-        GEO_MAZE_SIDE_WALL,
+
         GEO_LAVA,
 
         // Mountains for Boundary
@@ -421,12 +416,14 @@ private:
 	bool AsteroidCollision;
 
 	//Keypad stuff (Gary's)
-
 	bool isSafeOpen;
 	float safeDoorRotation;
 	Keypad keypad;
 	void InitSafe();
 
+    bool keypadBool;
+    vector<Keypad> keypads;
+    void InitKeypads();
 
 	//SHORTHAND CODES FOR EASIER CODINGS (GARY'S)
 	void LoadShaderCodes();
@@ -534,7 +531,7 @@ private:
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);
 
-	float mazeTranslateValue;
+
 
 };
 
