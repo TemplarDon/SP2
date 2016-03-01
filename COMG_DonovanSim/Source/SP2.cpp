@@ -676,6 +676,14 @@ void SP2::Update(double dt)
 			AsteroidCollision = true;
 		}
 	}
+	if (AsteroidCollision)
+	{
+		charPos = { 108, 17, 130 };
+		shipPos = { 375, 18, -105 };
+
+		camPointer = &firstPersonCamera;
+		somePlayer.setCameraType("first");
+	}
     //Entering / Exiting Ship
     shipToggle(dt, InteractablesList, somePlayer);
 
@@ -1135,13 +1143,13 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
         {
             if (Application::IsKeyPressed('F'))
             {
-                if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
+                if (somePlayer.pos.y <= 30 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
                 {
                     camPointer = &firstPersonCamera;
                     somePlayer.setCameraType("first");
 
                     camPointer->position.x = somePlayer.pos.x;
-                    camPointer->position.y = somePlayer.pos.y;
+					camPointer->position.y = somePlayer.pos.y;
                     camPointer->position.z = somePlayer.pos.z;
 
                     shipIt->shipTakeoff = false;
