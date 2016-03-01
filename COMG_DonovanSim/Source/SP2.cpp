@@ -93,6 +93,7 @@ void SP2::Init()
 	askedWings = false;
 	askedShipBuild = false;
 	shipBuilt = false;
+    noMoney = false;
 
 	gateOpening = false;
 	frontGateOpening = false;
@@ -148,8 +149,6 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-
-
 	//startingCharPos = charPos = { -350, 17, -370 }; // STARTING POS OF MAZERUNNER
     startingCharPos = charPos = { 350, 17, 370 };
 
@@ -476,6 +475,10 @@ void SP2::Update(double dt)
                     askedHull = true;
                 }
             }
+            else
+            {
+                askedShipBuild = false;
+            }
         }
 
         // Weapon
@@ -496,7 +499,7 @@ void SP2::Update(double dt)
         {
             if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
             {
-                if (Application::IsKeyPressed('E') && somePlayer.checkWeapon() == true)
+                if (Application::IsKeyPressed(VK_LEFT) && somePlayer.checkWeapon() == true)
                 {
                     somePlayer.addCrystals(1);
                 }
@@ -693,9 +696,12 @@ void SP2::EquippingWeapons()
 	//EQUIP GUN, HAND DISAPPEAR
 	if (Application::IsKeyPressed(VK_F1))
 	{
-		equipGun = true;
-		translatePointer = 127;
-		HandDisappear = true;
+        if (somePlayer.checkWeapon())
+        {
+            equipGun = true;
+            translatePointer = 127;
+            HandDisappear = true;
+        }
 	}
 
 	//EQUIP PICKAXE , HAND DISAPPEAR
@@ -744,8 +750,8 @@ void SP2::shipFlying(double dt)
                 shipPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
 
                 i->pos.x = i->pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-                i->pos.y = i->pos.x + i->shipDirection.y + (float)(i->shipSpeed * dt);
-                i->pos.z = i->pos.x + i->shipDirection.z + (float)(i->shipSpeed * dt);
+                i->pos.y = i->pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                i->pos.z = i->pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
 
                 somePlayer.pos.x = somePlayer.pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
                 somePlayer.pos.y = somePlayer.pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
@@ -870,6 +876,9 @@ void SP2::mazeTranslate(double dt)
             if ((somePlayer.pos.z <= 350 && somePlayer.pos.z >= -350) && (somePlayer.pos.x <= -420 + lavaTranslation + 5 && somePlayer.pos.x >= -420 + lavaTranslation - 5) && (somePlayer.pos.y <= 17))
             {
                 deadText = true;
+                //somePlayer.pos.x = shipPos.x;
+                //somePlayer.pos.y = shipPos.y;
+                //somePlayer.pos.z = shipPos.z;
             }
             else
             {
@@ -877,7 +886,6 @@ void SP2::mazeTranslate(double dt)
             }
         }
     }
-
 }
 
 void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
@@ -1026,31 +1034,6 @@ void SP2::shipCreation()
 
 void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
-	//Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-	//for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)
-	//{
-	//	if (shipIt->isInView(somePlayer.pos, view) == true)
-	//	{
-	//		if (Application::IsKeyPressed('F'))
-	//		{
-	//			if (somePlayer.getCameraType() == "first")
-	//			{
-	//				camPointer = &thirdPersonCamera;
-	//				somePlayer.setCameraType("third");
-	//			}
-	//			else
-	//			{
- //                   if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
- //                   {
- //                       camPointer = &firstPersonCamera;
- //                       somePlayer.setCameraType("first");
- //                   }
-
-	//			}
-	//		}
-	//	}
-	//}
-
     Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
     for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)
     {
@@ -1080,6 +1063,8 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
                     camPointer->position.x = somePlayer.pos.x;
                     camPointer->position.y = somePlayer.pos.y;
                     camPointer->position.z = somePlayer.pos.z;
+
+                    shipIt->shipTakeoff = false;
                 }
             }
         }
@@ -1099,6 +1084,7 @@ void SP2::shopInteractions()
                 askedHull = false;
                 askedWings = true;
             }
+            else { noMoney = true; }
  
         }
         else if (Application::IsKeyPressed('2'))
@@ -1110,6 +1096,7 @@ void SP2::shopInteractions()
                 askedHull = false;
                 askedWings = true;
             }
+            else { noMoney = true; }
 
         }
         else if (Application::IsKeyPressed('3'))
@@ -1121,12 +1108,13 @@ void SP2::shopInteractions()
                 askedHull = false;
                 askedWings = true;
             }
+            else { noMoney = true; }
         }
     }
 
     if (askedWings)
     {
-        if (Application::IsKeyPressed('1'))
+        if (Application::IsKeyPressed('4'))
         {
             if (somePlayer.removeCrystals(20)) 
             { 
@@ -1135,8 +1123,9 @@ void SP2::shopInteractions()
                 askedWings = false;
                 askedEngine = true;
             }
+            else { noMoney = true; }
         }
-        else if (Application::IsKeyPressed('2'))
+        else if (Application::IsKeyPressed('5'))
         {
             if (somePlayer.removeCrystals(30)) 
             { 
@@ -1145,13 +1134,14 @@ void SP2::shopInteractions()
                 askedWings = false;
                 askedEngine = true;
             }
+            else { noMoney = true; }
 
         }
     }
 
     if (askedEngine)
     {
-        if (Application::IsKeyPressed('1'))
+        if (Application::IsKeyPressed('6'))
         {
 
             if (somePlayer.removeCrystals(20)) 
@@ -1163,9 +1153,10 @@ void SP2::shopInteractions()
                 askedShipBuild = false;
                 shipBuilt = true;
             }
+            else { noMoney = true; }
 
         }
-        else if (Application::IsKeyPressed('2'))
+        else if (Application::IsKeyPressed('7'))
         {
             if (somePlayer.removeCrystals(30)) 
             { 
@@ -1176,6 +1167,7 @@ void SP2::shopInteractions()
                 askedShipBuild = false;
                 shipBuilt = true;
             }
+            else { noMoney = true; }
         }
     }
 

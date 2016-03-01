@@ -774,7 +774,7 @@ void SP2::RenderCode()
 	as << somePlayer.getCrystals();
 	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(0, 1, 0), 1.5, 16.2, 5);
 
-	//weapon 
+	//Weapon 
 	std::ostringstream weapon;
 	weapon.str("");
 	if (somePlayer.checkWeapon()) { weapon << "true"; }
@@ -896,15 +896,15 @@ void SP2::RenderCode()
     // Tests for shipBuilding
     if (askedHull)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light (10) | 2. Medium (20) | 3. Large (30) ", Color(1, 0, 0), 1, 0, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light (10) | 2. Medium (20) | 3. Large (30) ", Color(1, 0, 0), 2, 0, 14);
     }
     if (askedWings)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual (20) | 5. Quad (30)", Color(1, 0, 0), 1, 0, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual (20) | 5. Quad (30)", Color(1, 0, 0), 2, 0, 14);
     }
     if (askedEngine)
     {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine (20)  | 7. G2 Engine (30) ", Color(1, 0, 0), 1, 0, 14);
+        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine (20)  | 7. G2 Engine (30) ", Color(1, 0, 0), 2, 0, 14);
     }
 
     // Tests for ship Flight
@@ -913,7 +913,8 @@ void SP2::RenderCode()
     if (thirdPersonCamera.pitchingUp) { RenderTextOnScreen(meshList[GEO_TEXT], "Up", Color(1, 0, 0), 1, 0, 13); }
     if (thirdPersonCamera.pitchingDown) { RenderTextOnScreen(meshList[GEO_TEXT], "Down", Color(1, 0, 0), 1, 0, 12); }
 
-    
+    if (deadText) { RenderTextOnScreen(meshList[GEO_TEXT], "Dead", Color(1, 0, 0), 1, 0, 16); }
+    else { RenderTextOnScreen(meshList[GEO_TEXT], "No Dead", Color(1, 0, 0), 1, 0, 16); }
 }
 
 

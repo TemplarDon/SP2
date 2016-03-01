@@ -121,14 +121,6 @@ class SP2 : public Scene
         GEO_BED,
         GEO_HEALING_TUBE,
 
-
-		//SCience Lab
-		GEO_SCIENCELAB_TABLE,
-		GEO_SCIENCELAB_CUPBOARD,
-		GEO_SCIENCELAB_BEAKER,
-		GEO_KEYPAD,
-
-
         //NPCs
         GEO_CHEF,
         GEO_SPACEGUY,
@@ -518,6 +510,7 @@ private:
     bool askedEngine;
     bool askedShipBuild;
     bool shipBuilt;
+    bool noMoney;
 
   
 
