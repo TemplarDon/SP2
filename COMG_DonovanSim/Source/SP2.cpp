@@ -360,12 +360,12 @@ void SP2::Update(double dt)
 			}
 		}
 
-
-				if (Application::IsKeyPressed('U'))
-				{
-					ConsumeCokeText = false;
-					RenderCoke = false;
-				}
+		if (it->name == "vending")
+		{
+			if (Application::IsKeyPressed('U'))
+			{
+				ConsumeCokeText = false;
+				RenderCoke = false;
 			}
 			else
 			{
@@ -377,53 +377,6 @@ void SP2::Update(double dt)
 
 
 
-		//TOKEN
-		if (it->name == "token")
-		{
-			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-			{
-				PickUpTokenText = true;
-
-
-		//COUNTER
-		if (it->name == "counter")
-		{
-			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-			{
-				testText = true;
-				if (Application::IsKeyPressed('Y'))
-				{
-					YesShowCafeMenu = true;
-				}
-
-				if (YesShowCafeMenu == true)
-				{
-					DisplayCafeMenu = true;
-				}
-				else
-				{
-					DisplayCafeMenu = false;
-				}
-			}
-			else
-			{
-				testText = false;
-				DisplayCafeMenu = false;
-				YesShowCafeMenu = false;
-			}
-		}
-
-				if (Application::IsKeyPressed('Q'))
-				{
-					TokenOnScreen = true;
-					TokenTranslate = 10.5;
-				}
-			}
-			else
-			{
-				PickUpTokenText = false;
-			}
-		}
 		
         //COUNTER
         if (it->name == "counter")
@@ -509,46 +462,6 @@ void SP2::Update(double dt)
 			//}
 		}
 
-
-
-		//SPACESUIT
-		if (it->name == "spacesuit")
-		{
-			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-			{
-				wearSuitText = true;
-
-				if (Application::IsKeyPressed('T'))
-				{
-					SuitTranslate = -50;
-					wearSuit = true;
-					DisplayInventory = true;
-				}
-
-				if (Application::IsKeyPressed('G'))
-				{
-					wearSuit = false;
-					DisplayInventory = false;
-				}
-			}
-			else
-			{
-				wearSuitText = false;
-
-				if (Application::IsKeyPressed('G'))
-				{
-					wearSuit = false;
-					DisplayInventory = false;
-				}
-			}
-		}
-
-
-
-
-
-
-
 		// Door Opening & Closing
 		if (it->name.find("frontGate") != string::npos)
 		{
@@ -631,7 +544,6 @@ void SP2::Update(double dt)
 			}
 
 		}
-<<<<<<< HEAD
 
 		// Target
 		if (it->name == "target dummy")
@@ -645,48 +557,17 @@ void SP2::Update(double dt)
 			}
 		}
 
-		static bool isHeld = false;
-
-		if (Application::IsKeyPressed('H'))
+		if (it->name == "keypadButton1")
 		{
 			if (it->isInView({ firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z }, view))
 			{
-				if (it->name == "keypadButton1")
+				if (Application::IsKeyPressed('H'))
 				{
 					keypad.targetBool.setTargetValue(true);
 				}
 			}
 		}
 	}
-
-=======
-
-		// Target
-		if (it->name == "target dummy")
-		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-			{
-				if (Application::IsKeyPressed('E') && somePlayer.checkWeapon() == true)
-				{
-					somePlayer.addCrystals(1);
-				}
-			}
-		}
-
-		static bool isHeld = false;
-
-		if (Application::IsKeyPressed('H'))
-		{
-			if (it->isInView({ firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z }, view))
-			{
-				if (it->name == "keypadButton1")
-				{
-					keypad.targetBool.setTargetValue(true);
-				}
-			}
-		}
-	}
-
 
 
 	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
@@ -694,22 +575,7 @@ void SP2::Update(double dt)
 	{
 		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
-
-        // Target
-        if (it->name == "target dummy")
-        {
-            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-            {
-                if (Application::IsKeyPressed(VK_LEFT) && somePlayer.checkWeapon() == true)
-                {
-                    somePlayer.addCrystals(1);
-                }
-            }
-        }
-		if (it->name == "crystal")
-
 		{
-
 			// Target
 			if (i->name == "target dummy")
 			{
@@ -1602,6 +1468,7 @@ void SP2::Render()
 
 	RenderCode();
 }
+
 
 void SP2::Exit()
 {
