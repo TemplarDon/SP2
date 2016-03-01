@@ -102,6 +102,7 @@
     <ClCompile Include="Source\Hull.cpp" />
     <ClCompile Include="Source\InteractableOBJs.cpp" />
     <ClCompile Include="Source\Inventory.cpp" />
+    <ClCompile Include="Source\Keypad.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Ship.cpp" />
     <ClCompile Include="Source\ShipBuilder.cpp" />
@@ -126,7 +127,6 @@
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ClassTarget.h" />
     <ClInclude Include="Source\CollisionOBJs.h" />
     <ClInclude Include="Source\Engine.h" />
     <ClInclude Include="Source\Hull.h" />

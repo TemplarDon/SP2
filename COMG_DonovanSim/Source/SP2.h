@@ -73,6 +73,7 @@ class SP2 : public Scene
         GEO_BUNK,
         GEO_SPACEMASK,
         GEO_SPACESUIT,
+		GEO_SHOPLIST,
 
 
         GEO_WINDOW,
@@ -144,13 +145,27 @@ class SP2 : public Scene
 		GEO_CRYSTAL,
 
 
+<<<<<<< HEAD
+        //SCIENCE LAB
+        GEO_SCIENCELAB_TABLE,
+        GEO_SCIENCELAB_CUPBOARD,
+        GEO_SCIENCELAB_BEAKER,
+
+        //Keypad + Safe
+
+        GEO_KEYPAD,
+		GEO_SAFE_BOX,
+		GEO_SAFE_DOOR,
+=======
 		//CAFE MENU
 		GEO_CAFEPOINTER,
 		GEO_BREAD,
 		GEO_COFFEE,
 		GEO_APPLE,
+>>>>>>> origin/master
 
         //Maze Walls
+		GEO_MAZE_SIDE_WALL,
         GEO_MAZE_LEFT_WALL,
         GEO_MAZE_RIGHT_WALL,
         GEO_MAZE_TREASURE_BACK_WALL,
@@ -158,6 +173,7 @@ class SP2 : public Scene
         GEO_MAZE_TREASURE_LEFT_WALL2,
         GEO_MAZE_TREASURE_RIGHT_WALL1,
         GEO_MAZE_TREASURE_RIGHT_WALL2,
+		GEO_MAZE_OBSTACLE,
         GEO_MAZE_OBSTACLE1,
         GEO_MAZE_OBSTACLE2,
         GEO_MAZE_OBSTACLE3,
@@ -343,6 +359,7 @@ private:
 	bool BreadAppear;
 	bool CoffeeAppear;
 	bool AppleAppear;
+	bool DisplayShopList;
 
 
 
@@ -408,9 +425,10 @@ private:
 
 	//Keypad stuff (Gary's)
 
-	bool keypadBool;
-	vector<Keypad> keypads;
-	void InitKeypads();
+	bool isSafeOpen;
+	float safeDoorRotation;
+	Keypad keypad;
+	void InitSafe();
 
 
 	//SHORTHAND CODES FOR EASIER CODINGS (GARY'S)
@@ -453,6 +471,8 @@ private:
 
 	//MENU POINTER
 	void CafeMenuPointerInteraction();
+	void ShopMenuPointerInteraction();
+
 
 	//RENDER TEXT
 	void RenderText(Mesh* mesh, std::string text, Color color);
@@ -516,6 +536,8 @@ private:
 
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);
+
+	float mazeTranslateValue;
 
 };
 
