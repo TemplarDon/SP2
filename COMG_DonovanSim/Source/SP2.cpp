@@ -47,6 +47,8 @@ void SP2::Init()
 	distance = 0;
 	firstpos = 0;
 	translatePointer = -30;
+	mazeTranslateValue = 0;
+	safeDoorRotation = 0;
 
 	//BOOLEANS
 	NearVendingText = false;
@@ -87,7 +89,7 @@ void SP2::Init()
     leftGateOpening = false;
     rightGateOpening = false;
 
-	keypadBool = false;
+	isSafeOpen = false;
 
     // Assign Pointers for Ship Building
     LightHull = new Light_Hull;
@@ -149,7 +151,7 @@ void SP2::Init()
     //somePlayer.setCameraType("third");
 
     Mtx44 projection;
-    projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f);
+    projection.SetToPerspective(45.f, 16.f / 9.f, 0.1f, 2000.f);
     projectionStack.LoadMatrix(projection);
 
 	thirdPersonCamera.SetCameraDistanceBounds(10, 200);
@@ -188,9 +190,7 @@ void SP2::Init()
 	}
 	crystalcount = 0;
 
-	keypads.clear();
-
-	InitKeypads();
+	InitSafe();
 }
 
 void SP2::Update(double dt)
@@ -240,215 +240,235 @@ void SP2::Update(double dt)
 		HandDisappear = true;
 	}
 
+	//Safe + keypad stuff (Gary's)
+	if (isSafeOpen)
+	{
+		safeDoorRotation += float(dt) * 60;
+		safeDoorRotation = min(safeDoorRotation, 115);
+	}
+
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 
-    for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+	for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
 	{
-        //VENDING MACHINE
-        if (it->name == "vending")
-        {
-            if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-            {
-                NearVendingText = true;
-                if (Application::IsKeyPressed('Q'))
-                {
-                    TextTranslate = 100;
-                    TokenOnScreen = false;
-                    RenderCoke = true;
-                    ConsumeCokeText = true;
-                }
+		//VENDING MACHINE
+		if (it->name == "vending")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				NearVendingText = true;
+				if (Application::IsKeyPressed('Q'))
+				{
+					TextTranslate = 100;
+					TokenOnScreen = false;
+					RenderCoke = true;
+					ConsumeCokeText = true;
+				}
 
-                if (Application::IsKeyPressed('U'))
-                {
-                    ConsumeCokeText = false;
-                    RenderCoke = false;
-                }
-            }
-            else
-            {
-                NearVendingText = false;
-                ConsumeCokeText = false;
-                RenderCoke = false;
-            }
-        }
-
-
-        //TOKEN
-        if (it->name == "token")
-        {
-            if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-            {
-                PickUpTokenText = true;
-
-                if (Application::IsKeyPressed('Q'))
-                {
-                    TokenOnScreen = true;
-                    TokenTranslate = 10.5;
-                }
-            }
-            else
-            {
-                PickUpTokenText = false;
-            }
-        }
+				if (Application::IsKeyPressed('U'))
+				{
+					ConsumeCokeText = false;
+					RenderCoke = false;
+				}
+			}
+			else
+			{
+				NearVendingText = false;
+				ConsumeCokeText = false;
+				RenderCoke = false;
+			}
+		}
 
 
-        //COUNTER
-        if (it->name == "counter")
-        {
-            if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-            {
-                testText = true;
-                if (Application::IsKeyPressed('Y'))
-                {
-                    YesShowCafeMenu = true;
-                }
+		//TOKEN
+		if (it->name == "token")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				PickUpTokenText = true;
 
-                if (YesShowCafeMenu == true)
-                {
-                    DisplayCafeMenu = true;
-                }
-                else
-                {
-                    DisplayCafeMenu = false;
-                }
-            }
-            else
-            {
-                testText = false;
-                DisplayCafeMenu = false;
-                YesShowCafeMenu = false;
-            }
-        }
+				if (Application::IsKeyPressed('Q'))
+				{
+					TokenOnScreen = true;
+					TokenTranslate = 10.5;
+				}
+			}
+			else
+			{
+				PickUpTokenText = false;
+			}
+		}
 
 
+		//COUNTER
+		if (it->name == "counter")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				testText = true;
+				if (Application::IsKeyPressed('Y'))
+				{
+					YesShowCafeMenu = true;
+				}
 
-        //SPACESUIT
-        if (it->name == "spacesuit")
-        {
-            if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-            {
-                wearSuitText = true;
-
-                if (Application::IsKeyPressed('T'))
-                {
-                    SuitTranslate = -50;
-                    wearSuit = true;
-                    DisplayInventory = true;
-                }
-
-                if (Application::IsKeyPressed('G'))
-                {
-                    wearSuit = false;
-                    DisplayInventory = false;
-                }
-            }
-            else
-            {
-                wearSuitText = false;
-
-                if (Application::IsKeyPressed('G'))
-                {
-                    wearSuit = false;
-                    DisplayInventory = false;
-                }
-            }
-        }
+				if (YesShowCafeMenu == true)
+				{
+					DisplayCafeMenu = true;
+				}
+				else
+				{
+					DisplayCafeMenu = false;
+				}
+			}
+			else
+			{
+				testText = false;
+				DisplayCafeMenu = false;
+				YesShowCafeMenu = false;
+			}
+		}
 
 
-        // Door Opening & Closing
-        if (it->name.find("frontGate") != string::npos)
-        {
-            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF FRONTGATE IS IN VIEW
-            {
-                if (Application::IsKeyPressed('E'))
-                {
-                    frontGateOpening = true;
-                }
-                if (frontGateOpening) { doorInteractions(dt, it, frontGateOffset, frontGateOpening); }
-                if (!frontGateOpening) { doorClosing(dt, it, frontGateOffset, frontGateOpening); }
-            }
-        }
 
-        if (it->name.find("rightGate") != string::npos)
-        {
-            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF rightGATE IS IN VIEW
-            {
-                if (Application::IsKeyPressed('E'))
-                {
-                    rightGateOpening = true;
-                }
-                if (rightGateOpening) { doorInteractions(dt, it, rightGateOffset, rightGateOpening); }
-                if (!rightGateOpening) { doorClosing(dt, it, rightGateOffset, rightGateOpening); }
-            }
-        }
+		//SPACESUIT
+		if (it->name == "spacesuit")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				wearSuitText = true;
 
-        if (it->name.find("backGate") != string::npos)
-        {
-            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF backGATE IS IN VIEW
-            {
-                if (Application::IsKeyPressed('E'))
-                {
-                    backGateOpening = true;
-                }
-                if (backGateOpening) { doorInteractions(dt, it, backGateOffset, backGateOpening); }
-                if (!backGateOpening) { doorClosing(dt, it, backGateOffset, backGateOpening); }
-            }
-        }
+				if (Application::IsKeyPressed('T'))
+				{
+					SuitTranslate = -50;
+					wearSuit = true;
+					DisplayInventory = true;
+				}
 
-        if (it->name.find("leftGate") != string::npos)
-        {
-            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF leftGATE IS IN VIEW
-            {
-                if (Application::IsKeyPressed('E'))
-                {
-                    leftGateOpening = true;
-                }
-                if (leftGateOpening) { doorInteractions(dt, it, leftGateOffset, leftGateOpening); }
-                if (!leftGateOpening) { doorClosing(dt, it, leftGateOffset, leftGateOpening); }
-            }
-        }
+				if (Application::IsKeyPressed('G'))
+				{
+					wearSuit = false;
+					DisplayInventory = false;
+				}
+			}
+			else
+			{
+				wearSuitText = false;
 
-        // Shop
-        if (it->name == "shop")
-        {
-            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-            {
-                if (Application::IsKeyPressed('E'))
-                {
-                    askedShipBuild = true;
-                    askedHull = true;
-                }
-            }
-        }
+				if (Application::IsKeyPressed('G'))
+				{
+					wearSuit = false;
+					DisplayInventory = false;
+				}
+			}
+		}
 
-        // Weapon
-        if (it->name == "gun rack")
-        {
-            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-            {
-                if (Application::IsKeyPressed('E'))
-                {
-                    somePlayer.setWeapon();
-                }
-            }
 
-        }
+		// Door Opening & Closing
+		if (it->name.find("frontGate") != string::npos)
+		{
+			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF FRONTGATE IS IN VIEW
+			{
+				if (Application::IsKeyPressed('E'))
+				{
+					frontGateOpening = true;
+				}
+				if (frontGateOpening) { doorInteractions(dt, it, frontGateOffset, frontGateOpening); }
+				if (!frontGateOpening) { doorClosing(dt, it, frontGateOffset, frontGateOpening); }
+			}
+		}
 
-        // Target
-        if (it->name == "target dummy")
-        {
-            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-            {
-                if (Application::IsKeyPressed('E') && somePlayer.checkWeapon() == true)
-                {
-                    somePlayer.addCrystals(1);
-                }
-            }
-        }
-    }
+		if (it->name.find("rightGate") != string::npos)
+		{
+			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF rightGATE IS IN VIEW
+			{
+				if (Application::IsKeyPressed('E'))
+				{
+					rightGateOpening = true;
+				}
+				if (rightGateOpening) { doorInteractions(dt, it, rightGateOffset, rightGateOpening); }
+				if (!rightGateOpening) { doorClosing(dt, it, rightGateOffset, rightGateOpening); }
+			}
+		}
+
+		if (it->name.find("backGate") != string::npos)
+		{
+			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF backGATE IS IN VIEW
+			{
+				if (Application::IsKeyPressed('E'))
+				{
+					backGateOpening = true;
+				}
+				if (backGateOpening) { doorInteractions(dt, it, backGateOffset, backGateOpening); }
+				if (!backGateOpening) { doorClosing(dt, it, backGateOffset, backGateOpening); }
+			}
+		}
+
+		if (it->name.find("leftGate") != string::npos)
+		{
+			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF leftGATE IS IN VIEW
+			{
+				if (Application::IsKeyPressed('E'))
+				{
+					leftGateOpening = true;
+				}
+				if (leftGateOpening) { doorInteractions(dt, it, leftGateOffset, leftGateOpening); }
+				if (!leftGateOpening) { doorClosing(dt, it, leftGateOffset, leftGateOpening); }
+			}
+		}
+
+		// Shop
+		if (it->name == "shop")
+		{
+			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+			{
+				if (Application::IsKeyPressed('E'))
+				{
+					askedShipBuild = true;
+					askedHull = true;
+				}
+			}
+		}
+
+		// Weapon
+		if (it->name == "gun rack")
+		{
+			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+			{
+				if (Application::IsKeyPressed('E'))
+				{
+					somePlayer.setWeapon();
+				}
+			}
+
+		}
+
+		// Target
+		if (it->name == "target dummy")
+		{
+			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+			{
+				if (Application::IsKeyPressed('E') && somePlayer.checkWeapon() == true)
+				{
+					somePlayer.addCrystals(1);
+				}
+			}
+		}
+
+		static bool isHeld = false;
+
+		if (Application::IsKeyPressed('H'))
+		{
+			if (it->isInView({ firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z }, view))
+			{
+				if (it->name == "keypadButton1")
+				{
+					keypad.targetBool.setTargetValue(true);
+				}
+			}
+		}
+	}
 
 
 	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)

@@ -138,10 +138,14 @@ class SP2 : public Scene
         GEO_SCIENCELAB_CUPBOARD,
         GEO_SCIENCELAB_BEAKER,
 
-        //Keypad
+        //Keypad + Safe
+
         GEO_KEYPAD,
+		GEO_SAFE_BOX,
+		GEO_SAFE_DOOR,
 
         //Maze Walls
+		GEO_MAZE_SIDE_WALL,
         GEO_MAZE_LEFT_WALL,
         GEO_MAZE_RIGHT_WALL,
         GEO_MAZE_TREASURE_BACK_WALL,
@@ -149,6 +153,7 @@ class SP2 : public Scene
         GEO_MAZE_TREASURE_LEFT_WALL2,
         GEO_MAZE_TREASURE_RIGHT_WALL1,
         GEO_MAZE_TREASURE_RIGHT_WALL2,
+		GEO_MAZE_OBSTACLE,
         GEO_MAZE_OBSTACLE1,
         GEO_MAZE_OBSTACLE2,
         GEO_MAZE_OBSTACLE3,
@@ -352,9 +357,10 @@ private:
 
 	//Keypad stuff (Gary's)
 
-	bool keypadBool;
-	vector<Keypad> keypads;
-	void InitKeypads();
+	bool isSafeOpen;
+	float safeDoorRotation;
+	Keypad keypad;
+	void InitSafe();
 
 
 	//SHORTHAND CODES FOR EASIER CODINGS (GARY'S)
@@ -443,6 +449,8 @@ private:
 
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);
+
+	float mazeTranslateValue;
 
 };
 
