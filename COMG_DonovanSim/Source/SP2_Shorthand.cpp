@@ -1061,47 +1061,47 @@ void SP2::renderMaze()
 
 void SP2::InitSafe()
 {
-    InteractableOBJs keypadOBJ =
-    {
-        "keypad",
-        meshList[GEO_KEYPAD]->maxPos,
-        meshList[GEO_KEYPAD]->minPos,
-        {},
-        1,
-        0,
-        {}
-    };
+	InteractableOBJs keypadOBJ =
+	{
+		"keypad",
+		meshList[GEO_KEYPAD]->maxPos,
+		meshList[GEO_KEYPAD]->minPos,
+		{},
+		1,
+		0,
+		{}
+	};
 
-    InteractableOBJs safeOBJ =
-    {
-        "safe",
-        meshList[GEO_SAFE_BOX]->maxPos,
-        meshList[GEO_SAFE_BOX]->minPos,
-        { 86.5f, 16, -143.f },
-        1,
-        0,
-        {}
-    };
+	InteractableOBJs safeOBJ =
+	{
+		"safe",
+		meshList[GEO_SAFE_BOX]->maxPos,
+		meshList[GEO_SAFE_BOX]->minPos,
+		{ 86.5f, 16, -143.f },
+		1,
+		0,
+		{}
+	};
 
-    safeOBJ.maxPos.x = 20;
-    safeOBJ.minPos.x = -20;
-    safeOBJ.minPos.y = -20;
-    safeOBJ.maxPos.z = 12;
-    safeOBJ.setRequirements(1, 0.1f);
-    InteractablesList.push_back(safeOBJ);
+	safeOBJ.maxPos.x = 20;
+	safeOBJ.minPos.x = -20;
+	safeOBJ.minPos.y = -20;
+	safeOBJ.maxPos.z = 12;
+	safeOBJ.setRequirements(1, 0.1f);
+	InteractablesList.push_back(safeOBJ);
 
-    keypad =
-    {
-        safeOBJ.pos,
-        0
-    };
-    keypad.targetBool.setTargetLocation(&isSafeOpen);
+	keypad =
+	{
+		safeOBJ.pos,
+		0
+	};
+	keypad.targetBool.setTargetLocation(&isSafeOpen);
 
-    keypadOBJ.setRequirements(14, 0.45f);
-    keypadOBJ.minPos = { 0.5f, 0.5f, 0.5f };
-    keypadOBJ.maxPos = { 0.5f, 0.5f, 0.5f };
-    keypadOBJ.pos = keypad.pos;
-    keypadOBJ.pos.z += 1;
+	keypadOBJ.setRequirements(14, 0.45f);
+	keypadOBJ.minPos = { 0.5f, 0.5f, 0.5f };
+	keypadOBJ.maxPos = { 0.5f, 0.5f, 0.5f };
+	keypadOBJ.pos = keypad.pos;
+	keypadOBJ.pos.z += 1;
 }
 void SP2::initMountains()
 {

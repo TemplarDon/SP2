@@ -89,6 +89,7 @@ class SP2 : public Scene
 
 		GEO_ASTEROID,
 
+
 		//INVENTORY
 		GEO_FIRSTBOX,
 		GEO_SECONDBOX,
@@ -135,6 +136,7 @@ class SP2 : public Scene
         GEO_MINE,
 		GEO_CRYSTAL,
 
+
         //SCIENCE LAB
         GEO_SCIENCELAB_TABLE,
         GEO_SCIENCELAB_CUPBOARD,
@@ -154,6 +156,31 @@ class SP2 : public Scene
         //Maze Walls
         GEO_MAZE_OBSTACLE,
         GEO_MAZE_SIDE_WALL,
+
+
+
+        //Maze Walls
+		GEO_MAZE_SIDE_WALL,
+        GEO_MAZE_LEFT_WALL,
+        GEO_MAZE_RIGHT_WALL,
+        GEO_MAZE_TREASURE_BACK_WALL,
+        GEO_MAZE_TREASURE_LEFT_WALL1,
+        GEO_MAZE_TREASURE_LEFT_WALL2,
+        GEO_MAZE_TREASURE_RIGHT_WALL1,
+        GEO_MAZE_TREASURE_RIGHT_WALL2,
+		GEO_MAZE_OBSTACLE,
+        GEO_MAZE_OBSTACLE1,
+        GEO_MAZE_OBSTACLE2,
+        GEO_MAZE_OBSTACLE3,
+        GEO_MAZE_OBSTACLE4,
+        GEO_MAZE_OBSTACLE5,
+        GEO_MAZE_OBSTACLE6,
+        GEO_MAZE_OBSTACLE7,
+        GEO_MAZE_OBSTACLE8,
+        GEO_MAZE_OBSTACLE9,
+        GEO_MAZE_OBSTACLE10,
+        GEO_MAZE_OBSTACLE11,
+>>>>>>> Stashed changes
         GEO_LAVA,
 
         // Mountains for Boundary
@@ -505,6 +532,8 @@ private:
 
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);
+
+
 
 };
 
