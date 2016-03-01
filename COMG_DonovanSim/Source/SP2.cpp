@@ -155,7 +155,7 @@ void SP2::Init()
     startingCharPos = charPos = { 108, 17, 130 };
 
 
-
+	
 	//Initialize camera settings (Don's)
 	shipStartingPos = shipPos = { 375, 18, -105 };
     shipHorizontalRotateAngle = 0;
@@ -226,12 +226,7 @@ void SP2::Init()
 		movex[i] = coord1;
 		movez[i] = coord2;
 	}
-	for (int i = 0; i < AsteroidNo; i++)
-	{
-		InteractableOBJs asteroid = InteractableOBJs("asteroid", meshList[GEO_ASTEROID]->maxPos, meshList[GEO_ASTEROID]->minPos, Position(asteroidx[i],asteroidy[i],asteroidz[i]), 1, 0, Vector3(0, 0, 0));
-		asteroid.setRequirements(30, 5);
-		InteractablesList.push_back(asteroid);
-	}
+
 	crystalcount = 0;
 
 	InitSafe();
@@ -594,21 +589,6 @@ void SP2::Update(double dt)
 					}
 				}
 			}
-			if (i->name == "asteroid")
-			{
-				posxcheck = i->pos.x;
-				poszcheck = i->pos.z;
-				posycheck = i->pos.y;
-				posxcheck = (posxcheck - somePlayer.pos.x) * (posxcheck - somePlayer.pos.x);
-				posycheck = (posycheck - somePlayer.pos.y) * (posycheck - somePlayer.pos.y);
-				poszcheck = (poszcheck - somePlayer.pos.z) * (poszcheck - somePlayer.pos.z);
-				between = posxcheck + posycheck + poszcheck;
-				between = sqrt(between);
-				if (between <= 30)
-				{
-					AsteroidCollision = true;
-				}
-			}
 		}
     }
 
@@ -647,7 +627,7 @@ void SP2::Update(double dt)
 			shopInteractions();
 		}
 	}
-
+	//ASTEROID MOVEMENT    
 	for (int i = 0; i < AsteroidNo; i++)
 	{
 		asteroidx[i] += movex[i] + 0.05 * dt;
@@ -661,7 +641,22 @@ void SP2::Update(double dt)
 			asteroidz[i] *= -1;
 		}
 	}
-	
+	//ASTEROID COLLISION CHECK      
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		posxcheck = asteroidx[i];
+		poszcheck = asteroidz[i];
+		posycheck = asteroidy[i];
+		posxcheck = (posxcheck - somePlayer.pos.x) * (posxcheck - somePlayer.pos.x);
+		posycheck = (posycheck - somePlayer.pos.y) * (posycheck - somePlayer.pos.y);
+		poszcheck = (poszcheck - somePlayer.pos.z) * (poszcheck - somePlayer.pos.z);
+		between = posxcheck + posycheck + poszcheck;
+		between = sqrt(between);
+		if (between <= 30)
+		{
+			AsteroidCollision = true;
+		}
+	}
     //Entering / Exiting Ship
     shipToggle(dt, InteractablesList, somePlayer);
 
