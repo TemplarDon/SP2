@@ -51,9 +51,11 @@ void SP2::Init()
 	translatePointer = -30;
 	mazeTranslateValue = 0;
 	safeDoorRotation = 0;
+
 	cafeMenuPointer = 62;
 	BounceTime = 0;
 	CoolDownTime = 0;
+
 
 	//BOOLEANS
 	NearVendingText = false;
@@ -291,6 +293,13 @@ void SP2::Update(double dt)
 		safeDoorRotation = min(safeDoorRotation, 115);
 	}
 
+	//Safe + keypad stuff (Gary's)
+	if (isSafeOpen)
+	{
+		safeDoorRotation += float(dt) * 60;
+		safeDoorRotation = min(safeDoorRotation, 115);
+	}
+
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -310,6 +319,7 @@ void SP2::Update(double dt)
 					RenderCoke = true;
 					ConsumeCokeText = true;
 				}
+
 
 				if (Application::IsKeyPressed('U'))
 				{
@@ -344,6 +354,24 @@ void SP2::Update(double dt)
 				PickUpTokenText = false;
 			}
 		}
+
+		if (it->name == "vending")
+		{
+			if (Application::IsKeyPressed('U'))
+			{
+				ConsumeCokeText = false;
+				RenderCoke = false;
+			}
+			else
+			{
+				NearVendingText = false;
+				ConsumeCokeText = false;
+				RenderCoke = false;
+			}
+		}
+
+
+
 		
         //COUNTER
         if (it->name == "counter")
@@ -374,11 +402,11 @@ void SP2::Update(double dt)
             else
             {
 				testText = false;
-                testText = false;
-                DisplayCafeMenu = false;
-                YesShowCafeMenu = false;
-            }
-        }
+				DisplayCafeMenu = false;
+				YesShowCafeMenu = false;
+			}
+		}
+
 
 		//SPACESUIT
 		if (it->name == "spacesuit")
@@ -429,25 +457,19 @@ void SP2::Update(double dt)
 			//}
 		}
 
-
-
-
-
-
-
-        // Door Opening & Closing
-        if (it->name.find("frontGate") != string::npos)
-        {
-            if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF FRONTGATE IS IN VIEW
-            {
-                if (Application::IsKeyPressed('E'))
-                {
-                    frontGateOpening = true;
-                }
-                if (frontGateOpening) { doorInteractions(dt, it, frontGateOffset, frontGateOpening); }
-                if (!frontGateOpening) { doorClosing(dt, it, frontGateOffset, frontGateOpening); }
-            }
-        }
+		// Door Opening & Closing
+		if (it->name.find("frontGate") != string::npos)
+		{
+			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF FRONTGATE IS IN VIEW
+			{
+				if (Application::IsKeyPressed('E'))
+				{
+					frontGateOpening = true;
+				}
+				if (frontGateOpening) { doorInteractions(dt, it, frontGateOffset, frontGateOpening); }
+				if (!frontGateOpening) { doorClosing(dt, it, frontGateOffset, frontGateOpening); }
+			}
+		}
 
 		if (it->name.find("rightGate") != string::npos)
 		{
@@ -530,13 +552,11 @@ void SP2::Update(double dt)
 			}
 		}
 
-		static bool isHeld = false;
-
-		if (Application::IsKeyPressed('H'))
+		if (it->name == "keypadButton1")
 		{
 			if (it->isInView({ firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z }, view))
 			{
-				if (it->name == "keypadButton1")
+				if (Application::IsKeyPressed('H'))
 				{
 					keypad.targetBool.setTargetValue(true);
 				}
@@ -551,7 +571,6 @@ void SP2::Update(double dt)
 		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
 		{
-
 			// Target
 			if (i->name == "target dummy")
 			{
@@ -1444,6 +1463,7 @@ void SP2::Render()
 
 	RenderCode();
 }
+
 
 void SP2::Exit()
 {

@@ -157,6 +157,7 @@ class SP2 : public Scene
 
 
 
+
         //Maze Walls
 		GEO_MAZE_SIDE_WALL,
         GEO_MAZE_LEFT_WALL,
@@ -186,7 +187,6 @@ class SP2 : public Scene
 
         // Base
         GEO_BASE,
-      
         NUM_GEOMETRY,
 
     };
