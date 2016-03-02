@@ -73,6 +73,7 @@ class SP2 : public Scene
 		GEO_BUNK,
 		GEO_SPACEMASK,
 		GEO_SPACESUIT,
+		GEO_HELIPADSIGN,
 
 
 		GEO_WINDOW,
@@ -122,6 +123,9 @@ class SP2 : public Scene
 		GEO_SOLDIER,
 		GEO_SHOPKEEPER,
 
+
+		//INSTRUCTIONS BOX
+		GEO_INSTRUCTIONBOX,
 
 		//NPC dialogue box
 		GEO_NPCDIALOGUEBOX,
@@ -383,8 +387,9 @@ private:
 	bool BreadAppear;
 	bool CoffeeAppear;
 	bool AppleAppear;
-
-
+	bool NPCInCafeTokenTask;
+	bool NPCInRecMazeTask;
+	bool HelipadInstructions;
 
 	//DOOR (DONOVAN'S)
 	float leftGateOffset;
@@ -486,6 +491,15 @@ private:
 	void RenderCoffee();
 	void RenderApple();
 	void RenderAsteroids();
+
+
+	//INSTRUCTION
+	void readInstructions(); //
+	string file_contents2;//
+	vector<string>instruct_vec;//
+	void Instructions();
+	void RenderInstructions();  //
+	void RenderInstructionBoxOnScreen(Mesh* mesh, float size, float x, float y);
 
 
 	//DIALOUGE SYSTEM

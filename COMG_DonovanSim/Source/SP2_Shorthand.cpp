@@ -237,11 +237,13 @@ void SP2::LoadMeshes()
 
 
 
-
 	//NPCS
 	//SHOPKEEPER
 	meshList[GEO_SHOPKEEPER] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Shopkeeper.obj");
 	meshList[GEO_SHOPKEEPER]->textureID = LoadTGA("Image//Shopkeeper.tga");
+	InteractableOBJs shopkeeper = InteractableOBJs("shopkeeper", meshList[GEO_SHOPKEEPER]->maxPos, meshList[GEO_SHOPKEEPER]->minPos, Position(220, 2, -10), 2, 0, Vector3(0, 0, 0));
+	shopkeeper.setRequirements(27, 15);
+	InteractablesList.push_back(shopkeeper);
 	//NURSE
 	meshList[GEO_NURSE] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Nurse.obj");
 	meshList[GEO_NURSE]->textureID = LoadTGA("Image//Nurse.tga");
@@ -279,12 +281,17 @@ void SP2::LoadMeshes()
 	spaceguy.setRequirements(25, 12);
 	InteractablesList.push_back(spaceguy);
 
+	InteractableOBJs spaceguy2 = InteractableOBJs("spaceguy2", meshList[GEO_SPACEGUY]->maxPos, meshList[GEO_SPACEGUY]->minPos, Position(105, 2.8, 5), 2, 0, Vector3(0, 0, 0));
+	spaceguy2.setRequirements(25, 12);
+	InteractablesList.push_back(spaceguy2);
+
 
 	//TEXT BOX
 	meshList[GEO_NPCDIALOGUEBOX] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//NPCTextBox.obj");
 	meshList[GEO_NPCDIALOGUEBOX]->textureID = LoadTGA("Image//NPCTextBox.tga");
 
-
+	meshList[GEO_INSTRUCTIONBOX] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//NPCTextBox.obj");
+	meshList[GEO_INSTRUCTIONBOX]->textureID = LoadTGA("Image//Instructions.tga");
 
 
 
@@ -528,6 +535,20 @@ void SP2::LoadMeshes()
 	InteractableOBJs helipad = InteractableOBJs("helipad", meshList[GEO_HELIPAD]->maxPos, meshList[GEO_HELIPAD]->minPos, Position(shipStartingPos.x, shipStartingPos.y - 15, shipStartingPos.z), 1, 0, Vector3(0, 0, 0));
 	helipad.setRequirements(25, 15);
 	InteractablesList.push_back(helipad);
+
+
+	//HELIPADSIGN
+	meshList[GEO_HELIPADSIGN] = MeshBuilder::GenerateOBJ("helipad", "OBJ//HelipadSignBoard.obj");
+	meshList[GEO_HELIPADSIGN]->textureID = LoadTGA("Image//HelipadSignBoard.tga");
+
+
+
+
+
+
+
+
+
 
     // Base
     meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
@@ -870,6 +891,18 @@ void SP2::RenderCode()
 	modelStack.PopMatrix();
 
 
+
+	//HELIPAD SIGN BOARD
+	modelStack.PushMatrix();
+	modelStack.Translate(370, 2, -75);
+	/*modelStack.Rotate(180, 1, 0, 0);*/
+	modelStack.Scale(2.2, 2.2, 2.2);
+	RenderMesh(meshList[GEO_HELIPADSIGN], false, toggleLight);
+	modelStack.PopMatrix();
+
+
+
+
 	//APPLE
 	if (AppleAppear == true)
 	{
@@ -904,8 +937,6 @@ void SP2::RenderCode()
 	}
 
 
-	//DO NOT DELETE CAFE MENU STUFF
-	//CAFE MENU   
 	if (DisplayCafeMenu == true)  //true
 	{
 		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
@@ -938,15 +969,6 @@ void SP2::RenderCode()
 		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST4], 5, 8, 6);
 		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6, 44, shopListPointer);     //62, 50, 38t
 	}
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1017,8 +1039,13 @@ void SP2::RenderCode()
 	else { weapon << "false"; }
 	RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(0, 1, 0), 1.5, 16.2, 8);
 
+
+	//INSTRUCTIONS
+	RenderInstructions();
+
 	//NPC DIALOGUES
 	RenderNPCDialogues();
+
 
 
 	//Keypad
@@ -1056,11 +1083,7 @@ void SP2::RenderCode()
 	//NPC DIALOGUES
 	RenderNPCDialogues();
 
-	//VENDING TEXT
-	if (NearVendingText)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Requires token", Color(1, 0, 0), 2, 6, TextTranslate);
-	}
+
 
 	//TEST TEXT
 	//if (testText == true)
@@ -1078,70 +1101,20 @@ void SP2::RenderCode()
 		RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
 	}
 
-	//std::ostringstream shipyaw;
-	//shipyaw.str("");
-	//// Ship Animation
-	//Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
-	//Vector3 up = thirdPersonCamera.up;
-	//Vector3 right = view.Cross(up);
-	//float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
-	//shipyaw << yawAngleDiff;
-	//RenderTextOnScreen(meshList[GEO_TEXT], shipyaw.str(), Color(0, 1, 0), 2, 7, 12);
 
-	//PICK UP TOKEN
-	if (PickUpTokenText == true)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS Q TO PICK UP TOKEN", Color(1, 0, 0), 2, 6, 18);
-	}
-
-	//CONSUME COKE TEXT
-	if (ConsumeCokeText == true)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "THANKS FOR BUYING A COKE!!", Color(1, 0, 0), 2, 6, 22);
-		RenderTextOnScreen(meshList[GEO_TEXT], "HERE IS YOUR COKE.", Color(1, 0, 0), 2, 6, 20);
-		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS U TO DRINK COKE", Color(1, 0, 0), 2, 6, 18);
-	}
-
-
-	//WEAR SUIT TEXT
-	if (wearSuitText == true)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS T TO PUT ON SPACE SUIT", Color(1, 0, 0), 2, 6, 18);
-		//for (int i = 0; i < dialogue_vec.size(); ++i)
-		//{
-		//RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.5, 5, 20);
-		////}
-	}
-
-	//WEAR SUIT \ MASK ON SCREEN
-	if (wearSuit == true)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "PRESS G TO TAKE OUT SPACE SUIT", Color(1, 0, 0), 2, 8, 14);
-
-        glBlendFunc(1, 1);
-        RenderSpacemaskOnScreen(meshList[GEO_SPACEMASK], 5, 8, 6.3);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    //CRYSTAL TEXT
-    if (CrystalText == true)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "PRESS E TO MINE THE CRYSTAL", Color(1, 0, 0), 2, 8, 14);
-    }
-
-    // Tests for shipBuilding
-    if (askedHull)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light (10) | 2. Medium (20) | 3. Large (30) ", Color(1, 0, 0), 2, 0, 14);
-    }
-    if (askedWings)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual (20) | 5. Quad (30)", Color(1, 0, 0), 2, 0, 14);
-    }
-    if (askedEngine)
-    {
-        RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine (20)  | 7. G2 Engine (30) ", Color(1, 0, 0), 2, 0, 14);
-    }
+    //// Tests for shipBuilding
+    //if (askedHull)
+    //{
+    //    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light (10) | 2. Medium (20) | 3. Large (30) ", Color(1, 0, 0), 2, 0, 14);
+    //}
+    //if (askedWings)
+    //{
+    //    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual (20) | 5. Quad (30)", Color(1, 0, 0), 2, 0, 14);
+    //}
+    //if (askedEngine)
+    //{
+    //    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine (20)  | 7. G2 Engine (30) ", Color(1, 0, 0), 2, 0, 14);
+    //}
 
     // Tests for ship Flight
     if (thirdPersonCamera.yawingLeft) { RenderTextOnScreen(meshList[GEO_TEXT], "Left", Color(1, 0, 0), 1, 0, 14); }
@@ -1538,6 +1511,58 @@ void SP2::ReadKeyPresses()
 	}
 }
 
+void SP2::RenderInstructions()
+{
+	//VENDING TEXT
+	if (NearVendingText)
+	{
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[0], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[9], Color(1, 0, 0), 1.7, 5, 8);
+	}
+
+	//CRYSTAL TEXT
+	if (CrystalText == true)
+	{
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[1], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[2], Color(1, 0, 0), 1.7, 5, 8);
+	}
+
+	//PICK UP TOKEN
+	if (PickUpTokenText == true)
+	{
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[3], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[4], Color(1, 0, 0), 1.7, 5, 8);
+	}
+
+	//CONSUME COKE TEXT
+	if (ConsumeCokeText == true)
+	{
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[5], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[6], Color(1, 0, 0), 1.7, 5, 8);
+	}
+
+	//WEAR SUIT TEXT
+	if (wearSuitText == true)
+	{
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[7], Color(1, 0, 0), 1.7, 5, 10);
+	}
+
+	//WEAR SUIT \ MASK ON SCREEN
+	if (wearSuit == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[8], Color(1, 0, 0), 2, 8, 14);
+
+		glBlendFunc(1, 1);
+		RenderSpacemaskOnScreen(meshList[GEO_SPACEMASK], 5, 8, 6.3);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+}
+
 void SP2::RenderNPCDialogues()
 {
 	if (chefText == true)  //true
@@ -1577,12 +1602,22 @@ void SP2::RenderNPCDialogues()
 	{
 		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
 		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[7], Color(1, 1, 1), 1.7, 5, 8);
 	}
 
-	if (shopkeeperText == true)
+	if (NPCInCafeTokenTask == true)
 	{
 		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[8], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[9], Color(1, 0, 0), 1.7, 5, 8);
+	}
+
+	if (NPCInRecMazeTask == true)
+	{
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[10], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[11], Color(1, 0, 0), 1.7, 5, 8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[12], Color(1, 0, 0), 1.7, 5, 6);
 	}
 
 }
@@ -1997,7 +2032,7 @@ void SP2::RenderCafeRoom()
 	modelStack.PushMatrix();
 	modelStack.Translate(220, 2, -10);
 	modelStack.Scale(3.7, 4, 3.7);
-	RenderMesh(meshList[GEO_SPACEGUY], true, toggleLight);
+	RenderMesh(meshList[GEO_SHOPKEEPER], true, toggleLight);
 	modelStack.PopMatrix();
 }
 
@@ -2052,6 +2087,25 @@ void SP2::RenderBread()
 	RenderMesh(meshList[GEO_BREAD], true, toggleLight);
 	modelStack.PopMatrix();
 
+}
+
+void SP2::RenderInstructionBoxOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -100, 100); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	RenderMesh(mesh, false, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
 }
 
 void SP2::RenderNPCTextBoxOnScreen(Mesh* mesh, float size, float x, float y)
