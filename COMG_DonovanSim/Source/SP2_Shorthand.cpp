@@ -2158,7 +2158,8 @@ void SP2::RenderAsteroids()
 		modelStack.PushMatrix();
 		modelStack.Translate(asteroidx[i], asteroidy[i], asteroidz[i]);
 		modelStack.Scale(20, 20, 20);
-		modelStack.Rotate(asteroidrotatex, 1, 0, 0);
+		modelStack.Rotate(rotatex[i], 1, 0, 0);
+		modelStack.Rotate(rotatez[i], 0, 0, 1);
 		RenderMesh(meshList[GEO_ASTEROID], true, toggleLight);
 		modelStack.PopMatrix();
 	}

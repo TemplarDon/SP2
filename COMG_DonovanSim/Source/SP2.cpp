@@ -183,9 +183,6 @@ void SP2::Init()
 	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
 	thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 20);
 
-	// Init Cam Pointer
-	camPointer = &firstPersonCamera;
-
 	//Init Player + Stats
 	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, firstPersonCamera); // Name, Race, Money, Pos, camera
 
@@ -244,6 +241,7 @@ void SP2::Init()
 		movex[i] = coord1;
 		movez[i] = coord2;
 	}
+
 	for (int i = 0; i < AsteroidNo; i++)
 	{
 		InteractableOBJs asteroid = InteractableOBJs("asteroid", meshList[GEO_ASTEROID]->maxPos, meshList[GEO_ASTEROID]->minPos, Position(asteroidx[i], asteroidy[i], asteroidz[i]), 1, 0, Vector3(0, 0, 0));
@@ -298,11 +296,11 @@ void SP2::Update(double dt)
 		firstFrames--;
 	}
 
-	if (Application::IsKeyPressed('R'))
-	{
-		somePlayer.pos = startingCharPos;
-		firstPersonCamera.Reset();
-	}
+
+    if (Application::IsKeyPressed('R'))
+    {
+		reset();
+    }
 
 
 	//DIALOGUE DO NOT DELETE THIS 
@@ -698,21 +696,6 @@ void SP2::Update(double dt)
 
 				}
 			}
-			if (i->name == "asteroid")
-			{
-				posxcheck = i->pos.x;
-				poszcheck = i->pos.z;
-				posycheck = i->pos.y;
-				posxcheck = (posxcheck - somePlayer.pos.x) * (posxcheck - somePlayer.pos.x);
-				posycheck = (posycheck - somePlayer.pos.y) * (posycheck - somePlayer.pos.y);
-				poszcheck = (poszcheck - somePlayer.pos.z) * (poszcheck - somePlayer.pos.z);
-				between = posxcheck + posycheck + poszcheck;
-				between = sqrt(between);
-				if (between <= 30)
-				{
-					AsteroidCollision = true;
-				}
-			}
 		}
 	}
 
@@ -741,10 +724,25 @@ void SP2::Update(double dt)
 		onGround = true;
 	}
 
+
+	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
+	if (camPointer == &firstPersonCamera)
+	{
+		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+
+		if (askedShipBuild)
+		{
+			shopInteractions();
+		}
+	}
+	//ASTEROID MOVEMENT    
+
 	for (int i = 0; i < AsteroidNo; i++)
 	{
 		asteroidx[i] += movex[i] + 0.05 * dt;
 		asteroidz[i] += movez[i] + 0.5 * dt;
+		rotatex[i] += (movex[i] ) + 1 * dt;
+		rotatez[i] += (movez[i] ) + 1 * dt;
 		if (asteroidx[i] > 1000 || asteroidx[i] < -1000)
 		{
 			asteroidx[i] *= -1;
@@ -754,6 +752,28 @@ void SP2::Update(double dt)
 			asteroidz[i] *= -1;
 		}
 	}
+
+	//ASTEROID COLLISION CHECK      
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		posxcheck = asteroidx[i];
+		poszcheck = asteroidz[i];
+		posycheck = asteroidy[i];
+		posxcheck = (posxcheck - somePlayer.pos.x) * (posxcheck - somePlayer.pos.x);
+		posycheck = (posycheck - somePlayer.pos.y) * (posycheck - somePlayer.pos.y);
+		poszcheck = (poszcheck - somePlayer.pos.z) * (poszcheck - somePlayer.pos.z);
+		between = posxcheck + posycheck + poszcheck;
+		between = sqrt(between);
+		if (between <= 30)
+		{
+			AsteroidCollision = true;
+		}
+	}
+	if (AsteroidCollision == true)
+	{
+		reset();
+	}
+
 
 	//Entering / Exiting Ship
 	shipToggle(dt, InteractablesList, somePlayer);
@@ -1593,6 +1613,7 @@ void SP2::shipCreation()
     Vector3 right = view.Cross(up);
 
     Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0), view);
+
     someShip.setRequirements(50, 500);
 
 	shipTemplatePtr = &someShip;
@@ -1722,7 +1743,7 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
         {
             if (Application::IsKeyPressed('F') && CoolDownTime == 0)
             {
-                if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
+                if (somePlayer.pos.y <= 30 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
                 {
                     camPointer = &firstPersonCamera;
                     somePlayer.setCameraType("first");
@@ -1732,7 +1753,7 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
 
                     // Sets 1st person camera new position to the player's position
                     camPointer->position.x = somePlayer.pos.x;
-                    camPointer->position.y = somePlayer.pos.y;
+					camPointer->position.y = somePlayer.pos.y;
                     camPointer->position.z = somePlayer.pos.z;
 
                     // Set Ship To 'Straight' Orientation
@@ -1988,6 +2009,50 @@ bool SP2::checkCrystalPos(int posxcheck, int poszcheck, int i)
 	{
 		return false;
 	}
+}
+
+void SP2::reset()
+{
+		somePlayer.removeCrystals(somePlayer.getCrystals()); //sets amount of crystals to 0;    
+		somePlayer.addCrystals(50); 
+		//removes ship obj and collision  
+		shipBuilt = false; //doesnt render ship obj collision is still there 
+		if (somePlayer.getCameraType() != "first")
+		{
+			camPointer = &firstPersonCamera;
+			somePlayer.setCameraType("first");
+		}
+		somePlayer.pos = startingCharPos;
+		firstPersonCamera.Reset();
+		//resets third person camera      
+		thirdPersonCamera.Reset();
+		if (ShipList.size() > 0)
+		{
+			ShipList.pop_back();
+		}
+		//render space suit    
+		wearSuit = false;  
+		//render crystals    
+		
+		for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+		{
+			if (it->name == "crystal")
+			{
+				it = this->InteractablesList.erase(it);
+				it = InteractablesList.begin();
+			}
+		}
+		for (int i = 0; i < CrystalNo; i++) //create collision for all crystal again 
+		{
+			InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(xcoords[i], 0, zcoords[i]), 5, 0, Vector3(0, 0, 0));
+			crystal.setRequirements(30, 5);
+			InteractablesList.push_back(crystal);
+		}
+		for (int a = 0; a < CrystalNo; a++)
+		{
+			rendercrystal[a] = 1;  //set all crystal to render    
+		}
+		
 }
 
 
