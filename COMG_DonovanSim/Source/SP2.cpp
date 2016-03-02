@@ -263,6 +263,9 @@ void SP2::Update(double dt)
 	//FPS
 	FramesPerSecond = 1 / dt;
 
+	moveLightPosition(0, { float(dt) * 3, 0, 0 });
+	rotateSpotlight(1, float(dt) * 160, { 1, 1, 0 });
+
 	//READKEYS FUNCTION
 	ReadKeyPresses();
 
