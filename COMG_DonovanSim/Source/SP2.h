@@ -405,12 +405,13 @@ private:
 	int AsteroidNo;
 	int asteroidx[50];
 	int movex[50];
+	int rotatex[50];
 	int asteroidz[50];
 	int movez[50];
+	int rotatez[50];
 	int asteroidy[50];
 	int renderasteroid[50];
 	int coord3;
-	int asteroidrotatex;
 	int posycheck;
 	double between;
 	bool AsteroidCollision;
@@ -526,7 +527,8 @@ private:
     bool shipBuilt;
     bool noMoney;
 
-  
+    //Reset function    
+	void reset();
 
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);

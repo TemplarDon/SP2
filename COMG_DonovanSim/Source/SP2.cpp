@@ -167,9 +167,6 @@ void SP2::Init()
 	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
 	thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 20);
 
-	// Init Cam Pointer
-	camPointer = &firstPersonCamera;
-
 	//Init Player + Stats
 	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, firstPersonCamera); // Name, Race, Money, Pos, camera
 
@@ -229,8 +226,6 @@ void SP2::Init()
 		movez[i] = coord2;
 	}
 
-	crystalcount = 0;
-
 	InitSafe();
 }
 
@@ -277,10 +272,8 @@ void SP2::Update(double dt)
 
     if (Application::IsKeyPressed('R'))
     {
-        somePlayer.pos = startingCharPos;
-        firstPersonCamera.Reset();
+		reset();
     }
-
 
 	//DIALOGUE DO NOT DELETE THIS 
 	DialoguesWithNPCs();
@@ -650,6 +643,8 @@ void SP2::Update(double dt)
 	{
 		asteroidx[i] += movex[i] + 0.05 * dt;
 		asteroidz[i] += movez[i] + 0.5 * dt;
+		rotatex[i] += (movex[i] ) + 1 * dt;
+		rotatez[i] += (movez[i] ) + 1 * dt;
 		if (asteroidx[i] > 1000 || asteroidx[i] < -1000)
 		{
 			asteroidx[i] *= -1;
@@ -675,14 +670,7 @@ void SP2::Update(double dt)
 			AsteroidCollision = true;
 		}
 	}
-	if (AsteroidCollision)
-	{
-		charPos = { 108, 17, 130 };
-		shipPos = { 375, 18, -105 };
 
-		camPointer = &firstPersonCamera;
-		somePlayer.setCameraType("first");
-	}
     //Entering / Exiting Ship
     shipToggle(dt, InteractablesList, somePlayer);
 
@@ -1529,6 +1517,26 @@ bool SP2::checkCrystalPos(int posxcheck, int poszcheck, int i)
 	{
 		return false;
 	}
+}
+
+void SP2::reset()
+{
+		somePlayer.removeCrystals(somePlayer.getCrystals()); //sets amount of crystals to 0;    
+		//removes ship obj and collision  
+		//resets first person camera to starting area  
+		if (somePlayer.getCameraType() != "first")
+		{
+				camPointer = &firstPersonCamera;
+				somePlayer.setCameraType("first");
+		}
+		somePlayer.pos = startingCharPos;    
+		firstPersonCamera.Reset();    
+		//resets third person camera      
+		thirdPersonCamera.Reset();     
+		//render space suit    
+		wearSuit = false;  
+		//render crystals    
+
 }
 
 

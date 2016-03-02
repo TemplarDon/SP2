@@ -513,7 +513,7 @@ void SP2::LoadMeshes()
     meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga"); //185, 50, 30
     InteractableOBJs base = InteractableOBJs("base", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(185, 50, 30), 83, 0, Vector3(0, 0, 0)); //83, 25, 82
     base.setRequirements(25, 15);
-    InteractablesList.push_back(base);
+  //  InteractablesList.push_back(base);
 
     // MAZE 
     initMaze();
@@ -1879,7 +1879,8 @@ void SP2::RenderAsteroids()
 		modelStack.PushMatrix();
 		modelStack.Translate(asteroidx[i], asteroidy[i], asteroidz[i]);
 		modelStack.Scale(20, 20, 20);
-		modelStack.Rotate(asteroidrotatex, 1, 0, 0);
+		modelStack.Rotate(rotatex[i], 1, 0, 0);
+		modelStack.Rotate(rotatez[i], 0, 0, 1);
 		RenderMesh(meshList[GEO_ASTEROID], true, toggleLight);
 		modelStack.PopMatrix();
 	}
