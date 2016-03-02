@@ -40,7 +40,7 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 
 void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
 {
-	float mouseSpeed = 10;
+	float mouseSpeed = 5;
 
 	if (mouseEnabled)
 	{
@@ -97,7 +97,7 @@ void ThirdPersonCamera::YawCamera(float degrees)
 		if (A - degrees < -yawBoundsRange) degrees = A + yawBoundsRange;
 	}
 
-    std::cout << yawBoundsDirection << std::endl;
+    //std::cout << yawBoundsDirection << std::endl;
 
 	rotationMatrix.SetToRotation(degrees, 0, 1, 0);
 
