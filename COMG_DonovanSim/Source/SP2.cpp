@@ -363,13 +363,6 @@ void SP2::Update(double dt)
 		safeDoorRotation = min(safeDoorRotation, 115);
 	}
 
-	//Safe + keypad stuff (Gary's)
-	if (isSafeOpen)
-	{
-		safeDoorRotation += float(dt) * 60;
-		safeDoorRotation = min(safeDoorRotation, 115);
-	}
-
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -389,7 +382,6 @@ void SP2::Update(double dt)
 					RenderCoke = true;
 					ConsumeCokeText = true;
 				}
-
 
 				if (Application::IsKeyPressed('U'))
 				{
@@ -643,10 +635,9 @@ void SP2::Update(double dt)
 		{
 			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 			{
-				if (Application::IsKeyPressed('E') && CoolDownTime == 0)
+				if (Application::IsKeyPressed('E'))
 				{
 					somePlayer.setWeapon();
-                    CoolDownTime = 20;
 				}
 			}
 
@@ -657,18 +648,20 @@ void SP2::Update(double dt)
 		{
 			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 			{
-                if (Application::IsKeyPressed(VK_LBUTTON) && somePlayer.checkWeapon() == true)
+				if (Application::IsKeyPressed('E') && somePlayer.checkWeapon() == true)
 				{
 					somePlayer.addCrystals(1);
 				}
 			}
 		}
 
-		if (it->name == "keypadButton1")
+		static bool isHeld = false;
+
+		if (Application::IsKeyPressed('H'))
 		{
 			if (it->isInView({ firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z }, view))
 			{
-				if (Application::IsKeyPressed('H'))
+				if (it->name == "keypadButton1")
 				{
 					keypad.targetBool.setTargetValue(true);
 				}
@@ -683,6 +676,18 @@ void SP2::Update(double dt)
 		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
 		{
+
+			// Target
+			if (i->name == "target dummy")
+			{
+				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+				{
+					if (Application::IsKeyPressed(VK_LEFT) && somePlayer.checkWeapon() == true)
+					{
+						somePlayer.addCrystals(1);
+					}
+				}
+			}
 			if (i->name == "crystal")
 			{
 				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
@@ -1205,15 +1210,14 @@ void SP2::ShopMenuPointerInteraction()
 //PLEASE DO NOT DELETE THIS !!!! 
 void SP2::CafeMenuPointerInteraction()
 {
-    // Moved to Update
-	//if (CoolDownTime > 0)
-	//{
-	//	CoolDownTime--;
-	//}
-	//else
-	//{
-	//	CoolDownTime == 0;
-	//}
+	if (CoolDownTime > 0)
+	{
+		CoolDownTime--;
+	}
+	else
+	{
+		CoolDownTime == 0;
+	}
 
 	switch (S)
 	{
