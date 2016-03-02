@@ -297,6 +297,21 @@ void SP2::LoadMeshes()
 	InteractablesList.push_back(spaceguy);
 
 
+	//TEXT BOX
+	meshList[GEO_NPCDIALOGUEBOX] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//NPCTextBox.obj");
+	meshList[GEO_NPCDIALOGUEBOX]->textureID = LoadTGA("Image//NPCTextBox.tga");
+
+
+
+
+
+
+
+
+
+
+
+
 	//CAFE
 	initRoomTemplate(Position(250, 2, 30));
 	//COUNTER
@@ -947,11 +962,11 @@ void SP2::RenderCode()
 	}
 
 	//TEST TEXT
-	if (testText == true)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press Y to look at the menu.", Color(0, 1, 0), 1.5, 5, 18);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press U to eat the food.", Color(0, 1, 0), 1.5, 5, 16);
-	}
+	//if (testText == true)
+	//{
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Press Y to look at the menu.", Color(0, 1, 0), 1.5, 5, 18);
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Press U to eat the food.", Color(0, 1, 0), 1.5, 5, 16);
+	//}
 
 	// Ship Stats
 	std::ostringstream shipStats;
@@ -1367,41 +1382,49 @@ void SP2::ReadKeyPresses()
 
 void SP2::RenderNPCDialogues()
 {
-	if (chefText == true)
+	if (chefText == true)  //true
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[0], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[0], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press Y to look at the menu.", Color(1, 1, 1), 1.7, 5, 8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press U to eat the food.", Color(1, 1, 1), 1.7, 5, 6);
 	}
 
 	if (spaceguyText == true)
 	{
-
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[1], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[1], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
 	if (nurseText == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
 	if (doctorText == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[3], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[3], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
-	if (traderText == true)
+	if (traderText == true)   //true
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[4], Color(1, 0, 0), 1.5, 5, 20);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(0, 1, 0), 1.5, 5, 18);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[4], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 1, 1), 1.7, 5, 8);
 	}
 
 	if (soldierText == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
 	if (shopkeeperText == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
 }
@@ -1869,6 +1892,26 @@ void SP2::RenderBread()
 	modelStack.Translate(267, 11, -0.5);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BREAD], true, toggleLight);
+	modelStack.PopMatrix();
+
+}
+
+void SP2::RenderNPCTextBoxOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -100, 100); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	RenderMesh(mesh, false, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 
 }

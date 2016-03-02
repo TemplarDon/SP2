@@ -123,6 +123,9 @@ class SP2 : public Scene
 		GEO_SHOPKEEPER,
 
 
+		//NPC dialogue box
+		GEO_NPCDIALOGUEBOX,
+
 		//SPACE SHIP
 		GEO_SHIP,
 		GEO_HULL,
@@ -483,6 +486,7 @@ private:
 	vector<string>dialogue_vec;
 	void DialoguesWithNPCs();
 	void RenderNPCDialogues();
+	void RenderNPCTextBoxOnScreen(Mesh* mesh, float size, float x, float y);
 
 	//CAFE MENU
 	CafeMenu S;
