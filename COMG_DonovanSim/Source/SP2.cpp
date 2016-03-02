@@ -169,8 +169,8 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	//startingCharPos = charPos = { -350, 17, -370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 300, 50, 300 };
+	startingCharPos = charPos = { -350, 17, -370 }; // STARTING POS OF MAZERUNNER
+	//startingCharPos = charPos = { 300, 17, 300 };
 	//125, 120 
 	//250, 40
 
@@ -724,17 +724,6 @@ void SP2::Update(double dt)
 		onGround = true;
 	}
 
-
-	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
-	if (camPointer == &firstPersonCamera)
-	{
-		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-
-		if (askedShipBuild)
-		{
-			shopInteractions();
-		}
-	}
 	//ASTEROID MOVEMENT    
 
 	for (int i = 0; i < AsteroidNo; i++)
@@ -1370,10 +1359,7 @@ void SP2::shipFlying(double dt)
             if (!i->shipTakeoff) 
             {
                 i->setDirectionalVectors(view.Normalized()); 
-                //if (i->hullType == "LightHull") { shipHorizontalRotateAngle = 90; }
-                //if (i->hullType == "MediumHull" || i->hullType == "LargeHull") { shipHorizontalRotateAngle = 180; }
             } 
-            //if (!i->shipTakeoff) { view = i->shipDirection; } // Sets Camera direction to be the same as ship
 
             if (Application::IsKeyPressed(VK_SPACE) && i->shipTakeoff == false) { i->shipTakeoff = true; } /// Press 'SpaceBar' to take off
 
@@ -1401,6 +1387,7 @@ void SP2::shipFlying(double dt)
                     shipPos.x = shipPos.x - ( i->shipDirection.x + (float)(i->shipSpeed * dt) );
                     shipPos.y = shipPos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
                     shipPos.z = shipPos.z - ( i->shipDirection.z + (float)(i->shipSpeed * dt) );
+                    //reset();
                 }
 
                 // Check to stop Ship from going into the ground
@@ -1500,48 +1487,6 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
 
 void SP2::mazeTranslate(double dt)
 {
-	//float randomScale = (float)((rand() % 10 + 1));
-	//for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
-	//{
-	//    if (it->name == "leftObstacle" || it->name == "rightObstacle")
-	//    {
-	//        if (mazeTranslateValue <= 10 && !mazeOpening)
-	//        {
-	//            mazeTranslateValue += (float)(randomScale * dt);
-	//            it->pos.z += (float)(randomScale * dt);
-	//            if (mazeTranslateValue >= 10)
-	//            {
-	//                mazeOpening = true;
-	//            }
-	//        }
-	//        else
-	//        {
-	//            mazeTranslateValue -= (float)(randomScale * dt);
-	//            it->pos.z -= (float)(randomScale * dt);
-	//            if (mazeTranslateValue <= 0)
-	//            {
-	//                mazeOpening = false;
-	//            }
-	//        }
-
-	//        //if ((somePlayer.pos.x < it->maxPos.x * it->scaleOffSet + it->pos.x && somePlayer.pos.x > it->minPos.x * it->scaleOffSet + it->pos.x) && (somePlayer.pos.z < it->maxPos.z * it->scaleOffSet + it->pos.z && somePlayer.pos.z > it->minPos.z * it->scaleOffSet + it->pos.z))
-	//        //{
-	//        //    firstPersonCamera.Reset();
-	//        //}
-
-	//        for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
-	//        {
-	//            //-330 to -350
-	//            if (somePlayer.pos.x >= -350 && somePlayer.pos.x <= -330 && somePlayer.pos.z >= zAxis - 3 && somePlayer.pos.z <= zAxis + 3)
-	//            {
-	//                if (!mazeOpening)
-	//                firstPersonCamera.Reset();
-	//            }
-	//        }
-
-	//    }
-	//}
-
     // Lava Movement
     if (lavaTranslation <= 140)
     {
@@ -1561,6 +1506,7 @@ void SP2::mazeTranslate(double dt)
                 if ((somePlayer.pos.x <= -420 + lavaTranslation + 5 && somePlayer.pos.x >= -420 + lavaTranslation - 5) || ((somePlayer.pos.x <= -280 - lavaTranslation + 5 && somePlayer.pos.x >= -280 - lavaTranslation - 5)))
                 {
                     deadText = true;
+                    reset();
                 }
                 else
                 {
@@ -1981,7 +1927,6 @@ void SP2::Render()
 	RenderCode();
 }
 
-
 void SP2::Exit()
 {
 	// Cleanup VBO here
@@ -2021,6 +1966,8 @@ void SP2::reset()
 		{
 			camPointer = &firstPersonCamera;
 			somePlayer.setCameraType("first");
+            DisplayInventory = false; 
+            HandDisappear = false;
 		}
 		somePlayer.pos = startingCharPos;
 		firstPersonCamera.Reset();
