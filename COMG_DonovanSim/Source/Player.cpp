@@ -79,7 +79,35 @@ void Player::removeItem(InteractableOBJs itemName)
 /******************************************************************************/
 void Player::addPart(ShipParts* partsName)
 {
-    this->playerInventory.shipPartsList.push_back(partsName);
+    string wings = "Wings";
+    string engine = "Engine";
+    string hull = "Hull";
+
+    for (list<ShipParts*>::iterator it = playerInventory.shipPartsList.begin(); it != playerInventory.shipPartsList.end(); ++it)
+    {
+        if ((*it)->getName().find(wings) != string::npos && partsName->getName().find(wings) != string::npos) // Check if a wing part already exists and check if somePart is a wing part 
+        {
+            *it = partsName; // Replaces existing part
+            break;
+        }
+        if ((*it)->getName().find(engine) != string::npos && partsName->getName().find(engine) != string::npos) // Check if a engine part already exists and check if somePart is a engine part 
+        {
+            *it = partsName; // Replaces existing part
+            break;
+        }
+        if ((*it)->getName().find(hull) != string::npos && partsName->getName().find(hull) != string::npos) // Check if a hull part already exists and check if somePart is a hull part 
+        {
+            *it = partsName; // Replaces existing part
+            break;
+        }
+
+        this->playerInventory.shipPartsList.push_back(partsName); // If none of above conditions met, push back to vector
+    }
+
+    if (playerInventory.shipPartsList.size() == 0)
+    {
+        this->playerInventory.shipPartsList.push_back(partsName); // If nothing in vector, push back
+    }
 }
 
 /******************************************************************************/
@@ -91,7 +119,7 @@ void Player::addPart(ShipParts* partsName)
     Returns a list of ShipParts
 */
 /******************************************************************************/
-list<ShipParts*> Player::getParts()
+list<ShipParts*>& Player::getParts()
 {
     return this->playerInventory.shipPartsList;
 }
