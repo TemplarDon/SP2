@@ -295,9 +295,12 @@ void SP2::LoadMeshes()
 
 
 
+	//HEALTH BAR
+	meshList[GEO_DEADHEALTHBAR] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//HealthBar.obj");
+	meshList[GEO_DEADHEALTHBAR]->textureID = LoadTGA("Image//DeadHealthBar.tga");
 
-
-
+	meshList[GEO_ALIVEHEALTHBAR] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//HealthBar.obj");
+	meshList[GEO_ALIVEHEALTHBAR]->textureID = LoadTGA("Image//AliveHealthBar.tga");
 
 
 
@@ -937,16 +940,20 @@ void SP2::RenderCode()
 	}
 
 
+
 	if (DisplayCafeMenu == true)  //true
 	{
+		//DisplayInventory = true;
 		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
 
 		RenderCafePointerOnScreen(meshList[GEO_CAFEPOINTER], 0.6, 44, cafeMenuPointer);     //62, 50, 38t
 	}
 
+
 	//DO NOT DELETE SHOP LIST STUFF
 	if (DisplayShopList == true)   //true
 	{
+		DisplayInventory = true;
 		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST1], 5, 8, 6);
 		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6, 44, shopListPointer);     //62, 50, 38t
 	}
@@ -989,6 +996,20 @@ void SP2::RenderCode()
 
 		//POINTER
 		RenderPointerOnScreen(meshList[GEO_POINTER], 0.4, translatePointer, 37);     //127, 141
+
+
+		//CRYSTAL COUNTS
+		std::ostringstream as;
+		as.str("");
+		as << somePlayer.getCrystals();
+		RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 1.5, 16.2, 5);
+
+		//Weapon 
+		std::ostringstream weapon;
+		weapon.str("");
+		if (somePlayer.checkWeapon()) { weapon << "Equipped"; }
+		else { weapon << "Unequipped"; }
+		RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(1, 0, 0), 1.3, 36, 4);
 	}
 
 	if (HandDisappear == false)  //false
@@ -1024,20 +1045,6 @@ void SP2::RenderCode()
 	os.str("");
 	os << "Collision with asteroids :" << AsteroidCollision;
 	RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
-
-
-	//CRYSTAL COUNTS
-	std::ostringstream as;
-	as.str("");
-	as << somePlayer.getCrystals();
-	RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 1, 0), 1.5, 16.2, 5);
-
-	//Weapon 
-	std::ostringstream weapon;
-	weapon.str("");
-	if (somePlayer.checkWeapon()) { weapon << "true"; }
-	else { weapon << "false"; }
-	RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(0, 1, 0), 1.5, 16.2, 8);
 
 
 	//INSTRUCTIONS
@@ -1101,7 +1108,6 @@ void SP2::RenderCode()
 		RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
 	}
 
-
     //// Tests for shipBuilding
     //if (askedHull)
     //{
@@ -1122,8 +1128,8 @@ void SP2::RenderCode()
     if (thirdPersonCamera.pitchingUp) { RenderTextOnScreen(meshList[GEO_TEXT], "Up", Color(1, 0, 0), 1, 0, 13); }
     if (thirdPersonCamera.pitchingDown) { RenderTextOnScreen(meshList[GEO_TEXT], "Down", Color(1, 0, 0), 1, 0, 12); }
 
-    if (deadText) { RenderTextOnScreen(meshList[GEO_TEXT], "Dead", Color(1, 0, 0), 1, 0, 16); }
-    else { RenderTextOnScreen(meshList[GEO_TEXT], "No Dead", Color(1, 0, 0), 1, 0, 16); }
+	if (deadText) { RenderHealthBarOnScreen(meshList[GEO_DEADHEALTHBAR], 2.6, 2.5, 21); }
+	else { RenderHealthBarOnScreen(meshList[GEO_ALIVEHEALTHBAR], 2.6, 2.5, 21); }
 }
 
 void SP2::initMaze()
@@ -2217,6 +2223,25 @@ void SP2::RenderAsteroids()
 		RenderMesh(meshList[GEO_ASTEROID], true, toggleLight);
 		modelStack.PopMatrix();
 	}
+}
+
+void SP2::RenderHealthBarOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	RenderMesh(mesh, false, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
 }
 
 void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)

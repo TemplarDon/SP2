@@ -173,7 +173,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, -370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 300, 50, 300 };
+	startingCharPos = charPos = { 125, 17, 120 };
 	//125, 120 
 	//250, 40
 
@@ -438,6 +438,7 @@ void SP2::Update(double dt)
 					//SuitTranslate = -50;
 					wearSuit = true;
 					DisplayInventory = true;
+					HandDisappear = true;
 				}
 
 				if (Application::IsKeyPressed('G'))
@@ -683,16 +684,16 @@ void SP2::Update(double dt)
 	}
 
 
-	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
-	if (camPointer == &firstPersonCamera)
-	{
-		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+	////INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
+	//if (camPointer == &firstPersonCamera)
+	//{
+	//	Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 
-		if (askedShipBuild)
-		{
-			shopInteractions();
-		}
-	}
+	//	if (askedShipBuild)
+	//	{
+	//		shopInteractions();
+	//	}
+	//}
 	//ASTEROID MOVEMENT    
 
 	for (int i = 0; i < AsteroidNo; i++)
