@@ -29,7 +29,7 @@
     axis to rotate collision box by (not working)
 */
 /******************************************************************************/
-Ship::Ship(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis) : InteractableOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
+Ship::Ship(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis, Vector3 target) : InteractableOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
 {
     shipSpeed = 0;
     shipMaxSpeed = 0;
@@ -37,6 +37,8 @@ Ship::Ship(string name, Position maxPos, Position minPos, Position offSet, int s
     turningSpeed = 0;
     shipLandingSpeed = 2;
     shipTakeoff = false;
+    Vector3 position = { pos.x, pos.y, pos.z };
+    this->defaultShipDirection = shipDirection = (target - position).Normalized();
 }
 
 /******************************************************************************/

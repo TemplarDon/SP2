@@ -137,7 +137,7 @@ void SP2::Init()
     lavaTranslation = 0;
     for (int i = 0; i < 10; ++i)
     {
-        mazeRandomTranslateVec.push_back((float)((rand() % 100 - 50)));    
+        mazeRandomTranslateVec.push_back((float)((rand() % 80 - 40)));    
     }
     deadText = false;
 
@@ -197,7 +197,7 @@ void SP2::Init()
 			xcoords[i] = coord1;
 			zcoords[i] = coord2;
 			rendercrystal[i] = 1;
-			cout << coord1 << "," << coord2 << endl;
+			//cout << coord1 << "," << coord2 << endl;
 		}
 	}
 	for (int i = 0; i < CrystalNo; i++)
@@ -431,7 +431,7 @@ void SP2::Update(double dt)
 
 				if (Application::IsKeyPressed('T'))
 				{
-					SuitTranslate = -50;
+					//SuitTranslate = -50;
 					wearSuit = true;
 					DisplayInventory = true;
 				}
@@ -593,7 +593,7 @@ void SP2::Update(double dt)
 					CrystalText = true;
 					posxcheck = i->pos.x;
 					poszcheck = i->pos.z;
-					if (Application::IsKeyPressed('E'))
+					if (Application::IsKeyPressed('E') && equipPickaxe)
 					{
 						for (int a = 0; a < CrystalNo; a++)
 						{
@@ -817,15 +817,19 @@ void SP2::shipFlying(double dt)
             Vector3 up = camPointer->up;
             Vector3 right = view.Cross(up);
 
-            if (!i->shipTakeoff) { i->setDirectionalVectors(view.Normalized()); }
+            // Sets Ships direction to be the same as the camera
+            if (!i->shipTakeoff) 
+            {
+                i->setDirectionalVectors(view.Normalized()); 
+                //if (i->hullType == "LightHull") { shipHorizontalRotateAngle = 90; }
+                //if (i->hullType == "MediumHull" || i->hullType == "LargeHull") { shipHorizontalRotateAngle = 180; }
+            } 
+            //if (!i->shipTakeoff) { view = i->shipDirection; } // Sets Camera direction to be the same as ship
 
             if (Application::IsKeyPressed(VK_SPACE) && i->shipTakeoff == false) { i->shipTakeoff = true; } /// Press 'SpaceBar' to take off
 
             if (i->shipTakeoff)
             {
-                // Ship Animation - Don't Touch - Donovan
-                shipAnimation(dt, i);
-
                 // Set ship's new direction
                 i->setDirectionalVectors((i->shipDirection + view).Normalized());
 
@@ -849,16 +853,6 @@ void SP2::shipFlying(double dt)
                     shipPos.y = shipPos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
                     shipPos.z = shipPos.z - ( i->shipDirection.z + (float)(i->shipSpeed * dt) );
                 }
-
-                //// Move Ship's position (For Collision/ isinView())
-                //i->pos.x = i->pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-                //i->pos.y = i->pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
-                //i->pos.z = i->pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
-
-                //// Move Player's Position with the ship
-                //somePlayer.pos.x = somePlayer.pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-                //somePlayer.pos.y = somePlayer.pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
-                //somePlayer.pos.z = somePlayer.pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
 
                 // Check to stop Ship from going into the ground
                 if (shipPos.y <= 2)
@@ -887,6 +881,11 @@ void SP2::shipFlying(double dt)
                     }
                 }
             }
+
+
+            // Ship Animation - Don't Touch - Donovan
+            shipAnimation(dt, i);
+
         }
     }
 }
@@ -898,22 +897,39 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
     Vector3 up = camPointer->up;
     Vector3 right = view.Cross(up);
 
+    Vector3 defaultHorizontalPlane = { i->defaultShipDirection.x, 0, i->defaultShipDirection.z };
+    Vector3 horizontalPlane = { i->shipDirection.x, 0, i->shipDirection.z };
+
     // Find angle to pitch
     float pitchAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultUpVec.Dot(up)) / (thirdPersonCamera.defaultUpVec.Length() * up.Length()));
 
     // Find angle to yaw
-    float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
+    float yawAngleDiff = Math::RadianToDegree(acos(defaultHorizontalPlane.Dot(horizontalPlane) / defaultHorizontalPlane.Length() * horizontalPlane.Length()));
 
     // Check which direction ship is turning in and rotate ship
-    if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle <= yawAngleDiff)
+    if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle <= yawAngleDiff && shipHorizontalRotateAngle <= 180)
     {
         shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
     }
+    else if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle <= 360 - yawAngleDiff && shipHorizontalRotateAngle > 180)
+    {
+        shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
+    }
+    //else if (shipHorizontalRotateAngle >= yawAngleDiff)
+    //{
+    //    shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
+    //}
 
     if (thirdPersonCamera.yawingRight && shipHorizontalRotateAngle >= -yawAngleDiff)
     {
         shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
     }
+    else if (shipHorizontalRotateAngle <= -yawAngleDiff)
+    {
+        shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
+    }
+
+    cout << "yawAngleDiff: " << yawAngleDiff << " shipHorizontalRotateAngle: " << shipHorizontalRotateAngle << endl;
 
     if (thirdPersonCamera.pitchingDown && shipVerticalRotateAngle <= pitchAngleDiff)
     {
@@ -925,8 +941,8 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
         shipVerticalRotateAngle -= (float)(i->turningSpeed * dt);
     }
     
-    if (shipVerticalRotateAngle >= 360) { shipVerticalRotateAngle = 0; }
-    if (shipHorizontalRotateAngle >= 360) { shipHorizontalRotateAngle = 0; }
+    if (shipVerticalRotateAngle >= 360 ) { shipVerticalRotateAngle = 0; }
+    if (shipHorizontalRotateAngle >= 360 || shipHorizontalRotateAngle <= -360) { shipHorizontalRotateAngle = 0; }
 }
 
 void SP2::mazeTranslate(double dt)
@@ -987,16 +1003,16 @@ void SP2::mazeTranslate(double dt)
     {
         if (it->name == "lava")
         {
-            if ((somePlayer.pos.z <= 350 && somePlayer.pos.z >= -350) && (somePlayer.pos.x <= -420 + lavaTranslation + 5 && somePlayer.pos.x >= -420 + lavaTranslation - 5) && (somePlayer.pos.y <= 17))
+            if ((somePlayer.pos.z <= 350 && somePlayer.pos.z >= -350) && (somePlayer.pos.y <= 17))
             {
-                deadText = true;
-                //somePlayer.pos.x = shipPos.x;
-                //somePlayer.pos.y = shipPos.y;
-                //somePlayer.pos.z = shipPos.z;
-            }
-            else
-            {
-                deadText = false;
+                if ((somePlayer.pos.x <= -420 + lavaTranslation + 5 && somePlayer.pos.x >= -420 + lavaTranslation - 5) || ((somePlayer.pos.x <= -280 - lavaTranslation + 5 && somePlayer.pos.x >= -280 - lavaTranslation - 5)))
+                {
+                    deadText = true;
+                }
+                else
+                {
+                    deadText = false;
+                }
             }
         }
     }
@@ -1039,7 +1055,7 @@ void SP2::shipCreation()
     //WHY SHOULD YOU LOAD A MESH IN THE MIDDLE OF THE PROGRAM? WHO WAS DOING IT? (comment by Gary Goh)
     //meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
 
-    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0));
+    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0), camPointer->target);
     someShip.setRequirements(50, 500);
 
     shipTemplatePtr = &someShip;
