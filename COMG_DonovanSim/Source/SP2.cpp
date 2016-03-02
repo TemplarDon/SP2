@@ -137,7 +137,7 @@ void SP2::Init()
 	DualWings = new Dual_Wings;
 	QuadWings = new Quad_Wings;
 
-	//JUmp
+	//Jump
 	acceleration = -1;
 	firstvelo = 0;
 	secondvelo = 0;
@@ -159,6 +159,8 @@ void SP2::Init()
         mazeRandomTranslateVec.push_back((float)((rand() % 80 - 40)));    
     }
     deadText = false;
+    treasureTaken = false;
+    treasureText = false;
 
 	//FIRST PERSON CAMERA
 	firstPersonCamera.Reset();
@@ -172,8 +174,8 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 300, 17, 300 };
+	startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
+	//startingCharPos = charPos = { 300, 17, 300 };
 	//125, 120 
 	//250, 40
 
@@ -509,7 +511,7 @@ void SP2::Update(double dt)
 
 
 
-
+            
 
 
 
@@ -602,6 +604,24 @@ void SP2::Update(double dt)
                     {
                         keypad.targetBool.setTargetValue(true);
                     }
+                }
+            }
+
+            // Treasure
+            if (it->name == "mazeTreasure")
+            {
+                if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+                {
+                    treasureText = true;
+                    if(Application::IsKeyPressed('E'))
+                    {
+                        treasureTaken = true;
+                        somePlayer.addCrystals(9001);
+                    }
+                }
+                else
+                {
+                    treasureText = false;
                 }
             }
         }

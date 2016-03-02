@@ -1214,6 +1214,7 @@ void SP2::initMaze()
 	}
 
     InteractableOBJs mazeTreasure = InteractableOBJs("mazeTreasure", meshList[GEO_MAZE_TREASURE]->maxPos, meshList[GEO_MAZE_TREASURE]->minPos, Position(-350, 15, -370), 5, 0, Vector3(0, 0, 0));
+    mazeTreasure.setRequirements(25, 12);
     InteractablesList.push_back(mazeTreasure);
 
     InteractableOBJs pedastal = InteractableOBJs("pedastal", meshList[GEO_PEDASTAL]->maxPos, meshList[GEO_PEDASTAL]->minPos, Position(-350, 0, -370), 10, 0, Vector3(0, 0, 0));
@@ -1418,11 +1419,15 @@ void SP2::renderMaze()
     RenderMesh(meshList[GEO_PEDASTAL], true, toggleLight);
     modelStack.PopMatrix();
 
-    modelStack.PushMatrix();
-    modelStack.Translate(-350, 15, -370);
-    modelStack.Scale(2, 2, 2);
-    RenderMesh(meshList[GEO_MAZE_TREASURE], true, toggleLight);
-    modelStack.PopMatrix();
+    if (!treasureTaken)
+    {
+        modelStack.PushMatrix();
+        modelStack.Translate(-350, 15, -370);
+        modelStack.Scale(2, 2, 2);
+        RenderMesh(meshList[GEO_MAZE_TREASURE], true, toggleLight);
+        modelStack.PopMatrix();
+    }
+
 
     // SignBoard
     modelStack.PushMatrix();
@@ -1601,6 +1606,13 @@ void SP2::RenderInstructions()
 		RenderSpacemaskOnScreen(meshList[GEO_SPACEMASK], 5, 8, 6.3);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
+
+    if (treasureText)
+    {
+        RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
+        RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[10], Color(1, 0, 0), 1.7, 5, 10);
+        RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[11], Color(1, 0, 0), 1.7, 5, 8);
+    }
 }
 
 void SP2::RenderNPCDialogues()
