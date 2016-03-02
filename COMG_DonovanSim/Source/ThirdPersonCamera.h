@@ -70,6 +70,9 @@ public:
 
     // Function for checking which direction is the ship turning in
     void shipTurningAnimation(float yaw, float pitch);
+
+    // Function for Bounds Checking
+    bool createBoundary(std::vector<InteractableOBJs>&InteractablesList, std::vector<Building>&BuildingsList, Player &somePlayer, Position camPos);
 };
 
 #endif

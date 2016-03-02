@@ -417,3 +417,161 @@ void ThirdPersonCamera::shipTurningAnimation(float yaw, float pitch)
     if (yaw > 840 && yaw < 1680) { yawingRight = true; }
     else { yawingRight = false; }
 }
+
+bool ThirdPersonCamera::createBoundary(std::vector<InteractableOBJs>&InteractablesList, std::vector<Building>&BuildingsList, Player &somePlayer, Position camPos)
+{
+    Position maxPos;
+    Position minPos;
+
+    for (int i = 0; i < InteractablesList.size(); ++i)
+    {
+        maxPos.x = InteractablesList[i].maxPos.x;
+        maxPos.y = InteractablesList[i].maxPos.y;
+        maxPos.z = InteractablesList[i].maxPos.z;
+
+        minPos.x = InteractablesList[i].minPos.x;
+        minPos.y = InteractablesList[i].minPos.y;
+        minPos.z = InteractablesList[i].minPos.z;
+
+        // Scaling
+        maxPos.x = maxPos.x * InteractablesList[i].scaleOffSet;
+        maxPos.y = maxPos.y * InteractablesList[i].scaleOffSet;
+        maxPos.z = maxPos.z * InteractablesList[i].scaleOffSet;
+
+        minPos.x = minPos.x * InteractablesList[i].scaleOffSet;
+        minPos.y = minPos.y * InteractablesList[i].scaleOffSet;
+        minPos.z = minPos.z * InteractablesList[i].scaleOffSet;
+
+        // Rotation
+        Mtx44 rotation;
+        Vector3 tempMax;
+        Vector3 tempMin;
+
+        tempMax.x = maxPos.x;
+        tempMax.y = maxPos.y;
+        tempMax.z = maxPos.z;
+
+        tempMin.x = minPos.x;
+        tempMin.y = minPos.y;
+        tempMin.z = minPos.z;
+        if (InteractablesList[i].rotateAxis.x == 1)
+        {
+            rotation.SetToRotation(InteractablesList[i].rotateAngle, 1, 0, 0);
+            tempMax = rotation * tempMax;
+            tempMin = rotation * tempMin;
+        }
+        if (InteractablesList[i].rotateAxis.y == 1)
+        {
+            rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 1, 0);
+            tempMax = rotation * tempMax;
+            tempMin = rotation * tempMin;
+        }
+        if (InteractablesList[i].rotateAxis.z == 1)
+        {
+            rotation.SetToRotation(InteractablesList[i].rotateAngle, 0, 0, 1);
+            tempMax = rotation * tempMax;
+            tempMin = rotation * tempMin;
+        }
+
+        maxPos.x = tempMax.x;
+        maxPos.y = tempMax.y;
+        maxPos.z = tempMax.z;
+
+        minPos.x = tempMin.x;
+        minPos.y = tempMin.y;
+        minPos.z = tempMin.z;
+
+        // Translating
+        maxPos.x += InteractablesList[i].pos.x;
+        maxPos.y += InteractablesList[i].pos.y;
+        maxPos.z += InteractablesList[i].pos.z;
+
+        minPos.x += InteractablesList[i].pos.x;
+        minPos.y += InteractablesList[i].pos.y;
+        minPos.z += InteractablesList[i].pos.z;
+
+        if ((camPos.x > maxPos.x || camPos.x < minPos.x) || (camPos.y > maxPos.y || camPos.y < minPos.y) || (camPos.z > maxPos.z || camPos.z < minPos.z))
+        {
+            InteractablesList[i].canMove = true;
+        }
+        else
+        {
+            InteractablesList[i].canMove = false;
+        }
+    }
+
+
+    for (int i = 0; i < BuildingsList.size(); ++i)
+    {
+        maxPos.x = BuildingsList[i].maxPos.x;
+        maxPos.y = BuildingsList[i].maxPos.y;
+        maxPos.z = BuildingsList[i].maxPos.z;
+
+        minPos.x = BuildingsList[i].minPos.x;
+        minPos.y = BuildingsList[i].minPos.y;
+        minPos.z = BuildingsList[i].minPos.z;
+
+        // Scaling
+        maxPos.x = maxPos.x * BuildingsList[i].scaleOffSet;
+        maxPos.y = maxPos.y * BuildingsList[i].scaleOffSet;
+        maxPos.z = maxPos.z * BuildingsList[i].scaleOffSet;
+
+        minPos.x = minPos.x * BuildingsList[i].scaleOffSet;
+        minPos.y = minPos.y * BuildingsList[i].scaleOffSet;
+        minPos.z = minPos.z * BuildingsList[i].scaleOffSet;
+
+        // Translating
+        maxPos.x += BuildingsList[i].pos.x;
+        maxPos.y += BuildingsList[i].pos.y;
+        maxPos.z += BuildingsList[i].pos.z;
+
+        minPos.x += BuildingsList[i].pos.x;
+        minPos.y += BuildingsList[i].pos.y;
+        minPos.z += BuildingsList[i].pos.z;
+
+        if ((camPos.x > maxPos.x || camPos.x < minPos.x) || (camPos.y > maxPos.y || camPos.y < minPos.y) || (camPos.z > maxPos.z || camPos.z < minPos.z))
+        {
+            BuildingsList[i].canMove = true;
+        }
+        else
+        {
+            BuildingsList[i].canMove = false;
+        }
+
+    }
+
+    for (int i = 0; i < InteractablesList.size(); ++i)
+    {
+        if (InteractablesList[i].canMove == true)
+        {
+            canMoveInteractable = true;
+        }
+        else
+        {
+            canMoveInteractable = false;
+            break;
+        }
+    }
+
+    for (int i = 0; i < BuildingsList.size(); ++i)
+    {
+        if (BuildingsList[i].canMove == true)
+        {
+            canMoveBuilding = true;
+        }
+        else
+        {
+            canMoveBuilding = false;
+            break;
+        }
+    }
+
+    if (canMoveBuilding == true && canMoveInteractable == true)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

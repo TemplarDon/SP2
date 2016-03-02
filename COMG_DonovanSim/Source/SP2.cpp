@@ -53,6 +53,7 @@ void SP2::Init()
 	translatePointer = -30;
 	mazeTranslateValue = 0;
 	safeDoorRotation = 0;
+
 	cafeMenuPointer = 62;
 	shopListPointer = 62.2;
 	BounceTime = 0;
@@ -61,6 +62,7 @@ void SP2::Init()
 	CoolDownTime3 = 0;
 	CoolDownTime4 = 0;
 	CoolDownTime5 = 0;
+
 
 	//BOOLEANS
 	NearVendingText = false;
@@ -361,6 +363,13 @@ void SP2::Update(double dt)
 		safeDoorRotation = min(safeDoorRotation, 115);
 	}
 
+	//Safe + keypad stuff (Gary's)
+	if (isSafeOpen)
+	{
+		safeDoorRotation += float(dt) * 60;
+		safeDoorRotation = min(safeDoorRotation, 115);
+	}
+
 
 	//INTERACTIONS WITH OBJS (SHANIA'S)  IT WORKS
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -380,6 +389,7 @@ void SP2::Update(double dt)
 					RenderCoke = true;
 					ConsumeCokeText = true;
 				}
+
 
 				if (Application::IsKeyPressed('U'))
 				{
@@ -633,9 +643,10 @@ void SP2::Update(double dt)
 		{
 			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 			{
-				if (Application::IsKeyPressed('E'))
+				if (Application::IsKeyPressed('E') && CoolDownTime == 0)
 				{
 					somePlayer.setWeapon();
+                    CoolDownTime = 20;
 				}
 			}
 
@@ -646,20 +657,18 @@ void SP2::Update(double dt)
 		{
 			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 			{
-				if (Application::IsKeyPressed('E') && somePlayer.checkWeapon() == true)
+                if (Application::IsKeyPressed(VK_LBUTTON) && somePlayer.checkWeapon() == true)
 				{
 					somePlayer.addCrystals(1);
 				}
 			}
 		}
 
-		static bool isHeld = false;
-
-		if (Application::IsKeyPressed('H'))
+		if (it->name == "keypadButton1")
 		{
 			if (it->isInView({ firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z }, view))
 			{
-				if (it->name == "keypadButton1")
+				if (Application::IsKeyPressed('H'))
 				{
 					keypad.targetBool.setTargetValue(true);
 				}
@@ -674,18 +683,6 @@ void SP2::Update(double dt)
 		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
 		{
-
-			// Target
-			if (i->name == "target dummy")
-			{
-				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-				{
-					if (Application::IsKeyPressed(VK_LEFT) && somePlayer.checkWeapon() == true)
-					{
-						somePlayer.addCrystals(1);
-					}
-				}
-			}
 			if (i->name == "crystal")
 			{
 				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
@@ -1208,14 +1205,15 @@ void SP2::ShopMenuPointerInteraction()
 //PLEASE DO NOT DELETE THIS !!!! 
 void SP2::CafeMenuPointerInteraction()
 {
-	if (CoolDownTime > 0)
-	{
-		CoolDownTime--;
-	}
-	else
-	{
-		CoolDownTime == 0;
-	}
+    // Moved to Update
+	//if (CoolDownTime > 0)
+	//{
+	//	CoolDownTime--;
+	//}
+	//else
+	//{
+	//	CoolDownTime == 0;
+	//}
 
 	switch (S)
 	{
@@ -1328,57 +1326,86 @@ void SP2::EquippingWeapons()
 
 void SP2::shipFlying(double dt)
 {
-	//SHIP INTERACTIONS (DONOVAN'S)
-	for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
-	{
-		if (camPointer == &thirdPersonCamera)
-		{
-			Vector3 view = (camPointer->target - camPointer->position).Normalized();
-			Vector3 up = camPointer->up;
-			Vector3 right = view.Cross(up);
+    for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
+    {
+        if (camPointer == &thirdPersonCamera)
+        {
+            Vector3 view = (camPointer->target - camPointer->position).Normalized();
+            Vector3 up = camPointer->up;
+            Vector3 right = view.Cross(up);
 
-			if (!i->shipTakeoff) { i->setDirectionalVectors(view.Normalized()); }
+            if (!i->shipTakeoff) { i->setDirectionalVectors(view.Normalized()); }
 
-			if (Application::IsKeyPressed(VK_SPACE) && i->shipTakeoff == false) { i->shipTakeoff = true; } /// Press 'SpaceBar' to take off
+            if (Application::IsKeyPressed(VK_SPACE) && i->shipTakeoff == false) { i->shipTakeoff = true; } /// Press 'SpaceBar' to take off
 
-			if (i->shipTakeoff)
-			{
-				// Ship Animation - Don't Touch - Donovan
-				shipAnimation(dt, i);
+            if (i->shipTakeoff)
+            {
+                // Ship Animation - Don't Touch - Donovan
+                shipAnimation(dt, i);
 
-				// Set ship's new direction
-				i->setDirectionalVectors((i->shipDirection + view).Normalized());
+                // Set ship's new direction
+                i->setDirectionalVectors((i->shipDirection + view).Normalized());
 
-				shipPos.x = shipPos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-				shipPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
-				shipPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+                // Check Bounds
+                Position camPos;
 
-				i->pos.x = i->pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-				i->pos.y = i->pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
-				i->pos.z = i->pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+                camPos.x = shipPos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
+                camPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                camPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
 
-				somePlayer.pos.x = somePlayer.pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-				somePlayer.pos.y = somePlayer.pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
-				somePlayer.pos.z = somePlayer.pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+                // Move Ship's position (For Translation)
+                if (thirdPersonCamera.createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
+                {
+                    shipPos.x = shipPos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
+                    shipPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                    shipPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+                }
+                else
+                {
+                    shipPos.x = shipPos.x - ( i->shipDirection.x + (float)(i->shipSpeed * dt) );
+                    shipPos.y = shipPos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
+                    shipPos.z = shipPos.z - ( i->shipDirection.z + (float)(i->shipSpeed * dt) );
+                }
 
-				if (Application::IsKeyPressed('W')) // Increase Speed
-				{
-					if (i->shipSpeed <= i->shipMaxSpeed)
-					{
-						i->shipSpeed += (float)(i->shipSpeedGain * dt);
-					}
-				}
+                //// Move Ship's position (For Collision/ isinView())
+                //i->pos.x = i->pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
+                //i->pos.y = i->pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                //i->pos.z = i->pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
 
-				if (Application::IsKeyPressed('S')) // Decrease Speed
-				{
-					if (i->shipSpeed >= i->shipLandingSpeed)
-					{
-						i->shipSpeed -= (float)(i->shipSpeedGain * dt);
-					}
-				}
-			}
-		}
-	}
+                //// Move Player's Position with the ship
+                //somePlayer.pos.x = somePlayer.pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
+                //somePlayer.pos.y = somePlayer.pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                //somePlayer.pos.z = somePlayer.pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+
+                // Check to stop Ship from going into the ground
+                if (shipPos.y <= 2)
+                {
+                    shipPos.y = shipPos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
+                    i->pos.y = i->pos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
+                    somePlayer.pos.y = somePlayer.pos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
+                }
+
+                // Make Positions the same
+                i->pos = somePlayer.pos = shipPos;
+
+                if (Application::IsKeyPressed('W')) // Increase Speed
+                {
+                    if (i->shipSpeed <= i->shipMaxSpeed)
+                    {
+                        i->shipSpeed += (float)(i->shipSpeedGain * dt);
+                    }
+                }
+
+                if (Application::IsKeyPressed('S')) // Decrease Speed
+                {
+                    if (i->shipSpeed >= i->shipLandingSpeed)
+                    {
+                        i->shipSpeed -= (float)(i->shipSpeedGain * dt);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
@@ -1638,41 +1665,51 @@ void SP2::shipCreation()
 
 void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
-	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-	for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)
-	{
-		// Getting into Ship
-		if (shipIt->isInView(somePlayer.pos, view))
-		{
-			if (somePlayer.getCameraType() == "first")
-			{
-				if (Application::IsKeyPressed('F'))
-				{
-					camPointer = &thirdPersonCamera;
-					somePlayer.setCameraType("third");
-				}
-			}
-		}
+    Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+    for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)
+    {
+        // Getting into Ship
+        if (shipIt->isInView(somePlayer.pos, view))
+        {
+            if (somePlayer.getCameraType() == "first")
+            {
+                if (Application::IsKeyPressed('F') && CoolDownTime == 0)
+                {
+                    camPointer = &thirdPersonCamera;
+                    somePlayer.setCameraType("third");
+                    CoolDownTime = 20;
+                }
+            }
+        }
 
-		// Getting out of ship
-		if (somePlayer.getCameraType() == "third")
-		{
-			if (Application::IsKeyPressed('F'))
-			{
-				if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
-				{
-					camPointer = &firstPersonCamera;
-					somePlayer.setCameraType("first");
+        // Getting out of ship
+        if (somePlayer.getCameraType() == "third")
+        {
+            if (Application::IsKeyPressed('F') && CoolDownTime == 0)
+            {
+                if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
+                {
+                    camPointer = &firstPersonCamera;
+                    somePlayer.setCameraType("first");
 
-					camPointer->position.x = somePlayer.pos.x;
-					camPointer->position.y = somePlayer.pos.y;
-					camPointer->position.z = somePlayer.pos.z;
+                    // Sets player's position to original y - axis
+                    somePlayer.pos.y = charPos.y;
 
-					shipIt->shipTakeoff = false;
-				}
-			}
-		}
-	}
+                    // Sets 1st person camera new position to the player's position
+                    camPointer->position.x = somePlayer.pos.x;
+                    camPointer->position.y = somePlayer.pos.y;
+                    camPointer->position.z = somePlayer.pos.z;
+
+                    // Set Ship To 'Straight' Orientation
+                    shipVerticalRotateAngle = 0;
+
+                    shipIt->shipTakeoff = false;
+
+                    CoolDownTime = 20;
+                }
+            }
+        }
+    }
 }
 
 void SP2::shopInteractions()
@@ -1987,6 +2024,7 @@ void SP2::Render()
 
 	RenderCode();
 }
+
 
 void SP2::Exit()
 {
