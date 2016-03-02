@@ -35,51 +35,50 @@
 
 class SP2 : public Scene
 {
-    enum GEOMETRY_TYPE
-    {
-        GEO_AXES,
-        GEO_QUAD,
-        GEO_LEFT,
-        GEO_RIGHT,
-        GEO_TOP,
-        GEO_BOTTOM,
-        GEO_FRONT,
-        GEO_BACK,
-        GEO_LIGHTBALL,
-        GEO_TEXT,
-        GEO_HANDS,
+	enum GEOMETRY_TYPE
+	{
+		GEO_AXES,
+		GEO_QUAD,
+		GEO_LEFT,
+		GEO_RIGHT,
+		GEO_TOP,
+		GEO_BOTTOM,
+		GEO_FRONT,
+		GEO_BACK,
+		GEO_LIGHTBALL,
+		GEO_TEXT,
+		GEO_HANDS,
 
-        //ROOM TEMPLATE
-        GEO_WALL,
-        GEO_WALL2,
-        GEO_GATETOP,
-        GEO_GATETOP2,
+		//ROOM TEMPLATE
+		GEO_WALL,
+		GEO_WALL2,
+		GEO_GATETOP,
+		GEO_GATETOP2,
 
-        GEO_GATE,
-        GEO_TESTDOOR,
+		GEO_GATE,
+		GEO_TESTDOOR,
 
-        //OBJS
-        GEO_TRADEPOST,
-        GEO_SPEAKERS,
-        GEO_SOFA,
-        GEO_COUNTER,
-        GEO_FRIDGE,
-        GEO_TABLE,
-        GEO_VENDING,
-        GEO_CHAIR,
-        GEO_TOKEN,
-        GEO_COKE,
-        GEO_CAFETEXTBOX,
-        GEO_BUNK,
-        GEO_SPACEMASK,
-        GEO_SPACESUIT,
-		GEO_SHOPLIST,
+		//OBJS
+		GEO_TRADEPOST,
+		GEO_SPEAKERS,
+		GEO_SOFA,
+		GEO_COUNTER,
+		GEO_FRIDGE,
+		GEO_TABLE,
+		GEO_VENDING,
+		GEO_CHAIR,
+		GEO_TOKEN,
+		GEO_COKE,
+		GEO_CAFETEXTBOX,
+		GEO_BUNK,
+		GEO_SPACEMASK,
+		GEO_SPACESUIT,
 
 
-        GEO_WINDOW,
-        GEO_HUD,
-        GEO_INVENTORY,
-        GEO_HAND,
+		GEO_WINDOW,
+		GEO_HUD,
+		GEO_INVENTORY,
+		GEO_HAND,
 
 		//WEAPON
 		GEO_HOLDGUN,
@@ -99,51 +98,51 @@ class SP2 : public Scene
 		GEO_SIXTHBOX,
 		GEO_SEVENTHBOX,
 
-        GEO_HELIPAD,
+		GEO_HELIPAD,
 
 
-        //ARMOURY / SHOP
-        GEO_GUN,
-        GEO_GUN_RACK,
-        GEO_SHOOTING_RANGE,
-        GEO_TARGET,
-        GEO_SHOP,
+		//ARMOURY / SHOP
+		GEO_GUN,
+		GEO_GUN_RACK,
+		GEO_SHOOTING_RANGE,
+		GEO_TARGET,
+		GEO_SHOP,
 
 
-        // Infirmary
-        GEO_BED,
-        GEO_HEALING_TUBE,
+		// Infirmary
+		GEO_BED,
+		GEO_HEALING_TUBE,
 
-        //NPCs
-        GEO_CHEF,
-        GEO_SPACEGUY,
-        GEO_NURSE,
-        GEO_DOCTOR,
-        GEO_TRADER,
-        GEO_SOLDIER,
-        GEO_SHOPKEEPER,
-
-
-        //SPACE SHIP
-        GEO_SHIP,
-        GEO_HULL,
-        GEO_WINGS,
-        GEO_ENGINE,
-        GEO_GROUND,
+		//NPCs
+		GEO_CHEF,
+		GEO_SPACEGUY,
+		GEO_NURSE,
+		GEO_DOCTOR,
+		GEO_TRADER,
+		GEO_SOLDIER,
+		GEO_SHOPKEEPER,
 
 
-        //MINE
-        GEO_MINE,
+		//SPACE SHIP
+		GEO_SHIP,
+		GEO_HULL,
+		GEO_WINGS,
+		GEO_ENGINE,
+		GEO_GROUND,
+
+
+		//MINE
+		GEO_MINE,
 		GEO_CRYSTAL,
 
 
-        //SCIENCE LAB
-        GEO_SCIENCELAB_TABLE,
-        GEO_SCIENCELAB_CUPBOARD,
-        GEO_SCIENCELAB_BEAKER,
+		//SCIENCE LAB
+		GEO_SCIENCELAB_TABLE,
+		GEO_SCIENCELAB_CUPBOARD,
+		GEO_SCIENCELAB_BEAKER,
 
-        //Keypad + Safe
-        GEO_KEYPAD,
+		//Keypad + Safe
+		GEO_KEYPAD,
 		GEO_SAFE_BOX,
 		GEO_SAFE_DOOR,
 
@@ -158,15 +157,23 @@ class SP2 : public Scene
 
 
 
-        //Maze Walls
+		//SHOP
+		GEO_SHOPPOINTER1,
+		GEO_SHOPLIST1,
+		GEO_SHOPLIST2,
+		GEO_SHOPLIST3,
+		GEO_SHOPLIST4,
+
+
+		//Maze Walls
 		GEO_MAZE_SIDE_WALL,
-        GEO_MAZE_LEFT_WALL,
-        GEO_MAZE_RIGHT_WALL,
-        GEO_MAZE_TREASURE_BACK_WALL,
-        GEO_MAZE_TREASURE_LEFT_WALL1,
-        GEO_MAZE_TREASURE_LEFT_WALL2,
-        GEO_MAZE_TREASURE_RIGHT_WALL1,
-        GEO_MAZE_TREASURE_RIGHT_WALL2,
+		GEO_MAZE_LEFT_WALL,
+		GEO_MAZE_RIGHT_WALL,
+		GEO_MAZE_TREASURE_BACK_WALL,
+		GEO_MAZE_TREASURE_LEFT_WALL1,
+		GEO_MAZE_TREASURE_LEFT_WALL2,
+		GEO_MAZE_TREASURE_RIGHT_WALL1,
+		GEO_MAZE_TREASURE_RIGHT_WALL2,
 		GEO_MAZE_OBSTACLE,
         GEO_MAZE_OBSTACLE1,
         GEO_MAZE_OBSTACLE2,
@@ -202,16 +209,16 @@ class SP2 : public Scene
         U_MATERIAL_SHININESS,
         
 		U_LIGHTENABLED,
-        U_NUMLIGHTS,
+		U_NUMLIGHTS,
 
-        U_COLOR_TEXTURE_ENABLED,
-        U_COLOR_TEXTURE,
+		U_COLOR_TEXTURE_ENABLED,
+		U_COLOR_TEXTURE,
 
-        U_TEXT_ENABLED,
-        U_TEXT_COLOR,
+		U_TEXT_ENABLED,
+		U_TEXT_COLOR,
 
-        U_TOTAL,
-    };
+		U_TOTAL,
+	};
 
 	enum UNIFORM_LIGHT
 	{
@@ -230,11 +237,36 @@ class SP2 : public Scene
 		UL_TOTAL,
 	};
 
+
+	//CAFE MENU
 	enum CafeMenu
 	{
 		PLACE1,
 		PLACE2,
 		PLACE3,
+		CAFENOMENU,
+	};
+
+
+	//SHOP LIST
+	enum ShopList
+	{
+		POSITION1,
+		POSITION2,
+		POSITION3,
+		POSITION4,
+		POSITION5,
+		POSITION6,
+		POSITION7,
+		POSITION8,
+		POSITION9,
+		POSITION10,
+		POSITION11,
+		POSITION12,
+		POSITION13,
+		POSITION14,
+		POSITION15,
+		SHOPNOMENU,
 	};
 
 	static const size_t numLights = 3;
@@ -243,71 +275,69 @@ class SP2 : public Scene
 	unsigned lightUniforms[numLights][UL_TOTAL];
 
 public:
-    SP2();
-    ~SP2();
+	SP2();
+	~SP2();
 
-    virtual void Init();
-    virtual void Update(double dt);
-    virtual void Render();
-    virtual void Exit();
+	virtual void Init();
+	virtual void Update(double dt);
+	virtual void Render();
+	virtual void Exit();
 private:
 
-    unsigned m_vertexArrayID;
-    unsigned m_vertexBuffer[NUM_GEOMETRY];
-    unsigned m_colorBuffer[NUM_GEOMETRY];
-    unsigned m_indexBuffer[NUM_GEOMETRY];
-    Mesh *meshList[NUM_GEOMETRY];
-    unsigned m_programID;
+	unsigned m_vertexArrayID;
+	unsigned m_vertexBuffer[NUM_GEOMETRY];
+	unsigned m_colorBuffer[NUM_GEOMETRY];
+	unsigned m_indexBuffer[NUM_GEOMETRY];
+	Mesh *meshList[NUM_GEOMETRY];
+	unsigned m_programID;
 
 
 	MS modelStack, viewStack, projectionStack;
 
-    Player somePlayer;
+	Player somePlayer;
 
 	//Starting position for player
 	Position startingCharPos;
-    Position charPos;
+	Position charPos;
 
-    // Starting position for ship
-    Position shipStartingPos;
+	// Starting position for ship
+	Position shipStartingPos;
 	Position shipPos;
-	
 
-    // Variable to allow ship to rotate while moving
-    float shipHorizontalRotateAngle;
-    float shipVerticalRotateAngle;
 
-    vector<InteractableOBJs>InteractablesList;
-    vector<Building>BuildingsList;
-    vector<Ship>ShipList;
+	// Variable to allow ship to rotate while moving
+	float shipHorizontalRotateAngle;
+	float shipVerticalRotateAngle;
+
+	vector<InteractableOBJs>InteractablesList;
+	vector<Building>BuildingsList;
+	vector<Ship>ShipList;
 
 	//CAMERA
-    Camera *camPointer;
+	Camera *camPointer;
 	FirstPersonCamera firstPersonCamera;
 	ThirdPersonCamera thirdPersonCamera;
 
 	//LIGHTS
-    Light light[numLights];
-    bool toggleLight;
-    void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
+	Light light[numLights];
+	bool toggleLight;
+	void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
-    //SHIP BUILDER & SHIP POINTER
-    ShipBuilder ShipBuilder;
-    Ship* shipTemplatePtr;
+	//SHIP BUILDER & SHIP POINTER
+	ShipBuilder ShipBuilder;
+	Ship* shipTemplatePtr;
 
-    //SHIP PARTS
-    Light_Hull* LightHull;
+	//SHIP PARTS
+	Light_Hull* LightHull;
 
-    Medium_Hull* MediumHull;
-    Large_Hull* LargeHull;
+	Medium_Hull* MediumHull;
+	Large_Hull* LargeHull;
 
-    G1_Engine* G1Engine;
-    G2_Engine* G2Engine;
-    Dual_Wings* DualWings;
-    Quad_Wings* QuadWings;
+	G1_Engine* G1Engine;
+	G2_Engine* G2Engine;
+	Dual_Wings* DualWings;
+	Quad_Wings* QuadWings;
 
-	//CAFE MENU
-	CafeMenu S;
 
 	//FLOATS (SHANIA'S)
 	float TokenTranslate;
@@ -317,9 +347,7 @@ private:
 	float rotateAngle;
 	float heightOfWall;
 	float translatePointer;
-	float cafeMenuPointer;
 	double BounceTime;
-	float CoolDownTime;
 
 	//DOUBLE
 	double testDouble;
@@ -332,17 +360,15 @@ private:
 	bool ConsumeCokeText;
 	bool PickUpTokenText;
 	bool testText;
-	bool DisplayCafeMenu;
-	bool YesShowCafeMenu;
 	bool MENUBOOL;
 	bool wearSuitText;
 	bool wearSuit;
 	bool DisplayInventory;
 	bool chefText;
 	bool spaceguyText;
-	bool nurseText;	
+	bool nurseText;
 	bool doctorText;
-	bool traderText;	
+	bool traderText;
 	bool soldierText;
 	bool shopkeeperText;
 	bool equipPickaxe;
@@ -351,28 +377,27 @@ private:
 	bool BreadAppear;
 	bool CoffeeAppear;
 	bool AppleAppear;
-	bool DisplayShopList;
 
 
 
-    //DOOR (DONOVAN'S)
-    float leftGateOffset;
-    float rightGateOffset;
-    float frontGateOffset;
-    float backGateOffset;
-    bool gateOpening;
-    bool frontGateOpening;
-    bool backGateOpening;
-    bool leftGateOpening;
-    bool rightGateOpening;
+	//DOOR (DONOVAN'S)
+	float leftGateOffset;
+	float rightGateOffset;
+	float frontGateOffset;
+	float backGateOffset;
+	bool gateOpening;
+	bool frontGateOpening;
+	bool backGateOpening;
+	bool leftGateOpening;
+	bool rightGateOpening;
 
-    // Maze
-    float mazeTranslateValue;
-    float mazeRandomTranslate;
-    float lavaTranslation;
-    vector<float>mazeRandomTranslateVec;
-    bool mazeOpening;
-    bool deadText;
+	// Maze
+	float mazeTranslateValue;
+	float mazeRandomTranslate;
+	float lavaTranslation;
+	vector<float>mazeRandomTranslateVec;
+	bool mazeOpening;
+	bool deadText;
 
 	//JUMP (BECKHAM'S)
 	int acceleration;
@@ -380,7 +405,7 @@ private:
 	int firstvelo;
 	int secondvelo;
 	int distance;
-	int gravity; 
+	int gravity;
 	int firstpos;
 	bool onGround;
 
@@ -392,8 +417,8 @@ private:
 	//MINING INTERACTIONS (BECKHAM'S)    
 	bool CrystalText;
 	int CrystalNo;
-	int posxcheck; 
-	int poszcheck; 
+	int posxcheck;
+	int poszcheck;
 	int crystalcount;
 	int xcoords[100];
 	int zcoords[100];
@@ -422,9 +447,9 @@ private:
 	Keypad keypad;
 	void InitSafe();
 
-    bool keypadBool;
-    vector<Keypad> keypads;
-    void InitKeypads();
+	bool keypadBool;
+	vector<Keypad> keypads;
+	void InitKeypads();
 
 	//SHORTHAND CODES FOR EASIER CODINGS (GARY'S)
 	void LoadShaderCodes();
@@ -445,15 +470,11 @@ private:
 	void RenderBunkRoom();
 	void RenderScienceLab();
 	void RenderCrystals();
-    void RenderArmouryAndShop();
-    void RenderInfirmary();
-
+	void RenderArmouryAndShop();
+	void RenderInfirmary();
 	void RenderBread();
 	void RenderCoffee();
 	void RenderApple();
-
-
-
 	void RenderAsteroids();
 
 
@@ -464,9 +485,42 @@ private:
 	void DialoguesWithNPCs();
 	void RenderNPCDialogues();
 
-	//MENU POINTER
+	//CAFE MENU
+	CafeMenu S;
+	float cafeMenuPointer;
+	float CoolDownTime;
 	void CafeMenuPointerInteraction();
+	bool DisplayCafeMenu;
+	bool YesShowCafeMenu;
+	bool CafeStuff;
+	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y);
+
+
+
+
+
+	//SHOP LIST
+	ShopList L;
+	float shopListPointer;
+	float CoolDownTime2;
+	float CoolDownTime3;
+	float CoolDownTime4;
+	float CoolDownTime5;
 	void ShopMenuPointerInteraction();
+	bool DisplayShopList;
+	bool YesShowShopList;
+	bool DisplayShopList2;
+	bool DisplayShopList3;
+	bool DisplayShopList4;
+	bool List2Appear;
+	bool firstList;
+	bool ShopStuff;
+	bool secondList;
+	void RenderShopTextboxOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderShopPointerOnScreen(Mesh* mesh, float size, float x, float y);
+
+
 
 
 	//RENDER TEXT
@@ -476,34 +530,32 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderTokenOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderCokeOnScreen(Mesh* mesh, float size, float x, float y);
-	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderHandOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderHandOnScreen2(Mesh* mesh, float size, float x, float y);
 	void RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderInventoryOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderWeaponOnScreen(Mesh* mesh, float size, float x, float y);
-	void RenderPointerOnScreen(Mesh* mesh, float size, float x, float y);
-	void RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderPointerOnScreen(Mesh* mesh, float size, float x, float y); //weapon pointer
 	void RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderGunOnScreen(Mesh* mesh, float size, float x, float y);
-	
-    
+
+
 	// Toggle between 1st and 3rd person camera
-    void shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
-	
+	void shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
+
 	//INTERACTION FUNCTIONS
-    void vendingMachineInteractions();
-    void tokenInteractions();
-    void counterInteractions();
-    void spaceSuitInteractions();
-    void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
-    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
-    void shopInteractions();
-    void shipFlying(double dt);
-    void shipAnimation(double dt, vector<Ship>::iterator i);
-    void shipCreation();
-    void mazeTranslate(double dt);
+	void vendingMachineInteractions();
+	void tokenInteractions();
+	void counterInteractions();
+	void spaceSuitInteractions();
+	void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
+	void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
+	void shopInteractions();
+	void shipFlying(double dt);
+	void shipAnimation(double dt, vector<Ship>::iterator i);
+	void shipCreation();
+	void mazeTranslate(double dt);
 	void EquippingWeapons();
 
 
@@ -511,24 +563,28 @@ private:
 	void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 	void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 
-    //Functions to init & render Maze
-    void initMaze();
-    void renderMaze();
-     
-    //Functions to init & render Mountains (For Boundary)
-    void initMountains();
-    void renderMountains();
-
-    // TEMP BOOLS FOR SHIP BUILDING
-    bool askedHull;
-    bool askedWings;
-    bool askedEngine;
-    bool askedShipBuild;
-    bool shipBuilt;
-    bool noMoney;
 
     //Reset function    
 	void reset();
+
+	//Functions to init & render Maze
+	void initMaze();
+	void renderMaze();
+
+	//Functions to init & render Mountains (For Boundary)
+	void initMountains();
+	void renderMountains();
+
+	// TEMP BOOLS FOR SHIP BUILDING
+	bool askedHull;
+	bool askedWings;
+	bool askedEngine;
+	bool askedShipBuild;
+	bool shipBuilt;
+	bool noMoney;
+
+
+
 
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);
