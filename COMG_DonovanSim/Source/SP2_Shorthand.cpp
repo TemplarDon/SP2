@@ -1,5 +1,6 @@
 #include "SP2.h"
 
+//Shader information.
 void SP2::LoadShaderCodes()
 {
 	//Set background color to dark blue
@@ -80,65 +81,47 @@ void SP2::LoadShaderCodes()
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
 
 	glUseProgram(m_programID);
+	glUniform1i(m_parameters[U_NUMLIGHTS], numLights);
 }
 
+//Light data information.
 void SP2::LoadLights()
 {
-	light[0].type = Light::LIGHT_SPOT;
-	light[0].position.Set(-60, 12, 0);
-	light[0].color.Set(1, 1, 1);
-	light[0].power = 1;
-	light[0].kC = 1.0f;
-	light[0].kL = 0.01f;
-	light[0].kQ = 0.001f;
-	light[0].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[0].cosInner = cos(Math::DegreeToRadian(30));
-	light[0].exponent = 3.0f;
-	light[0].spotDirection.Set(0.2f, 1.0f, 0.2f);
+	setLightData(0,						//Light index.
+		Light::LIGHT_SPOT,				//Light type.
+		{ -60, 12, 0 },					//Light position.
+		{ 1, 1, 1 },					//Light color.
+		1,								//Light power.
+		1.0f, 0.01f, 0.001f,			//Light attenuation values. (constant, linear, quadratic)
+		45, 30,							//Spotlight cutoff / inner values in degrees.
+		3.0f,							//Spotlight exponent.
+		{ 0.2f, 1.0f, 0.2f }			//Spotlight direction.
+	);
 
-	light[1].type = Light::LIGHT_SPOT;
-	light[1].position.Set(0, 10, 0);
-	light[1].color.Set(0, 1, 1);
-	light[1].power = 1;
-	light[1].kC = 1.0f;
-	light[1].kL = 0.01f;
-	light[1].kQ = 0.001f;
-	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[1].cosInner = cos(Math::DegreeToRadian(30));
-	light[1].exponent = 3.0f;
-	light[1].spotDirection.Set(-0.2f, 1.0f, -0.2f);
+	setLightData(1,
+		Light::LIGHT_SPOT,
+		{ 0, 10, 0 },
+		{ 0, 1, 1 },
+		1,
+		1.0f, 0.01f, 0.001f,
+		45, 30,
+		3.0f,
+		{ -0.2f, 1.0f, -0.2f }
+	);
 
-	light[2].type = Light::LIGHT_SPOT;
-	light[2].position.Set(3, 10, 0);
-	light[2].color.Set(1, 0, 0);
-	light[2].power = 1;
-	light[2].kC = 1.0f;
-	light[2].kL = 0.01f;
-	light[2].kQ = 0.001f;
-	light[2].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[2].cosInner = cos(Math::DegreeToRadian(30));
-	light[2].exponent = 3.0f;
-	light[2].spotDirection.Set(-0.2f, 1.0f, 0);
-
-	glUniform1i(m_parameters[U_NUMLIGHTS], numLights);
-
-	for (size_t S = 0; S < numLights; S++)
-	{
-		glUniform1i(lightUniforms[S][UL_TYPE], light[S].type);
-		glUniform3fv(lightUniforms[S][UL_COLOR], 1, &light[S].color.r);
-		glUniform1f(lightUniforms[S][UL_POWER], light[S].power);
-		glUniform1f(lightUniforms[S][UL_KC], light[S].kC);
-		glUniform1f(lightUniforms[S][UL_KL], light[S].kL);
-		glUniform1f(lightUniforms[S][UL_KQ], light[S].kQ);
-		glUniform1f(lightUniforms[S][UL_COSCUTOFF], light[S].cosCutoff);
-		glUniform1f(lightUniforms[S][UL_COSINNER], light[S].cosInner);
-		glUniform1f(lightUniforms[S][UL_EXPONENT], light[S].exponent);
-	}
-
-	// Make sure you pass uniform parameters after glUseProgram()
-	glUniform1i(m_parameters[U_NUMLIGHTS], numLights);
+	setLightData(2,
+		Light::LIGHT_SPOT,
+		{ 3, 10, 0 },
+		{ 1, 0, 0 },
+		1,
+		1.0f, 0.01f, 0.001f,
+		45, 30,
+		3.0f,
+		{ -0.2f, 1.0f, 0 }
+	);
 }
 
+//Mesh data information.
 void SP2::LoadMeshes()
 {
 	//Text
@@ -295,6 +278,21 @@ void SP2::LoadMeshes()
 	InteractableOBJs spaceguy = InteractableOBJs("spaceguy", meshList[GEO_SPACEGUY]->maxPos, meshList[GEO_SPACEGUY]->minPos, Position(271, 1.8, 143), 2, 0, Vector3(0, 0, 0));
 	spaceguy.setRequirements(25, 12);
 	InteractablesList.push_back(spaceguy);
+
+
+	//TEXT BOX
+	meshList[GEO_NPCDIALOGUEBOX] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//NPCTextBox.obj");
+	meshList[GEO_NPCDIALOGUEBOX]->textureID = LoadTGA("Image//NPCTextBox.tga");
+
+
+
+
+
+
+
+
+
+
 
 
 	//CAFE
@@ -544,6 +542,89 @@ void SP2::LoadMeshes()
 	// Mountains (For Boundary)
 	initMountains();
 
+}
+
+//Sets the lights' data (for initialization purposes).
+void SP2::setLightData(
+	const size_t &index,
+	const Light::LIGHT_TYPE &type,
+	const Position &pos,
+	const Color &color,
+	const float &power,
+	const float &kC,
+	const float &kL,
+	const float &kQ,
+	const float &cutoff,
+	const float &inner,
+	const float &exponent,
+	const Vector3 &spotDirection)
+{
+	if (index >= numLights) return;
+
+	light[index].type = type;
+	light[index].position = pos;
+	light[index].color = color;
+	light[index].power = power;
+	light[index].kC = kC;
+	light[index].kL = kL;
+	light[index].kQ = kQ;
+	light[index].cosCutoff = cos(Math::DegreeToRadian(cutoff));
+	light[index].cosInner = cos(Math::DegreeToRadian(inner));
+	light[index].exponent = exponent;
+	light[index].spotDirection = spotDirection;
+
+	glUniform1i(lightUniforms[index][UL_TYPE], light[index].type);
+	glUniform3fv(lightUniforms[index][UL_COLOR], 1, &light[index].color.r);
+	glUniform1f(lightUniforms[index][UL_POWER], light[index].power);
+	glUniform1f(lightUniforms[index][UL_KC], light[index].kC);
+	glUniform1f(lightUniforms[index][UL_KL], light[index].kL);
+	glUniform1f(lightUniforms[index][UL_KQ], light[index].kQ);
+	glUniform1f(lightUniforms[index][UL_COSCUTOFF], light[index].cosCutoff);
+	glUniform1f(lightUniforms[index][UL_COSINNER], light[index].cosInner);
+	glUniform1f(lightUniforms[index][UL_EXPONENT], light[index].exponent);
+}
+
+//Sets the light's color.
+void SP2::setLightColor(const size_t &index, const Color &C)
+{
+	if (index >= numLights) return;
+
+	light[index].color = C;
+	glUniform3fv(lightUniforms[index][UL_COLOR], 1, &light[index].color.r);
+}
+
+//Sets the light's power.
+void SP2::setLightPower(const size_t &index, const float &P)
+{
+	if (index >= numLights) return;
+
+	light[index].power = P;
+	glUniform1f(lightUniforms[index][UL_POWER], light[index].power);
+}
+
+//Moves the light's position.
+void SP2::moveLightPosition(const size_t &index, const Vector3 &M)
+{
+	if (index >= numLights) return;
+
+	Position *p = &light[index].position;
+	p->x += M.x;
+	p->y += M.y;
+	p->z += M.z;
+}
+
+//Rotates the spotlight along the axis.
+void SP2::rotateSpotlight(const size_t &index, const float &degrees, const Vector3 &axis)
+{
+	if (index >= numLights) return;
+	if (light[index].type != Light::LIGHT_SPOT) return;
+
+	Mtx44 rotation;
+	rotation.SetToRotation(degrees, axis.x, axis.y, axis.z);
+
+	Vector3 &d = light[index].spotDirection;
+
+	d = rotation * d;
 }
 
 void SP2::initSpaceShip()
@@ -944,11 +1025,11 @@ void SP2::RenderCode()
 	}
 
 	//TEST TEXT
-	if (testText == true)
-	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press Y to look at the menu.", Color(0, 1, 0), 1.5, 5, 18);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press U to eat the food.", Color(0, 1, 0), 1.5, 5, 16);
-	}
+	//if (testText == true)
+	//{
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Press Y to look at the menu.", Color(0, 1, 0), 1.5, 5, 18);
+	//	RenderTextOnScreen(meshList[GEO_TEXT], "Press U to eat the food.", Color(0, 1, 0), 1.5, 5, 16);
+	//}
 
 	// Ship Stats
 	std::ostringstream shipStats;
@@ -1232,12 +1313,19 @@ void SP2::renderMaze()
 		RenderMesh(meshList[GEO_MAZE_OBSTACLE], true, toggleLight);
 		modelStack.PopMatrix();
 
-		// Lava
+		// Lava (1st)
 		modelStack.PushMatrix();
 		modelStack.Translate(-420 + lavaTranslation, 0, zAxis);
 		modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
 		RenderMesh(meshList[GEO_LAVA], true, toggleLight);
 		modelStack.PopMatrix();
+
+        // Lava (2nd)
+        modelStack.PushMatrix();
+        modelStack.Translate(-280 - lavaTranslation, 0, zAxis);
+        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
+        RenderMesh(meshList[GEO_LAVA], true, toggleLight);
+        modelStack.PopMatrix();
 
 		++i;
 	}
@@ -1345,11 +1433,11 @@ void SP2::ReadKeyPresses()
 	}
 
 	//COLLECT TOLKEN
-	if (Application::IsKeyPressed('Q'))
-	{
-		TokenOnScreen = true;
-		TokenTranslate = 10.5;
-	}
+	//if (Application::IsKeyPressed('Q'))
+	//{
+	//	TokenOnScreen = true;
+	//	TokenTranslate = 10.5;
+	//}
 
 	if (Application::IsKeyPressed('C'))
 	{
@@ -1364,41 +1452,49 @@ void SP2::ReadKeyPresses()
 
 void SP2::RenderNPCDialogues()
 {
-	if (chefText == true)
+	if (chefText == true)  //true
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[0], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[0], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press Y to look at the menu.", Color(1, 1, 1), 1.7, 5, 8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press U to eat the food.", Color(1, 1, 1), 1.7, 5, 6);
 	}
 
 	if (spaceguyText == true)
 	{
-
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[1], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[1], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
 	if (nurseText == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
 	if (doctorText == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[3], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[3], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
-	if (traderText == true)
+	if (traderText == true)   //true
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[4], Color(1, 0, 0), 1.5, 5, 20);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(0, 1, 0), 1.5, 5, 18);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[4], Color(1, 0, 0), 1.7, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 1, 1), 1.7, 5, 8);
 	}
 
 	if (soldierText == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
 	if (shopkeeperText == true)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 0, 0), 1.5, 5, 20);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 0, 0), 1.7, 5, 10);
 	}
 
 }
@@ -1866,6 +1962,26 @@ void SP2::RenderBread()
 	modelStack.Translate(267, 11, -0.5);
 	modelStack.Scale(1.2, 1.2, 1.2);
 	RenderMesh(meshList[GEO_BREAD], true, toggleLight);
+	modelStack.PopMatrix();
+
+}
+
+void SP2::RenderNPCTextBoxOnScreen(Mesh* mesh, float size, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -100, 100); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Scale(size, size, size);
+	modelStack.Translate(x, y, 0);
+	RenderMesh(mesh, false, toggleLight);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 
 }

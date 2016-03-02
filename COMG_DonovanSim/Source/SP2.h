@@ -123,6 +123,9 @@ class SP2 : public Scene
 		GEO_SHOPKEEPER,
 
 
+		//NPC dialogue box
+		GEO_NPCDIALOGUEBOX,
+
 		//SPACE SHIP
 		GEO_SHIP,
 		GEO_HULL,
@@ -269,10 +272,29 @@ class SP2 : public Scene
 		SHOPNOMENU,
 	};
 
-	static const size_t numLights = 3;
-
+	//Light data.
+	static const size_t numLights = 3; Light light[numLights];
 	unsigned m_parameters[U_TOTAL];
 	unsigned lightUniforms[numLights][UL_TOTAL];
+
+	void setLightData(
+		const size_t &index,
+		const Light::LIGHT_TYPE &type,
+		const Position &pos,
+		const Color &color,
+		const float &power,
+		const float &kC,
+		const float &kL,
+		const float &kQ,
+		const float &cutoff,
+		const float &inner,
+		const float &exponent,
+		const Vector3 &spotDirection);
+
+	void setLightColor(const size_t &index, const Color &C);
+	void setLightPower(const size_t &index, const float &P);
+	void moveLightPosition(const size_t &index, const Vector3 &M);
+	void rotateSpotlight(const size_t &index, const float &degrees, const Vector3 &axis);
 
 public:
 	SP2();
@@ -319,9 +341,8 @@ private:
 	ThirdPersonCamera thirdPersonCamera;
 
 	//LIGHTS
-	Light light[numLights];
-	bool toggleLight;
-	void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
+    bool toggleLight;
+    void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
 	//SHIP BUILDER & SHIP POINTER
 	ShipBuilder ShipBuilder;
@@ -441,6 +462,8 @@ private:
 	double between;
 	bool AsteroidCollision;
 
+
+
 	//Keypad stuff (Gary's)
 	bool isSafeOpen;
 	float safeDoorRotation;
@@ -457,6 +480,8 @@ private:
 	void LoadMeshes();
 	void ReadKeyPresses();
 	void RenderCode();
+
+
 
 	//FUNCTION TO INIT AND RENDER SPACESHIP
 	void initSpaceShip();
@@ -484,6 +509,7 @@ private:
 	vector<string>dialogue_vec;
 	void DialoguesWithNPCs();
 	void RenderNPCDialogues();
+	void RenderNPCTextBoxOnScreen(Mesh* mesh, float size, float x, float y);
 
 	//CAFE MENU
 	CafeMenu S;
@@ -583,7 +609,9 @@ private:
 	bool shipBuilt;
 	bool noMoney;
 
-
+    bool hullFound;
+    bool wingsFound;
+    bool engineFound;
 
 
 	//CRYSTAL RELATED STUFF   
