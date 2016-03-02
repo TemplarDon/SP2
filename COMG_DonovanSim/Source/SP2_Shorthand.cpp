@@ -552,10 +552,22 @@ void SP2::LoadMeshes()
 
     // Base
     meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
-    meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga"); //185, 50, 30
-    InteractableOBJs base = InteractableOBJs("base", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(260, 55, -90), 30, 0, Vector3(0, 0, 0)); //83, 25, 82
-    base.setRequirements(25, 15);
-    //InteractablesList.push_back(base);
+    meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga"); 
+    InteractableOBJs base1 = InteractableOBJs("base1", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+    base1.setRequirements(25, 15);
+    InteractablesList.push_back(base1);
+
+    InteractableOBJs base2 = InteractableOBJs("base2", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+    base2.setRequirements(25, 15);
+    InteractablesList.push_back(base2);
+
+    InteractableOBJs base3 = InteractableOBJs("base3", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+    base3.setRequirements(25, 15);
+    InteractablesList.push_back(base3);
+
+    InteractableOBJs base4 = InteractableOBJs("base4", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+    base4.setRequirements(25, 15);
+    InteractablesList.push_back(base4);
 
 	// MAZE 
 	initMaze();
@@ -791,11 +803,37 @@ void SP2::RenderCode()
 	modelStack.PopMatrix();
 
 	// Base Top
+    // Infirmary
 	modelStack.PushMatrix();
-	modelStack.Translate(260, 55, -90);
-	modelStack.Scale(30, 30, 30);
+	modelStack.Translate(250, 62, -80);
+	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
 	modelStack.PopMatrix();
+
+    // Sciene Lab
+    modelStack.PushMatrix();
+    modelStack.Translate(120, 62, -80);
+    modelStack.Rotate(180, 0, 1, 0);
+    modelStack.Scale(40, 40, 40);
+    RenderMesh(meshList[GEO_BASE], false, toggleLight);
+    modelStack.PopMatrix();
+
+    // Rec Room & Shop
+    modelStack.PushMatrix();
+    modelStack.Translate(120, 62, 120);
+    modelStack.Rotate(0, 0, 1, 0);
+    modelStack.Scale(40, 40, 40);
+    RenderMesh(meshList[GEO_BASE], false, toggleLight);
+    modelStack.PopMatrix();
+
+    // Bunks & Cafe
+    modelStack.PushMatrix();
+    modelStack.Translate(250, 62, 120);
+    modelStack.Rotate(180, 0, 1, 0);
+    modelStack.Scale(40, 40, 40);
+    RenderMesh(meshList[GEO_BASE], false, toggleLight);
+    modelStack.PopMatrix();
+
 
 	//GROUND MESH
 	modelStack.PushMatrix();
@@ -2174,7 +2212,8 @@ void SP2::RenderAsteroids()
 		modelStack.PushMatrix();
 		modelStack.Translate(asteroidx[i], asteroidy[i], asteroidz[i]);
 		modelStack.Scale(20, 20, 20);
-		modelStack.Rotate(asteroidrotatex, 1, 0, 0);
+		modelStack.Rotate(rotatex[i], 1, 0, 0);
+		modelStack.Rotate(rotatez[i], 0, 0, 1);
 		RenderMesh(meshList[GEO_ASTEROID], true, toggleLight);
 		modelStack.PopMatrix();
 	}

@@ -456,12 +456,13 @@ private:
 	int AsteroidNo;
 	int asteroidx[50];
 	int movex[50];
+	int rotatex[50];
 	int asteroidz[50];
 	int movez[50];
+	int rotatez[50];
 	int asteroidy[50];
 	int renderasteroid[50];
 	int coord3;
-	int asteroidrotatex;
 	int posycheck;
 	double between;
 	bool AsteroidCollision;
@@ -589,8 +590,7 @@ private:
 	void counterInteractions();
 	void spaceSuitInteractions();
 	void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
-	void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
-	void shopInteractions();
+    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
 	void shipFlying(double dt);
 	void shipAnimation(double dt, vector<Ship>::iterator i);
 	void shipCreation();
@@ -601,6 +601,10 @@ private:
 	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM
 	void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 	void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
+
+
+    //Reset function    
+	void reset();
 
 	//Functions to init & render Maze
 	void initMaze();
@@ -621,6 +625,7 @@ private:
     bool hullFound;
     bool wingsFound;
     bool engineFound;
+
 
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);
