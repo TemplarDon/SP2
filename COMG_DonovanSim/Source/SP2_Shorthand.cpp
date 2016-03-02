@@ -1140,31 +1140,53 @@ void SP2::initMaze()
 	meshList[GEO_MAZE_OBSTACLE] = MeshBuilder::GenerateOBJ("mazeObstacle", "OBJ//Maze//mazeObstacle.obj");
 	meshList[GEO_MAZE_OBSTACLE]->textureID = LoadTGA("Image//Maze//mazewallUV.tga");
 
+    meshList[GEO_MAZE_ROOF] = MeshBuilder::GenerateOBJ("mazeRoof", "OBJ//Maze//mazeRoof.obj");
+    meshList[GEO_MAZE_ROOF]->textureID = LoadTGA("Image//Maze//mazewallUV.tga");
+
+    meshList[GEO_MAZE_TREASURE] = MeshBuilder::GenerateOBJ("mazeTreasure", "OBJ//Maze//mazeTreasure.obj");
+    meshList[GEO_MAZE_TREASURE]->textureID = LoadTGA("Image//Maze//mazeTreasureUV.tga");
+
+    meshList[GEO_PEDASTAL] = MeshBuilder::GenerateOBJ("pedastal", "OBJ//Maze//pedastal.obj");
+    meshList[GEO_PEDASTAL]->textureID = LoadTGA("Image//Maze//pedestalUV.tga");
+
 	meshList[GEO_LAVA] = MeshBuilder::GenerateOBJ("lava", "OBJ//lava.obj");
 	meshList[GEO_LAVA]->textureID = LoadTGA("Image//lavaUV.tga");
 
+    meshList[GEO_SIGNBOARD] = MeshBuilder::GenerateOBJ("signboard", "OBJ//HelipadSignBoard.obj");
+    meshList[GEO_SIGNBOARD]->textureID = LoadTGA("Image//Maze//MazeSignBoard.tga");
 
     int i = 0;
-    for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
+    for (int zAxis = 300; zAxis >= -400; zAxis -= 100)
     {
-        InteractableOBJs leftWall = InteractableOBJs("leftWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-420, 8, zAxis), 31, 0, Vector3(0, 0, 0));
+        InteractableOBJs leftWall = InteractableOBJs("leftWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-420, 10, zAxis), 30, 0, Vector3(0, 0, 0));
         InteractablesList.push_back(leftWall);
 
-        InteractableOBJs rightWall = InteractableOBJs("rightWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-280, 8, zAxis), 31, 0, Vector3(0, 0, 0));
+        InteractableOBJs rightWall = InteractableOBJs("rightWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-280, 10, zAxis), 30, 0, Vector3(0, 0, 0));
         InteractablesList.push_back(rightWall);
 
-        InteractableOBJs leftObstacle = InteractableOBJs("leftObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-420 + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]), 31, 0, Vector3(0, 0, 0));
+        InteractableOBJs leftObstacle = InteractableOBJs("leftObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-420 + mazeRandomTranslateVec[i], 10, zAxis + mazeRandomTranslateVec[i]), 30, 0, Vector3(0, 0, 0));
         InteractablesList.push_back(leftObstacle);
 
-        InteractableOBJs rightObstacle = InteractableOBJs("rightObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-280 + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]), 31, 0, Vector3(0, 0, 0));
+        InteractableOBJs rightObstacle = InteractableOBJs("rightObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-280 + mazeRandomTranslateVec[i], 10, zAxis + mazeRandomTranslateVec[i]), 30, 0, Vector3(0, 0, 0));
         InteractablesList.push_back(rightObstacle);
 
-        InteractableOBJs lava = InteractableOBJs("lava", meshList[GEO_LAVA]->maxPos, meshList[GEO_LAVA]->minPos, Position(-420, 8, zAxis), 31, 0, Vector3(0, 0, 0));
+        InteractableOBJs mazeRoof = InteractableOBJs("mazeRoof", meshList[GEO_MAZE_ROOF]->maxPos, meshList[GEO_MAZE_ROOF]->minPos, Position(-350, 32, zAxis), 30, 0, Vector3(0, 0, 0));
+        InteractablesList.push_back(mazeRoof);
+
+        InteractableOBJs lava = InteractableOBJs("lava", meshList[GEO_LAVA]->maxPos, meshList[GEO_LAVA]->minPos, Position(-420, 10, zAxis), 30, 0, Vector3(0, 0, 0));
         InteractablesList.push_back(lava);
 
 		++i;
 	}
 
+    InteractableOBJs mazeTreasure = InteractableOBJs("mazeTreasure", meshList[GEO_MAZE_TREASURE]->maxPos, meshList[GEO_MAZE_TREASURE]->minPos, Position(-350, 15, -370), 5, 0, Vector3(0, 0, 0));
+    InteractablesList.push_back(mazeTreasure);
+
+    InteractableOBJs pedastal = InteractableOBJs("pedastal", meshList[GEO_PEDASTAL]->maxPos, meshList[GEO_PEDASTAL]->minPos, Position(-350, 0, -370), 10, 0, Vector3(0, 0, 0));
+    InteractablesList.push_back(pedastal);
+
+    InteractableOBJs signboard = InteractableOBJs("signboard", meshList[GEO_SIGNBOARD]->maxPos, meshList[GEO_SIGNBOARD]->minPos, Position(-370, 0, 370), 5, 0, Vector3(0, 0, 0));
+    InteractablesList.push_back(signboard);
 
 }
 
@@ -1285,7 +1307,7 @@ void SP2::initMountains()
 
 	for (int xAxis = 500; xAxis >= -500; xAxis -= 100)
 	{
-		InteractableOBJs mountain4 = InteractableOBJs("mountain", meshList[GEO_MOUNTAIN]->maxPos, meshList[GEO_MOUNTAIN]->minPos, Position(xAxis, 0, 500), 5, 0, Vector3(0, 0, 0));
+		InteractableOBJs mountain4 = InteractableOBJs("mountain", meshList[GEO_MOUNTAIN]->maxPos, meshList[GEO_MOUNTAIN]->minPos, Position(xAxis, 0, 600), 5, 0, Vector3(0, 0, 0));
 		InteractablesList.push_back(mountain4);
 
 		InteractableOBJs mountain5 = InteractableOBJs("mountain", meshList[GEO_MOUNTAIN]->maxPos, meshList[GEO_MOUNTAIN]->minPos, Position(xAxis, 0, -500), 5, 0, Vector3(0, 0, 0));
@@ -1295,37 +1317,45 @@ void SP2::initMountains()
 
 void SP2::renderMaze()
 {
-	Vector3 mazeScale(30, 30, 30);
+    Vector3 mazeScale(30, 35, 30);
 	int i = 0;
 
 	// Left & Right Side Walls
-	for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
+	for (int zAxis = 300; zAxis >= -400; zAxis -= 100)
 	{
 		// Left Wall
 		modelStack.PushMatrix();
-		modelStack.Translate(-420, 8, zAxis);
+		modelStack.Translate(-420, 10, zAxis);
 		modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
 		RenderMesh(meshList[GEO_MAZE_SIDE_WALL], true, toggleLight);
 		modelStack.PopMatrix();
 
 		// Right Wall
 		modelStack.PushMatrix();
-		modelStack.Translate(-280, 8, zAxis);
+		modelStack.Translate(-280, 10, zAxis);
 		modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
 		RenderMesh(meshList[GEO_MAZE_SIDE_WALL], true, toggleLight);
 		modelStack.PopMatrix();
 
+        // Roof
+        modelStack.PushMatrix();
+        modelStack.Translate(-350, 31, zAxis);
+        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z - 15);
+        RenderMesh(meshList[GEO_MAZE_ROOF], true, toggleLight);
+        modelStack.PopMatrix();
+
+
 		// Obstacles
 		// Left Side Obstacles
 		modelStack.PushMatrix();
-		modelStack.Translate(-420 + mazeTranslateValue + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]);
+		modelStack.Translate(-420 + mazeTranslateValue + mazeRandomTranslateVec[i], 10, zAxis + mazeRandomTranslateVec[i]);
 		modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
 		RenderMesh(meshList[GEO_MAZE_OBSTACLE], true, toggleLight);
 		modelStack.PopMatrix();
 
 		// Right Side Obstacles
 		modelStack.PushMatrix();
-		modelStack.Translate(-280 + mazeTranslateValue + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]);
+		modelStack.Translate(-280 + mazeTranslateValue + mazeRandomTranslateVec[i], 10, zAxis + mazeRandomTranslateVec[i]);
 		modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
 		RenderMesh(meshList[GEO_MAZE_OBSTACLE], true, toggleLight);
 		modelStack.PopMatrix();
@@ -1346,6 +1376,26 @@ void SP2::renderMaze()
 
 		++i;
 	}
+
+    // Treasure + Pedastal
+    modelStack.PushMatrix();
+    modelStack.Translate(-350, 0, -370);
+    modelStack.Scale(5, 10, 5);
+    RenderMesh(meshList[GEO_PEDASTAL], true, toggleLight);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(-350, 15, -370);
+    modelStack.Scale(2, 2, 2);
+    RenderMesh(meshList[GEO_MAZE_TREASURE], true, toggleLight);
+    modelStack.PopMatrix();
+
+    // SignBoard
+    modelStack.PushMatrix();
+    modelStack.Translate(-370, 0, 370);
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_SIGNBOARD], true, toggleLight);
+    modelStack.PopMatrix();
 }
 
 void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
@@ -2808,7 +2858,7 @@ void SP2::renderMountains()
 	{
 		// Boundary at the Base's Side
 		modelStack.PushMatrix();
-		modelStack.Translate(xAxis, 0, 500);
+		modelStack.Translate(xAxis, 0, 600);
 		modelStack.Scale(5, 5, 5);
 		RenderMesh(meshList[GEO_MOUNTAIN], true, toggleLight);
 		modelStack.PopMatrix();
