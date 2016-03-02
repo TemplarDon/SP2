@@ -578,7 +578,9 @@ private:
 	bool shipBuilt;
 	bool noMoney;
 
-
+    bool hullFound;
+    bool wingsFound;
+    bool engineFound;
 
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);

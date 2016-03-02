@@ -1232,12 +1232,19 @@ void SP2::renderMaze()
 		RenderMesh(meshList[GEO_MAZE_OBSTACLE], true, toggleLight);
 		modelStack.PopMatrix();
 
-		// Lava
+		// Lava (1st)
 		modelStack.PushMatrix();
 		modelStack.Translate(-420 + lavaTranslation, 0, zAxis);
 		modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
 		RenderMesh(meshList[GEO_LAVA], true, toggleLight);
 		modelStack.PopMatrix();
+
+        // Lava (2nd)
+        modelStack.PushMatrix();
+        modelStack.Translate(-280 - lavaTranslation, 0, zAxis);
+        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
+        RenderMesh(meshList[GEO_LAVA], true, toggleLight);
+        modelStack.PopMatrix();
 
 		++i;
 	}
@@ -1345,11 +1352,11 @@ void SP2::ReadKeyPresses()
 	}
 
 	//COLLECT TOLKEN
-	if (Application::IsKeyPressed('Q'))
-	{
-		TokenOnScreen = true;
-		TokenTranslate = 10.5;
-	}
+	//if (Application::IsKeyPressed('Q'))
+	//{
+	//	TokenOnScreen = true;
+	//	TokenTranslate = 10.5;
+	//}
 
 	if (Application::IsKeyPressed('C'))
 	{
@@ -2590,62 +2597,62 @@ void SP2::renderMountains()
 
 }
 
-void SP2::renderMaze()
-{
-    Vector3 mazeScale(31, 31, 31);
-    int i = 0;
-
-    // Left & Right Side Walls
-    for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
-    {
-        // Left Wall
-        modelStack.PushMatrix();
-        modelStack.Translate(-420, 8, zAxis);
-        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
-        RenderMesh(meshList[GEO_MAZE_SIDE_WALL], true, toggleLight);
-        modelStack.PopMatrix();
-
-        // Right Wall
-        modelStack.PushMatrix();
-        modelStack.Translate(-280, 8, zAxis);
-        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
-        RenderMesh(meshList[GEO_MAZE_SIDE_WALL], true, toggleLight);
-        modelStack.PopMatrix();
-
-        // Obstacles
-        // Left Side Obstacles
-        modelStack.PushMatrix();
-        modelStack.Translate(-420 + mazeTranslateValue + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]);
-        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
-        RenderMesh(meshList[GEO_MAZE_OBSTACLE], true, toggleLight);
-        modelStack.PopMatrix();
-
-        // Right Side Obstacles
-        modelStack.PushMatrix();
-        modelStack.Translate(-280 + mazeTranslateValue + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]);
-        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
-        RenderMesh(meshList[GEO_MAZE_OBSTACLE], true, toggleLight);
-        modelStack.PopMatrix();
-
-        // Lava (1st)
-        modelStack.PushMatrix();
-        modelStack.Translate(-420 + lavaTranslation, 0, zAxis);
-        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
-        RenderMesh(meshList[GEO_LAVA], true, toggleLight);
-        modelStack.PopMatrix();
-
-        // Lava (2nd)
-        modelStack.PushMatrix();
-        modelStack.Translate(-280 - lavaTranslation, 0, zAxis);
-        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
-        RenderMesh(meshList[GEO_LAVA], true, toggleLight);
-        modelStack.PopMatrix();
-
-        ++i;
-    }
-
-
-}
+//void SP2::renderMaze()
+//{
+//    Vector3 mazeScale(31, 31, 31);
+//    int i = 0;
+//
+//    // Left & Right Side Walls
+//    for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
+//    {
+//        // Left Wall
+//        modelStack.PushMatrix();
+//        modelStack.Translate(-420, 8, zAxis);
+//        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
+//        RenderMesh(meshList[GEO_MAZE_SIDE_WALL], true, toggleLight);
+//        modelStack.PopMatrix();
+//
+//        // Right Wall
+//        modelStack.PushMatrix();
+//        modelStack.Translate(-280, 8, zAxis);
+//        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
+//        RenderMesh(meshList[GEO_MAZE_SIDE_WALL], true, toggleLight);
+//        modelStack.PopMatrix();
+//
+//        // Obstacles
+//        // Left Side Obstacles
+//        modelStack.PushMatrix();
+//        modelStack.Translate(-420 + mazeTranslateValue + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]);
+//        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
+//        RenderMesh(meshList[GEO_MAZE_OBSTACLE], true, toggleLight);
+//        modelStack.PopMatrix();
+//
+//        // Right Side Obstacles
+//        modelStack.PushMatrix();
+//        modelStack.Translate(-280 + mazeTranslateValue + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]);
+//        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z);
+//        RenderMesh(meshList[GEO_MAZE_OBSTACLE], true, toggleLight);
+//        modelStack.PopMatrix();
+//
+//        // Lava (1st)
+//        modelStack.PushMatrix();
+//        modelStack.Translate(-420 + lavaTranslation, 0, zAxis);
+//        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
+//        RenderMesh(meshList[GEO_LAVA], true, toggleLight);
+//        modelStack.PopMatrix();
+//
+//        // Lava (2nd)
+//        modelStack.PushMatrix();
+//        modelStack.Translate(-280 - lavaTranslation, 0, zAxis);
+//        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
+//        RenderMesh(meshList[GEO_LAVA], true, toggleLight);
+//        modelStack.PopMatrix();
+//
+//        ++i;
+//    }
+//
+//
+//}
 
 void SP2::RenderText(Mesh* mesh, std::string text, Color color)
 {
