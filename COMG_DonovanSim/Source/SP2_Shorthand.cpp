@@ -1,5 +1,6 @@
 #include "SP2.h"
 
+//Shader information.
 void SP2::LoadShaderCodes()
 {
 	//Set background color to dark blue
@@ -80,65 +81,47 @@ void SP2::LoadShaderCodes()
 	m_parameters[U_TEXT_COLOR] = glGetUniformLocation(m_programID, "textColor");
 
 	glUseProgram(m_programID);
+	glUniform1i(m_parameters[U_NUMLIGHTS], numLights);
 }
 
+//Light data information.
 void SP2::LoadLights()
 {
-	light[0].type = Light::LIGHT_SPOT;
-	light[0].position.Set(-60, 12, 0);
-	light[0].color.Set(1, 1, 1);
-	light[0].power = 1;
-	light[0].kC = 1.0f;
-	light[0].kL = 0.01f;
-	light[0].kQ = 0.001f;
-	light[0].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[0].cosInner = cos(Math::DegreeToRadian(30));
-	light[0].exponent = 3.0f;
-	light[0].spotDirection.Set(0.2f, 1.0f, 0.2f);
+	setLightData(0,						//Light index.
+		Light::LIGHT_SPOT,				//Light type.
+		{ -60, 12, 0 },					//Light position.
+		{ 1, 1, 1 },					//Light color.
+		1,								//Light power.
+		1.0f, 0.01f, 0.001f,			//Light attenuation values. (constant, linear, quadratic)
+		45, 30,							//Spotlight cutoff / inner values in degrees.
+		3.0f,							//Spotlight exponent.
+		{ 0.2f, 1.0f, 0.2f }			//Spotlight direction.
+	);
 
-	light[1].type = Light::LIGHT_SPOT;
-	light[1].position.Set(0, 10, 0);
-	light[1].color.Set(0, 1, 1);
-	light[1].power = 1;
-	light[1].kC = 1.0f;
-	light[1].kL = 0.01f;
-	light[1].kQ = 0.001f;
-	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[1].cosInner = cos(Math::DegreeToRadian(30));
-	light[1].exponent = 3.0f;
-	light[1].spotDirection.Set(-0.2f, 1.0f, -0.2f);
+	setLightData(1,
+		Light::LIGHT_SPOT,
+		{ 0, 10, 0 },
+		{ 0, 1, 1 },
+		1,
+		1.0f, 0.01f, 0.001f,
+		45, 30,
+		3.0f,
+		{ -0.2f, 1.0f, -0.2f }
+	);
 
-	light[2].type = Light::LIGHT_SPOT;
-	light[2].position.Set(3, 10, 0);
-	light[2].color.Set(1, 0, 0);
-	light[2].power = 1;
-	light[2].kC = 1.0f;
-	light[2].kL = 0.01f;
-	light[2].kQ = 0.001f;
-	light[2].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[2].cosInner = cos(Math::DegreeToRadian(30));
-	light[2].exponent = 3.0f;
-	light[2].spotDirection.Set(-0.2f, 1.0f, 0);
-
-	glUniform1i(m_parameters[U_NUMLIGHTS], numLights);
-
-	for (size_t S = 0; S < numLights; S++)
-	{
-		glUniform1i(lightUniforms[S][UL_TYPE], light[S].type);
-		glUniform3fv(lightUniforms[S][UL_COLOR], 1, &light[S].color.r);
-		glUniform1f(lightUniforms[S][UL_POWER], light[S].power);
-		glUniform1f(lightUniforms[S][UL_KC], light[S].kC);
-		glUniform1f(lightUniforms[S][UL_KL], light[S].kL);
-		glUniform1f(lightUniforms[S][UL_KQ], light[S].kQ);
-		glUniform1f(lightUniforms[S][UL_COSCUTOFF], light[S].cosCutoff);
-		glUniform1f(lightUniforms[S][UL_COSINNER], light[S].cosInner);
-		glUniform1f(lightUniforms[S][UL_EXPONENT], light[S].exponent);
-	}
-
-	// Make sure you pass uniform parameters after glUseProgram()
-	glUniform1i(m_parameters[U_NUMLIGHTS], numLights);
+	setLightData(2,
+		Light::LIGHT_SPOT,
+		{ 3, 10, 0 },
+		{ 1, 0, 0 },
+		1,
+		1.0f, 0.01f, 0.001f,
+		45, 30,
+		3.0f,
+		{ -0.2f, 1.0f, 0 }
+	);
 }
 
+//Mesh data information.
 void SP2::LoadMeshes()
 {
 	//Text
@@ -549,7 +532,7 @@ void SP2::LoadMeshes()
     // Base
     meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
     meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga"); //185, 50, 30
-    InteractableOBJs base = InteractableOBJs("base", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(185, 50, 30), 83, 0, Vector3(0, 0, 0)); //83, 25, 82
+    InteractableOBJs base = InteractableOBJs("base", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(260, 55, -90), 30, 0, Vector3(0, 0, 0)); //83, 25, 82
     base.setRequirements(25, 15);
     //InteractablesList.push_back(base);
 
@@ -561,11 +544,94 @@ void SP2::LoadMeshes()
 
 }
 
+//Sets the lights' data (for initialization purposes).
+void SP2::setLightData(
+	const size_t &index,
+	const Light::LIGHT_TYPE &type,
+	const Position &pos,
+	const Color &color,
+	const float &power,
+	const float &kC,
+	const float &kL,
+	const float &kQ,
+	const float &cutoff,
+	const float &inner,
+	const float &exponent,
+	const Vector3 &spotDirection)
+{
+	if (index >= numLights) return;
+
+	light[index].type = type;
+	light[index].position = pos;
+	light[index].color = color;
+	light[index].power = power;
+	light[index].kC = kC;
+	light[index].kL = kL;
+	light[index].kQ = kQ;
+	light[index].cosCutoff = cos(Math::DegreeToRadian(cutoff));
+	light[index].cosInner = cos(Math::DegreeToRadian(inner));
+	light[index].exponent = exponent;
+	light[index].spotDirection = spotDirection;
+
+	glUniform1i(lightUniforms[index][UL_TYPE], light[index].type);
+	glUniform3fv(lightUniforms[index][UL_COLOR], 1, &light[index].color.r);
+	glUniform1f(lightUniforms[index][UL_POWER], light[index].power);
+	glUniform1f(lightUniforms[index][UL_KC], light[index].kC);
+	glUniform1f(lightUniforms[index][UL_KL], light[index].kL);
+	glUniform1f(lightUniforms[index][UL_KQ], light[index].kQ);
+	glUniform1f(lightUniforms[index][UL_COSCUTOFF], light[index].cosCutoff);
+	glUniform1f(lightUniforms[index][UL_COSINNER], light[index].cosInner);
+	glUniform1f(lightUniforms[index][UL_EXPONENT], light[index].exponent);
+}
+
+//Sets the light's color.
+void SP2::setLightColor(const size_t &index, const Color &C)
+{
+	if (index >= numLights) return;
+
+	light[index].color = C;
+	glUniform3fv(lightUniforms[index][UL_COLOR], 1, &light[index].color.r);
+}
+
+//Sets the light's power.
+void SP2::setLightPower(const size_t &index, const float &P)
+{
+	if (index >= numLights) return;
+
+	light[index].power = P;
+	glUniform1f(lightUniforms[index][UL_POWER], light[index].power);
+}
+
+//Moves the light's position.
+void SP2::moveLightPosition(const size_t &index, const Vector3 &M)
+{
+	if (index >= numLights) return;
+
+	Position *p = &light[index].position;
+	p->x += M.x;
+	p->y += M.y;
+	p->z += M.z;
+}
+
+//Rotates the spotlight along the axis.
+void SP2::rotateSpotlight(const size_t &index, const float &degrees, const Vector3 &axis)
+{
+	if (index >= numLights) return;
+	if (light[index].type != Light::LIGHT_SPOT) return;
+
+	Mtx44 rotation;
+	rotation.SetToRotation(degrees, axis.x, axis.y, axis.z);
+
+	Vector3 &d = light[index].spotDirection;
+
+	d = rotation * d;
+}
+
 void SP2::initSpaceShip()
 {
 	// Space Ship
 	meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
-	Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0));
+	Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0), camPointer->target);
 	someShip.setRequirements(50, 500);
 
 	shipTemplatePtr = &someShip;
@@ -705,8 +771,8 @@ void SP2::RenderCode()
 
 	// Base Top
 	modelStack.PushMatrix();
-	modelStack.Translate(185, 50, 30);
-	modelStack.Scale(83, 25, 82);
+	modelStack.Translate(260, 55, -90);
+	modelStack.Scale(30, 30, 30);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
 	modelStack.PopMatrix();
 
@@ -808,9 +874,6 @@ void SP2::RenderCode()
 
 		RenderCafePointerOnScreen(meshList[GEO_CAFEPOINTER], 0.6, 44, cafeMenuPointer);     //62, 50, 38t
 	}
-
-
-
 
 	//DO NOT DELETE SHOP LIST STUFF
 	if (DisplayShopList == true)   //true
@@ -1064,23 +1127,23 @@ void SP2::initMaze()
 	meshList[GEO_LAVA]->textureID = LoadTGA("Image//lavaUV.tga");
 
 
-	int i = 0;
-	for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
-	{
-		InteractableOBJs leftWall = InteractableOBJs("leftWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-420, 8, zAxis), 31, 0, Vector3(0, 0, 0));
-		InteractablesList.push_back(leftWall);
+    int i = 0;
+    for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
+    {
+        InteractableOBJs leftWall = InteractableOBJs("leftWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-420, 8, zAxis), 31, 0, Vector3(0, 0, 0));
+        InteractablesList.push_back(leftWall);
 
-		InteractableOBJs rightWall = InteractableOBJs("rightWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-280, 8, zAxis), 31, 0, Vector3(0, 0, 0));
-		InteractablesList.push_back(rightWall);
+        InteractableOBJs rightWall = InteractableOBJs("rightWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-280, 8, zAxis), 31, 0, Vector3(0, 0, 0));
+        InteractablesList.push_back(rightWall);
 
-		InteractableOBJs leftObstacle = InteractableOBJs("leftObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-420 + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]), 31, 0, Vector3(0, 0, 0));
-		InteractablesList.push_back(leftObstacle);
+        InteractableOBJs leftObstacle = InteractableOBJs("leftObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-420 + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]), 31, 0, Vector3(0, 0, 0));
+        InteractablesList.push_back(leftObstacle);
 
-		InteractableOBJs rightObstacle = InteractableOBJs("rightObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-280 + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]), 31, 0, Vector3(0, 0, 0));
-		InteractablesList.push_back(rightObstacle);
+        InteractableOBJs rightObstacle = InteractableOBJs("rightObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-280 + mazeRandomTranslateVec[i], 8, zAxis + mazeRandomTranslateVec[i]), 31, 0, Vector3(0, 0, 0));
+        InteractablesList.push_back(rightObstacle);
 
-		InteractableOBJs lava = InteractableOBJs("lava", meshList[GEO_LAVA]->maxPos, meshList[GEO_LAVA]->minPos, Position(-420, 8, zAxis), 31, 0, Vector3(0, 0, 0));
-		InteractablesList.push_back(lava);
+        InteractableOBJs lava = InteractableOBJs("lava", meshList[GEO_LAVA]->maxPos, meshList[GEO_LAVA]->minPos, Position(-420, 8, zAxis), 31, 0, Vector3(0, 0, 0));
+        InteractablesList.push_back(lava);
 
 		++i;
 	}
@@ -1250,12 +1313,19 @@ void SP2::renderMaze()
 		RenderMesh(meshList[GEO_MAZE_OBSTACLE], true, toggleLight);
 		modelStack.PopMatrix();
 
-		// Lava
+		// Lava (1st)
 		modelStack.PushMatrix();
 		modelStack.Translate(-420 + lavaTranslation, 0, zAxis);
 		modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
 		RenderMesh(meshList[GEO_LAVA], true, toggleLight);
 		modelStack.PopMatrix();
+
+        // Lava (2nd)
+        modelStack.PushMatrix();
+        modelStack.Translate(-280 - lavaTranslation, 0, zAxis);
+        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
+        RenderMesh(meshList[GEO_LAVA], true, toggleLight);
+        modelStack.PopMatrix();
 
 		++i;
 	}
@@ -1363,11 +1433,11 @@ void SP2::ReadKeyPresses()
 	}
 
 	//COLLECT TOLKEN
-	if (Application::IsKeyPressed('Q'))
-	{
-		TokenOnScreen = true;
-		TokenTranslate = 10.5;
-	}
+	//if (Application::IsKeyPressed('Q'))
+	//{
+	//	TokenOnScreen = true;
+	//	TokenTranslate = 10.5;
+	//}
 
 	if (Application::IsKeyPressed('C'))
 	{
@@ -2588,7 +2658,6 @@ void SP2::RenderSpaceShip()
 	modelStack.PopMatrix();
 	// End of Ship
 }
-
 
 void SP2::renderMountains()
 {

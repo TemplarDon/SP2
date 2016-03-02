@@ -30,6 +30,8 @@ struct Light
         color.Set(1, 1, 1);
         power = 1.f;
         kC = kL = kQ = 1;
+		cosCutoff = cosInner = 0;
+		exponent = 1;
     }
 };
 

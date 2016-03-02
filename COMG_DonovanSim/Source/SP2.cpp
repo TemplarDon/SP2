@@ -110,6 +110,11 @@ void SP2::Init()
 	shipBuilt = false;
 	noMoney = false;
 
+    hullFound = false;
+    wingsFound = false;
+    engineFound = false;
+
+
 	gateOpening = false;
 	frontGateOpening = false;
 	backGateOpening = false;
@@ -142,15 +147,15 @@ void SP2::Init()
 
 	isInViewSpheres = false;
 
-	// Maze
-	mazeTranslateValue = 0;
-	mazeRandomTranslate = (float)((rand() % 10 + 1));
-	lavaTranslation = 0;
-	for (int i = 0; i < 10; ++i)
-	{
-		mazeRandomTranslateVec.push_back((float)((rand() % 100 - 50)));
-	}
-	deadText = false;
+    // Maze
+    mazeTranslateValue = 0;
+    mazeRandomTranslate = (float)((rand() % 10 + 1));
+    lavaTranslation = 0;
+    for (int i = 0; i < 10; ++i)
+    {
+        mazeRandomTranslateVec.push_back((float)((rand() % 80 - 40)));    
+    }
+    deadText = false;
 
 	//FIRST PERSON CAMERA
 	firstPersonCamera.Reset();
@@ -208,7 +213,7 @@ void SP2::Init()
 			xcoords[i] = coord1;
 			zcoords[i] = coord2;
 			rendercrystal[i] = 1;
-			cout << coord1 << "," << coord2 << endl;
+			//cout << coord1 << "," << coord2 << endl;
 		}
 	}
 	for (int i = 0; i < CrystalNo; i++)
@@ -258,6 +263,9 @@ void SP2::Update(double dt)
 	//FPS
 	FramesPerSecond = 1 / dt;
 
+	moveLightPosition(0, { float(dt) * 3, 0, 0 });
+	rotateSpotlight(1, float(dt) * 160, { 1, 1, 0 });
+
 	//READKEYS FUNCTION
 	ReadKeyPresses();
 
@@ -274,6 +282,14 @@ void SP2::Update(double dt)
 		}
 	}
 
+    if (CoolDownTime > 0)
+    {
+        CoolDownTime--;
+    }
+    else
+    {
+        CoolDownTime = 0;
+    }
 
 	static unsigned firstFrames = 2;
 	if (firstFrames > 0)
@@ -463,7 +479,7 @@ void SP2::Update(double dt)
 
 				if (Application::IsKeyPressed('T'))
 				{
-					SuitTranslate = -50;
+					//SuitTranslate = -50;
 					wearSuit = true;
 					DisplayInventory = true;
 				}
@@ -491,28 +507,6 @@ void SP2::Update(double dt)
 		{
 			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
 			{
-				//if (Application::IsKeyPressed('Y'))
-				//{
-				//	traderText = false;
-				//	YesShowShopList = true;
-				//}
-				//else
-				//{
-				//	traderText = true;
-				//	YesShowShopList = false;
-				//}
-
-
-				//if (YesShowShopList == true)
-				//{
-				//	traderText = false;
-				//	DisplayShopList = true;
-				//}
-				//else
-				//{
-				//	traderText = true;
-				//	DisplayShopList = false;
-				//}
 				traderText = true;
 				if (Application::IsKeyPressed('Y'))
 				{
@@ -613,31 +607,32 @@ void SP2::Update(double dt)
 			}
 		}
 
-		// Shop
-		if (it->name == "shop")
-		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-			{
-				if (Application::IsKeyPressed('E'))
-				{
-					askedShipBuild = true;
-					askedHull = true;
-				}
-			}
-			else
-			{
-				askedShipBuild = false;
-			}
-		}
+		//// Shop
+		//if (it->name == "shop")
+		//{
+		//	if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+		//	{
+		//		if (Application::IsKeyPressed('E'))
+		//		{
+		//			askedShipBuild = true;
+		//			askedHull = true;
+		//		}
+		//	}
+		//	else
+		//	{
+		//		askedShipBuild = false;
+		//	}
+		//}
 
 		// Weapon
 		if (it->name == "gun rack")
 		{
 			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 			{
-				if (Application::IsKeyPressed('E'))
+				if (Application::IsKeyPressed('E') && CoolDownTime == 0)
 				{
 					somePlayer.setWeapon();
+                    CoolDownTime = 20;
 				}
 			}
 
@@ -648,7 +643,7 @@ void SP2::Update(double dt)
 		{
 			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 			{
-				if (Application::IsKeyPressed('E') && somePlayer.checkWeapon() == true)
+                if (Application::IsKeyPressed(VK_LBUTTON) && somePlayer.checkWeapon() == true)
 				{
 					somePlayer.addCrystals(1);
 				}
@@ -695,8 +690,7 @@ void SP2::Update(double dt)
 					CrystalText = true;
 					posxcheck = i->pos.x;
 					poszcheck = i->pos.z;
-
-					if (Application::IsKeyPressed('E') && equipPickaxe == true)
+					if (Application::IsKeyPressed('E') && equipPickaxe)
 					{
 						for (int a = 0; a < CrystalNo; a++)
 						{
@@ -757,17 +751,6 @@ void SP2::Update(double dt)
 	{
 		firstPersonCamera.position.y = firstpos;
 		onGround = true;
-	}
-
-	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
-	if (camPointer == &firstPersonCamera)
-	{
-		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-
-		if (askedShipBuild)
-		{
-			shopInteractions();
-		}
 	}
 
 	for (int i = 0; i < AsteroidNo; i++)
@@ -913,13 +896,49 @@ void SP2::ShopMenuPointerInteraction()
 			CoolDownTime2 = 15;
 			YesShowShopList = false;
 			DisplayShopList = false;
-			shipCreation();
-			shipBuilt = true;
+
+            /*string hull = "Hull";
+            string wings = "Wings";
+            string engine = "Engine";
+
+            if (somePlayer.getParts().size() > 0)
+            {
+                for (list<ShipParts*>::iterator it = somePlayer.getParts().begin(); it != somePlayer.getParts().end(); ++it)
+                {
+                    if ((*it)->getName().find(hull) != string::npos)
+                    {
+                        hullFound = true;
+                    }
+
+                    if ((*it)->getName().find(wings) != string::npos)
+                    {
+                        wingsFound = true;
+                    }
+
+                    if ((*it)->getName().find(engine) != string::npos)
+                    {
+                        engineFound = true;
+                    }
+                    if (hullFound && wingsFound && engineFound)
+                    {
+                        shipCreation();
+                        shipBuilt = true;
+                    }
+                }
+            }
+            else
+            {
+
+            }*/
+
+            shipCreation();
+            shipBuilt = true;
+            
 		}
 
 		break;
-	}
 
+	}
 
 
 
@@ -970,7 +989,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CYRSTAL
-			if (somePlayer.removeCrystals(10))
+			if (somePlayer.getCrystals() >= 10)
 			{
 				somePlayer.removeCrystals(10);
 				somePlayer.addPart(LightHull);
@@ -1002,7 +1021,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(20))
+            if (somePlayer.getCrystals() >= 20)
 			{
 				somePlayer.removeCrystals(20);
 				somePlayer.addPart(MediumHull);
@@ -1034,7 +1053,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(30))
+            if (somePlayer.getCrystals() >= 30)
 			{
 				somePlayer.removeCrystals(30);
 				somePlayer.addPart(LargeHull);
@@ -1082,7 +1101,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(20))
+            if (somePlayer.getCrystals() >= 20)
 			{
 				somePlayer.removeCrystals(20);
 				somePlayer.addPart(DualWings);
@@ -1114,7 +1133,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(30))
+            if (somePlayer.getCrystals() >= 30)
 			{
 				somePlayer.removeCrystals(30);
 				somePlayer.addPart(QuadWings);
@@ -1162,7 +1181,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(20))
+            if (somePlayer.getCrystals() >= 20)
 			{
 				somePlayer.removeCrystals(20);
 				somePlayer.addPart(G1Engine);
@@ -1194,7 +1213,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(30))
+            if (somePlayer.getCrystals() >= 30)
 			{
 				somePlayer.removeCrystals(30);
 				somePlayer.addPart(G2Engine);
@@ -1210,14 +1229,15 @@ void SP2::ShopMenuPointerInteraction()
 //PLEASE DO NOT DELETE THIS !!!! 
 void SP2::CafeMenuPointerInteraction()
 {
-	if (CoolDownTime > 0)
-	{
-		CoolDownTime--;
-	}
-	else
-	{
-		CoolDownTime == 0;
-	}
+    // Moved to Update - Don
+	//if (CoolDownTime > 0)
+	//{
+	//	CoolDownTime--;
+	//}
+	//else
+	//{
+	//	CoolDownTime == 0;
+	//}
 
 	switch (S)
 	{
@@ -1330,86 +1350,85 @@ void SP2::EquippingWeapons()
 
 void SP2::shipFlying(double dt)
 {
-	for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
-	{
-		if (camPointer == &thirdPersonCamera)
-		{
-			Vector3 view = (camPointer->target - camPointer->position).Normalized();
-			Vector3 up = camPointer->up;
-			Vector3 right = view.Cross(up);
+    for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
+    {
+        if (camPointer == &thirdPersonCamera)
+        {
+            Vector3 view = (camPointer->target - camPointer->position).Normalized();
+            Vector3 up = camPointer->up;
+            Vector3 right = view.Cross(up);
 
-			if (!i->shipTakeoff) { i->setDirectionalVectors(view.Normalized()); }
+            // Sets Ships direction to be the same as the camera
+            if (!i->shipTakeoff) 
+            {
+                i->setDirectionalVectors(view.Normalized()); 
+                //if (i->hullType == "LightHull") { shipHorizontalRotateAngle = 90; }
+                //if (i->hullType == "MediumHull" || i->hullType == "LargeHull") { shipHorizontalRotateAngle = 180; }
+            } 
+            //if (!i->shipTakeoff) { view = i->shipDirection; } // Sets Camera direction to be the same as ship
 
-			if (Application::IsKeyPressed(VK_SPACE) && i->shipTakeoff == false) { i->shipTakeoff = true; } /// Press 'SpaceBar' to take off
+            if (Application::IsKeyPressed(VK_SPACE) && i->shipTakeoff == false) { i->shipTakeoff = true; } /// Press 'SpaceBar' to take off
 
-			if (i->shipTakeoff)
-			{
-				// Ship Animation - Don't Touch - Donovan
-				shipAnimation(dt, i);
+            if (i->shipTakeoff)
+            {
+                // Set ship's new direction
+                i->setDirectionalVectors((i->shipDirection + view).Normalized());
 
-				// Set ship's new direction
-				i->setDirectionalVectors((i->shipDirection + view).Normalized());
+                // Check Bounds
+                Position camPos;
 
-				// Check Bounds
-				Position camPos;
+                camPos.x = shipPos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
+                camPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                camPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
 
-				camPos.x = shipPos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-				camPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
-				camPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+                // Move Ship's position (For Translation)
+                if (thirdPersonCamera.createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
+                {
+                    shipPos.x = shipPos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
+                    shipPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
+                    shipPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+                }
+                else
+                {
+                    shipPos.x = shipPos.x - ( i->shipDirection.x + (float)(i->shipSpeed * dt) );
+                    shipPos.y = shipPos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
+                    shipPos.z = shipPos.z - ( i->shipDirection.z + (float)(i->shipSpeed * dt) );
+                }
 
-				// Move Ship's position (For Translation)
-				if (thirdPersonCamera.createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
-				{
-					shipPos.x = shipPos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-					shipPos.y = shipPos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
-					shipPos.z = shipPos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
-				}
-				else
-				{
-					shipPos.x = shipPos.x - (i->shipDirection.x + (float)(i->shipSpeed * dt));
-					shipPos.y = shipPos.y - (i->shipDirection.y + (float)(i->shipSpeed * dt));
-					shipPos.z = shipPos.z - (i->shipDirection.z + (float)(i->shipSpeed * dt));
-				}
+                // Check to stop Ship from going into the ground
+                if (shipPos.y <= 2)
+                {
+                    shipPos.y = shipPos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
+                    i->pos.y = i->pos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
+                    somePlayer.pos.y = somePlayer.pos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
+                }
 
-				//// Move Ship's position (For Collision/ isinView())
-				//i->pos.x = i->pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-				//i->pos.y = i->pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
-				//i->pos.z = i->pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+                // Make Positions the same
+                i->pos = somePlayer.pos = shipPos;
 
-				//// Move Player's Position with the ship
-				//somePlayer.pos.x = somePlayer.pos.x + i->shipDirection.x + (float)(i->shipSpeed * dt);
-				//somePlayer.pos.y = somePlayer.pos.y + i->shipDirection.y + (float)(i->shipSpeed * dt);
-				//somePlayer.pos.z = somePlayer.pos.z + i->shipDirection.z + (float)(i->shipSpeed * dt);
+                if (Application::IsKeyPressed('W')) // Increase Speed
+                {
+                    if (i->shipSpeed <= i->shipMaxSpeed)
+                    {
+                        i->shipSpeed += (float)(i->shipSpeedGain * dt);
+                    }
+                }
 
-				// Check to stop Ship from going into the ground
-				if (shipPos.y <= 2)
-				{
-					shipPos.y = shipPos.y - (i->shipDirection.y + (float)(i->shipSpeed * dt));
-					i->pos.y = i->pos.y - (i->shipDirection.y + (float)(i->shipSpeed * dt));
-					somePlayer.pos.y = somePlayer.pos.y - (i->shipDirection.y + (float)(i->shipSpeed * dt));
-				}
+                if (Application::IsKeyPressed('S')) // Decrease Speed
+                {
+                    if (i->shipSpeed >= i->shipLandingSpeed)
+                    {
+                        i->shipSpeed -= (float)(i->shipSpeedGain * dt);
+                    }
+                }
+            }
 
-				// Make Positions the same
-				i->pos = somePlayer.pos = shipPos;
 
-				if (Application::IsKeyPressed('W')) // Increase Speed
-				{
-					if (i->shipSpeed <= i->shipMaxSpeed)
-					{
-						i->shipSpeed += (float)(i->shipSpeedGain * dt);
-					}
-				}
+            // Ship Animation - Don't Touch - Donovan
+            shipAnimation(dt, i);
 
-				if (Application::IsKeyPressed('S')) // Decrease Speed
-				{
-					if (i->shipSpeed >= i->shipLandingSpeed)
-					{
-						i->shipSpeed -= (float)(i->shipSpeedGain * dt);
-					}
-				}
-			}
-		}
-	}
+        }
+    }
 }
 
 void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
@@ -1419,35 +1438,56 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
 	Vector3 up = camPointer->up;
 	Vector3 right = view.Cross(up);
 
-	// Find angle to pitch
-	float pitchAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultUpVec.Dot(up)) / (thirdPersonCamera.defaultUpVec.Length() * up.Length()));
+    Vector3 defaultHorizontalPlane = { -i->defaultShipDirection.x, 0, -i->defaultShipDirection.z };
+    Vector3 horizontalPlane = { i->shipDirection.x, 0, i->shipDirection.z };
 
-	// Find angle to yaw
-	float yawAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultRightVec.Dot(right) / thirdPersonCamera.defaultRightVec.Length() * right.Length()));
+    // Find angle to pitch
+    float pitchAngleDiff = Math::RadianToDegree(acos(thirdPersonCamera.defaultUpVec.Dot(up)) / (thirdPersonCamera.defaultUpVec.Length() * up.Length()));
 
-	// Check which direction ship is turning in and rotate ship
-	if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle <= yawAngleDiff)
-	{
-		shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
-	}
+    // Find angle to yaw
+    float yawAngleDiff = Math::RadianToDegree(acos(defaultHorizontalPlane.Dot(horizontalPlane) / defaultHorizontalPlane.Length() * horizontalPlane.Length()));
 
-	if (thirdPersonCamera.yawingRight && shipHorizontalRotateAngle >= -yawAngleDiff)
-	{
-		shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
-	}
+    // Check which direction ship is turning in and rotate ship
+    if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle <= yawAngleDiff && shipHorizontalRotateAngle <= 180)
+    {
+        shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
+    }
+    else if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle <= 360 - yawAngleDiff && shipHorizontalRotateAngle > 180)
+    {
+        shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
+    }
+    //else if (shipHorizontalRotateAngle >= yawAngleDiff)
+    //{
+    //    shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
+    //}
+
+    if (thirdPersonCamera.yawingRight && shipHorizontalRotateAngle >= -yawAngleDiff && shipHorizontalRotateAngle >= -180)
+    {
+        shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
+    }
+    else if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle >= -(360 + -yawAngleDiff) && shipHorizontalRotateAngle < -180)
+    {
+        shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
+    }
+    //else if (shipHorizontalRotateAngle <= -yawAngleDiff)
+    //{
+    //    shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
+    //}
+
+    cout << "yawAngleDiff: " << yawAngleDiff << " shipHorizontalRotateAngle: " << shipHorizontalRotateAngle << endl;
 
 	if (thirdPersonCamera.pitchingDown && shipVerticalRotateAngle <= pitchAngleDiff)
 	{
 		shipVerticalRotateAngle += (float)(i->turningSpeed * dt);
 	}
 
-	if (thirdPersonCamera.pitchingUp && shipVerticalRotateAngle >= -pitchAngleDiff)
-	{
-		shipVerticalRotateAngle -= (float)(i->turningSpeed * dt);
-	}
-
-	if (shipVerticalRotateAngle >= 360) { shipVerticalRotateAngle = 0; }
-	if (shipHorizontalRotateAngle >= 360) { shipHorizontalRotateAngle = 0; }
+    if (thirdPersonCamera.pitchingUp && shipVerticalRotateAngle >= -pitchAngleDiff)
+    {
+        shipVerticalRotateAngle -= (float)(i->turningSpeed * dt);
+    }
+    
+    if (shipVerticalRotateAngle >= 360 ) { shipVerticalRotateAngle = 0; }
+    if (shipHorizontalRotateAngle >= 360 || shipHorizontalRotateAngle <= -360) { shipHorizontalRotateAngle = 0; }
 }
 
 void SP2::mazeTranslate(double dt)
@@ -1494,33 +1534,33 @@ void SP2::mazeTranslate(double dt)
 	//    }
 	//}
 
-	// Lava Movement
-	if (lavaTranslation <= 140)
-	{
-		lavaTranslation += (float)(10 * dt);
-		if (lavaTranslation >= 140)
-		{
-			lavaTranslation = 0;
-		}
-	}
+    // Lava Movement
+    if (lavaTranslation <= 140)
+    {
+        lavaTranslation += (float)(10 * dt);
+        if (lavaTranslation >= 140)
+        {
+            lavaTranslation = 0;
+        }
+    }
 
-	for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
-	{
-		if (it->name == "lava")
-		{
-			if ((somePlayer.pos.z <= 350 && somePlayer.pos.z >= -350) && (somePlayer.pos.x <= -420 + lavaTranslation + 5 && somePlayer.pos.x >= -420 + lavaTranslation - 5) && (somePlayer.pos.y <= 17))
-			{
-				deadText = true;
-				//somePlayer.pos.x = shipPos.x;
-				//somePlayer.pos.y = shipPos.y;
-				//somePlayer.pos.z = shipPos.z;
-			}
-			else
-			{
-				deadText = false;
-			}
-		}
-	}
+    for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+    {
+        if (it->name == "lava")
+        {
+            if ((somePlayer.pos.z <= 350 && somePlayer.pos.z >= -350) && (somePlayer.pos.y <= 17))
+            {
+                if ((somePlayer.pos.x <= -420 + lavaTranslation + 5 && somePlayer.pos.x >= -420 + lavaTranslation - 5) || ((somePlayer.pos.x <= -280 - lavaTranslation + 5 && somePlayer.pos.x >= -280 - lavaTranslation - 5)))
+                {
+                    deadText = true;
+                }
+                else
+                {
+                    deadText = false;
+                }
+            }
+        }
+    }
 }
 
 void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
@@ -1560,16 +1600,17 @@ void SP2::shipCreation()
 	//WHY SHOULD YOU LOAD A MESH IN THE MIDDLE OF THE PROGRAM? WHO WAS DOING IT? (comment by Gary Goh)
 	//meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
 
-	Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0));
-	someShip.setRequirements(50, 500);
+    Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
+    Vector3 up = thirdPersonCamera.up;
+    Vector3 right = view.Cross(up);
+
+    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0), view);
+    someShip.setRequirements(50, 500);
 
 	shipTemplatePtr = &someShip;
 
 	ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, somePlayer.getParts()));
 
-	Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
-	Vector3 up = thirdPersonCamera.up;
-	Vector3 right = view.Cross(up);
 	for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
 	{
 		i->setDirectionalVectors(view, right);
@@ -1669,51 +1710,56 @@ void SP2::shipCreation()
 
 void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
-	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-	for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)
-	{
-		// Getting into Ship
-		if (shipIt->isInView(somePlayer.pos, view))
-		{
-			if (somePlayer.getCameraType() == "first")
-			{
-				if (Application::IsKeyPressed('F') && CoolDownTime == 0)
-				{
-					camPointer = &thirdPersonCamera;
-					somePlayer.setCameraType("third");
-					CoolDownTime = 20;
-				}
-			}
-		}
+    Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
+    for (vector<Ship>::iterator shipIt = ShipList.begin(); shipIt < ShipList.end(); ++shipIt)
+    {
+        // Getting into Ship
+        if (shipIt->isInView(somePlayer.pos, view))
+        {
+            if (somePlayer.getCameraType() == "first")
+            {
+                if (Application::IsKeyPressed('F') && CoolDownTime == 0)
+                {
+                    camPointer = &thirdPersonCamera;
+                    somePlayer.setCameraType("third");
+                    CoolDownTime = 20;
+                    DisplayInventory = true;
+                    HandDisappear = true;
+                }
+            }
+        }
 
-		// Getting out of ship
-		if (somePlayer.getCameraType() == "third")
-		{
-			if (Application::IsKeyPressed('F') && CoolDownTime == 0)
-			{
-				if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
-				{
-					camPointer = &firstPersonCamera;
-					somePlayer.setCameraType("first");
+        // Getting out of ship
+        if (somePlayer.getCameraType() == "third")
+        {
+            if (Application::IsKeyPressed('F') && CoolDownTime == 0)
+            {
+                if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
+                {
+                    camPointer = &firstPersonCamera;
+                    somePlayer.setCameraType("first");
 
-					// Sets player's position to original y - axis
-					somePlayer.pos.y = charPos.y;
+                    // Sets player's position to original y - axis
+                    somePlayer.pos.y = charPos.y;
 
-					// Sets 1st person camera new position to the player's position
-					camPointer->position.x = somePlayer.pos.x;
-					camPointer->position.y = somePlayer.pos.y;
-					camPointer->position.z = somePlayer.pos.z;
+                    // Sets 1st person camera new position to the player's position
+                    camPointer->position.x = somePlayer.pos.x;
+                    camPointer->position.y = somePlayer.pos.y;
+                    camPointer->position.z = somePlayer.pos.z;
 
-					// Set Ship To 'Straight' Orientation
-					shipVerticalRotateAngle = 0;
+                    // Set Ship To 'Straight' Orientation
+                    shipVerticalRotateAngle = 0;
 
-					shipIt->shipTakeoff = false;
+                    shipIt->shipTakeoff = false;
 
-					CoolDownTime = 20;
-				}
-			}
-		}
-	}
+                    CoolDownTime = 20;
+
+                    DisplayInventory = false;
+                    HandDisappear = false;
+                }
+            }
+        }
+    }
 }
 
 void SP2::shopInteractions()
