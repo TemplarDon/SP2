@@ -170,7 +170,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, -370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 125, 17, 120 };
+	startingCharPos = charPos = { 300, 50, 300 };
 	//125, 120 
 	//250, 40
 
@@ -671,18 +671,6 @@ void SP2::Update(double dt)
 		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
 		{
-
-			// Target
-			if (i->name == "target dummy")
-			{
-				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-				{
-					if (Application::IsKeyPressed(VK_LEFT) && somePlayer.checkWeapon() == true)
-					{
-						somePlayer.addCrystals(1);
-					}
-				}
-			}
 			if (i->name == "crystal")
 			{
 				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
@@ -1762,109 +1750,6 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
     }
 }
 
-void SP2::shopInteractions()
-{
-	if (askedHull)
-	{
-		if (Application::IsKeyPressed('1'))
-		{
-			if (somePlayer.removeCrystals(10))
-			{
-				somePlayer.removeCrystals(10);
-				somePlayer.addPart(LightHull);
-				askedHull = false;
-				askedWings = true;
-			}
-			else { noMoney = true; }
-
-		}
-		else if (Application::IsKeyPressed('2'))
-		{
-			if (somePlayer.removeCrystals(20))
-			{
-				somePlayer.removeCrystals(20);
-				somePlayer.addPart(MediumHull);
-				askedHull = false;
-				askedWings = true;
-			}
-			else { noMoney = true; }
-
-		}
-		else if (Application::IsKeyPressed('3'))
-		{
-			if (somePlayer.removeCrystals(30))
-			{
-				somePlayer.removeCrystals(30);
-				somePlayer.addPart(LargeHull);
-				askedHull = false;
-				askedWings = true;
-			}
-			else { noMoney = true; }
-		}
-	}
-
-	if (askedWings)
-	{
-		if (Application::IsKeyPressed('4'))
-		{
-			if (somePlayer.removeCrystals(20))
-			{
-				somePlayer.removeCrystals(20);
-				somePlayer.addPart(DualWings);
-				askedWings = false;
-				askedEngine = true;
-			}
-			else { noMoney = true; }
-		}
-		else if (Application::IsKeyPressed('5'))
-		{
-			if (somePlayer.removeCrystals(30))
-			{
-				somePlayer.removeCrystals(30);
-				somePlayer.addPart(QuadWings);
-				askedWings = false;
-				askedEngine = true;
-			}
-			else { noMoney = true; }
-
-		}
-	}
-
-	if (askedEngine)
-	{
-		if (Application::IsKeyPressed('6'))
-		{
-
-			if (somePlayer.removeCrystals(20))
-			{
-				somePlayer.removeCrystals(20);
-				somePlayer.addPart(G1Engine);
-				askedEngine = false;
-				shipCreation();
-				askedShipBuild = false;
-				shipBuilt = true;
-			}
-			else { noMoney = true; }
-
-		}
-		else if (Application::IsKeyPressed('7'))
-		{
-			if (somePlayer.removeCrystals(30))
-			{
-				somePlayer.removeCrystals(30);
-				somePlayer.addPart(G2Engine);
-				askedEngine = false;
-				shipCreation();
-				askedShipBuild = false;
-				shipBuilt = true;
-			}
-			else { noMoney = true; }
-		}
-	}
-
-
-}
-
 void SP2::Dialogues()
 {
 	std::ifstream file("TextFiles//NPCDialogues.txt");
@@ -2081,6 +1966,16 @@ void SP2::Exit()
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
+
+    delete LightHull;
+    delete MediumHull;
+    delete LargeHull;
+
+    delete DualWings;
+    delete QuadWings;
+
+    delete G1Engine;
+    delete G2Engine;
 }
 
 bool SP2::checkCrystalPos(int posxcheck, int poszcheck, int i)

@@ -575,8 +575,7 @@ private:
 	void counterInteractions();
 	void spaceSuitInteractions();
 	void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
-	void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
-	void shopInteractions();
+    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
 	void shipFlying(double dt);
 	void shipAnimation(double dt, vector<Ship>::iterator i);
 	void shipCreation();
