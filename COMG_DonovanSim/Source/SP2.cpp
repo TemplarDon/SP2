@@ -280,7 +280,7 @@ void SP2::Update(double dt)
 		firstFrames--;
 	}
 
-<<<<<<< HEAD
+
     if (Application::IsKeyPressed('R'))
     {
 		reset();
@@ -784,7 +784,10 @@ void SP2::Update(double dt)
 			AsteroidCollision = true;
 		}
 	}
-
+	if (AsteroidCollision == true)
+	{
+		reset();
+	}
 
 
 	//Entering / Exiting Ship
@@ -1579,7 +1582,7 @@ void SP2::shipCreation()
 	//WHY SHOULD YOU LOAD A MESH IN THE MIDDLE OF THE PROGRAM? WHO WAS DOING IT? (comment by Gary Goh)
 	//meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
 
-    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0), camPointer->target);
+    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipPos, 4, 0, Vector3(0, 0, 0), camPointer->target);
     someShip.setRequirements(50, 500);
 
 	shipTemplatePtr = &someShip;
@@ -2071,21 +2074,45 @@ bool SP2::checkCrystalPos(int posxcheck, int poszcheck, int i)
 void SP2::reset()
 {
 		somePlayer.removeCrystals(somePlayer.getCrystals()); //sets amount of crystals to 0;    
+		somePlayer.addCrystals(50); 
 		//removes ship obj and collision  
-		//resets first person camera to starting area  
+		shipBuilt = false; //doesnt render ship obj collision is still there 
 		if (somePlayer.getCameraType() != "first")
 		{
-				camPointer = &firstPersonCamera;
-				somePlayer.setCameraType("first");
+			camPointer = &firstPersonCamera;
+			somePlayer.setCameraType("first");
 		}
-		somePlayer.pos = startingCharPos;    
-		firstPersonCamera.Reset();    
+		somePlayer.pos = startingCharPos;
+		firstPersonCamera.Reset();
 		//resets third person camera      
-		thirdPersonCamera.Reset();     
+		thirdPersonCamera.Reset();
+		if (ShipList.size() > 0)
+		{
+			ShipList.pop_back();
+		}
 		//render space suit    
 		wearSuit = false;  
 		//render crystals    
-
+		
+		for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+		{
+			if (it->name == "crystal")
+			{
+				it = this->InteractablesList.erase(it);
+				it = InteractablesList.begin();
+			}
+		}
+		for (int i = 0; i < CrystalNo; i++) //create collision for all crystal again 
+		{
+			InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(xcoords[i], 0, zcoords[i]), 5, 0, Vector3(0, 0, 0));
+			crystal.setRequirements(30, 5);
+			InteractablesList.push_back(crystal);
+		}
+		for (int a = 0; a < CrystalNo; a++)
+		{
+			rendercrystal[a] = 1;  //set all crystal to render    
+		}
+		
 }
 
 
