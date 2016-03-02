@@ -102,6 +102,9 @@ void SP2::Init()
 	List2Appear = false;
 	CafeStuff = false;
 	ShopStuff = false;
+	NPCInCafeTokenTask = false;
+	NPCInRecMazeTask = false; 
+	HelipadInstructions = false;
 
 	askedEngine = false;
 	askedHull = false;
@@ -170,7 +173,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, -370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 125, 17, 120 };
+	startingCharPos = charPos = { 360, 17, -88 };
 	//125, 120 
 	//250, 40
 
@@ -304,6 +307,8 @@ void SP2::Update(double dt)
 		firstPersonCamera.Reset();
 	}
 
+	//INSTRUCTIONS
+	readInstructions();
 
 	//DIALOGUE DO NOT DELETE THIS 
 	DialoguesWithNPCs();
@@ -311,14 +316,8 @@ void SP2::Update(double dt)
 	//DO NOT DELETE EQUIP WEAPON STUFF
 	EquippingWeapons();
 
-	//DO NOT DELETE CAFE MENU STUFF 
 	//CAFE MENU
-
-	//if (CafeStuff == true)
-	//{
-	//ShopStuff = false;
 	CafeMenuPointerInteraction();
-	//}
 
 	if (Application::IsKeyPressed('U'))
 	{
@@ -327,50 +326,9 @@ void SP2::Update(double dt)
 		BreadAppear = false;
 	}
 
-
-	//if (DisplayCafeMenu == false)
-	//{
-	//	S = CAFENOMENU;
-	//}
-
-	//if (DisplayShopList == false)
-	//{
-	//	L = SHOPNOMENU;
-	//}
-
 	//SHOP LIST
-	//ShopMenuPointerInteraction();
-	//DO NOT DELETE SHOP MENU STUFF
-	//ShopMenuPointerInteraction();
-
-	//if (Application::IsKeyPressed(VK_DOWN))
-	//{
-	//	shopListPointer -= 12;
-	//}
-
-	//if (Application::IsKeyPressed(VK_UP))
-	//{
-	//	shopListPointer += 12;
-	//}
-
-	//if (ShopStuff == true)
-	//{
-	//CafeStuff = false;
 	ShopMenuPointerInteraction();
-	//}
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
 
 	//Safe + keypad stuff (Gary's)
 	if (isSafeOpen)
@@ -1982,7 +1940,63 @@ void SP2::DialoguesWithNPCs()
 				spaceguyText = false;
 			}
 		}
+
+		//NPC IN CAFE
+		if (it->name == "shopkeeper")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				NPCInCafeTokenTask = true;
+
+			}
+			else
+			{
+
+				NPCInCafeTokenTask = false;
+			}
+		}
+
+
+		//NPC IN REC ROOM
+		if (it->name == "spaceguy2")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				NPCInRecMazeTask = true;
+
+			}
+			else
+			{
+
+				NPCInRecMazeTask = false;
+			}
+		}
+
+
+
+		
 	}
+}
+
+void SP2::readInstructions()
+{
+	std::ifstream file("TextFiles//Instructions.txt");
+	std::string str;
+	while (std::getline(file, str))
+	{
+		file_contents2 = str;
+		if (str != "end")
+		{
+			instruct_vec.push_back(file_contents2);
+			cout << file_contents2 << endl;
+		}
+		else
+		{
+			break;
+		}
+
+	}
+
 }
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
