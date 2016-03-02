@@ -160,7 +160,9 @@ class SP2 : public Scene
 		GEO_APPLE,
 
 
-
+		//HEALTH BAR
+		GEO_DEADHEALTHBAR,
+		GEO_ALIVEHEALTHBAR,
 
 
 
@@ -564,6 +566,7 @@ private:
 	void RenderPointerOnScreen(Mesh* mesh, float size, float x, float y); //weapon pointer
 	void RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderGunOnScreen(Mesh* mesh, float size, float x, float y);
+	void RenderHealthBarOnScreen(Mesh* mesh, float size, float x, float y);
 
 
 	// Toggle between 1st and 3rd person camera

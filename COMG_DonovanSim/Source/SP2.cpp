@@ -435,12 +435,13 @@ void SP2::Update(double dt)
                 {
                     wearSuitText = true;
 
-                    if (Application::IsKeyPressed('T'))
-                    {
-                        //SuitTranslate = -50;
-                        wearSuit = true;
-                        DisplayInventory = true;
-                    }
+				if (Application::IsKeyPressed('T'))
+				{
+					//SuitTranslate = -50;
+					wearSuit = true;
+					DisplayInventory = true;
+					HandDisappear = true;
+				}
 
                     if (Application::IsKeyPressed('G'))
                     {
