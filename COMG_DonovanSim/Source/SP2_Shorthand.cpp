@@ -1043,8 +1043,6 @@ void SP2::RenderCode()
 
         RenderTextOnScreen(meshList[GEO_TEXT], hullText.str(), Color(1, 0, 0), 2, 19, 2);
 
-
-
 	}
 
 	if (HandDisappear == false)  //false
