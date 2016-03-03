@@ -476,7 +476,7 @@ void SP2::LoadMeshes()
 	//SPACESUIT
 	meshList[GEO_SPACESUIT] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spacesuit.obj");
 	meshList[GEO_SPACESUIT]->textureID = LoadTGA("Image//Spacesuit.tga");
-	InteractableOBJs spacesuit = InteractableOBJs("spacesuit", meshList[GEO_SPACESUIT]->maxPos, meshList[GEO_SPACESUIT]->minPos, Position(220, SuitTranslate, 190), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs spacesuit = InteractableOBJs("spacesuit", meshList[GEO_SPACESUIT]->maxPos, meshList[GEO_SPACESUIT]->minPos, Position(220, 2, 190), 2, 0, Vector3(0, 0, 0));
 	spacesuit.setRequirements(25, 15);
 	InteractablesList.push_back(spacesuit);
 	//SPACE MASK
@@ -1378,6 +1378,7 @@ void SP2::renderMaze()
         modelStack.PushMatrix();
         modelStack.Translate(-350, 15, -370);
         modelStack.Scale(2, 2, 2);
+		modelStack.Rotate(SpinTheFood, 0, 1, 0);
         RenderMesh(meshList[GEO_MAZE_TREASURE], true, toggleLight);
         modelStack.PopMatrix();
     }
@@ -1931,7 +1932,7 @@ void SP2::RenderBunkRoom()
 
 	//SPACESUIT
 	modelStack.PushMatrix();
-	modelStack.Translate(220, SuitTranslate, 190);
+	modelStack.Translate(220, 2, 190);
 	modelStack.Scale(1.3, 1.3, 1.3);
 	modelStack.Rotate(180, 0, 1, 0);
 	RenderMesh(meshList[GEO_SPACESUIT], true, toggleLight);
