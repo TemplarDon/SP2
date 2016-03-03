@@ -176,7 +176,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 250, 17, 40 };
+	startingCharPos = charPos = { -350, 17, 370 };
 	//300 , 17, 300
 	//125, 120 
 	//250, 40
