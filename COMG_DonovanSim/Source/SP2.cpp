@@ -1229,7 +1229,7 @@ void SP2::EquippingWeapons()
 	}
 
 	//F3 TO MAKE INVENTORY AND HAND APPEAR
-	if (Application::IsKeyPressed(VK_F3))
+	if (Application::IsKeyPressed(VK_F3) && (wearSuit == false))
 	{
 		equipGun = false;
 		equipPickaxe = false;
@@ -1915,6 +1915,10 @@ void SP2::Exit()
 \brief
 Function to check for each individual crystal's position    
 
+\param posxcheck , poszcheck , i    
+posxcheck and poszcheck checks the current position of where the player is 
+looking at, i is the position of the crystal's xcoord,zcoord in the array    
+
 \return
 returns bool, true if there is a crystal at that position, false if not 
 */
@@ -2054,4 +2058,4 @@ void SP2::asteroidgen()
 		InteractablesList.push_back(asteroid);
 	}
 
-}  
+} 
