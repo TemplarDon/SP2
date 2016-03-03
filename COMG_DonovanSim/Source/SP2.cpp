@@ -205,57 +205,9 @@ void SP2::Init()
 
 	firstPersonCamera.Reset();
 
-	//CRYSTAL
-	//ASSIGNING COORD INTO ARRAY   x - 30 , 350  z - -190 , 250
-	CrystalNo = 20;
-	for (int i = 0; i < CrystalNo; i++)
-	{
-		coord1 = rand() % 474 - 42;
-		coord2 = rand() % 763 - 381;
-		if (((coord1 < 30) || coord1 > 350) || ((coord2 < -190) || (coord2 > 250)))
-		{
-			xcoords[i] = coord1;
-			zcoords[i] = coord2;
-			rendercrystal[i] = 1;
-			//cout << coord1 << "," << coord2 << endl;
-		}
-	}
-	for (int i = 0; i < CrystalNo; i++)
-	{
-		InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(xcoords[i], 0, zcoords[i]), 5, 0, Vector3(0, 0, 0));
-		crystal.setRequirements(30, 5);
-		InteractablesList.push_back(crystal);
-	}
-	AsteroidNo = 40;
-	for (int i = 0; i < AsteroidNo; i++)
-	{
-		coord1 = rand() % 1000 - 500;
-		coord2 = rand() % 1000 - 500;
-		coord3 = rand() % 20 + 90;
-		asteroidx[i] = coord1;
-		asteroidy[i] = coord3;
-		asteroidz[i] = coord2;
-		coord1 = rand() % 10 - 5;
-		if (coord1 == 0)
-		{
-			coord1 = 1;
-		}
-		coord2 = rand() % 10 - 5;
-		if (coord2 == 0)
-		{
-			coord1 = 1;
-		}
-		movex[i] = coord1;
-		movez[i] = coord2;
-	}
+	crystalgen();
 
-	for (int i = 0; i < AsteroidNo; i++)
-	{
-		InteractableOBJs asteroid = InteractableOBJs("asteroid", meshList[GEO_ASTEROID]->maxPos, meshList[GEO_ASTEROID]->minPos, Position(asteroidx[i], asteroidy[i], asteroidz[i]), 1, 0, Vector3(0, 0, 0));
-		asteroid.setRequirements(30, 5);
-		InteractablesList.push_back(asteroid);
-	}
-	crystalcount = 0;
+	asteroidgen();
 
 	InitSafe();
 }
@@ -711,6 +663,7 @@ void SP2::Update(double dt)
 		}
 	}
 
+	//JUMP     
 
 	if (Application::IsKeyPressed(VK_SPACE) && (onGround == true)) //s = ut + 0.5 at^2
 	{
@@ -752,8 +705,6 @@ void SP2::Update(double dt)
 			asteroidz[i] *= -1;
 		}
 	}
-
-	//ASTEROID COLLISION CHECK      
 	for (int i = 0; i < AsteroidNo; i++)
 	{
 		posxcheck = asteroidx[i];
@@ -766,14 +717,9 @@ void SP2::Update(double dt)
 		between = sqrt(between);
 		if (between <= 30)
 		{
-			AsteroidCollision = true;
+			reset();
 		}
 	}
-	if (AsteroidCollision == true)
-	{
-		reset();
-	}
-
 
 	//Entering / Exiting Ship
 	shipToggle(dt, InteractablesList, somePlayer);
@@ -2009,6 +1955,15 @@ void SP2::Exit()
 	delete G1Engine;
 	delete G2Engine;
 }
+/******************************************************************************/
+/*!
+\brief
+Function to check for each individual crystal's position    
+
+\return
+returns bool, true if there is a crystal at that position, false if not 
+*/
+/******************************************************************************/
 
 bool SP2::checkCrystalPos(int posxcheck, int poszcheck, int i)
 {
@@ -2021,7 +1976,12 @@ bool SP2::checkCrystalPos(int posxcheck, int poszcheck, int i)
 		return false;
 	}
 }
-
+/******************************************************************************/
+/*!
+\brief
+Function that resets the game     
+*/
+/******************************************************************************/
 void SP2::reset()
 {
 	somePlayer.removeCrystals(somePlayer.getCrystals()); //sets amount of crystals to 0;    
@@ -2078,4 +2038,71 @@ void SP2::reset()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+Function that randomly generates crystals (OBJ and hitbox)    
+*/
+/******************************************************************************/
+void SP2::crystalgen()
+{
+	CrystalNo = 20;
+	for (int i = 0; i < CrystalNo; i++)
+	{
+		coord1 = rand() % 474 - 42;
+		coord2 = rand() % 763 - 381;
+		if (((coord1 < 30) || coord1 > 350) || ((coord2 < -190) || (coord2 > 250)))
+		{
+			xcoords[i] = coord1;
+			zcoords[i] = coord2;
+			rendercrystal[i] = 1;
+			//cout << coord1 << "," << coord2 << endl;
+		}
+	}
+	for (int i = 0; i < CrystalNo; i++)
+	{
+		InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(xcoords[i], 0, zcoords[i]), 5, 0, Vector3(0, 0, 0));
+		crystal.setRequirements(30, 5);
+		InteractablesList.push_back(crystal);
+	}
+}
 
+/******************************************************************************/
+/*!
+\brief
+Function that randomly generates asteroid (OBJ + hitbox + movement + rotation)      
+*/
+/******************************************************************************/
+void SP2::asteroidgen()
+{
+	AsteroidNo = 40;
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		coord1 = rand() % 1000 - 500;
+		coord2 = rand() % 1000 - 500;
+		coord3 = rand() % 20 + 90;
+		asteroidx[i] = coord1;
+		asteroidy[i] = coord3;
+		asteroidz[i] = coord2;
+		coord1 = rand() % 10 - 5;
+		if (coord1 == 0)
+		{
+			coord1 = 1;
+		}
+		coord2 = rand() % 10 - 5;
+		if (coord2 == 0)
+		{
+			coord1 = 1;
+		}
+		movex[i] = coord1;
+		movez[i] = coord2;
+	}
+
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		InteractableOBJs asteroid = InteractableOBJs("asteroid", meshList[GEO_ASTEROID]->maxPos, meshList[GEO_ASTEROID]->minPos, Position(asteroidx[i], asteroidy[i], asteroidz[i]), 1, 0, Vector3(0, 0, 0));
+		asteroid.setRequirements(30, 5);
+		InteractablesList.push_back(asteroid);
+	}
+
+}  

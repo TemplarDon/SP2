@@ -619,6 +619,15 @@ private:
 	bool engineFound;
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);
+
+	void crystalgen();
+	void asteroidgen();
+
+	void jump();
+
+
+
+
 };
 
 #endif
