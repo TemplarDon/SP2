@@ -1538,13 +1538,6 @@ void SP2::ReadKeyPresses()
 		}
 	}
 
-	//COLLECT TOLKEN
-	//if (Application::IsKeyPressed('Q'))
-	//{
-	//	TokenOnScreen = true;
-	//	TokenTranslate = 10.5;
-	//}
-
 	if (Application::IsKeyPressed('C'))
 	{
 		isInViewSpheres = true;

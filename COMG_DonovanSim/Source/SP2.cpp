@@ -174,8 +174,8 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
-	//startingCharPos = charPos = { 300, 17, 300 };
+	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
+	startingCharPos = charPos = { 300, 17, 300 };
 	//125, 120 
 	//250, 40
 
@@ -260,6 +260,9 @@ void SP2::Init()
 
 void SP2::Update(double dt)
 {
+    //PlaySound(TEXT("Music//space.wav"), NULL, SND_SYNC);
+    //system("pause");
+
 	//Dont touch this code 
 	CrystalText = false;
 	AsteroidCollision = false;
@@ -613,7 +616,7 @@ void SP2::Update(double dt)
                 if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
                 {
                     treasureText = true;
-                    if(Application::IsKeyPressed('E'))
+                    if(Application::IsKeyPressed('E') && !treasureTaken)
                     {
                         treasureTaken = true;
                         somePlayer.addCrystals(9001);
@@ -690,7 +693,6 @@ void SP2::Update(double dt)
 	}
 
 	//ASTEROID MOVEMENT    
-
 	for (int i = 0; i < AsteroidNo; i++)
 	{
 		asteroidx[i] += movex[i] + 0.05 * dt;
