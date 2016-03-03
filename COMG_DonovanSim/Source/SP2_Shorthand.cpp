@@ -1082,10 +1082,28 @@ void SP2::RenderCode()
 	// Ship Stats
 	std::ostringstream shipStats;
 	shipStats.str("");
+
+    std::ostringstream shipLanding;
+    shipLanding.str("");
 	if (ShipList.size() > 0)
 	{
 		shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
-		RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
+
+        RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8f);
+        RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(1, 0, 0), 1.7f, 5, 10);
+
+        for (size_t i = 0; i < ShipList.size(); ++i)
+        {
+            if (somePlayer.pos.y <= 30 && ShipList[i].shipSpeed <= ShipList[i].shipLandingSpeed)
+            {
+                shipLanding << "Landing Status: " << "Can Land" ;
+            }
+            else
+            {
+                shipLanding << "Landing Status: " << "Can't Land";
+            }
+        }
+        RenderTextOnScreen(meshList[GEO_TEXT], shipLanding.str(), Color(1, 0, 0), 1.7f, 5, 8);
 	}
 
 	// Tests for ship Flight
@@ -1096,9 +1114,6 @@ void SP2::RenderCode()
 
 	if (deadText) { RenderHealthBarOnScreen(meshList[GEO_DEADHEALTHBAR], 2.6f, 2.5f, 21); }
 	else { RenderHealthBarOnScreen(meshList[GEO_ALIVEHEALTHBAR], 2.6f, 2.5f, 21); }
-
-	//CROSS HAIR
-	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
 }
 
 void SP2::initSpaceShip()

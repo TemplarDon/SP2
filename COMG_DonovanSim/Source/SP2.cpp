@@ -1944,6 +1944,7 @@ void SP2::reset()
 		HandDisappear = false;
 	}
 	somePlayer.pos = startingCharPos;
+    shipPos = shipStartingPos;
 	firstPersonCamera.Reset();
 	//resets third person camera      
 	thirdPersonCamera.Reset();
