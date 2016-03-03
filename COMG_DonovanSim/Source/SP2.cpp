@@ -258,8 +258,51 @@ void SP2::Update(double dt)
 	//FPS
 	FramesPerSecond = 1 / dt;
 
-	moveLightPosition(0, { float(dt) * 3, 0, 0 });
-	rotateSpotlight(1, float(dt) * 160, { 1, 1, 0 });
+	if (Application::IsKeyPressed(VK_NUMPAD4))
+	{
+		light[0].position.x += float(dt) * 8;
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD1))
+	{
+		light[0].position.x -= float(dt) * 8;
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD2))
+	{
+		light[0].position.y += float(dt) * 8;
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD5))
+	{
+		light[0].position.y -= float(dt) * 8;
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD3))
+	{
+		light[0].position.z += float(dt) * 8;
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD6))
+	{
+		light[0].position.z -= float(dt) * 8;
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD7))
+	{
+		setLightPower(0, light[0].power + float(dt));
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD8))
+	{
+		setLightPower(0, light[0].power - float(dt));
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD0))
+	{
+		bool k = true;
+	}
+
 
 	//READKEYS FUNCTION
 	ReadKeyPresses();
@@ -1218,7 +1261,7 @@ void SP2::CafeMenuPointerInteraction()
 	}
 	else
 	{
-		CoolDownTime == 0;
+		CoolDownTime = 0;
 	}
 
 	switch (S)

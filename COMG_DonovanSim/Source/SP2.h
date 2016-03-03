@@ -269,8 +269,8 @@ class SP2 : public Scene
 		SHOPNOMENU,
 	};
 
-	//Light data.
-	static const size_t numLights = 3; Light light[numLights];
+	//Light data. Variable numLights is used to define the number of lights this scene has.
+	static const size_t numLights = 7; Light light[numLights];
 	unsigned m_parameters[U_TOTAL];
 	unsigned lightUniforms[numLights][UL_TOTAL];
 
@@ -290,8 +290,26 @@ class SP2 : public Scene
 
 	void setLightColor(const size_t &index, const Color &C);
 	void setLightPower(const size_t &index, const float &P);
-	void moveLightPosition(const size_t &index, const Vector3 &M);
+	void setLightCutoff(const size_t &index, const float &D);
+	void setLightInner(const size_t &index, const float &D);
+	void moveLightPosition(const size_t &index, const Vector3 &M, const bool &absolute);
 	void rotateSpotlight(const size_t &index, const float &degrees, const Vector3 &axis);
+
+	unsigned m_vertexArrayID;
+	unsigned m_vertexBuffer[NUM_GEOMETRY];
+	unsigned m_colorBuffer[NUM_GEOMETRY];
+	unsigned m_indexBuffer[NUM_GEOMETRY];
+	Mesh *meshList[NUM_GEOMETRY];
+	unsigned m_programID;
+
+	void MeshInit(GEOMETRY_TYPE G,
+		Mesh *mesh,
+		const unsigned &textureID = 0,
+		const Component &ambient = { 0.4f, 0.4f, 0.4f },
+		const Component &diffuse = { 0.5f, 0.5f, 0.5f },
+		const Component &specular = { 0, 0, 0 },
+		const float &shininess = 1
+		);
 
 public:
 	SP2();
@@ -302,15 +320,6 @@ public:
 	virtual void Render();
 	virtual void Exit();
 private:
-
-	unsigned m_vertexArrayID;
-	unsigned m_vertexBuffer[NUM_GEOMETRY];
-	unsigned m_colorBuffer[NUM_GEOMETRY];
-	unsigned m_indexBuffer[NUM_GEOMETRY];
-	Mesh *meshList[NUM_GEOMETRY];
-	unsigned m_programID;
-
-
 	MS modelStack, viewStack, projectionStack;
 
 	Player somePlayer;
@@ -322,7 +331,6 @@ private:
 	// Starting position for ship
 	Position shipStartingPos;
 	Position shipPos;
-
 
 	// Variable to allow ship to rotate while moving
 	float shipHorizontalRotateAngle;
@@ -517,10 +525,6 @@ private:
 	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y);
 
-
-
-
-
 	//SHOP LIST
 	ShopList L;
 	float shopListPointer;
@@ -541,9 +545,6 @@ private:
 	void RenderShopTextboxOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderShopPointerOnScreen(Mesh* mesh, float size, float x, float y);
 
-
-
-
 	//RENDER TEXT
 	void RenderText(Mesh* mesh, std::string text, Color color);
 
@@ -561,7 +562,6 @@ private:
 	void RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderGunOnScreen(Mesh* mesh, float size, float x, float y);
 
-
 	// Toggle between 1st and 3rd person camera
 	void shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer);
 
@@ -578,7 +578,6 @@ private:
 	void shipCreation();
 	void mazeTranslate(double dt);
 	void EquippingWeapons();
-
 
 	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM
 	void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
@@ -600,13 +599,8 @@ private:
 	bool shipBuilt;
 	bool noMoney;
 
-
-
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(int xcoord, int zcoord, int i);
-
-
-
 };
 
 #endif
