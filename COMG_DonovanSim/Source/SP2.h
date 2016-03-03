@@ -382,7 +382,7 @@ private:
 	bool ConsumeCokeText;
 	bool PickUpTokenText;
 	bool testText;
-	bool MENUBOOL;
+	bool MenuBool;
 	bool wearSuitText;
 	bool wearSuit;
 	bool DisplayInventory;
@@ -392,7 +392,6 @@ private:
 	bool doctorText;
 	bool traderText;
 	bool soldierText;
-	bool shopkeeperText;
 	bool equipPickaxe;
 	bool equipGun;
 	bool HandDisappear;
@@ -401,7 +400,6 @@ private:
 	bool AppleAppear;
 	bool NPCInCafeTokenTask;
 	bool NPCInRecMazeTask;
-	bool HelipadInstructions;
 
 	//DOOR (DONOVAN'S)
 	float leftGateOffset;
@@ -420,8 +418,8 @@ private:
 	float lavaTranslation;
 	vector<float>mazeRandomTranslateVec;
 	bool deadText;
-    bool treasureText;
-    bool treasureTaken;
+	bool treasureText;
+	bool treasureTaken;
 
 	//JUMP (BECKHAM'S)
 	int acceleration;
