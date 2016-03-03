@@ -1007,21 +1007,43 @@ void SP2::RenderCode()
         std::ostringstream as;
         as.str("");
         as << somePlayer.getCrystals();
-        RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 2, 10.5, 1);
-
+        RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 2, 10.5, 2);
 
         // Ship Parts
         std::ostringstream engineText;
         engineText.str("");
 
+        std::ostringstream wingsText;
+        wingsText.str("");
+
+        std::ostringstream hullText;
+        hullText.str("");
 
 
-		//Weapon 
-		std::ostringstream weapon;
-		weapon.str("");
-		if (somePlayer.checkWeapon()) { weapon << "Equipped"; }
-		else { weapon << "Unequipped"; }
-		RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(1, 0, 0), 1.3, 36, 4);
+        if (somePlayer.getParts().size() > 0)
+        {
+            for (list<ShipParts*>::iterator it = somePlayer.getParts().begin(); it != somePlayer.getParts().end(); ++it)
+            {
+                if ((*it)->getName() == "LightHull") { hullText << "Light"; }
+                if ((*it)->getName() == "MediumHull") { hullText << "Medium"; }
+                if ((*it)->getName() == "LargeHull") { hullText << "Large"; }
+
+                if ((*it)->getName() == "DualWings") { wingsText << "Dual"; }
+                if ((*it)->getName() == "QuadWings") { wingsText << "Quad"; }
+
+                if ((*it)->getName() == "G1Engine") { engineText << "G1"; }
+                if ((*it)->getName() == "G2Engine") { engineText << "G2"; }
+
+            }
+        }
+
+        RenderTextOnScreen(meshList[GEO_TEXT], engineText.str(), Color(1, 0, 0), 2, 13, 2);
+
+        RenderTextOnScreen(meshList[GEO_TEXT], wingsText.str(), Color(1, 0, 0), 2, 16, 2);
+
+        RenderTextOnScreen(meshList[GEO_TEXT], hullText.str(), Color(1, 0, 0), 2, 19, 2);
+
+
 
 	}
 
@@ -1047,17 +1069,17 @@ void SP2::RenderCode()
 		RenderGunOnScreen(meshList[GEO_HOLDGUN], 3.4, 19.5, 4);
 	}
 
-	// Player POS
-	std::ostringstream playerpos;
-	playerpos.str("");
-	playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
+	//// Player POS
+	//std::ostringstream playerpos;
+	//playerpos.str("");
+	//playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
+	//RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
-	// Collision check with asteroid  
-	std::ostringstream os;
-	os.str("");
-	os << "Collision with asteroids :" << AsteroidCollision;
-	RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
+	//// Collision check with asteroid  
+	//std::ostringstream os;
+	//os.str("");
+	//os << "Collision with asteroids :" << AsteroidCollision;
+	//RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
 
 
 	//INSTRUCTIONS
