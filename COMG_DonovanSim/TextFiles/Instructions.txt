@@ -8,4 +8,6 @@ Press U to drink the coke.
 Press T to put on the spacesuit.
 Press G to take out the spacesuit.
 Press Q to insert token.
+Here is the treasure!
+Press E to get the treasure.
 end

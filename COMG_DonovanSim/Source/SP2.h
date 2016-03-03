@@ -409,8 +409,9 @@ private:
 	float mazeRandomTranslate;
 	float lavaTranslation;
 	vector<float>mazeRandomTranslateVec;
-	bool mazeOpening;
 	bool deadText;
+    bool treasureText;
+    bool treasureTaken;
 
 	//JUMP (BECKHAM'S)
 	int acceleration;

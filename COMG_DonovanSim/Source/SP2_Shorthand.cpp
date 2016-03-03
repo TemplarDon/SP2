@@ -997,19 +997,46 @@ void SP2::RenderCode()
 		//POINTER
 		RenderPointerOnScreen(meshList[GEO_POINTER], 0.4, translatePointer, 37);     //127, 141
 
+        //CRYSTAL COUNTS
+        std::ostringstream as;
+        as.str("");
+        as << somePlayer.getCrystals();
+        RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 2, 10.5, 1);
 
-		//CRYSTAL COUNTS
-		std::ostringstream as;
-		as.str("");
-		as << somePlayer.getCrystals();
-		RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 1.5, 16.2, 5);
 
-		//Weapon 
-		std::ostringstream weapon;
-		weapon.str("");
-		if (somePlayer.checkWeapon()) { weapon << "Equipped"; }
-		else { weapon << "Unequipped"; }
-		RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(1, 0, 0), 1.3, 36, 4);
+        // Ship Parts
+        std::ostringstream engineText;
+        engineText.str("");
+
+        std::ostringstream wingsText;
+        wingsText.str("");
+
+        std::ostringstream hullText;
+        hullText.str("");
+
+
+        if (somePlayer.getParts().size() > 0)
+        {
+            for (list<ShipParts*>::iterator it = somePlayer.getParts().begin(); it != somePlayer.getParts().end(); ++it)
+            {
+                if ((*it)->getName() == "LightHull") { hullText << "Light"; }
+                if ((*it)->getName() == "MediumHull") { hullText << "Medium"; }
+                if ((*it)->getName() == "LargeHull") { hullText << "Large"; }
+
+                if ((*it)->getName() == "DualWings") { wingsText << "Dual"; }
+                if ((*it)->getName() == "QuadWings") { wingsText << "Quad"; }
+
+                if ((*it)->getName() == "G1Engine") { engineText << "G1"; }
+                if ((*it)->getName() == "G2Engine") { engineText << "G2"; }
+
+            }
+        }
+
+        RenderTextOnScreen(meshList[GEO_TEXT], engineText.str(), Color(1, 0, 0), 2, 13, 1);
+
+        RenderTextOnScreen(meshList[GEO_TEXT], wingsText.str(), Color(1, 0, 0), 2, 16, 1);
+
+        RenderTextOnScreen(meshList[GEO_TEXT], hullText.str(), Color(1, 0, 0), 2, 19, 1);
 	}
 
 	if (HandDisappear == false)  //false
@@ -1034,17 +1061,24 @@ void SP2::RenderCode()
 		RenderGunOnScreen(meshList[GEO_HOLDGUN], 3.4, 19.5, 4);
 	}
 
-	// Player POS
-	std::ostringstream playerpos;
-	playerpos.str("");
-	playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
+	//// Player POS
+	//std::ostringstream playerpos;
+	//playerpos.str("");
+	//playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
+	//RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
-	// Collision check with asteroid  
-	std::ostringstream os;
-	os.str("");
-	os << "Collision with asteroids :" << AsteroidCollision;
-	RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
+	//// Collision check with asteroid  
+	//std::ostringstream os;
+	//os.str("");
+	//os << "Collision with asteroids :" << AsteroidCollision;
+	//RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
+
+	////Weapon 
+	//std::ostringstream weapon;
+	//weapon.str("");
+	//if (somePlayer.checkWeapon()) { weapon << "true"; }
+	//else { weapon << "false"; }
+	//RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(0, 1, 0), 1.5, 16.2, 8);
 
 
 	//INSTRUCTIONS
@@ -1179,8 +1213,9 @@ void SP2::initMaze()
 		++i;
 	}
 
-	InteractableOBJs mazeTreasure = InteractableOBJs("mazeTreasure", meshList[GEO_MAZE_TREASURE]->maxPos, meshList[GEO_MAZE_TREASURE]->minPos, Position(-350, 15, -370), 5, 0, Vector3(0, 0, 0));
-	InteractablesList.push_back(mazeTreasure);
+    InteractableOBJs mazeTreasure = InteractableOBJs("mazeTreasure", meshList[GEO_MAZE_TREASURE]->maxPos, meshList[GEO_MAZE_TREASURE]->minPos, Position(-350, 15, -370), 5, 0, Vector3(0, 0, 0));
+    mazeTreasure.setRequirements(25, 12);
+    InteractablesList.push_back(mazeTreasure);
 
 	InteractableOBJs pedastal = InteractableOBJs("pedastal", meshList[GEO_PEDASTAL]->maxPos, meshList[GEO_PEDASTAL]->minPos, Position(-350, 0, -370), 10, 0, Vector3(0, 0, 0));
 	InteractablesList.push_back(pedastal);
@@ -1377,25 +1412,29 @@ void SP2::renderMaze()
 		++i;
 	}
 
-	// Treasure + Pedastal
-	modelStack.PushMatrix();
-	modelStack.Translate(-350, 0, -370);
-	modelStack.Scale(5, 10, 5);
-	RenderMesh(meshList[GEO_PEDASTAL], true, toggleLight);
-	modelStack.PopMatrix();
+    // Treasure + Pedastal
+    modelStack.PushMatrix();
+    modelStack.Translate(-350, 0, -370);
+    modelStack.Scale(5, 10, 5);
+    RenderMesh(meshList[GEO_PEDASTAL], true, toggleLight);
+    modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-350, 15, -370);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_MAZE_TREASURE], true, toggleLight);
-	modelStack.PopMatrix();
+    if (!treasureTaken)
+    {
+        modelStack.PushMatrix();
+        modelStack.Translate(-350, 15, -370);
+        modelStack.Scale(2, 2, 2);
+        RenderMesh(meshList[GEO_MAZE_TREASURE], true, toggleLight);
+        modelStack.PopMatrix();
+    }
 
-	// SignBoard
-	modelStack.PushMatrix();
-	modelStack.Translate(-370, 0, 370);
-	modelStack.Scale(5, 5, 5);
-	RenderMesh(meshList[GEO_SIGNBOARD], true, toggleLight);
-	modelStack.PopMatrix();
+
+    // SignBoard
+    modelStack.PushMatrix();
+    modelStack.Translate(-370, 0, 370);
+    modelStack.Scale(5, 5, 5);
+    RenderMesh(meshList[GEO_SIGNBOARD], true, toggleLight);
+    modelStack.PopMatrix();
 }
 
 void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
@@ -1567,6 +1606,13 @@ void SP2::RenderInstructions()
 		RenderSpacemaskOnScreen(meshList[GEO_SPACEMASK], 5, 8, 6.3);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
+
+    if (treasureText)
+    {
+        RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
+        RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[10], Color(1, 0, 0), 1.7, 5, 10);
+        RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[11], Color(1, 0, 0), 1.7, 5, 8);
+    }
 }
 
 void SP2::RenderNPCDialogues()
