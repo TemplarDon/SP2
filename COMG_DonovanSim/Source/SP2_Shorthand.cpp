@@ -300,37 +300,37 @@ void SP2::LoadMeshes()
 	shopkeeper.setRequirements(27, 15);
 	InteractablesList.push_back(shopkeeper);
 	//NURSE
-	meshList[GEO_NURSE] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Nurse.obj");
+	meshList[GEO_NURSE] = MeshBuilder::GenerateOBJ("Nurse", "OBJ//Nurse.obj");
 	meshList[GEO_NURSE]->textureID = LoadTGA("Image//Nurse.tga");
 	InteractableOBJs nurse = InteractableOBJs("nurse", meshList[GEO_NURSE]->maxPos, meshList[GEO_NURSE]->minPos, Position(261, 2, -70), 2, 0, Vector3(0, 0, 0));
 	nurse.setRequirements(30, 12);
 	InteractablesList.push_back(nurse);
 	//DOCTOR //250, 2, -100
-	meshList[GEO_DOCTOR] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Doctor.obj");
+	meshList[GEO_DOCTOR] = MeshBuilder::GenerateOBJ("Doctor", "OBJ//Doctor.obj");
 	meshList[GEO_DOCTOR]->textureID = LoadTGA("Image//Doctor.tga");
 	InteractableOBJs doctor = InteractableOBJs("doctor", meshList[GEO_DOCTOR]->maxPos, meshList[GEO_DOCTOR]->minPos, Position(232, 2, -130), 2, 0, Vector3(0, 0, 0));
 	doctor.setRequirements(30, 12);
 	InteractablesList.push_back(doctor);
 	//TRADER
-	meshList[GEO_TRADER] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Trader.obj");
+	meshList[GEO_TRADER] = MeshBuilder::GenerateOBJ("Trader", "OBJ//Trader.obj");
 	meshList[GEO_TRADER]->textureID = LoadTGA("Image//Trader.tga");
 	InteractableOBJs trader = InteractableOBJs("trader", meshList[GEO_TRADER]->maxPos, meshList[GEO_TRADER]->minPos, Position(140, 2, 125), 2, 0, Vector3(0, 0, 0));
 	trader.setRequirements(30, 12);
 	InteractablesList.push_back(trader);
 	//SOLDIER
-	meshList[GEO_SOLDIER] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Soldier.obj");
+	meshList[GEO_SOLDIER] = MeshBuilder::GenerateOBJ("Soldier", "OBJ//Soldier.obj");
 	meshList[GEO_SOLDIER]->textureID = LoadTGA("Image//Soldier.tga");
 	InteractableOBJs soldier = InteractableOBJs("soldier", meshList[GEO_SOLDIER]->maxPos, meshList[GEO_SOLDIER]->minPos, Position(148, 2, 200), 2, 0, Vector3(0, 0, 0));
 	soldier.setRequirements(25, 15);
 	InteractablesList.push_back(soldier);
 	//CHEF
-	meshList[GEO_CHEF] = MeshBuilder::GenerateOBJ("Speakers", "OBJ//Chef.obj");
+	meshList[GEO_CHEF] = MeshBuilder::GenerateOBJ("Chef", "OBJ//Chef.obj");
 	meshList[GEO_CHEF]->textureID = LoadTGA("Image//Chef.tga");
 	InteractableOBJs chef = InteractableOBJs("chef", meshList[GEO_CHEF]->maxPos, meshList[GEO_CHEF]->minPos, Position(280, 2, -2), 2, 0, Vector3(0, 0, 0));
 	chef.setRequirements(32, 15);
 	InteractablesList.push_back(chef);
 	//SPACEGUY
-	meshList[GEO_SPACEGUY] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spaceman.obj");
+	meshList[GEO_SPACEGUY] = MeshBuilder::GenerateOBJ("Spaceguy", "OBJ//Spaceman.obj");
 	meshList[GEO_SPACEGUY]->textureID = LoadTGA("Image//Spaceman.tga");
 	InteractableOBJs spaceguy = InteractableOBJs("spaceguy", meshList[GEO_SPACEGUY]->maxPos, meshList[GEO_SPACEGUY]->minPos, Position(271, 1.8, 143), 2, 0, Vector3(0, 0, 0));
 	spaceguy.setRequirements(25, 12);
@@ -780,7 +780,6 @@ void SP2::MeshInit(GEOMETRY_TYPE G,
 #pragma endregion
 
 //Main rendering code
->>>>>>> origin/master
 void SP2::RenderCode()
 {
 	modelStack.PushMatrix();
@@ -895,14 +894,14 @@ void SP2::RenderCode()
 	// Base Top
 	// Infirmary
 	modelStack.PushMatrix();
-	modelStack.Translate(250, 62, -80);
+	modelStack.Translate(250, 63, -80);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
 	modelStack.PopMatrix();
 
 	// Sciene Lab
 	modelStack.PushMatrix();
-	modelStack.Translate(120, 62, -80);
+	modelStack.Translate(120, 63, -80);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
@@ -910,7 +909,7 @@ void SP2::RenderCode()
 
 	// Rec Room & Shop
 	modelStack.PushMatrix();
-	modelStack.Translate(120, 62, 120);
+	modelStack.Translate(120, 63, 120);
 	modelStack.Rotate(0, 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
@@ -918,7 +917,7 @@ void SP2::RenderCode()
 
 	// Bunks & Cafe
 	modelStack.PushMatrix();
-	modelStack.Translate(250, 62, 120);
+	modelStack.Translate(250, 63, 120);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
