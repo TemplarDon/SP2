@@ -526,10 +526,10 @@ void SP2::LoadMeshes()
 	meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
 	meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga");
 
-    //ASTEROIDS   
+	//ASTEROIDS   
 	meshList[GEO_ASTEROID] = MeshBuilder::GenerateOBJ("asteroid", "OBJ//Rock1.obj");
 	meshList[GEO_ASTEROID]->textureID = LoadTGA("Image//Asteroid.tga");
-	
+
 	//HANGAR
 	initSpaceShip();
 	// Helipad (Ship Spawn)
@@ -553,24 +553,24 @@ void SP2::LoadMeshes()
 
 
 
-    // Base
-    meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
-    meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga"); 
-    InteractableOBJs base1 = InteractableOBJs("base1", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
-    base1.setRequirements(25, 15);
-    InteractablesList.push_back(base1);
+	// Base
+	meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
+	meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga");
+	InteractableOBJs base1 = InteractableOBJs("base1", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	base1.setRequirements(25, 15);
+	InteractablesList.push_back(base1);
 
-    InteractableOBJs base2 = InteractableOBJs("base2", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
-    base2.setRequirements(25, 15);
-    InteractablesList.push_back(base2);
+	InteractableOBJs base2 = InteractableOBJs("base2", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	base2.setRequirements(25, 15);
+	InteractablesList.push_back(base2);
 
-    InteractableOBJs base3 = InteractableOBJs("base3", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
-    base3.setRequirements(25, 15);
-    InteractablesList.push_back(base3);
+	InteractableOBJs base3 = InteractableOBJs("base3", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	base3.setRequirements(25, 15);
+	InteractablesList.push_back(base3);
 
-    InteractableOBJs base4 = InteractableOBJs("base4", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
-    base4.setRequirements(25, 15);
-    InteractablesList.push_back(base4);
+	InteractableOBJs base4 = InteractableOBJs("base4", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	base4.setRequirements(25, 15);
+	InteractablesList.push_back(base4);
 
 	// MAZE 
 	initMaze();
@@ -806,36 +806,36 @@ void SP2::RenderCode()
 	modelStack.PopMatrix();
 
 	// Base Top
-    // Infirmary
+	// Infirmary
 	modelStack.PushMatrix();
 	modelStack.Translate(250, 62, -80);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
 	modelStack.PopMatrix();
 
-    // Sciene Lab
-    modelStack.PushMatrix();
-    modelStack.Translate(120, 62, -80);
-    modelStack.Rotate(180, 0, 1, 0);
-    modelStack.Scale(40, 40, 40);
-    RenderMesh(meshList[GEO_BASE], false, toggleLight);
-    modelStack.PopMatrix();
+	// Sciene Lab
+	modelStack.PushMatrix();
+	modelStack.Translate(120, 62, -80);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_BASE], false, toggleLight);
+	modelStack.PopMatrix();
 
-    // Rec Room & Shop
-    modelStack.PushMatrix();
-    modelStack.Translate(120, 62, 120);
-    modelStack.Rotate(0, 0, 1, 0);
-    modelStack.Scale(40, 40, 40);
-    RenderMesh(meshList[GEO_BASE], false, toggleLight);
-    modelStack.PopMatrix();
+	// Rec Room & Shop
+	modelStack.PushMatrix();
+	modelStack.Translate(120, 62, 120);
+	modelStack.Rotate(0, 0, 1, 0);
+	modelStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_BASE], false, toggleLight);
+	modelStack.PopMatrix();
 
-    // Bunks & Cafe
-    modelStack.PushMatrix();
-    modelStack.Translate(250, 62, 120);
-    modelStack.Rotate(180, 0, 1, 0);
-    modelStack.Scale(40, 40, 40);
-    RenderMesh(meshList[GEO_BASE], false, toggleLight);
-    modelStack.PopMatrix();
+	// Bunks & Cafe
+	modelStack.PushMatrix();
+	modelStack.Translate(250, 62, 120);
+	modelStack.Rotate(180, 0, 1, 0);
+	modelStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_BASE], false, toggleLight);
+	modelStack.PopMatrix();
 
 
 	//GROUND MESH
@@ -1142,25 +1142,25 @@ void SP2::RenderCode()
 		RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
 	}
 
-    //// Tests for shipBuilding
-    //if (askedHull)
-    //{
-    //    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light (10) | 2. Medium (20) | 3. Large (30) ", Color(1, 0, 0), 2, 0, 14);
-    //}
-    //if (askedWings)
-    //{
-    //    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual (20) | 5. Quad (30)", Color(1, 0, 0), 2, 0, 14);
-    //}
-    //if (askedEngine)
-    //{
-    //    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine (20)  | 7. G2 Engine (30) ", Color(1, 0, 0), 2, 0, 14);
-    //}
+	//// Tests for shipBuilding
+	//if (askedHull)
+	//{
+	//    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light (10) | 2. Medium (20) | 3. Large (30) ", Color(1, 0, 0), 2, 0, 14);
+	//}
+	//if (askedWings)
+	//{
+	//    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual (20) | 5. Quad (30)", Color(1, 0, 0), 2, 0, 14);
+	//}
+	//if (askedEngine)
+	//{
+	//    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine (20)  | 7. G2 Engine (30) ", Color(1, 0, 0), 2, 0, 14);
+	//}
 
-    // Tests for ship Flight
-    if (thirdPersonCamera.yawingLeft) { RenderTextOnScreen(meshList[GEO_TEXT], "Left", Color(1, 0, 0), 1, 0, 14); }
-    if (thirdPersonCamera.yawingRight) { RenderTextOnScreen(meshList[GEO_TEXT], "Right", Color(1, 0, 0), 1, 0, 15); }
-    if (thirdPersonCamera.pitchingUp) { RenderTextOnScreen(meshList[GEO_TEXT], "Up", Color(1, 0, 0), 1, 0, 13); }
-    if (thirdPersonCamera.pitchingDown) { RenderTextOnScreen(meshList[GEO_TEXT], "Down", Color(1, 0, 0), 1, 0, 12); }
+	// Tests for ship Flight
+	if (thirdPersonCamera.yawingLeft) { RenderTextOnScreen(meshList[GEO_TEXT], "Left", Color(1, 0, 0), 1, 0, 14); }
+	if (thirdPersonCamera.yawingRight) { RenderTextOnScreen(meshList[GEO_TEXT], "Right", Color(1, 0, 0), 1, 0, 15); }
+	if (thirdPersonCamera.pitchingUp) { RenderTextOnScreen(meshList[GEO_TEXT], "Up", Color(1, 0, 0), 1, 0, 13); }
+	if (thirdPersonCamera.pitchingDown) { RenderTextOnScreen(meshList[GEO_TEXT], "Down", Color(1, 0, 0), 1, 0, 12); }
 
 	if (deadText) { RenderHealthBarOnScreen(meshList[GEO_DEADHEALTHBAR], 2.6, 2.5, 21); }
 	else { RenderHealthBarOnScreen(meshList[GEO_ALIVEHEALTHBAR], 2.6, 2.5, 21); }
@@ -1174,41 +1174,41 @@ void SP2::initMaze()
 	meshList[GEO_MAZE_OBSTACLE] = MeshBuilder::GenerateOBJ("mazeObstacle", "OBJ//Maze//mazeObstacle.obj");
 	meshList[GEO_MAZE_OBSTACLE]->textureID = LoadTGA("Image//Maze//mazewallUV.tga");
 
-    meshList[GEO_MAZE_ROOF] = MeshBuilder::GenerateOBJ("mazeRoof", "OBJ//Maze//mazeRoof.obj");
-    meshList[GEO_MAZE_ROOF]->textureID = LoadTGA("Image//Maze//mazewallUV.tga");
+	meshList[GEO_MAZE_ROOF] = MeshBuilder::GenerateOBJ("mazeRoof", "OBJ//Maze//mazeRoof.obj");
+	meshList[GEO_MAZE_ROOF]->textureID = LoadTGA("Image//Maze//mazewallUV.tga");
 
-    meshList[GEO_MAZE_TREASURE] = MeshBuilder::GenerateOBJ("mazeTreasure", "OBJ//Maze//mazeTreasure.obj");
-    meshList[GEO_MAZE_TREASURE]->textureID = LoadTGA("Image//Maze//mazeTreasureUV.tga");
+	meshList[GEO_MAZE_TREASURE] = MeshBuilder::GenerateOBJ("mazeTreasure", "OBJ//Maze//mazeTreasure.obj");
+	meshList[GEO_MAZE_TREASURE]->textureID = LoadTGA("Image//Maze//mazeTreasureUV.tga");
 
-    meshList[GEO_PEDASTAL] = MeshBuilder::GenerateOBJ("pedastal", "OBJ//Maze//pedastal.obj");
-    meshList[GEO_PEDASTAL]->textureID = LoadTGA("Image//Maze//pedestalUV.tga");
+	meshList[GEO_PEDASTAL] = MeshBuilder::GenerateOBJ("pedastal", "OBJ//Maze//pedastal.obj");
+	meshList[GEO_PEDASTAL]->textureID = LoadTGA("Image//Maze//pedestalUV.tga");
 
 	meshList[GEO_LAVA] = MeshBuilder::GenerateOBJ("lava", "OBJ//lava.obj");
 	meshList[GEO_LAVA]->textureID = LoadTGA("Image//lavaUV.tga");
 
-    meshList[GEO_SIGNBOARD] = MeshBuilder::GenerateOBJ("signboard", "OBJ//HelipadSignBoard.obj");
-    meshList[GEO_SIGNBOARD]->textureID = LoadTGA("Image//Maze//MazeSignBoard.tga");
+	meshList[GEO_SIGNBOARD] = MeshBuilder::GenerateOBJ("signboard", "OBJ//HelipadSignBoard.obj");
+	meshList[GEO_SIGNBOARD]->textureID = LoadTGA("Image//Maze//MazeSignBoard.tga");
 
-    int i = 0;
-    for (int zAxis = 300; zAxis >= -400; zAxis -= 100)
-    {
-        InteractableOBJs leftWall = InteractableOBJs("leftWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-420, 10, zAxis), 30, 0, Vector3(0, 0, 0));
-        InteractablesList.push_back(leftWall);
+	int i = 0;
+	for (int zAxis = 300; zAxis >= -400; zAxis -= 100)
+	{
+		InteractableOBJs leftWall = InteractableOBJs("leftWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-420, 10, zAxis), 30, 0, Vector3(0, 0, 0));
+		InteractablesList.push_back(leftWall);
 
-        InteractableOBJs rightWall = InteractableOBJs("rightWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-280, 10, zAxis), 30, 0, Vector3(0, 0, 0));
-        InteractablesList.push_back(rightWall);
+		InteractableOBJs rightWall = InteractableOBJs("rightWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-280, 10, zAxis), 30, 0, Vector3(0, 0, 0));
+		InteractablesList.push_back(rightWall);
 
-        InteractableOBJs leftObstacle = InteractableOBJs("leftObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-420 + mazeRandomTranslateVec[i], 10, zAxis + mazeRandomTranslateVec[i]), 30, 0, Vector3(0, 0, 0));
-        InteractablesList.push_back(leftObstacle);
+		InteractableOBJs leftObstacle = InteractableOBJs("leftObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-420 + mazeRandomTranslateVec[i], 10, zAxis + mazeRandomTranslateVec[i]), 30, 0, Vector3(0, 0, 0));
+		InteractablesList.push_back(leftObstacle);
 
-        InteractableOBJs rightObstacle = InteractableOBJs("rightObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-280 + mazeRandomTranslateVec[i], 10, zAxis + mazeRandomTranslateVec[i]), 30, 0, Vector3(0, 0, 0));
-        InteractablesList.push_back(rightObstacle);
+		InteractableOBJs rightObstacle = InteractableOBJs("rightObstacle", meshList[GEO_MAZE_OBSTACLE]->maxPos, meshList[GEO_MAZE_OBSTACLE]->minPos, Position(-280 + mazeRandomTranslateVec[i], 10, zAxis + mazeRandomTranslateVec[i]), 30, 0, Vector3(0, 0, 0));
+		InteractablesList.push_back(rightObstacle);
 
-        InteractableOBJs mazeRoof = InteractableOBJs("mazeRoof", meshList[GEO_MAZE_ROOF]->maxPos, meshList[GEO_MAZE_ROOF]->minPos, Position(-350, 32, zAxis), 30, 0, Vector3(0, 0, 0));
-        InteractablesList.push_back(mazeRoof);
+		InteractableOBJs mazeRoof = InteractableOBJs("mazeRoof", meshList[GEO_MAZE_ROOF]->maxPos, meshList[GEO_MAZE_ROOF]->minPos, Position(-350, 32, zAxis), 30, 0, Vector3(0, 0, 0));
+		InteractablesList.push_back(mazeRoof);
 
-        InteractableOBJs lava = InteractableOBJs("lava", meshList[GEO_LAVA]->maxPos, meshList[GEO_LAVA]->minPos, Position(-420, 10, zAxis), 30, 0, Vector3(0, 0, 0));
-        InteractablesList.push_back(lava);
+		InteractableOBJs lava = InteractableOBJs("lava", meshList[GEO_LAVA]->maxPos, meshList[GEO_LAVA]->minPos, Position(-420, 10, zAxis), 30, 0, Vector3(0, 0, 0));
+		InteractablesList.push_back(lava);
 
 		++i;
 	}
@@ -1217,11 +1217,11 @@ void SP2::initMaze()
     mazeTreasure.setRequirements(25, 12);
     InteractablesList.push_back(mazeTreasure);
 
-    InteractableOBJs pedastal = InteractableOBJs("pedastal", meshList[GEO_PEDASTAL]->maxPos, meshList[GEO_PEDASTAL]->minPos, Position(-350, 0, -370), 10, 0, Vector3(0, 0, 0));
-    InteractablesList.push_back(pedastal);
+	InteractableOBJs pedastal = InteractableOBJs("pedastal", meshList[GEO_PEDASTAL]->maxPos, meshList[GEO_PEDASTAL]->minPos, Position(-350, 0, -370), 10, 0, Vector3(0, 0, 0));
+	InteractablesList.push_back(pedastal);
 
-    InteractableOBJs signboard = InteractableOBJs("signboard", meshList[GEO_SIGNBOARD]->maxPos, meshList[GEO_SIGNBOARD]->minPos, Position(-370, 0, 370), 5, 0, Vector3(0, 0, 0));
-    InteractablesList.push_back(signboard);
+	InteractableOBJs signboard = InteractableOBJs("signboard", meshList[GEO_SIGNBOARD]->maxPos, meshList[GEO_SIGNBOARD]->minPos, Position(-370, 0, 370), 5, 0, Vector3(0, 0, 0));
+	InteractablesList.push_back(signboard);
 
 }
 
@@ -1352,7 +1352,7 @@ void SP2::initMountains()
 
 void SP2::renderMaze()
 {
-    Vector3 mazeScale(30, 35, 30);
+	Vector3 mazeScale(30, 35, 30);
 	int i = 0;
 
 	// Left & Right Side Walls
@@ -1372,12 +1372,12 @@ void SP2::renderMaze()
 		RenderMesh(meshList[GEO_MAZE_SIDE_WALL], true, toggleLight);
 		modelStack.PopMatrix();
 
-        // Roof
-        modelStack.PushMatrix();
-        modelStack.Translate(-350, 31, zAxis);
-        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z - 15);
-        RenderMesh(meshList[GEO_MAZE_ROOF], true, toggleLight);
-        modelStack.PopMatrix();
+		// Roof
+		modelStack.PushMatrix();
+		modelStack.Translate(-350, 31, zAxis);
+		modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z - 15);
+		RenderMesh(meshList[GEO_MAZE_ROOF], true, toggleLight);
+		modelStack.PopMatrix();
 
 
 		// Obstacles
@@ -1402,12 +1402,12 @@ void SP2::renderMaze()
 		RenderMesh(meshList[GEO_LAVA], true, toggleLight);
 		modelStack.PopMatrix();
 
-        // Lava (2nd)
-        modelStack.PushMatrix();
-        modelStack.Translate(-280 - lavaTranslation, 0, zAxis);
-        modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
-        RenderMesh(meshList[GEO_LAVA], true, toggleLight);
-        modelStack.PopMatrix();
+		// Lava (2nd)
+		modelStack.PushMatrix();
+		modelStack.Translate(-280 - lavaTranslation, 0, zAxis);
+		modelStack.Scale(mazeScale.x, mazeScale.y, mazeScale.z + 5);
+		RenderMesh(meshList[GEO_LAVA], true, toggleLight);
+		modelStack.PopMatrix();
 
 		++i;
 	}

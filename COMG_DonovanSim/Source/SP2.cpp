@@ -178,6 +178,7 @@ void SP2::Init()
 	startingCharPos = charPos = { 300, 17, 300 };
 	//125, 120 
 	//250, 40
+	//-350, 17, -270
 
 	//Initialize camera settings (Don's)
 	shipStartingPos = shipPos = { 375, 18, -105 };
@@ -396,19 +397,19 @@ void SP2::Update(double dt)
                 }
             }
 
-            //COUNTER
-            if (it->name == "counter")
-            {
-                if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-                {
-                    testText = true;
-                    if (Application::IsKeyPressed('Y'))
-                    {
-                        testText = false;
-                        chefText = false;
-                        YesShowCafeMenu = true;
-                        S = PLACE1;
-                    }
+		//COUNTER
+		if (it->name == "counter")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				testText = true;
+				if (Application::IsKeyPressed('Y'))
+				{
+					testText = false;
+					chefText = false;
+					YesShowCafeMenu = true;
+					S = OPTION_APPLE;
+				}
 
                     if (YesShowCafeMenu == true)
                     {
@@ -466,18 +467,18 @@ void SP2::Update(double dt)
                 }
             }
 
-            //SHOP LIST
-            if (it->name == "trader")
-            {
-                if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-                {
-                    traderText = true;
-                    if (Application::IsKeyPressed('Y'))
-                    {
-                        traderText = false;
-                        YesShowShopList = true;
-                        L = POSITION1;
-                    }
+		//SHOP LIST
+		if (it->name == "trader")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				traderText = true;
+				if (Application::IsKeyPressed('Y'))
+				{
+					traderText = false;
+					YesShowShopList = true;
+					L = OPTION_HULL;
+				}
 
                     if (YesShowShopList == true)
                     {
@@ -741,8 +742,12 @@ void SP2::Update(double dt)
 	mazeTranslate(dt);
 }
 
-//NEW CODE
-//PLEASE DO NOT DELETE THIS!!!!
+/******************************************************************************/
+/*!
+\brief
+Function for switching the position of the shop's pointer and then change the render on screen obj.
+*/
+/******************************************************************************/
 void SP2::ShopMenuPointerInteraction()
 {
 	//EXIT THE LIST
@@ -768,17 +773,17 @@ void SP2::ShopMenuPointerInteraction()
 	//FIRST LIST
 	switch (L)
 	{
-	case POSITION1:   //HULL                                           //Position 1 HULL
+	case OPTION_HULL:   //HULL                                           //Position 1 HULL
 		shopListPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime2 == 1)    //press up to position 3
 		{
 			CoolDownTime2 = 15;
-			L = POSITION11;
+			L = OPTION_CREATESHIP;
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime2 == 1)   //press down to position 2
 		{
 			CoolDownTime2 = 15;
-			L = POSITION2;
+			L = OPTION_WINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)        //press Enter will close the list
@@ -787,24 +792,24 @@ void SP2::ShopMenuPointerInteraction()
 			YesShowShopList = false;
 			DisplayShopList = false;
 			DisplayShopList2 = true;                                    //SHOW NEW HULL LIST
-			L = POSITION4;
+			L = OPTION_LIGHTHULL;
 		}
 
 
 		break;
 
-	case POSITION2:     //WINGS                                        //Position 2  WINGS
+	case OPTION_WINGS:     //WINGS                                        //Position 2  WINGS
 		shopListPointer = 50;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime2 == 1)    //press up to position 1
 		{
 			CoolDownTime2 = 15;
-			L = POSITION1;
+			L = OPTION_HULL;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime2 == 1)   //press down to position 3
 		{
 			CoolDownTime2 = 15;
-			L = POSITION3;
+			L = OPTION_ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)                       //press Enter will close the list
@@ -813,22 +818,22 @@ void SP2::ShopMenuPointerInteraction()
 			YesShowShopList = false;
 			DisplayShopList = false;
 			DisplayShopList3 = true;                                    //SHOW NEW WINGS LIST
-			L = POSITION7;
+			L = OPTION_DUALWINGS;
 		}
 
 		break;
 
-	case POSITION3:           //ENGINE                                 //Position 3  ENGINE
+	case OPTION_ENGINE:           //ENGINE                                 //Position 3  ENGINE
 		shopListPointer = 38;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime2 == 1)    //press up to Position 2
 		{
 			CoolDownTime2 = 15;
-			L = POSITION2;
+			L = OPTION_WINGS;
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime2 == 1)   //press down to Position 1
 		{
 			CoolDownTime2 = 15;
-			L = POSITION11;
+			L = OPTION_CREATESHIP;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)                       //press Enter will close the list
@@ -837,22 +842,22 @@ void SP2::ShopMenuPointerInteraction()
 			YesShowShopList = false;
 			DisplayShopList = false;
 			DisplayShopList4 = true;
-			L = POSITION9;
+			L = OPTION_G1ENGINE;
 		}
 		break;
 
-	case POSITION11:                                                                    //Create ship
+	case OPTION_CREATESHIP:                                                                    //Create ship
 		shopListPointer = 26;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime2 == 1)
 		{
 			CoolDownTime2 = 15;
-			L = POSITION3;
+			L = OPTION_ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime2 == 1)
 		{
 			CoolDownTime2 = 15;
-			L = POSITION1;
+			L = OPTION_HULL;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)                       //press Enter will close the list
@@ -900,18 +905,18 @@ void SP2::ShopMenuPointerInteraction()
 	//SECOND LIST
 	switch (L)
 	{
-	case POSITION4:                                                                //SMALL HULL
+	case OPTION_LIGHTHULL:                                                                //SMALL HULL
 		shopListPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION6;
+			L = OPTION_LARGEHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION5;
+			L = OPTION_MEDIUMHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -932,18 +937,18 @@ void SP2::ShopMenuPointerInteraction()
 		}
 		break;
 
-	case POSITION5:                                                          //MEDIUM HULL
+	case OPTION_MEDIUMHULL:                                                          //MEDIUM HULL
 		shopListPointer = 50;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION4;
+			L = OPTION_LIGHTHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION6;
+			L = OPTION_LARGEHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -964,18 +969,18 @@ void SP2::ShopMenuPointerInteraction()
 		break;
 
 
-	case POSITION6:                                                             //LARGE HULL
+	case OPTION_LARGEHULL:                                                             //LARGE HULL
 		shopListPointer = 38;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION5;
+			L = OPTION_MEDIUMHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION4;
+			L = OPTION_LIGHTHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1012,18 +1017,18 @@ void SP2::ShopMenuPointerInteraction()
 	//THIRD LIST
 	switch (L)
 	{
-	case POSITION7:                                                         //DUAL WINGS
+	case OPTION_DUALWINGS:                                                         //DUAL WINGS
 		shopListPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime4 == 3)
 		{
 			CoolDownTime4 = 17;
-			L = POSITION8;
+			L = OPTION_QUADWINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime4 == 3)
 		{
 			CoolDownTime4 = 17;
-			L = POSITION8;
+			L = OPTION_QUADWINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1044,18 +1049,18 @@ void SP2::ShopMenuPointerInteraction()
 
 		break;
 
-	case POSITION8:                                                                 //QUAD WINGS
+	case OPTION_QUADWINGS:                                                                 //QUAD WINGS
 		shopListPointer = 50;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime4 == 3)
 		{
 			CoolDownTime4 = 17;
-			L = POSITION7;
+			L = OPTION_DUALWINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime4 == 3)
 		{
 			CoolDownTime4 = 17;
-			L = POSITION7;
+			L =OPTION_DUALWINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1092,18 +1097,18 @@ void SP2::ShopMenuPointerInteraction()
 	//FOURTH LIST
 	switch (L)
 	{
-	case POSITION9:                                                                     //G1 ENGINE
+	case OPTION_G1ENGINE:                                                                     //G1 ENGINE
 		shopListPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime5 == 4)
 		{
 			CoolDownTime5 = 18;
-			L = POSITION10;
+			L = OPTION_G2ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime5 == 4)
 		{
 			CoolDownTime5 = 18;
-			L = POSITION10;
+			L = OPTION_G2ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1124,18 +1129,18 @@ void SP2::ShopMenuPointerInteraction()
 
 		break;
 
-	case POSITION10:
+	case OPTION_G2ENGINE:
 		shopListPointer = 50;                                                         //G2 ENGINE
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime5 == 4)
 		{
 			CoolDownTime5 = 18;
-			L = POSITION9;
+			L = OPTION_G1ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime5 == 4)
 		{
 			CoolDownTime5 = 18;
-			L = POSITION9;
+			L = OPTION_G1ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1159,7 +1164,12 @@ void SP2::ShopMenuPointerInteraction()
 
 }
 
-//PLEASE DO NOT DELETE THIS !!!! 
+/******************************************************************************/
+/*!
+\brief
+Function for switching the position of the cafe's pointer and then render the ojb of the chosen option.
+*/
+/******************************************************************************/
 void SP2::CafeMenuPointerInteraction()
 {
     // Moved to Update - Don
@@ -1174,7 +1184,7 @@ void SP2::CafeMenuPointerInteraction()
 
 	switch (S)
 	{
-	case PLACE1:
+	case OPTION_APPLE:
 		cafeMenuPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
 		{
@@ -1184,7 +1194,7 @@ void SP2::CafeMenuPointerInteraction()
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
 		{
 			CoolDownTime = 20;
-			S = PLACE2;
+			S = OPTION_COFFEE;
 		}
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
 		{
@@ -1192,12 +1202,12 @@ void SP2::CafeMenuPointerInteraction()
 			AppleAppear = true;
 		}
 		break;
-	case PLACE2:
+	case OPTION_COFFEE:
 		cafeMenuPointer = 50;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
 		{
 			CoolDownTime = 20;
-			S = PLACE1;
+			S = OPTION_APPLE;
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
 		{
@@ -1215,12 +1225,12 @@ void SP2::CafeMenuPointerInteraction()
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
 		{
 			CoolDownTime = 20;
-			S = PLACE2;
+			S = OPTION_COFFEE;
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
 		{
 			CoolDownTime = 20;
-			S = PLACE1;
+			S = OPTION_APPLE;
 		}
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
 		{
@@ -1237,7 +1247,12 @@ void SP2::CafeMenuPointerInteraction()
 	}
 }
 
-//PLEASE DO NOT DELETE THIS TOO !!!!
+/******************************************************************************/
+/*!
+\brief
+Function to lock the weapon when equipped. Cannot equip two weapon at one time.
+*/
+/******************************************************************************/
 void SP2::EquippingWeapons()
 {
 	//EQUIP GUN, HAND DISAPPEAR
@@ -1653,6 +1668,12 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
     }
 }
 
+/******************************************************************************/
+/*!
+\brief
+Function to read the NPCDialogues text file and store the lines in a vector.
+*/
+/******************************************************************************/
 void SP2::Dialogues()
 {
 	std::ifstream file("TextFiles//NPCDialogues.txt");
@@ -1673,6 +1694,12 @@ void SP2::Dialogues()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+Function to detect the NPCs position and use booleans to render out the line read from the dialogue file.
+*/
+/******************************************************************************/
 void SP2::DialoguesWithNPCs()
 {
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -1808,6 +1835,13 @@ void SP2::DialoguesWithNPCs()
 	}
 }
 
+
+/******************************************************************************/
+/*!
+\brief
+Function to read the Instructions text file and store the lines in a vector.
+*/
+/******************************************************************************/
 void SP2::readInstructions()
 {
 	std::ifstream file("TextFiles//Instructions.txt");
