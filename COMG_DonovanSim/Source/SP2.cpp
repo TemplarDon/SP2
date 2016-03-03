@@ -37,8 +37,6 @@ void SP2::Init()
 	rotateAngle = 0;
 	TokenTranslate = 11;
 	TextTranslate = 20;
-	TestRotation = 90;
-	SuitTranslate = 2;
 	leftGateOffset = 0;
 	rightGateOffset = 0;
 	frontGateOffset = 0;
@@ -53,15 +51,15 @@ void SP2::Init()
 	translatePointer = -30;
 	mazeTranslateValue = 0;
 	safeDoorRotation = 0;
-
 	cafeMenuPointer = 62;
-	shopListPointer = 62.2;
+	shopListPointer = 62;
 	BounceTime = 0;
 	CoolDownTime = 0;
 	CoolDownTime2 = 0;
 	CoolDownTime3 = 0;
 	CoolDownTime4 = 0;
 	CoolDownTime5 = 0;
+	SpinTheFood = -90;
 
 
 	//BOOLEANS
@@ -175,7 +173,8 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 300, 17, 300 };
+	startingCharPos = charPos = { 250, 17, 40 };
+	//300 , 17, 300
 	//125, 120 
 	//250, 40
 	//-350, 17, -270
@@ -438,7 +437,6 @@ void SP2::Update(double dt)
 
 				if (Application::IsKeyPressed('T'))
 				{
-					//SuitTranslate = -50;
 					wearSuit = true;
 					DisplayInventory = true;
 					HandDisappear = true;
@@ -729,6 +727,8 @@ void SP2::Update(double dt)
 
 	// Maze Movement
 	mazeTranslate(dt);
+
+	SpinTheFood += 60 * dt;
 }
 
 /******************************************************************************/
