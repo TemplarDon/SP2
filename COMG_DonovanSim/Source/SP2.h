@@ -33,6 +33,8 @@
 #include <cstdlib>
 #include <time.h>
 
+
+
 class SP2 : public Scene
 {
 	enum GEOMETRY_TYPE

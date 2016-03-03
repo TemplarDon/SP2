@@ -996,12 +996,25 @@ void SP2::RenderCode()
 		//POINTER
 		RenderPointerOnScreen(meshList[GEO_POINTER], 0.4, translatePointer, 37);     //127, 141
 
+        //Weapon 
+        std::ostringstream weapon;
+        weapon.str("");
+        if (somePlayer.checkWeapon()) { weapon << "Equipped"; }
+        else { weapon << "Unequipped"; }
+        RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(1, 0, 0), 1.3, 36, 4);
 
-		//CRYSTAL COUNTS
-		std::ostringstream as;
-		as.str("");
-		as << somePlayer.getCrystals();
-		RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 1.5, 16.2, 5);
+        //CRYSTAL COUNTS
+        std::ostringstream as;
+        as.str("");
+        as << somePlayer.getCrystals();
+        RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 2, 10.5, 1);
+
+
+        // Ship Parts
+        std::ostringstream engineText;
+        engineText.str("");
+
+
 
 		//Weapon 
 		std::ostringstream weapon;
@@ -1507,13 +1520,6 @@ void SP2::ReadKeyPresses()
 			toggleLight = true;
 		}
 	}
-
-	//COLLECT TOLKEN
-	//if (Application::IsKeyPressed('Q'))
-	//{
-	//	TokenOnScreen = true;
-	//	TokenTranslate = 10.5;
-	//}
 
 	if (Application::IsKeyPressed('C'))
 	{
