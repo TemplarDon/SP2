@@ -12,84 +12,86 @@ FirstPersonCamera::~FirstPersonCamera()
 
 void FirstPersonCamera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 {
-	this->position = defaultPosition = pos;
-	this->target = defaultTarget = target;
-	Vector3 view = (target - position).Normalized();
-	Vector3 right = view.Cross(up);
-	right.y = 0;
-	right.Normalize();
-	this->up = defaultUp = right.Cross(view).Normalized();
+    this->position = defaultPosition = pos;
+    this->target = defaultTarget = target;
+    Vector3 view = (target - position).Normalized();
+    Vector3 right = view.Cross(up);
+    right.y = 0;
+    right.Normalize();
+    this->up = defaultUp = right.Cross(view).Normalized();
     canMoveBuilding = true;
     canMoveInteractable = true;
 }
 
 void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
 {
-	Vector3 boundary(1000, 1000, 1000);
+    Vector3 boundary(1000, 1000, 1000);
 
-	speed = 30;
-	mouseSpeed = 12;
+    speed = 30;
+    mouseSpeed = 12;
 
-	static const float CAMERA_SPEED = 50.f;
-	//if (Application::IsKeyPressed('R'))
-	//{
-	//	Reset();
-	//}
+    static const float CAMERA_SPEED = 50.f;
+    //if (Application::IsKeyPressed('R'))
+    //{
+    //	Reset();
+    //}
 
-	//view.y < 0.9396 && view.y > -09396
+    //view.y < 0.9396 && view.y > -09396
 
-	//Mouse - Shania
-	int Angle = 50;
-	horizontalAngle += mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
-	if (verticalAngle + mouseSpeed * dt * float(1080 / 2 - Application::mouseY) < Angle && verticalAngle + mouseSpeed * dt * float(1080 / 2 - Application::mouseY) > -Angle)
-	{
-	    verticalAngle += mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
-	}
+    //Mouse - Shania
+    //int Angle = 50;
+    //horizontalAngle += mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
+    //if (verticalAngle + mouseSpeed * dt * float(1080 / 2 - Application::mouseY) < Angle && verticalAngle + mouseSpeed * dt * float(1080 / 2 - Application::mouseY) > -Angle)
+    //{
+    //    verticalAngle += mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
+    //}
 
-	Vector3 view(cos(Math::DegreeToRadian(verticalAngle)) * sin(Math::DegreeToRadian(horizontalAngle)),
-		         sin(Math::DegreeToRadian(verticalAngle)),
-		        cos(Math::DegreeToRadian(verticalAngle)) * cos(Math::DegreeToRadian(horizontalAngle)));
+    //Vector3 view(cos(Math::DegreeToRadian(verticalAngle)) * sin(Math::DegreeToRadian(horizontalAngle)),
+    //    sin(Math::DegreeToRadian(verticalAngle)),
+    //    cos(Math::DegreeToRadian(verticalAngle)) * cos(Math::DegreeToRadian(horizontalAngle)));
 
 
-	Vector3 right(sin(Math::DegreeToRadian(horizontalAngle-90)), 0, cos(Math::DegreeToRadian(horizontalAngle-90)));
+    //Vector3 right(sin(Math::DegreeToRadian(horizontalAngle - 90)), 0, cos(Math::DegreeToRadian(horizontalAngle - 90)));
 
-	up = right.Cross(view);
+    //up = right.Cross(view);
 
-    target = position + view.Normalized();
+    //target = position + view.Normalized();
 
 
     // Mouse - DonoDon
-    //Vector3 view = (target - position).Normalized();
+    Vector3 view = (target - position).Normalized();
 
-    //float yaw = 0;
-    //float pitch = 0;
+    float yaw = 0;
+    float pitch = 0;
 
-    //yaw = (float)(mouseSpeed  * dt * (1680 / 2 - Application::mouseX));
+    yaw = (float)(mouseSpeed  * dt * (1680 / 2 - Application::mouseX));
 
-    //pitch = (float)(mouseSpeed * dt * (1080 / 2 - Application::mouseY));
+    pitch = (float)(mouseSpeed * dt * (1080 / 2 - Application::mouseY));
 
-    //// Mouse
-    //Mtx44 rotationYaw;
-    //rotationYaw.SetToRotation(yaw, 0, 1, 0);
-    //view = (target - position);
-    //Vector3 right = view.Cross(up);
-    //view = rotationYaw * view;
+    // Mouse
+    Mtx44 rotationYaw;
+    rotationYaw.SetToRotation(yaw, 0, 1, 0);
+    view = (target - position);
+    Vector3 right = view.Cross(up);
+    view = rotationYaw * view;
 
-    //target = view + position;
-    //up = rotationYaw * up;
+    target = view + position;
+    up = rotationYaw * up;
 
-    //Mtx44 rotationPitch;
-    //view = (target - position);
-    //right = view.Cross(up);
-    //right.y = 0;
-    //up = right.Cross(view).Normalized();
-    //rotationPitch.SetToRotation(pitch, right.x, right.y, right.z);
-
-    //view = rotationPitch * view;
-    //target = view + position;
-
-    //view = (target - position).Normalized();
+    Mtx44 rotationPitch;
+    view = (target - position);
+    right = view.Cross(up);
+    right.y = 0;
+    up = right.Cross(view).Normalized();
+    rotationPitch.SetToRotation(pitch, right.x, right.y, right.z);
     
+
+
+    view = rotationPitch * view;
+    target = view + position;
+
+    view = (target - position).Normalized();
+
     Position camPos; // Position to check collision with
 
     if (Application::IsKeyPressed('W'))
@@ -113,10 +115,10 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
         camPos.Set(somePlayer.pos.x - view.Normalized().x, somePlayer.pos.y - view.Normalized().y, somePlayer.pos.z - view.Normalized().z);
         if (createBoundary(InteractablesList, BuildingsList, somePlayer, camPos))
         {
-            position.x = position.x - (target - position).Normalized().x; 
-            position.z = position.z - (target - position).Normalized().z; 
-            target.x = target.x - (target - position).Normalized().x; 
-            target.z = target.z - (target - position).Normalized().z; 
+            position.x = position.x - (target - position).Normalized().x;
+            position.z = position.z - (target - position).Normalized().z;
+            target.x = target.x - (target - position).Normalized().x;
+            target.z = target.z - (target - position).Normalized().z;
 
             somePlayer.pos.x -= view.Normalized().x;
             somePlayer.pos.z -= view.Normalized().z;
@@ -313,7 +315,7 @@ bool FirstPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
 
 void FirstPersonCamera::Reset()
 {
-	position = defaultPosition;
-	target = defaultTarget;
+    position = defaultPosition;
+    target = defaultTarget;
     up = defaultUp;
 }
