@@ -1997,8 +1997,8 @@ void SP2::crystalgen()
 	CrystalNo = 20;
 	for (int i = 0; i < CrystalNo; i++)
 	{
-		coord1 = rand() % 474 - 42;
-		coord2 = rand() % 763 - 381;
+		coord1 = float(rand() % 474 - 42);
+		coord2 = float(rand() % 763 - 381);
 		if (((coord1 < 30) || coord1 > 350) || ((coord2 < -190) || (coord2 > 250)))
 		{
 			xcoords[i] = coord1;
@@ -2026,18 +2026,18 @@ void SP2::asteroidgen()
 	AsteroidNo = 40;
 	for (int i = 0; i < AsteroidNo; i++)
 	{
-		coord1 = rand() % 1000 - 500;
-		coord2 = rand() % 1000 - 500;
-		coord3 = rand() % 20 + 90;
+		coord1 = float(rand() % 1000 - 500);
+		coord2 = float(rand() % 1000 - 500);
+		coord3 = float(rand() % 20 + 90);
 		asteroidx[i] = coord1;
 		asteroidy[i] = coord3;
 		asteroidz[i] = coord2;
-		coord1 = rand() % 10 - 5;
+		coord1 = float(rand() % 10 - 5);
 		if (coord1 == 0)
 		{
 			coord1 = 1;
 		}
-		coord2 = rand() % 10 - 5;
+		coord2 = float(rand() % 10 - 5);
 		if (coord2 == 0)
 		{
 			coord1 = 1;
