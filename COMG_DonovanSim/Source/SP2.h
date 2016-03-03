@@ -371,6 +371,7 @@ private:
 	float heightOfWall;
 	float translatePointer;
 	double BounceTime;
+	float SpinTheFood;
 
 	//DOUBLE
 	double testDouble;
@@ -505,7 +506,10 @@ private:
 	void RenderCoffee();
 	void RenderApple();
 	void RenderAsteroids();
-
+	void RenderWeaponsWhenSelected();
+	void RenderShopLists();
+	void RenderCafeInteractions();
+	void RenderHandAndInventory();
 
 	//INSTRUCTION
 	void readInstructions(); //
@@ -532,6 +536,7 @@ private:
 	bool DisplayCafeMenu;
 	bool YesShowCafeMenu;
 	bool CafeStuff;
+	void RenderFood();
 	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y);
 

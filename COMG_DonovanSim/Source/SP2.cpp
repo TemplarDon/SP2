@@ -62,6 +62,7 @@ void SP2::Init()
 	CoolDownTime3 = 0;
 	CoolDownTime4 = 0;
 	CoolDownTime5 = 0;
+	SpinTheFood = -90;
 
 
 	//BOOLEANS
@@ -175,7 +176,8 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 300, 17, 300 };
+	startingCharPos = charPos = { 250, 17, 40 };
+	//300 , 17, 300
 	//125, 120 
 	//250, 40
 	//-350, 17, -270
@@ -739,6 +741,8 @@ void SP2::Update(double dt)
 
 	// Maze Movement
 	mazeTranslate(dt);
+
+	SpinTheFood += 60 * dt;
 }
 
 /******************************************************************************/
