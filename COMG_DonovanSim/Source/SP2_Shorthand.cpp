@@ -953,7 +953,6 @@ void SP2::RenderCode()
 	//DO NOT DELETE SHOP LIST STUFF
 	if (DisplayShopList == true)   //true
 	{
-		DisplayInventory = true;
 		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST1], 5, 8, 6);
 		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6, 44, shopListPointer);     //62, 50, 38t
 	}
@@ -997,11 +996,18 @@ void SP2::RenderCode()
 		//POINTER
 		RenderPointerOnScreen(meshList[GEO_POINTER], 0.4, translatePointer, 37);     //127, 141
 
+        //Weapon 
+        std::ostringstream weapon;
+        weapon.str("");
+        if (somePlayer.checkWeapon()) { weapon << "Equipped"; }
+        else { weapon << "Unequipped"; }
+        RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(1, 0, 0), 1.3, 36, 4);
+
         //CRYSTAL COUNTS
         std::ostringstream as;
         as.str("");
         as << somePlayer.getCrystals();
-        RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 2, 10.5, 1);
+        RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 2, 10.5, 2);
 
 
         // Ship Parts
@@ -1032,11 +1038,11 @@ void SP2::RenderCode()
             }
         }
 
-        RenderTextOnScreen(meshList[GEO_TEXT], engineText.str(), Color(1, 0, 0), 2, 13, 1);
+        RenderTextOnScreen(meshList[GEO_TEXT], engineText.str(), Color(1, 0, 0), 2, 13, 2);
 
-        RenderTextOnScreen(meshList[GEO_TEXT], wingsText.str(), Color(1, 0, 0), 2, 16, 1);
+        RenderTextOnScreen(meshList[GEO_TEXT], wingsText.str(), Color(1, 0, 0), 2, 16, 2);
 
-        RenderTextOnScreen(meshList[GEO_TEXT], hullText.str(), Color(1, 0, 0), 2, 19, 1);
+        RenderTextOnScreen(meshList[GEO_TEXT], hullText.str(), Color(1, 0, 0), 2, 19, 2);
 	}
 
 	if (HandDisappear == false)  //false
