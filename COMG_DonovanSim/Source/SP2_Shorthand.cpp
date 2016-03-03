@@ -1651,6 +1651,7 @@ void SP2::RenderNPCDialogues()
 		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
 		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.7, 5, 10);
 		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[7], Color(1, 1, 1), 1.7, 5, 8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[13], Color(1, 1, 1), 1.7, 5, 6);
 	}
 
 	if (NPCInCafeTokenTask == true)
