@@ -383,7 +383,7 @@ private:
 	bool ConsumeCokeText;
 	bool PickUpTokenText;
 	bool testText;
-	bool MENUBOOL;
+	bool MenuBool;
 	bool wearSuitText;
 	bool wearSuit;
 	bool DisplayInventory;
@@ -393,7 +393,6 @@ private:
 	bool doctorText;
 	bool traderText;
 	bool soldierText;
-	bool shopkeeperText;
 	bool equipPickaxe;
 	bool equipGun;
 	bool HandDisappear;
@@ -402,7 +401,6 @@ private:
 	bool AppleAppear;
 	bool NPCInCafeTokenTask;
 	bool NPCInRecMazeTask;
-	bool HelipadInstructions;
 
 	//DOOR (DONOVAN'S)
 	float leftGateOffset;
@@ -421,8 +419,8 @@ private:
 	float lavaTranslation;
 	vector<float>mazeRandomTranslateVec;
 	bool deadText;
-    bool treasureText;
-    bool treasureTaken;
+	bool treasureText;
+	bool treasureTaken;
 
 	//JUMP (BECKHAM'S)
 	float acceleration;
@@ -621,7 +619,12 @@ private:
 	bool wingsFound;
 	bool engineFound;
 	//CRYSTAL RELATED STUFF   
-	bool checkCrystalPos(float xcoord, float zcoord, int i);
+	bool checkCrystalPos(int xcoord, int zcoord, int i);
+
+	void crystalgen();
+	void asteroidgen();
+
+	void jump();
 };
 
 #endif
