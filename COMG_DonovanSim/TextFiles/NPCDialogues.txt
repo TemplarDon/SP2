@@ -11,4 +11,5 @@ Find the token on the table and buy a coke from the vending machine!
 SUPPP buddy! I heard there is a treasure in a nearby maze!
 However, you will need a spaceship to fly to the maze.
 Build a spaceship first by buying parts from the shop!
+Hold left click to shoot at the dummy.
 end

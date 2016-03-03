@@ -28,7 +28,7 @@ struct Light
         type = LIGHT_POINT;
         position.Set(0, 0, 0);
         color.Set(1, 1, 1);
-        power = 1.f;
+        power = 0.f;
         kC = kL = kQ = 1;
 		cosCutoff = cosInner = 0;
 		exponent = 1;
