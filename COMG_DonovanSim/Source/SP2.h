@@ -266,7 +266,7 @@ class SP2 : public Scene
 	};
 
 	//Light data. Variable numLights is used to define the number of lights this scene has.
-	static const size_t numLights = 7; Light light[numLights];
+	static const size_t numLights = 8; Light light[numLights];
 	unsigned m_parameters[U_TOTAL];
 	unsigned lightUniforms[numLights][UL_TOTAL];
 
@@ -290,6 +290,7 @@ class SP2 : public Scene
 	void setLightInner(const size_t &index, const float &D);
 	void moveLightPosition(const size_t &index, const Vector3 &M, const bool &absolute);
 	void rotateSpotlight(const size_t &index, const float &degrees, const Vector3 &axis);
+	void rotateDirectionalLight(const size_t &index, const float &degrees, const Vector3 &axis);
 
 	unsigned m_vertexArrayID;
 	unsigned m_vertexBuffer[NUM_GEOMETRY];
@@ -365,11 +366,11 @@ private:
 	float TokenTranslate;
 	float TextTranslate;
 	float TestRotation;
-	float SuitTranslate;
 	float rotateAngle;
 	float heightOfWall;
 	float translatePointer;
 	double BounceTime;
+	float SpinTheFood;
 
 	//DOUBLE
 	double testDouble;
@@ -382,7 +383,7 @@ private:
 	bool ConsumeCokeText;
 	bool PickUpTokenText;
 	bool testText;
-	bool MENUBOOL;
+	bool MenuBool;
 	bool wearSuitText;
 	bool wearSuit;
 	bool DisplayInventory;
@@ -392,7 +393,6 @@ private:
 	bool doctorText;
 	bool traderText;
 	bool soldierText;
-	bool shopkeeperText;
 	bool equipPickaxe;
 	bool equipGun;
 	bool HandDisappear;
@@ -401,7 +401,6 @@ private:
 	bool AppleAppear;
 	bool NPCInCafeTokenTask;
 	bool NPCInRecMazeTask;
-	bool HelipadInstructions;
 
 	//DOOR (DONOVAN'S)
 	float leftGateOffset;
@@ -420,17 +419,17 @@ private:
 	float lavaTranslation;
 	vector<float>mazeRandomTranslateVec;
 	bool deadText;
-    bool treasureText;
-    bool treasureTaken;
+	bool treasureText;
+	bool treasureTaken;
 
 	//JUMP (BECKHAM'S)
-	int acceleration;
-	int t;
-	int firstvelo;
-	int secondvelo;
-	int distance;
-	int gravity;
-	int firstpos;
+	float acceleration;
+	float t;
+	float firstvelo;
+	float secondvelo;
+	float distance;
+	float gravity;
+	float firstpos;
 	bool onGround;
 
 	//Booleans by Gary Goh.
@@ -441,27 +440,27 @@ private:
 	//MINING INTERACTIONS (BECKHAM'S)    
 	bool CrystalText;
 	int CrystalNo;
-	int posxcheck;
-	int poszcheck;
+	float posxcheck;
+	float poszcheck;
 	int crystalcount;
-	int xcoords[100];
-	int zcoords[100];
+	float xcoords[100];
+	float zcoords[100];
 	bool rendercrystal[100];
-	int coord1;
-	int coord2;
+	float coord1;
+	float coord2;
 
 	//ASTEROID RELATED    
 	int AsteroidNo;
-	int asteroidx[50];
-	int movex[50];
-	int rotatex[50];
-	int asteroidz[50];
-	int movez[50];
-	int rotatez[50];
-	int asteroidy[50];
-	int renderasteroid[50];
-	int coord3;
-	int posycheck;
+	float asteroidx[50];
+	float movex[50];
+	float rotatex[50];
+	float asteroidz[50];
+	float movez[50];
+	float rotatez[50];
+	float asteroidy[50];
+	float renderasteroid[50];
+	float coord3;
+	float posycheck;
 	double between;
 	bool AsteroidCollision;
 
@@ -504,7 +503,10 @@ private:
 	void RenderCoffee();
 	void RenderApple();
 	void RenderAsteroids();
-
+	void RenderWeaponsWhenSelected();
+	void RenderShopLists();
+	void RenderCafeInteractions();
+	void RenderHandAndInventory();
 
 	//INSTRUCTION
 	void readInstructions(); //
@@ -531,6 +533,7 @@ private:
 	bool DisplayCafeMenu;
 	bool YesShowCafeMenu;
 	bool CafeStuff;
+	void RenderFood();
 	void RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y);
 
@@ -589,8 +592,8 @@ private:
 	void EquippingWeapons();
 
 	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM
-	void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
-	void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
+	void initRoomTemplate(Position pos, Vector3 size = { 1, 1, 1 }, float groundMeshSize = 100);
+	void RenderRoomTemplate(Position pos, Vector3 size = { 1, 1, 1 }, float groundMeshSize = 100);
 
 
 	//Reset function    
@@ -616,7 +619,12 @@ private:
 	bool wingsFound;
 	bool engineFound;
 	//CRYSTAL RELATED STUFF   
-	bool checkCrystalPos(int xcoord, int zcoord, int i);
+	bool checkCrystalPos(float xcoord, float zcoord, int i);
+
+	void crystalgen();
+	void asteroidgen();
+
+	void jump();
 };
 
 #endif

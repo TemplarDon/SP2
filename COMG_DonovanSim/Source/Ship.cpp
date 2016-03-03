@@ -29,7 +29,7 @@
     axis to rotate collision box by (not working)
 */
 /******************************************************************************/
-Ship::Ship(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis, Vector3 target) : InteractableOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
+Ship::Ship(string name, Position maxPos, Position minPos, Position offSet, float scaleOffSet, float rotateAngle, Vector3 rotateAxis, Vector3 target) : InteractableOBJs(name, maxPos, minPos, offSet, scaleOffSet, rotateAngle, rotateAxis)
 {
     shipSpeed = 0;
     shipMaxSpeed = 0;

@@ -30,7 +30,7 @@ CollisionOBJs Constructor
     axis to rotate collision box by (not working)
 */
 /******************************************************************************/
-CollisionOBJs::CollisionOBJs(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis) : GameObject(name, offSet)
+CollisionOBJs::CollisionOBJs(string name, Position maxPos, Position minPos, Position offSet, float scaleOffSet, float rotateAngle, Vector3 rotateAxis) : GameObject(name, offSet)
 {
     this->maxPos = maxPos;
     this->minPos = minPos;

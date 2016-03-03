@@ -108,7 +108,7 @@ void SP2::LoadLights()
 		{ 0.5f, 0.875f, 1.f },
 		1.875f,
 		1.0f, 0.01f, 0.001f,
-		89.55f, 64.1,
+		89.55f, 64.1f,
 		1.0f,
 		{ 0, 1.0f, 0 }
 	);
@@ -173,6 +173,17 @@ void SP2::LoadLights()
 		{ 250, 32, 160 },
 		{ 1, 1, 1 },
 		2.55f,
+		1.0f, 0.01f, 0.001f,
+		89.55f, 64.1f,
+		1.0f,
+		{ 0, 1.0f, 0 }
+	);
+
+	setLightData(7,
+		Light::LIGHT_DIRECTIONAL,
+		{ 5, 4, 0 },
+		{ 1, 1, 1 },
+		1.2f,
 		1.0f, 0.01f, 0.001f,
 		89.55f, 64.1f,
 		1.0f,
@@ -332,11 +343,11 @@ void SP2::LoadMeshes()
 	//SPACEGUY
 	meshList[GEO_SPACEGUY] = MeshBuilder::GenerateOBJ("Spaceguy", "OBJ//Spaceman.obj");
 	meshList[GEO_SPACEGUY]->textureID = LoadTGA("Image//Spaceman.tga");
-	InteractableOBJs spaceguy = InteractableOBJs("spaceguy", meshList[GEO_SPACEGUY]->maxPos, meshList[GEO_SPACEGUY]->minPos, Position(271, 1.8, 143), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs spaceguy = InteractableOBJs("spaceguy", meshList[GEO_SPACEGUY]->maxPos, meshList[GEO_SPACEGUY]->minPos, Position(271, 1.8f, 143), 2, 0, Vector3(0, 0, 0));
 	spaceguy.setRequirements(25, 12);
 	InteractablesList.push_back(spaceguy);
 
-	InteractableOBJs spaceguy2 = InteractableOBJs("spaceguy2", meshList[GEO_SPACEGUY]->maxPos, meshList[GEO_SPACEGUY]->minPos, Position(105, 2.8, 5), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs spaceguy2 = InteractableOBJs("spaceguy2", meshList[GEO_SPACEGUY]->maxPos, meshList[GEO_SPACEGUY]->minPos, Position(105, 2.8f, 5), 2, 0, Vector3(0, 0, 0));
 	spaceguy2.setRequirements(25, 12);
 	InteractablesList.push_back(spaceguy2);
 
@@ -465,7 +476,7 @@ void SP2::LoadMeshes()
 	//SPACESUIT
 	meshList[GEO_SPACESUIT] = MeshBuilder::GenerateOBJ("Sofa", "OBJ//Spacesuit.obj");
 	meshList[GEO_SPACESUIT]->textureID = LoadTGA("Image//Spacesuit.tga");
-	InteractableOBJs spacesuit = InteractableOBJs("spacesuit", meshList[GEO_SPACESUIT]->maxPos, meshList[GEO_SPACESUIT]->minPos, Position(220, SuitTranslate, 190), 2, 0, Vector3(0, 0, 0));
+	InteractableOBJs spacesuit = InteractableOBJs("spacesuit", meshList[GEO_SPACESUIT]->maxPos, meshList[GEO_SPACESUIT]->minPos, Position(220, 2, 190), 2, 0, Vector3(0, 0, 0));
 	spacesuit.setRequirements(25, 15);
 	InteractablesList.push_back(spacesuit);
 	//SPACE MASK
@@ -759,6 +770,22 @@ void SP2::rotateSpotlight(const size_t &index, const float &degrees, const Vecto
 	d = rotation * d;
 }
 
+void SP2::rotateDirectionalLight(const size_t &index, const float &degrees, const Vector3 &axis)
+{
+	if (index >= numLights) return;
+	if (light[index].type != Light::LIGHT_DIRECTIONAL) return;
+
+	Vector3 R = { light[index].position.x, light[index].position.y, light[index].position.z };
+	Mtx44 rotationMatrix;
+
+	rotationMatrix.SetToRotation(degrees, axis.x, axis.y, axis.z);
+	R = rotationMatrix * R;
+
+	light[index].position.x = R.x;
+	light[index].position.y = R.y;
+	light[index].position.z = R.z;
+}
+
 //Shortcut function for loading meshes, textures, and materials.
 void SP2::MeshInit(GEOMETRY_TYPE G,
 	Mesh *mesh,
@@ -782,11 +809,6 @@ void SP2::MeshInit(GEOMETRY_TYPE G,
 //Main rendering code
 void SP2::RenderCode()
 {
-	modelStack.PushMatrix();
-	modelStack.Translate(thirdPersonCamera.GetFocusPoint()->x, thirdPersonCamera.GetFocusPoint()->y, thirdPersonCamera.GetFocusPoint()->z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
-	modelStack.PopMatrix();
-
 	if (isInViewSpheres)
 	{
 		Position P = { firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z };
@@ -883,16 +905,16 @@ void SP2::RenderCode()
 
 	//RENDER RANDOM ASTEROID GENERATION  
 	RenderAsteroids();
-	// Render Maze
+
+	//Render Maze
 	renderMaze();
 
-	// Render Mountains
+	//Render Mountains
 	modelStack.PushMatrix();
 	renderMountains();
 	modelStack.PopMatrix();
 
 	// Base Top
-	// Infirmary
 	modelStack.PushMatrix();
 	modelStack.Translate(250, 63, -80);
 	modelStack.Scale(40, 40, 40);
@@ -937,7 +959,7 @@ void SP2::RenderCode()
 
 	RenderRoomTemplate(Position(250, 2, 30));  //CAFE ROOM
 
-	RenderRoomTemplate(Position(120, 2, 30));
+	RenderRoomTemplate(Position(120, 2, 30));  
 
 	RenderRoomTemplate(Position(120, 2, -100));
 
@@ -969,7 +991,6 @@ void SP2::RenderCode()
 		modelStack.PopMatrix();
 	}
 
-	//INTERACTION
 
 	// Helipad
 	modelStack.PushMatrix();
@@ -979,192 +1000,32 @@ void SP2::RenderCode()
 	RenderMesh(meshList[GEO_HELIPAD], true, toggleLight);
 	modelStack.PopMatrix();
 
-
-
 	//HELIPAD SIGN BOARD
 	modelStack.PushMatrix();
 	modelStack.Translate(370, 2, -75);
 	/*modelStack.Rotate(180, 1, 0, 0);*/
-	modelStack.Scale(2.2, 2.2, 2.2);
+	modelStack.Scale(2.2f, 2.2f, 2.2f);
 	RenderMesh(meshList[GEO_HELIPADSIGN], false, toggleLight);
 	modelStack.PopMatrix();
 
 
 
+	//Interactions
 
-	//APPLE
-	if (AppleAppear == true)
-	{
-		RenderApple();
-	}
+	//Render food when selected
+	RenderFood();
 
-	//COFFEE
-	if (CoffeeAppear == true)
-	{
-		RenderCoffee();
-	}
+	//Render out cafe interactions
+	RenderCafeInteractions();
 
-	//BREAD
-	if (BreadAppear == true)
-	{
-		RenderBread();
-	}
+	//Render shop list
+	RenderShopLists();
 
+	//Render hand and inventory
+	RenderHandAndInventory();
 
-	//Note from Gary Goh: It's best to render the sprites first then the text.
-
-	if (TokenOnScreen == true)
-	{
-		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
-	}
-
-
-	//PICK UP COKE
-	if (RenderCoke == true)
-	{
-		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
-	}
-
-
-
-	if (DisplayCafeMenu == true)  //true
-	{
-		//DisplayInventory = true;
-		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
-
-		RenderCafePointerOnScreen(meshList[GEO_CAFEPOINTER], 0.6, 44, cafeMenuPointer);     //62, 50, 38t
-	}
-
-
-	//DO NOT DELETE SHOP LIST STUFF
-	if (DisplayShopList == true)   //true
-	{
-		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST1], 5, 8, 6);
-		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6, 44, shopListPointer);     //62, 50, 38t
-	}
-
-	if (DisplayShopList2 == true)
-	{
-		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST2], 5, 8, 6);
-		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6, 44, shopListPointer);     //62, 50, 38t
-	}
-
-
-	if (DisplayShopList3 == true)
-	{
-		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST3], 5, 8, 6);
-		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6, 44, shopListPointer);     //62, 50, 38t
-	}
-
-	if (DisplayShopList4 == true)
-	{
-		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST4], 5, 8, 6);
-		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6, 44, shopListPointer);     //62, 50, 38t
-	}
-
-
-
-
-
-
-
-	//INVENTORY & HANDS
-	if (DisplayInventory == false)
-	{
-		//Inventory
-		RenderInventoryOnScreen(meshList[GEO_FIRSTBOX], 5, 4.7, 2);
-		RenderInventoryOnScreen(meshList[GEO_SECONDBOX], 5, 5.8, 2);
-		RenderInventoryOnScreen(meshList[GEO_THIRDBOX], 5, 6.9, 2);
-		RenderInventoryOnScreen(meshList[GEO_FOURTHBOX], 5, 8, 2);
-		RenderInventoryOnScreen(meshList[GEO_FIFTHBOX], 5, 10.2, 2);
-		RenderInventoryOnScreen(meshList[GEO_SIXTHBOX], 5, 11.3, 2);
-
-		//POINTER
-		RenderPointerOnScreen(meshList[GEO_POINTER], 0.4, translatePointer, 37);     //127, 141
-
-        //Weapon 
-        std::ostringstream weapon;
-        weapon.str("");
-        if (somePlayer.checkWeapon()) { weapon << "Equipped"; }
-        else { weapon << "Unequipped"; }
-        RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(1, 0, 0), 1.3, 36, 4);
-
-        //CRYSTAL COUNTS
-        std::ostringstream as;
-        as.str("");
-        as << somePlayer.getCrystals();
-        RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 2, 10.5, 2);
-
-
-        // Ship Parts
-        std::ostringstream engineText;
-        engineText.str("");
-
-        std::ostringstream wingsText;
-        wingsText.str("");
-
-        std::ostringstream hullText;
-        hullText.str("");
-
-
-        if (somePlayer.getParts().size() > 0)
-        {
-            for (list<ShipParts*>::iterator it = somePlayer.getParts().begin(); it != somePlayer.getParts().end(); ++it)
-            {
-                if ((*it)->getName() == "LightHull") { hullText << "Light"; }
-                if ((*it)->getName() == "MediumHull") { hullText << "Medium"; }
-                if ((*it)->getName() == "LargeHull") { hullText << "Large"; }
-
-                if ((*it)->getName() == "DualWings") { wingsText << "Dual"; }
-                if ((*it)->getName() == "QuadWings") { wingsText << "Quad"; }
-
-                if ((*it)->getName() == "G1Engine") { engineText << "G1"; }
-                if ((*it)->getName() == "G2Engine") { engineText << "G2"; }
-
-            }
-        }
-
-        RenderTextOnScreen(meshList[GEO_TEXT], engineText.str(), Color(1, 0, 0), 2, 13, 2);
-
-        RenderTextOnScreen(meshList[GEO_TEXT], wingsText.str(), Color(1, 0, 0), 2, 16, 2);
-
-        RenderTextOnScreen(meshList[GEO_TEXT], hullText.str(), Color(1, 0, 0), 2, 19, 2);
-	}
-
-	if (HandDisappear == false)  //false
-	{
-		//Hand 1
-		RenderHandOnScreen(meshList[GEO_HAND], 5, 0.8, 1);
-
-		//Hand 2
-		RenderHandOnScreen2(meshList[GEO_HAND], 5, 15.3, 1);
-	}
-
-
-	//PICKAXE
-	if (equipPickaxe == true)
-	{
-		RenderPickaxeOnScreen(meshList[GEO_HOLDPICKAXE], 4.8, 14, 0.5);
-	}
-
-	//GUN
-	if (equipGun == true)
-	{
-		RenderGunOnScreen(meshList[GEO_HOLDGUN], 3.4, 19.5, 4);
-	}
-
-	//// Player POS
-	//std::ostringstream playerpos;
-	//playerpos.str("");
-	//playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
-	//RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
-
-	//// Collision check with asteroid  
-	//std::ostringstream os;
-	//os.str("");
-	//os << "Collision with asteroids :" << AsteroidCollision;
-	//RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
-
+	//Render weapon
+	RenderWeaponsWhenSelected();
 
 	//INSTRUCTIONS
 	RenderInstructions();
@@ -1204,7 +1065,7 @@ void SP2::RenderCode()
 
 
 	//CROSS HAIR
-	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
+	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 19.71f, 14.515f);
 
 	//NPC DIALOGUES
 	RenderNPCDialogues();
@@ -1227,28 +1088,17 @@ void SP2::RenderCode()
 		RenderTextOnScreen(meshList[GEO_TEXT], shipStats.str(), Color(0, 1, 0), 2, 3, 10);
 	}
 
-	//// Tests for shipBuilding
-	//if (askedHull)
-	//{
-	//    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Hull: 1. Light (10) | 2. Medium (20) | 3. Large (30) ", Color(1, 0, 0), 2, 0, 14);
-	//}
-	//if (askedWings)
-	//{
-	//    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Wing: 4. Dual (20) | 5. Quad (30)", Color(1, 0, 0), 2, 0, 14);
-	//}
-	//if (askedEngine)
-	//{
-	//    RenderTextOnScreen(meshList[GEO_TEXT], "Pick a Engine: 6. G1 Engine (20)  | 7. G2 Engine (30) ", Color(1, 0, 0), 2, 0, 14);
-	//}
-
 	// Tests for ship Flight
 	if (thirdPersonCamera.yawingLeft) { RenderTextOnScreen(meshList[GEO_TEXT], "Left", Color(1, 0, 0), 1, 0, 14); }
 	if (thirdPersonCamera.yawingRight) { RenderTextOnScreen(meshList[GEO_TEXT], "Right", Color(1, 0, 0), 1, 0, 15); }
 	if (thirdPersonCamera.pitchingUp) { RenderTextOnScreen(meshList[GEO_TEXT], "Up", Color(1, 0, 0), 1, 0, 13); }
 	if (thirdPersonCamera.pitchingDown) { RenderTextOnScreen(meshList[GEO_TEXT], "Down", Color(1, 0, 0), 1, 0, 12); }
 
-	if (deadText) { RenderHealthBarOnScreen(meshList[GEO_DEADHEALTHBAR], 2.6, 2.5, 21); }
-	else { RenderHealthBarOnScreen(meshList[GEO_ALIVEHEALTHBAR], 2.6, 2.5, 21); }
+	if (deadText) { RenderHealthBarOnScreen(meshList[GEO_DEADHEALTHBAR], 2.6f, 2.5f, 21); }
+	else { RenderHealthBarOnScreen(meshList[GEO_ALIVEHEALTHBAR], 2.6f, 2.5f, 21); }
+
+	//CROSS HAIR
+	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
 }
 
 void SP2::initSpaceShip()
@@ -1286,7 +1136,7 @@ void SP2::initMaze()
 	meshList[GEO_SIGNBOARD]->textureID = LoadTGA("Image//Maze//MazeSignBoard.tga");
 
 	int i = 0;
-	for (int zAxis = 300; zAxis >= -400; zAxis -= 100)
+	for (float zAxis = 300; zAxis >= -400; zAxis -= 100)
 	{
 		InteractableOBJs leftWall = InteractableOBJs("leftWall", meshList[GEO_MAZE_SIDE_WALL]->maxPos, meshList[GEO_MAZE_SIDE_WALL]->minPos, Position(-420, 10, zAxis), 30, 0, Vector3(0, 0, 0));
 		InteractablesList.push_back(leftWall);
@@ -1426,7 +1276,7 @@ void SP2::initMountains()
 	meshList[GEO_MOUNTAIN] = MeshBuilder::GenerateOBJ("moutain", "OBJ//Mountain.obj");
 	meshList[GEO_MOUNTAIN]->textureID = LoadTGA("Image//spaceground.tga");
 
-	for (int zAxis = 500; zAxis >= -500; zAxis -= 100)
+	for (float zAxis = 500; zAxis >= -500; zAxis -= 100)
 	{
 		InteractableOBJs mountain1 = InteractableOBJs("mountain", meshList[GEO_MOUNTAIN]->maxPos, meshList[GEO_MOUNTAIN]->minPos, Position(-160, 0, zAxis), 5, 0, Vector3(0, 0, 0));
 		InteractablesList.push_back(mountain1);
@@ -1438,7 +1288,7 @@ void SP2::initMountains()
 		InteractablesList.push_back(mountain3);
 	}
 
-	for (int xAxis = 500; xAxis >= -500; xAxis -= 100)
+	for (float xAxis = 500; xAxis >= -500; xAxis -= 100)
 	{
 		InteractableOBJs mountain4 = InteractableOBJs("mountain", meshList[GEO_MOUNTAIN]->maxPos, meshList[GEO_MOUNTAIN]->minPos, Position(xAxis, 0, 600), 5, 0, Vector3(0, 0, 0));
 		InteractablesList.push_back(mountain4);
@@ -1454,7 +1304,7 @@ void SP2::renderMaze()
 	int i = 0;
 
 	// Left & Right Side Walls
-	for (int zAxis = 300; zAxis >= -400; zAxis -= 100)
+	for (float zAxis = 300; zAxis >= -400; zAxis -= 100)
 	{
 		// Left Wall
 		modelStack.PushMatrix();
@@ -1522,6 +1372,7 @@ void SP2::renderMaze()
         modelStack.PushMatrix();
         modelStack.Translate(-350, 15, -370);
         modelStack.Scale(2, 2, 2);
+		modelStack.Rotate(SpinTheFood, 0, 1, 0);
         RenderMesh(meshList[GEO_MAZE_TREASURE], true, toggleLight);
         modelStack.PopMatrix();
     }
@@ -1536,7 +1387,7 @@ void SP2::renderMaze()
 }
 
 //Room template
-void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
+void SP2::initRoomTemplate(Position pos, Vector3 size, float groundMeshSize)
 {
 	Building floor1 = Building("floor1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
 	BuildingsList.push_back(floor1);
@@ -1653,40 +1504,40 @@ void SP2::RenderInstructions()
 	//VENDING TEXT
 	if (NearVendingText)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[0], Color(1, 0, 0), 1.7, 5, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[9], Color(1, 0, 0), 1.7, 5, 8);
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[0], Color(1, 0, 0), 1.7f, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[9], Color(1, 0, 0), 1.7f, 5, 8);
 	}
 
 	//CRYSTAL TEXT
 	if (CrystalText == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[1], Color(1, 0, 0), 1.7, 5, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[2], Color(1, 0, 0), 1.7, 5, 8);
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[1], Color(1, 0, 0), 1.7f, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[2], Color(1, 0, 0), 1.7f, 5, 8);
 	}
 
 	//PICK UP TOKEN
 	if (PickUpTokenText == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[3], Color(1, 0, 0), 1.7, 5, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[4], Color(1, 0, 0), 1.7, 5, 8);
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[3], Color(1, 0, 0), 1.7f, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[4], Color(1, 0, 0), 1.7f, 5, 8);
 	}
 
 	//CONSUME COKE TEXT
 	if (ConsumeCokeText == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[5], Color(1, 0, 0), 1.7, 5, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[6], Color(1, 0, 0), 1.7, 5, 8);
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[5], Color(1, 0, 0), 1.7f, 5, 6);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[6], Color(1, 0, 0), 1.7f, 5, 4);
 	}
 
 	//WEAR SUIT TEXT
 	if (wearSuitText == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[7], Color(1, 0, 0), 1.7, 5, 10);
+		RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[7], Color(1, 0, 0), 1.7f, 5, 10);
 	}
 
 	//WEAR SUIT \ MASK ON SCREEN
@@ -1695,15 +1546,15 @@ void SP2::RenderInstructions()
 		RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[8], Color(1, 0, 0), 2, 8, 14);
 
 		glBlendFunc(1, 1);
-		RenderSpacemaskOnScreen(meshList[GEO_SPACEMASK], 5, 8, 6.3);
+		RenderSpacemaskOnScreen(meshList[GEO_SPACEMASK], 5, 8, 6.3f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
     if (treasureText)
     {
-        RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8);
-        RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[10], Color(1, 0, 0), 1.7, 5, 10);
-        RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[11], Color(1, 0, 0), 1.7, 5, 8);
+        RenderNPCTextBoxOnScreen(meshList[GEO_INSTRUCTIONBOX], 5, 8, 2.8f);
+        RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[10], Color(1, 0, 0), 1.7f, 5, 10);
+        RenderTextOnScreen(meshList[GEO_TEXT], instruct_vec[11], Color(1, 0, 0), 1.7f, 5, 8);
     }
 }
 
@@ -1711,63 +1562,63 @@ void SP2::RenderNPCDialogues()
 {
 	if (chefText == true)  //true
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[0], Color(1, 0, 0), 1.7, 5, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press Y to look at the menu.", Color(1, 1, 1), 1.7, 5, 8);
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press U to eat the food.", Color(1, 1, 1), 1.7, 5, 6);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[0], Color(1, 0, 0), 1.7f, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press Y to look at the menu.", Color(1, 1, 1), 1.7f, 5, 8);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press U to eat the food.", Color(1, 1, 1), 1.7f, 5, 6);
 	}
 
 	if (spaceguyText == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[1], Color(1, 0, 0), 1.7, 5, 10);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[1], Color(1, 0, 0), 1.7f, 5, 10);
 	}
 
 	if (nurseText == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.7, 5, 10);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[2], Color(1, 0, 0), 1.7f, 5, 10);
 	}
 
 	if (doctorText == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[3], Color(1, 0, 0), 1.7, 5, 10);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[3], Color(1, 0, 0), 1.7f, 5, 10);
 	}
 
 	if (traderText == true)   //true
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[4], Color(1, 0, 0), 1.7, 5, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 1, 1), 1.7, 5, 8);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[4], Color(1, 0, 0), 1.7f, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[6], Color(1, 1, 1), 1.7f, 5, 8);
 	}
 
 	if (soldierText == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.7, 5, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[7], Color(1, 1, 1), 1.7, 5, 8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[13], Color(1, 1, 1), 1.7, 5, 6);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.7f, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[7], Color(1, 1, 1), 1.7f, 5, 8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[13], Color(1, 1, 1), 1.7f, 5, 6);
 	}
 
 	if (NPCInCafeTokenTask == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[8], Color(1, 0, 0), 1.7, 5, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[9], Color(1, 0, 0), 1.7, 5, 8);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[8], Color(1, 0, 0), 1.7f, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[9], Color(1, 0, 0), 1.7f, 5, 8);
 	}
 
 	if (NPCInRecMazeTask == true)
 	{
-		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[10], Color(1, 0, 0), 1.7, 5, 10);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[11], Color(1, 0, 0), 1.7, 5, 8);
-		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[12], Color(1, 0, 0), 1.7, 5, 6);
+		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8f);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[10], Color(1, 0, 0), 1.7f, 5, 10);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[11], Color(1, 0, 0), 1.7f, 5, 8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[12], Color(1, 0, 0), 1.7f, 5, 6);
 	}
 
 }
 
-void SP2::RenderRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
+void SP2::RenderRoomTemplate(Position pos, Vector3 size, float groundMeshSize)
 {
 	groundMeshSize = 100;
 
@@ -2022,14 +1873,14 @@ void SP2::RenderBunkRoom()
 	//BUNK 1 
 	modelStack.PushMatrix();
 	modelStack.Translate(288, 3, 127);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
 	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
 	modelStack.PopMatrix();
 
 	//BUNK 2 
 	modelStack.PushMatrix();
 	modelStack.Translate(271, 3, 127);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
 	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
 	modelStack.PopMatrix();
 
@@ -2037,14 +1888,14 @@ void SP2::RenderBunkRoom()
 	//BUNK 3 
 	modelStack.PushMatrix();
 	modelStack.Translate(210, 3, 127);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
 	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
 	modelStack.PopMatrix();
 
 	//BUNK 4 
 	modelStack.PushMatrix();
 	modelStack.Translate(227, 3, 127);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
 	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
 	modelStack.PopMatrix();
 
@@ -2053,30 +1904,30 @@ void SP2::RenderBunkRoom()
 	//BUNK 5 
 	modelStack.PushMatrix();
 	modelStack.Translate(288, 3, 191.5);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
 	modelStack.Rotate(180, 0, 1, 0);
 	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
 	modelStack.PopMatrix();
 
 	//BUNK 6 
 	modelStack.PushMatrix();
-	modelStack.Translate(271, 3, 191.5);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Translate(271, 3, 191.5f);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
 	modelStack.Rotate(180, 0, 1, 0);
 	RenderMesh(meshList[GEO_BUNK], true, toggleLight);
 	modelStack.PopMatrix();
 
 	//SPACE MAN RANDOM NPC
 	modelStack.PushMatrix();
-	modelStack.Translate(271, 1.8, 143);
-	modelStack.Scale(3.4, 4.4, 3.4);
+	modelStack.Translate(271, 1.8f, 143);
+	modelStack.Scale(3.4f, 4.4f, 3.4f);
 	RenderMesh(meshList[GEO_SPACEGUY], true, toggleLight);
 	modelStack.PopMatrix();
 
 	//SPACESUIT
 	modelStack.PushMatrix();
-	modelStack.Translate(220, SuitTranslate, 190);
-	modelStack.Scale(1.3, 1.3, 1.3);
+	modelStack.Translate(220, 2, 190);
+	modelStack.Scale(1.3f, 1.3f, 1.3f);
 	modelStack.Rotate(180, 0, 1, 0);
 	RenderMesh(meshList[GEO_SPACESUIT], true, toggleLight);
 	modelStack.PopMatrix();
@@ -2084,7 +1935,7 @@ void SP2::RenderBunkRoom()
 	//WINDOW1
 	glBlendFunc(1, 1);
 	modelStack.PushMatrix();
-	modelStack.Translate(220, 16, 209.3);
+	modelStack.Translate(220, 16, 209.3f);
 	modelStack.Scale(2, 2, 2);
 	modelStack.Rotate(180, 0, 1, 0);
 	RenderMesh(meshList[GEO_WINDOW], true, toggleLight);
@@ -2104,7 +1955,7 @@ void SP2::RenderBunkRoom()
 
 	//HUD
 	modelStack.PushMatrix();
-	modelStack.Translate(200.5, 16, 190);
+	modelStack.Translate(200.5f, 16, 190);
 	modelStack.Scale(2, 2, 2);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(180, 0, 1, 0);
@@ -2117,7 +1968,7 @@ void SP2::RenderCafeRoom()
 	//COUNTER
 	modelStack.PushMatrix();
 	modelStack.Translate(280, 2, 0);
-	modelStack.Scale(2.3, 2, 2.3);
+	modelStack.Scale(2.3f, 2, 2.3f);
 	RenderMesh(meshList[GEO_COUNTER], true, toggleLight);
 	modelStack.PopMatrix();
 
@@ -2131,7 +1982,7 @@ void SP2::RenderCafeRoom()
 	//CHEF
 	modelStack.PushMatrix();
 	modelStack.Translate(280, 2, -2);
-	modelStack.Scale(3.5, 3.8, 3.5);
+	modelStack.Scale(3.5f, 3.8f, 3.5f);
 	modelStack.Rotate(-90, 0, 1, 0);
 	RenderMesh(meshList[GEO_CHEF], true, toggleLight);
 	modelStack.PopMatrix();
@@ -2161,14 +2012,14 @@ void SP2::RenderCafeRoom()
 	//TOKEN
 	modelStack.PushMatrix();
 	modelStack.Translate(276, TokenTranslate, 61);
-	modelStack.Scale(1, 1.5, 1);
+	modelStack.Scale(1, 1.5f, 1);
 	RenderMesh(meshList[GEO_TOKEN], true, toggleLight);
 	modelStack.PopMatrix();
 
 	//VENDING
 	modelStack.PushMatrix();
 	modelStack.Translate(210, 2, 88);
-	modelStack.Scale(2.5, 2.5, 2.5);
+	modelStack.Scale(2.5f, 2.5f, 2.5f);
 	modelStack.Rotate(-90, 0, 1, 0);
 	RenderMesh(meshList[GEO_VENDING], true, toggleLight);
 	modelStack.PopMatrix();
@@ -2176,7 +2027,7 @@ void SP2::RenderCafeRoom()
 	//NPC
 	modelStack.PushMatrix();
 	modelStack.Translate(220, 2, -10);
-	modelStack.Scale(3.7, 4, 3.7);
+	modelStack.Scale(3.7f, 4, 3.7f);
 	RenderMesh(meshList[GEO_SHOPKEEPER], true, toggleLight);
 	modelStack.PopMatrix();
 }
@@ -2192,7 +2043,7 @@ void SP2::RenderCrystals()
 		else
 		{
 			modelStack.PushMatrix();
-			modelStack.Translate(xcoords[i], 2, zcoords[i]);
+			modelStack.Translate(float(xcoords[i]), 2, float(zcoords[i]));
 			modelStack.Scale(5, 5, 5);
 			RenderMesh(meshList[GEO_CRYSTAL], true, toggleLight);
 			modelStack.PopMatrix();
@@ -2202,12 +2053,33 @@ void SP2::RenderCrystals()
 
 }
 
+void SP2::RenderFood()
+{
+	//APPLE
+	if (AppleAppear == true)
+	{
+		RenderApple();
+	}
+
+	//COFFEE
+	if (CoffeeAppear == true)
+	{
+		RenderCoffee();
+	}
+
+	//BREAD
+	if (BreadAppear == true)
+	{
+		RenderBread();
+	}
+}
+
 void SP2::RenderApple()
 {
 	modelStack.PushMatrix();
-	modelStack.Translate(266, 12.4, -0.5);
-	modelStack.Scale(0.4, 0.4, 0.4);
-	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Translate(266, 12.4f, -0.5f);
+	modelStack.Scale(0.4f, 0.4f, 0.4f);
+	modelStack.Rotate(SpinTheFood, 0, 1, 0);
 	RenderMesh(meshList[GEO_APPLE], true, toggleLight);
 	modelStack.PopMatrix();
 
@@ -2218,7 +2090,7 @@ void SP2::RenderCoffee()
 	modelStack.PushMatrix();
 	modelStack.Translate(266, 12, -0.5);
 	modelStack.Scale(0.5, 0.5, 0.5);
-	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(SpinTheFood, 0, 1, 0);
 	RenderMesh(meshList[GEO_COFFEE], true, toggleLight);
 	modelStack.PopMatrix();
 
@@ -2227,11 +2099,155 @@ void SP2::RenderCoffee()
 void SP2::RenderBread()
 {
 	modelStack.PushMatrix();
-	modelStack.Translate(267, 11, -0.5);
-	modelStack.Scale(1.2, 1.2, 1.2);
+	modelStack.Translate(267, 11, -0.5f);
+	modelStack.Scale(1.2f, 1.2f, 1.2f);
+	modelStack.Rotate(SpinTheFood, 0, 1, 0);
 	RenderMesh(meshList[GEO_BREAD], true, toggleLight);
 	modelStack.PopMatrix();
 
+}
+
+void SP2::RenderWeaponsWhenSelected()
+{
+	//PICKAXE
+	if (equipPickaxe == true)
+	{
+		RenderPickaxeOnScreen(meshList[GEO_HOLDPICKAXE], 4.8f, 14, 0.5f);
+	}
+
+	//GUN
+	if (equipGun == true)
+	{
+		RenderGunOnScreen(meshList[GEO_HOLDGUN], 3.4f, 19.5f, 4);
+	}
+}
+
+void SP2::RenderShopLists()
+{
+	//DO NOT DELETE SHOP LIST STUFF
+	if (DisplayShopList == true)   //true
+	{
+		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST1], 5, 8, 6);
+		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6f, 44, shopListPointer);     //62, 50, 38t
+	}
+
+	if (DisplayShopList2 == true)
+	{
+		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST2], 5, 8, 6);
+		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6f, 44, shopListPointer);     //62, 50, 38t
+	}
+
+
+	if (DisplayShopList3 == true)
+	{
+		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST3], 5, 8, 6);
+		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6f, 44, shopListPointer);     //62, 50, 38t
+	}
+
+	if (DisplayShopList4 == true)
+	{
+		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST4], 5, 8, 6);
+		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6f, 44, shopListPointer);     //62, 50, 38t
+	}
+}
+
+void SP2::RenderCafeInteractions()
+{
+	if (TokenOnScreen == true)
+	{
+		RenderTokenOnScreen(meshList[GEO_TOKEN], 5, 8, 6);
+	}
+
+
+	//PICK UP COKE
+	if (RenderCoke == true)
+	{
+		RenderCokeOnScreen(meshList[GEO_COKE], 5, 8, 6);
+	}
+
+
+	if (DisplayCafeMenu == true)  //true
+	{
+		//DisplayInventory = true;
+		RenderCafeTextboxOnScreen(meshList[GEO_CAFETEXTBOX], 5, 8, 6);
+
+		RenderCafePointerOnScreen(meshList[GEO_CAFEPOINTER], 0.6f, 44, cafeMenuPointer);     //62, 50, 38t
+	}
+}
+
+void SP2::RenderHandAndInventory()
+{
+	//INVENTORY & HANDS
+	if (DisplayInventory == false)
+	{
+		//Inventory
+		RenderInventoryOnScreen(meshList[GEO_FIRSTBOX], 5, 4.7f, 2);
+		RenderInventoryOnScreen(meshList[GEO_SECONDBOX], 5, 5.8f, 2);
+		RenderInventoryOnScreen(meshList[GEO_THIRDBOX], 5, 6.9f, 2);
+		RenderInventoryOnScreen(meshList[GEO_FOURTHBOX], 5, 8, 2);
+		RenderInventoryOnScreen(meshList[GEO_FIFTHBOX], 5, 10.2f, 2);
+		RenderInventoryOnScreen(meshList[GEO_SIXTHBOX], 5, 11.3f, 2);
+
+		//POINTER
+		RenderPointerOnScreen(meshList[GEO_POINTER], 0.4f, translatePointer, 37);     //127, 141
+
+		//Weapon 
+		std::ostringstream weapon;
+		weapon.str("");
+		if (somePlayer.checkWeapon()) { weapon << "Equipped"; }
+		else { weapon << "Unequipped"; }
+		RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(1, 0, 0), 1.3f, 36, 4);
+
+		//CRYSTAL COUNTS
+		std::ostringstream as;
+		as.str("");
+		as << somePlayer.getCrystals();
+		RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 2, 10.5f, 2);
+
+		// Ship Parts
+		std::ostringstream engineText;
+		engineText.str("");
+
+		std::ostringstream wingsText;
+		wingsText.str("");
+
+		std::ostringstream hullText;
+		hullText.str("");
+
+
+		if (somePlayer.getParts().size() > 0)
+		{
+			for (list<ShipParts*>::iterator it = somePlayer.getParts().begin(); it != somePlayer.getParts().end(); ++it)
+			{
+				if ((*it)->getName() == "LightHull") { hullText << "Light"; }
+				if ((*it)->getName() == "MediumHull") { hullText << "Medium"; }
+				if ((*it)->getName() == "LargeHull") { hullText << "Large"; }
+
+				if ((*it)->getName() == "DualWings") { wingsText << "Dual"; }
+				if ((*it)->getName() == "QuadWings") { wingsText << "Quad"; }
+
+				if ((*it)->getName() == "G1Engine") { engineText << "G1"; }
+				if ((*it)->getName() == "G2Engine") { engineText << "G2"; }
+
+			}
+		}
+
+		RenderTextOnScreen(meshList[GEO_TEXT], engineText.str(), Color(1, 0, 0), 2, 13, 2);
+
+		RenderTextOnScreen(meshList[GEO_TEXT], wingsText.str(), Color(1, 0, 0), 2, 16, 2);
+
+		RenderTextOnScreen(meshList[GEO_TEXT], hullText.str(), Color(1, 0, 0), 2, 19, 2);
+
+	}
+
+	if (HandDisappear == false)  //false
+	{
+		//Hand 1
+		RenderHandOnScreen(meshList[GEO_HAND], 5, 0.8f, 1);
+
+		//Hand 2
+		RenderHandOnScreen2(meshList[GEO_HAND], 5, 15.3f, 1);
+	}
 }
 
 void SP2::RenderInstructionBoxOnScreen(Mesh* mesh, float size, float x, float y)
@@ -2309,7 +2325,7 @@ void SP2::RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.Rotate(-75, 0, 1, 0);
 	modelStack.Rotate(34, 0, 0, 1);
 	modelStack.Rotate(-90, 0, 0, 1);
-	RenderMesh(mesh, true, toggleLight);
+	RenderMesh(mesh, false, toggleLight);
 
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
@@ -2405,10 +2421,10 @@ void SP2::RenderAsteroids()
 	for (int i = 0; i < AsteroidNo; i++)
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(asteroidx[i], asteroidy[i], asteroidz[i]);
+		modelStack.Translate(float(asteroidx[i]), float(asteroidy[i]), float(asteroidz[i]));
 		modelStack.Scale(20, 20, 20);
-		modelStack.Rotate(rotatex[i], 1, 0, 0);
-		modelStack.Rotate(rotatez[i], 0, 0, 1);
+		modelStack.Rotate(float(rotatex[i]), 1, 0, 0);
+		modelStack.Rotate(float(rotatez[i]), 0, 0, 1);
 		RenderMesh(meshList[GEO_ASTEROID], true, toggleLight);
 		modelStack.PopMatrix();
 	}
@@ -2690,8 +2706,8 @@ void SP2::RenderRecRoom()
 
 	//SPACEMAN
 	modelStack.PushMatrix();
-	modelStack.Translate(105, 2.8, 5);
-	modelStack.Scale(3.4, 4.3, 3.4);
+	modelStack.Translate(105, 2.8f, 5);
+	modelStack.Scale(3.4f, 4.3f, 3.4f);
 	modelStack.Rotate(90, 0, 1, 0);
 	RenderMesh(meshList[GEO_SPACEGUY], true, toggleLight);
 	modelStack.PopMatrix();
@@ -2792,7 +2808,7 @@ void SP2::RenderArmouryAndShop()
 
 	// Gun
 	modelStack.PushMatrix();
-	modelStack.Scale(0.8, 0.8, 0.8);
+	modelStack.Scale(0.8f, 0.8f, 0.8f);
 	RenderMesh(meshList[GEO_GUN], true, toggleLight);
 	modelStack.PopMatrix();
 
@@ -2826,7 +2842,7 @@ void SP2::RenderArmouryAndShop()
 	//TRADER
 	modelStack.PushMatrix();
 	modelStack.Translate(25, 0, -35);
-	modelStack.Scale(3.7, 4, 3.7);
+	modelStack.Scale(3.7f, 4, 3.7f);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	RenderMesh(meshList[GEO_TRADER], true, toggleLight);
@@ -2835,7 +2851,7 @@ void SP2::RenderArmouryAndShop()
 	//SOLDIER
 	modelStack.PushMatrix();
 	modelStack.Translate(28, 0, 40);
-	modelStack.Scale(3.7, 4, 3.7);
+	modelStack.Scale(3.7f, 4, 3.7f);
 	modelStack.Rotate(180, 0, 1, 0);
 	//modelStack.Rotate(90, 0, 1, 0);
 	//modelStack.Rotate(90, 0, 1, 0);
@@ -2896,7 +2912,7 @@ void SP2::RenderInfirmary()
 	//NURSE
 	modelStack.PushMatrix();
 	modelStack.Translate(11, 0, 30);
-	modelStack.Scale(3.5, 3.8, 3.5);
+	modelStack.Scale(3.5f, 3.8f, 3.5f);
 	modelStack.Rotate(-90, 0, 1, 0);
 	RenderMesh(meshList[GEO_NURSE], true, toggleLight);
 	modelStack.PopMatrix();
@@ -2904,7 +2920,7 @@ void SP2::RenderInfirmary()
 	//DOCTOR
 	modelStack.PushMatrix();
 	modelStack.Translate(-18, 0, -30);
-	modelStack.Scale(3.5, 3.8, 3.5);
+	modelStack.Scale(3.5f, 3.8f, 3.5f);
 	RenderMesh(meshList[GEO_DOCTOR], true, toggleLight);
 	modelStack.PopMatrix();
 }
@@ -2944,7 +2960,7 @@ void SP2::RenderSpaceShip()
 void SP2::renderMountains()
 {
 
-	for (int zAxis = 500; zAxis >= -500; zAxis -= 100)
+	for (float zAxis = 500; zAxis >= -500; zAxis -= 100)
 	{
 		// Boundary Between Base & Maze
 		modelStack.PushMatrix();
@@ -2968,7 +2984,7 @@ void SP2::renderMountains()
 		modelStack.PopMatrix();
 	}
 
-	for (int xAxis = 500; xAxis >= -500; xAxis -= 100)
+	for (float xAxis = 500; xAxis >= -500; xAxis -= 100)
 	{
 		// Boundary at the Base's Side
 		modelStack.PushMatrix();

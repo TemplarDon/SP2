@@ -221,7 +221,7 @@ bool FirstPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
     Position maxPos;
     Position minPos;
 
-    for (int i = 0; i < InteractablesList.size(); ++i)
+    for (size_t i = 0; i < InteractablesList.size(); ++i)
     {
         maxPos.x = InteractablesList[i].maxPos.x;
         maxPos.y = InteractablesList[i].maxPos.y;
@@ -299,7 +299,7 @@ bool FirstPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
     }
 
 
-    for (int i = 0; i < BuildingsList.size(); ++i)
+    for (size_t i = 0; i < BuildingsList.size(); ++i)
     {
         maxPos.x = BuildingsList[i].maxPos.x;
         maxPos.y = BuildingsList[i].maxPos.y;
@@ -338,7 +338,7 @@ bool FirstPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
 
     }
 
-    for (int i = 0; i < InteractablesList.size(); ++i)
+    for (size_t i = 0; i < InteractablesList.size(); ++i)
     {
         if (InteractablesList[i].canMove == true)
         {
@@ -351,7 +351,7 @@ bool FirstPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
         }
     }
 
-    for (int i = 0; i < BuildingsList.size(); ++i)
+    for (size_t i = 0; i < BuildingsList.size(); ++i)
     {
         if (BuildingsList[i].canMove == true)
         {
