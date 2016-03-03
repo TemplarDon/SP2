@@ -24,7 +24,7 @@ Class Ship : public CollisionOBJs
 class Ship : public InteractableOBJs
 {
 public:
-    Ship(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis, Vector3 target);
+    Ship(string name, Position maxPos, Position minPos, Position offSet, float scaleOffSet, float rotateAngle, Vector3 rotateAxis, Vector3 target);
     ~Ship();
 
     // Ship's Speed

@@ -44,8 +44,8 @@ void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
 	if (mouseEnabled)
 	{
-		float horizontalAngle = mouseSpeed * dt * float(1680 / 2 - Application::mouseX);
-		float verticalAngle = mouseSpeed * dt * float(1080 / 2 - Application::mouseY);
+		float horizontalAngle = mouseSpeed * float(dt) * float(1680 / 2 - float(Application::mouseX));
+		float verticalAngle = mouseSpeed * float(dt) * float(1080 / 2 - float(Application::mouseY));
 
         //RotateYawBoundsDirection(abs(horizontalAngle) + 15 > yawBoundsRange ? float(horizontalAngle >= 0 ? 1 : -1) * 10 * float(dt) : 0);
         RotateYawBoundsDirection(horizontalAngle);
@@ -53,7 +53,7 @@ void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 		YawCamera(horizontalAngle);
 		PitchCamera(verticalAngle);
 
-        shipTurningAnimation(Application::mouseX, Application::mouseY);
+        shipTurningAnimation(float(Application::mouseX), float(Application::mouseY));
 	}
 
 	Refocus();
@@ -423,7 +423,7 @@ bool ThirdPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
     Position maxPos;
     Position minPos;
 
-    for (int i = 0; i < InteractablesList.size(); ++i)
+    for (size_t i = 0; i < InteractablesList.size(); ++i)
     {
         maxPos.x = InteractablesList[i].maxPos.x;
         maxPos.y = InteractablesList[i].maxPos.y;
@@ -501,7 +501,7 @@ bool ThirdPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
     }
 
 
-    for (int i = 0; i < BuildingsList.size(); ++i)
+    for (size_t i = 0; i < BuildingsList.size(); ++i)
     {
         maxPos.x = BuildingsList[i].maxPos.x;
         maxPos.y = BuildingsList[i].maxPos.y;
@@ -540,7 +540,7 @@ bool ThirdPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
 
     }
 
-    for (int i = 0; i < InteractablesList.size(); ++i)
+    for (size_t i = 0; i < InteractablesList.size(); ++i)
     {
         if (InteractablesList[i].canMove == true)
         {
@@ -553,7 +553,7 @@ bool ThirdPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
         }
     }
 
-    for (int i = 0; i < BuildingsList.size(); ++i)
+    for (size_t i = 0; i < BuildingsList.size(); ++i)
     {
         if (BuildingsList[i].canMove == true)
         {

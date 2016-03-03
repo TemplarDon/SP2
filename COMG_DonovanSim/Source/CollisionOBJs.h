@@ -23,7 +23,7 @@ class CollisionOBJs : public GameObject
 {
 protected:
 
-    CollisionOBJs(string name, Position maxPos, Position minPos, Position offSet, int scaleOffSet, float rotateAngle, Vector3 rotateAxis);
+    CollisionOBJs(string name, Position maxPos, Position minPos, Position offSet, float scaleOffSet, float rotateAngle, Vector3 rotateAxis);
 
 public:
     // Bool to check if player can move thru this object
@@ -37,7 +37,7 @@ public:
     Position minPos;
 
     // Position offSet;
-    int scaleOffSet;
+    float scaleOffSet;
 
     // Rotate Angle, used to rotate collision box
     float rotateAngle;

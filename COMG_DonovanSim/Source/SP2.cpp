@@ -31,7 +31,7 @@ void SP2::Init()
 
 
 	//RANDOM (MINING)
-	srand(time(0));
+	srand(unsigned(time(0)));
 
 	//FLOATS
 	rotateAngle = 0;
@@ -208,8 +208,8 @@ void SP2::Init()
 	CrystalNo = 20;
 	for (int i = 0; i < CrystalNo; i++)
 	{
-		coord1 = rand() % 474 - 42;
-		coord2 = rand() % 763 - 381;
+		coord1 = float(rand() % 474 - 42);
+		coord2 = float(rand() % 763 - 381);
 		if (((coord1 < 30) || coord1 > 350) || ((coord2 < -190) || (coord2 > 250)))
 		{
 			xcoords[i] = coord1;
@@ -220,25 +220,25 @@ void SP2::Init()
 	}
 	for (int i = 0; i < CrystalNo; i++)
 	{
-		InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(xcoords[i], 0, zcoords[i]), 5, 0, Vector3(0, 0, 0));
+		InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(float(xcoords[i]), 0, float(zcoords[i])), 5, 0, Vector3(0, 0, 0));
 		crystal.setRequirements(30, 5);
 		InteractablesList.push_back(crystal);
 	}
 	AsteroidNo = 40;
 	for (int i = 0; i < AsteroidNo; i++)
 	{
-		coord1 = rand() % 1000 - 500;
-		coord2 = rand() % 1000 - 500;
-		coord3 = rand() % 20 + 90;
+		coord1 = float(rand() % 1000 - 500);
+		coord2 = float(rand() % 1000 - 500);
+		coord3 = float(rand() % 20 + 90);
 		asteroidx[i] = coord1;
 		asteroidy[i] = coord3;
 		asteroidz[i] = coord2;
-		coord1 = rand() % 10 - 5;
+		coord1 = float(rand() % 10 - 5);
 		if (coord1 == 0)
 		{
 			coord1 = 1;
 		}
-		coord2 = rand() % 10 - 5;
+		coord2 = float(rand() % 10 - 5);
 		if (coord2 == 0)
 		{
 			coord1 = 1;
@@ -249,7 +249,7 @@ void SP2::Init()
 
 	for (int i = 0; i < AsteroidNo; i++)
 	{
-		InteractableOBJs asteroid = InteractableOBJs("asteroid", meshList[GEO_ASTEROID]->maxPos, meshList[GEO_ASTEROID]->minPos, Position(asteroidx[i], asteroidy[i], asteroidz[i]), 1, 0, Vector3(0, 0, 0));
+		InteractableOBJs asteroid = InteractableOBJs("asteroid", meshList[GEO_ASTEROID]->maxPos, meshList[GEO_ASTEROID]->minPos, Position(float(asteroidx[i]), float(asteroidy[i]), float(asteroidz[i])), 1, 0, Vector3(0, 0, 0));
 		asteroid.setRequirements(30, 5);
 		InteractablesList.push_back(asteroid);
 	}
@@ -267,7 +267,7 @@ void SP2::Update(double dt)
 	CrystalText = false;
 	AsteroidCollision = false;
 	//FPS
-	FramesPerSecond = 1 / dt;
+	FramesPerSecond = 1 / float(dt);
 
 	//READKEYS FUNCTION
 	ReadKeyPresses();
@@ -302,7 +302,7 @@ void SP2::Update(double dt)
 		firstPersonCamera.Reset();
 		firstFrames--;
 	}
-
+	;
 
     if (Application::IsKeyPressed('R'))
     {
@@ -659,14 +659,13 @@ void SP2::Update(double dt)
 							}
 						}
 					}
-
 				}
 			}
 		}
 	}
 
 
-	if (Application::IsKeyPressed(VK_SPACE) && (onGround == true)) //s = ut + 0.5 at^2
+	if (Application::IsKeyPressed(VK_SPACE) && onGround) //s = ut + 0.5 at^2
 	{
 		firstpos = firstPersonCamera.position.y;
 		firstvelo = 35;
@@ -677,11 +676,11 @@ void SP2::Update(double dt)
 		secondvelo = firstvelo + (acceleration * t * t); // a = -2 , t = 1 
 		firstvelo = secondvelo;
 
-		distance = ((firstvelo * t) + (0.3 * acceleration * t * t));
-		firstPersonCamera.position.y += distance * dt;
-		firstPersonCamera.target.y += distance * dt;
+		distance = ((firstvelo * t) + (0.3f * acceleration * t * t));
+		firstPersonCamera.position.y += distance * float(dt);
+		firstPersonCamera.target.y += distance * float(dt);
 
-		somePlayer.pos.y += distance * dt;
+		somePlayer.pos.y += distance * float(dt);
 	}
 
 	if (firstpos >= firstPersonCamera.position.y)
@@ -693,10 +692,10 @@ void SP2::Update(double dt)
 	//ASTEROID MOVEMENT    
 	for (int i = 0; i < AsteroidNo; i++)
 	{
-		asteroidx[i] += movex[i] + 0.05 * dt;
-		asteroidz[i] += movez[i] + 0.5 * dt;
-		rotatex[i] += (movex[i] ) + 1 * dt;
-		rotatez[i] += (movez[i] ) + 1 * dt;
+		asteroidx[i] += movex[i] + 0.05f * float(dt);
+		asteroidz[i] += movez[i] + 0.5f * float(dt);
+		rotatex[i] += (movex[i] ) + 1 * float(dt);
+		rotatez[i] += (movez[i] ) + 1 * float(dt);
 		if (asteroidx[i] > 1000 || asteroidx[i] < -1000)
 		{
 			asteroidx[i] *= -1;
@@ -738,7 +737,7 @@ void SP2::Update(double dt)
 	// Maze Movement
 	mazeTranslate(dt);
 
-	SpinTheFood += 60 * dt;
+	SpinTheFood += 60 * float(dt);
 }
 
 /******************************************************************************/
@@ -1977,16 +1976,9 @@ void SP2::Exit()
     delete G2Engine;
 }
 
-bool SP2::checkCrystalPos(int posxcheck, int poszcheck, int i)
+bool SP2::checkCrystalPos(float posxcheck, float poszcheck, int i)
 {
-	if ((posxcheck == xcoords[i]) && (poszcheck == zcoords[i]) && (rendercrystal[i] == 1))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return (posxcheck == xcoords[i]) && (poszcheck == zcoords[i]) && (rendercrystal[i] == 1);
 }
 
 void SP2::reset()

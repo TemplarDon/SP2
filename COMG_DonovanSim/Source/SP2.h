@@ -425,13 +425,13 @@ private:
     bool treasureTaken;
 
 	//JUMP (BECKHAM'S)
-	int acceleration;
-	int t;
-	int firstvelo;
-	int secondvelo;
-	int distance;
-	int gravity;
-	int firstpos;
+	float acceleration;
+	float t;
+	float firstvelo;
+	float secondvelo;
+	float distance;
+	float gravity;
+	float firstpos;
 	bool onGround;
 
 	//Booleans by Gary Goh.
@@ -442,27 +442,27 @@ private:
 	//MINING INTERACTIONS (BECKHAM'S)    
 	bool CrystalText;
 	int CrystalNo;
-	int posxcheck;
-	int poszcheck;
+	float posxcheck;
+	float poszcheck;
 	int crystalcount;
-	int xcoords[100];
-	int zcoords[100];
+	float xcoords[100];
+	float zcoords[100];
 	bool rendercrystal[100];
-	int coord1;
-	int coord2;
+	float coord1;
+	float coord2;
 
 	//ASTEROID RELATED    
 	int AsteroidNo;
-	int asteroidx[50];
-	int movex[50];
-	int rotatex[50];
-	int asteroidz[50];
-	int movez[50];
-	int rotatez[50];
-	int asteroidy[50];
-	int renderasteroid[50];
-	int coord3;
-	int posycheck;
+	float asteroidx[50];
+	float movex[50];
+	float rotatex[50];
+	float asteroidz[50];
+	float movez[50];
+	float rotatez[50];
+	float asteroidy[50];
+	float renderasteroid[50];
+	float coord3;
+	float posycheck;
 	double between;
 	bool AsteroidCollision;
 
@@ -594,8 +594,8 @@ private:
 	void EquippingWeapons();
 
 	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM
-	void initRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
-	void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
+	void initRoomTemplate(Position pos, Vector3 size = { 1, 1, 1 }, float groundMeshSize = 100);
+	void RenderRoomTemplate(Position pos, Vector3 size = { 1, 1, 1 }, float groundMeshSize = 100);
 
 
 	//Reset function    
@@ -621,7 +621,7 @@ private:
 	bool wingsFound;
 	bool engineFound;
 	//CRYSTAL RELATED STUFF   
-	bool checkCrystalPos(int xcoord, int zcoord, int i);
+	bool checkCrystalPos(float xcoord, float zcoord, int i);
 };
 
 #endif

@@ -452,7 +452,7 @@ Mesh* MeshBuilder::GenerateCylinder(const std::string &meshName, Color color, un
 
     for (unsigned stack = 0; stack < numStacks + 1; ++stack) // stack
     {
-        for (unsigned theta = 0; theta <= 360; theta += 10) // slice
+        for (float theta = 0; theta <= 360; theta += 10) // slice
         {
             //add_normal(x(theta), 0, z(theta))
             cylinder.normal.Set(CircleX(theta), 0, CircleZ(theta));
@@ -466,7 +466,7 @@ Mesh* MeshBuilder::GenerateCylinder(const std::string &meshName, Color color, un
         }
     }
 
-    for (unsigned theta = 0; theta <= 360; theta += 10) // top
+    for (float theta = 0; theta <= 360; theta += 10) // top
     {
         cylinder.normal.Set(0, 1, 0);
         cylinder.pos.Set(0, -height / 2, 0);
@@ -477,7 +477,7 @@ Mesh* MeshBuilder::GenerateCylinder(const std::string &meshName, Color color, un
         cylinder.color = color;
     }
 
-    for (unsigned theta = 0; theta <= 360; theta += 10) // bottom
+    for (float theta = 0; theta <= 360; theta += 10) // bottom
     {
         cylinder.normal.Set(0, -1, 0);
         cylinder.pos.Set(0, -height / 2, 0);
@@ -667,57 +667,57 @@ Mesh* MeshBuilder::GenerateHair(const std::string &meshName, Color color)
 
     // Front
     hair.pos.Set(0, 0, 0); hair.color = color; hair.normal.Set(0, 0, 1); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1, 0); hair.color = color; hair.normal.Set(0, 0, 1); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1.2, 0); hair.color = color; hair.normal.Set(0, 0, 1); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, 0); hair.color = color; hair.normal.Set(0, 0, 1); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1.2f, 0); hair.color = color; hair.normal.Set(0, 0, 1); hair_vertex_buffer_data.push_back(hair);
 
     hair.pos.Set(0, 0, 0); hair.color = color; hair.normal.Set(0, 0, 1); hair_vertex_buffer_data.push_back(hair);
     hair.pos.Set(1, 1, 0); hair.color = color; hair.normal.Set(0, 0, 1); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1, 0); hair.color = color; hair.normal.Set(0, 0, 1); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, 0); hair.color = color; hair.normal.Set(0, 0, 1); hair_vertex_buffer_data.push_back(hair);
 
     // Top
     hair.pos.Set(0, 0, 0); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1.2, 0); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0, 0, -0.5); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1.2f, 0); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0, 0, -0.5f); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
 
-    hair.pos.Set(0.8, 1.2, 0); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1.2, -0.5); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0, 0, -0.5); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1.2f, 0); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1.2f, -0.5f); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0, 0, -0.5f); hair.color = color; hair.normal.Set(0, 1, 0); hair_vertex_buffer_data.push_back(hair);
 
     // Back
-    hair.pos.Set(0, 0, -0.5); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1.2, -0.5); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1, -0.5); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0, 0, -0.5f); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1.2f, -0.5f); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, -0.5f); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
 
-    hair.pos.Set(0.8, 1, -0.5); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(1, 1, -0.5); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0, 0, -0.5); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, -0.5f); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(1, 1, -0.5f); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0, 0, -0.5f); hair.color = color; hair.normal.Set(0, 0, -1); hair_vertex_buffer_data.push_back(hair);
 
     // Bottom
     hair.pos.Set(0, 0, 0); hair.color = color; hair.normal.Set(0, -1, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0, 0, -0.5); hair.color = color; hair.normal.Set(0, -1, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(1, 1, -0.5); hair.color = color; hair.normal.Set(0, -1, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0, 0, -0.5f); hair.color = color; hair.normal.Set(0, -1, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(1, 1, -0.5f); hair.color = color; hair.normal.Set(0, -1, 0); hair_vertex_buffer_data.push_back(hair);
 
     hair.pos.Set(0, 0, 0); hair.color = color; hair.normal.Set(0, -1, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(1, 1, -0.5); hair.color = color; hair.normal.Set(0, -1, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(1, 1, -0.5f); hair.color = color; hair.normal.Set(0, -1, 0); hair_vertex_buffer_data.push_back(hair);
     hair.pos.Set(1, 1, 0); hair.color = color; hair.normal.Set(0, -1, 0); hair_vertex_buffer_data.push_back(hair);
 
     // Pointy bit bottom
     hair.pos.Set(1, 1, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(1, 1, -0.5); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1, -0.5); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(1, 1, -0.5f); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, -0.5f); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
 
-    hair.pos.Set(0.8, 1, -0.5); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, -0.5f); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
     hair.pos.Set(1, 1, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
 
     // Pointy bit top
-    hair.pos.Set(0.8, 1, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1, -0.5); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1.2, -0.5); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, -0.5f); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1.2f, -0.5f); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
 
-    hair.pos.Set(0.8, 1.2, -0.5); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1.2, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
-    hair.pos.Set(0.8, 1, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1.2f, -0.5f); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1.2f, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
+    hair.pos.Set(0.8f, 1, 0); hair.color = color; hair.normal.Set(1, 0, 0); hair_vertex_buffer_data.push_back(hair);
 
 
 
@@ -753,7 +753,7 @@ Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &f
     std::vector<Vertex> vertex_buffer_data;
     std::vector<GLuint> index_buffer_data;
 
-    for (int i = 0; i < vertex_buffer_data.size(); ++i)
+    for (size_t i = 0; i < vertex_buffer_data.size(); ++i)
     {
         index_buffer_data.push_back(i);
     }
@@ -765,7 +765,7 @@ Mesh* MeshBuilder::GenerateOBJ(const std::string &meshName, const std::string &f
 
     Position * posPtr1 = 0;
 
-    for (int i = 0; i < vertices.size(); ++i)
+    for (size_t i = 0; i < vertices.size(); ++i)
     {
         posPtr1 = &vertices[i];
         if (posPtr1->x > maxPos.x)
