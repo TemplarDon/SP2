@@ -365,7 +365,6 @@ private:
 	float TokenTranslate;
 	float TextTranslate;
 	float TestRotation;
-	float SuitTranslate;
 	float rotateAngle;
 	float heightOfWall;
 	float translatePointer;
