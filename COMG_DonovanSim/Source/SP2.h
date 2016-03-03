@@ -1,3 +1,11 @@
+/*************************************************************************************************/
+/*!
+\file   SP2.h
+\brief
+    Header File for the SP2 Class with parent class Scene, contains all functions and code for SP2
+*/
+/*************************************************************************************************/
+
 #ifndef SP_2_H
 #define SP_2_H
 
@@ -34,6 +42,13 @@
 #include <time.h>
 
 
+/*************************************************************************************************/
+/*!
+Class SP2 : public Scene
+\brief
+    Class SP2, with parent class Scene. Contains Constructor/ Destructor for SP2 and contains enums, functions and variables for SP2
+*/
+/*************************************************************************************************/
 
 class SP2 : public Scene
 {

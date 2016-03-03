@@ -1,14 +1,32 @@
+/*************************************************************************************************/
+/*!
+\file   SP2.cpp
+\brief
+    Contains code for SP2 Project
+*/
+/*************************************************************************************************/
 #include "SP2.h"
 #include <fstream>
 
 using std::cout;
 using std::cin;
 using std::endl;
-
+/******************************************************************************/
+/*!
+\brief
+    SP2 Default Constructor
+*/
+/******************************************************************************/
 SP2::SP2()
 {
 }
 
+/******************************************************************************/
+/*!
+\brief
+    SP2 Default Destructor
+*/
+/******************************************************************************/
 SP2::~SP2()
 {
 
@@ -18,6 +36,12 @@ static float ROT_LIMIT = 45.f;
 static float SCALE_LIMIT = 5.f;
 float FramesPerSecond = 0;
 
+/******************************************************************************/
+/*!
+\brief
+    SP2 Initialise
+*/
+/******************************************************************************/
 void SP2::Init()
 {
 	S = CAFENOMENU;
@@ -212,6 +236,14 @@ void SP2::Init()
 	InitSafe();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    SP2 Update Function
+\param  dt
+    Delta Time to make animations frame-dependent
+*/
+/******************************************************************************/
 void SP2::Update(double dt)
 {
 	//PlaySound(TEXT("Music//space.wav"), NULL, SND_SYNC);
@@ -1250,6 +1282,14 @@ void SP2::EquippingWeapons()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for moving the player while flying the spaceship
+\param  dt
+    delta time, used to make animations frame-dependent
+*/
+/******************************************************************************/
 void SP2::shipFlying(double dt)
 {
 	for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
@@ -1331,6 +1371,16 @@ void SP2::shipFlying(double dt)
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for rotating the ship while player is flying the ship
+\param  dt
+    delta time, used to make animations frame-dependent
+\param  i
+    vector<Ship> iterator used to access ship class' variables
+*/
+/******************************************************************************/
 void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
 {
 	// Ship Animation
@@ -1390,6 +1440,15 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
 	if (shipHorizontalRotateAngle >= 360 || shipHorizontalRotateAngle <= -360) { shipHorizontalRotateAngle = 0; }
 }
 
+
+/******************************************************************************/
+/*!
+\brief
+    Function for moving lava pools in the maze
+\param  dt
+    delta time, used to make animations frame-dependent
+*/
+/******************************************************************************/
 void SP2::mazeTranslate(double dt)
 {
 	// Lava Movement
@@ -1422,6 +1481,21 @@ void SP2::mazeTranslate(double dt)
 	}
 }
 
+
+/******************************************************************************/
+/*!
+\brief
+    Function for opening the doors
+\param  dt
+    delta time, used to make animations frame-dependent
+\param  it
+    vector<InteractableOBJs> iterator used to access InteractablesList (vector)
+\param  gateOffset
+    amount to move the door by
+\param gateOpening
+    bool to check if door is opening (true) or not (false)
+*/
+/******************************************************************************/
 void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
 {
 	if (gateOffset < 30)
@@ -1440,6 +1514,20 @@ void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, flo
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for closing the doors
+\param  dt
+    delta time, used to make animations frame-dependent
+\param  it
+    vector<InteractableOBJs> iterator used to access InteractablesList (vector)
+\param  gateOffset
+    amount to move the door by
+\param gateOpening
+    bool to check if door is opening (true) or not (false)
+*/
+/******************************************************************************/
 void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
 {
 	if (gateOffset > 0)
@@ -1453,6 +1541,12 @@ void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& g
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for shipCreation, loads meshes and creates a ship
+*/
+/******************************************************************************/
 void SP2::shipCreation()
 {
 	// Space Ship Template
@@ -1568,6 +1662,18 @@ void SP2::shipCreation()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for ging in and out of the ship
+\param  dt
+    delta time, used to make animations frame-dependent
+\param  InteractablesList
+    vector<InteractableOBJs> InteractablesList used to access InteractablesList (vector)
+\param  somePlayer
+    object of player class, used to access player's pos etc.
+*/
+/******************************************************************************/
 void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -1804,6 +1910,18 @@ void SP2::readInstructions()
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for rendering a mesh
+\param  mesh
+    Mesh to be loaded
+\param  enableLight
+    bool to check if light will apply to mesh
+\param  toggleLight
+    bool to toggle light on/off
+*/
+/******************************************************************************/
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
@@ -1852,6 +1970,12 @@ void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for rendering scene
+*/
+/******************************************************************************/
 void SP2::Render()
 {
 	// Render VBO here
@@ -1894,6 +2018,12 @@ void SP2::Render()
 	RenderCode();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for cleaning up the scene
+*/
+/******************************************************************************/
 void SP2::Exit()
 {
 	// Cleanup VBO here
@@ -1914,6 +2044,8 @@ void SP2::Exit()
 /*!
 \brief
 Function to check for each individual crystal's position    
+
+\param  posxcheck
 
 \return
 returns bool, true if there is a crystal at that position, false if not 
