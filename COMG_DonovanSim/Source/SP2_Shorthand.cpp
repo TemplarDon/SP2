@@ -1116,7 +1116,7 @@ void SP2::RenderCode()
 
     std::ostringstream shipLanding;
     shipLanding.str("");
-	if (ShipList.size() > 0)
+	if ((ShipList.size()> 0) && (camPointer == &thirdPersonCamera))
 	{
 		shipStats << "Speed(" << (int)ShipList[0].shipSpeed << ") Max(" << (int)ShipList[0].shipMaxSpeed << ") Landing(" << (int)ShipList[0].shipLandingSpeed << ")";
 

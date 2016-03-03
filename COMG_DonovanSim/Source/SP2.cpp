@@ -153,6 +153,7 @@ void SP2::Init()
 	leftGateOpening = false;
 	rightGateOpening = false;
 	isSafeOpen = false;
+	holdgun = false;
 
 	// Assign Pointers for Ship Building
 	LightHull = new Light_Hull;
@@ -199,7 +200,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 250, 17, 40 };
+	startingCharPos = charPos = { -350, 17, 370 };
 	//300 , 17, 300
 	//125, 120 
 	//250, 40
@@ -339,7 +340,7 @@ void SP2::Update(double dt)
 				if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
 				{
 					NearVendingText = true;
-					if (Application::IsKeyPressed('Q'))
+					if (Application::IsKeyPressed('Q') && (TokenOnScreen == true))
 					{
 						TextTranslate = 100;
 						TokenOnScreen = false;
@@ -574,7 +575,7 @@ void SP2::Update(double dt)
 			{
 				if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 				{
-					if (Application::IsKeyPressed(VK_LBUTTON) && somePlayer.checkWeapon() == true)
+					if (Application::IsKeyPressed(VK_LBUTTON) &&  (holdgun == true))
 					{
 						somePlayer.addCrystals(1);
 					}
@@ -855,20 +856,6 @@ void SP2::ShopMenuPointerInteraction()
 		break;
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	if (CoolDownTime3 > 2)
 	{
@@ -1246,6 +1233,7 @@ void SP2::EquippingWeapons()
 	{
 		if (somePlayer.checkWeapon())
 		{
+			holdgun = true;
 			equipGun = true;
 			translatePointer = 127;
 			HandDisappear = true;
@@ -1258,11 +1246,13 @@ void SP2::EquippingWeapons()
 		equipPickaxe = true;
 		translatePointer = 141;
 		HandDisappear = true;
+		holdgun = false;
 	}
 
 	//F3 TO MAKE INVENTORY AND HAND APPEAR
-	if (Application::IsKeyPressed(VK_F3))
+	if (Application::IsKeyPressed(VK_F3) && (wearSuit == false))
 	{
+		holdgun = false;
 		equipGun = false;
 		equipPickaxe = false;
 		translatePointer = -10;
@@ -2045,7 +2035,9 @@ void SP2::Exit()
 \brief
 Function to check for each individual crystal's position    
 
-\param  posxcheck
+\param posxcheck , poszcheck , i    
+posxcheck and poszcheck checks the current position of where the player is 
+looking at, i is the position of the crystal's xcoord,zcoord in the array    
 
 \return
 returns bool, true if there is a crystal at that position, false if not 
@@ -2186,4 +2178,4 @@ void SP2::asteroidgen()
 		InteractablesList.push_back(asteroid);
 	}
 
-}  
+} 

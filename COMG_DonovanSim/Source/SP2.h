@@ -605,6 +605,7 @@ private:
 	void shipCreation();
 	void mazeTranslate(double dt);
 	void EquippingWeapons();
+	bool holdgun;
 
 	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM
 	void initRoomTemplate(Position pos, Vector3 size = { 1, 1, 1 }, float groundMeshSize = 100);
