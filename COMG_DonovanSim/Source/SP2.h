@@ -177,31 +177,31 @@ class SP2 : public Scene
 		//Maze Walls
 		GEO_MAZE_SIDE_WALL,
 		GEO_MAZE_OBSTACLE,
-        GEO_MAZE_ROOF,
-        GEO_MAZE_TREASURE,
-        GEO_PEDASTAL,
-        GEO_SIGNBOARD,
-        GEO_LAVA,
+		GEO_MAZE_ROOF,
+		GEO_MAZE_TREASURE,
+		GEO_PEDASTAL,
+		GEO_SIGNBOARD,
+		GEO_LAVA,
 
-        // Mountains for Boundary
-        GEO_MOUNTAIN,
+		// Mountains for Boundary
+		GEO_MOUNTAIN,
 
-        // Base
-        GEO_BASE,
-        NUM_GEOMETRY,
+		// Base
+		GEO_BASE,
+		NUM_GEOMETRY,
 
-    };
+	};
 
-    enum UNIFORM_TYPE
-    {
-        U_MVP = 0,
-        U_MODELVIEW,
-        U_MODELVIEW_INVERSE_TRANSPOSE,
-        U_MATERIAL_AMBIENT,
-        U_MATERIAL_DIFFUSE,
-        U_MATERIAL_SPECULAR,
-        U_MATERIAL_SHININESS,
-        
+	enum UNIFORM_TYPE
+	{
+		U_MVP = 0,
+		U_MODELVIEW,
+		U_MODELVIEW_INVERSE_TRANSPOSE,
+		U_MATERIAL_AMBIENT,
+		U_MATERIAL_DIFFUSE,
+		U_MATERIAL_SPECULAR,
+		U_MATERIAL_SHININESS,
+
 		U_LIGHTENABLED,
 		U_NUMLIGHTS,
 
@@ -235,8 +235,8 @@ class SP2 : public Scene
 	//CAFE MENU
 	enum CafeMenu
 	{
-		PLACE1,
-		PLACE2,
+		OPTION_APPLE,
+		OPTION_COFFEE,
 		PLACE3,
 		CAFENOMENU,
 	};
@@ -245,17 +245,17 @@ class SP2 : public Scene
 	//SHOP LIST
 	enum ShopList
 	{
-		POSITION1,
-		POSITION2,
-		POSITION3,
-		POSITION4,
-		POSITION5,
-		POSITION6,
-		POSITION7,
-		POSITION8,
-		POSITION9,
-		POSITION10,
-		POSITION11,
+		OPTION_HULL,
+		OPTION_WINGS,
+		OPTION_ENGINE,
+		OPTION_CREATESHIP,
+		OPTION_LIGHTHULL,
+		OPTION_MEDIUMHULL,
+		OPTION_LARGEHULL,
+		OPTION_DUALWINGS,
+		OPTION_QUADWINGS,
+		OPTION_G1ENGINE,
+		OPTION_G2ENGINE,
 		POSITION12,
 		POSITION13,
 		POSITION14,
@@ -332,8 +332,8 @@ private:
 	ThirdPersonCamera thirdPersonCamera;
 
 	//LIGHTS
-    bool toggleLight;
-    void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
+	bool toggleLight;
+	void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
 	//SHIP BUILDER & SHIP POINTER
 	ShipBuilder ShipBuilder;
@@ -578,7 +578,7 @@ private:
 	void counterInteractions();
 	void spaceSuitInteractions();
 	void doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
-    void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
+	void doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening);
 	void shipFlying(double dt);
 	void shipAnimation(double dt, vector<Ship>::iterator i);
 	void shipCreation();
@@ -591,7 +591,7 @@ private:
 	void RenderRoomTemplate(Position pos, Vector3 size = (1, 1, 1), int groundMeshSize = 100);
 
 
-    //Reset function    
+	//Reset function    
 	void reset();
 
 	//Functions to init & render Maze
@@ -610,9 +610,9 @@ private:
 	bool shipBuilt;
 	bool noMoney;
 
-    bool hullFound;
-    bool wingsFound;
-    bool engineFound;
+	bool hullFound;
+	bool wingsFound;
+	bool engineFound;
 
 
 	//CRYSTAL RELATED STUFF   
