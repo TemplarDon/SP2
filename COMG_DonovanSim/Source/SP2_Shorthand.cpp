@@ -673,7 +673,7 @@ void SP2::initSpaceShip()
 	shipTemplatePtr = &someShip;
 }
 
-//MAIN RENDER CODE
+//Main rendering code
 void SP2::RenderCode()
 {
 
@@ -953,7 +953,6 @@ void SP2::RenderCode()
 	//DO NOT DELETE SHOP LIST STUFF
 	if (DisplayShopList == true)   //true
 	{
-		DisplayInventory = true;
 		RenderShopTextboxOnScreen(meshList[GEO_SHOPLIST1], 5, 8, 6);
 		RenderShopPointerOnScreen(meshList[GEO_SHOPPOINTER1], 0.6, 44, shopListPointer);     //62, 50, 38t
 	}
@@ -997,46 +996,20 @@ void SP2::RenderCode()
 		//POINTER
 		RenderPointerOnScreen(meshList[GEO_POINTER], 0.4, translatePointer, 37);     //127, 141
 
-        //CRYSTAL COUNTS
-        std::ostringstream as;
-        as.str("");
-        as << somePlayer.getCrystals();
-        RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 2, 10.5, 1);
 
+		//CRYSTAL COUNTS
+		std::ostringstream as;
+		as.str("");
+		as << somePlayer.getCrystals();
+		RenderTextOnScreen(meshList[GEO_TEXT], as.str(), Color(1, 0, 0), 1.5, 16.2, 5);
 
-        // Ship Parts
-        std::ostringstream engineText;
-        engineText.str("");
+		//Weapon 
+		std::ostringstream weapon;
+		weapon.str("");
+		if (somePlayer.checkWeapon()) { weapon << "Equipped"; }
+		else { weapon << "Unequipped"; }
+		RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(1, 0, 0), 1.3, 36, 4);
 
-        std::ostringstream wingsText;
-        wingsText.str("");
-
-        std::ostringstream hullText;
-        hullText.str("");
-
-
-        if (somePlayer.getParts().size() > 0)
-        {
-            for (list<ShipParts*>::iterator it = somePlayer.getParts().begin(); it != somePlayer.getParts().end(); ++it)
-            {
-                if ((*it)->getName() == "LightHull") { hullText << "Light"; }
-                if ((*it)->getName() == "MediumHull") { hullText << "Medium"; }
-                if ((*it)->getName() == "LargeHull") { hullText << "Large"; }
-
-                if ((*it)->getName() == "DualWings") { wingsText << "Dual"; }
-                if ((*it)->getName() == "QuadWings") { wingsText << "Quad"; }
-
-                if ((*it)->getName() == "G1Engine") { engineText << "G1"; }
-                if ((*it)->getName() == "G2Engine") { engineText << "G2"; }
-
-            }
-        }
-
-        RenderTextOnScreen(meshList[GEO_TEXT], engineText.str(), Color(1, 0, 0), 2, 13, 1);
-
-        RenderTextOnScreen(meshList[GEO_TEXT], wingsText.str(), Color(1, 0, 0), 2, 16, 1);
-
-        RenderTextOnScreen(meshList[GEO_TEXT], hullText.str(), Color(1, 0, 0), 2, 19, 1);
 	}
 
 	if (HandDisappear == false)  //false
@@ -1061,24 +1034,17 @@ void SP2::RenderCode()
 		RenderGunOnScreen(meshList[GEO_HOLDGUN], 3.4, 19.5, 4);
 	}
 
-	//// Player POS
-	//std::ostringstream playerpos;
-	//playerpos.str("");
-	//playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
-	//RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
+	// Player POS
+	std::ostringstream playerpos;
+	playerpos.str("");
+	playerpos << "Position: X(" << somePlayer.pos.x << ") Y(" << somePlayer.pos.y << ") Z(" << somePlayer.pos.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], playerpos.str(), Color(0, 1, 0), 1.2f, 3, 4);
 
-	//// Collision check with asteroid  
-	//std::ostringstream os;
-	//os.str("");
-	//os << "Collision with asteroids :" << AsteroidCollision;
-	//RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
-
-	////Weapon 
-	//std::ostringstream weapon;
-	//weapon.str("");
-	//if (somePlayer.checkWeapon()) { weapon << "true"; }
-	//else { weapon << "false"; }
-	//RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(0, 1, 0), 1.5, 16.2, 8);
+	// Collision check with asteroid  
+	std::ostringstream os;
+	os.str("");
+	os << "Collision with asteroids :" << AsteroidCollision;
+	RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
 
 
 	//INSTRUCTIONS
@@ -1166,6 +1132,7 @@ void SP2::RenderCode()
 	else { RenderHealthBarOnScreen(meshList[GEO_ALIVEHEALTHBAR], 2.6, 2.5, 21); }
 }
 
+//Initialise maze mesh, position and collision.
 void SP2::initMaze()
 {
 	meshList[GEO_MAZE_SIDE_WALL] = MeshBuilder::GenerateOBJ("mazeSideWall", "OBJ//Maze//mazeSideWalls.obj");
@@ -1225,6 +1192,7 @@ void SP2::initMaze()
 
 }
 
+//Initialise safe
 void SP2::InitSafe()
 {
 	InteractableOBJs keypadOBJ =
@@ -1323,6 +1291,7 @@ void SP2::InitSafe()
 	InteractablesList.push_back(keypadOBJ);
 }
 
+//Initialise mountains mesh, position and collision.
 void SP2::initMountains()
 {
 	meshList[GEO_MOUNTAIN] = MeshBuilder::GenerateOBJ("moutain", "OBJ//Mountain.obj");
@@ -1437,6 +1406,7 @@ void SP2::renderMaze()
     modelStack.PopMatrix();
 }
 
+//Room template
 void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 {
 	Building floor1 = Building("floor1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));

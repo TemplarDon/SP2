@@ -174,7 +174,7 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
+	startingCharPos = charPos = { 250, 17, 40 }; // STARTING POS OF MAZERUNNER
 	//startingCharPos = charPos = { 300, 17, 300 };
 	//125, 120 
 	//250, 40
