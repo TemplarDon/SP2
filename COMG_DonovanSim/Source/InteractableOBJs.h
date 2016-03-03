@@ -1,8 +1,6 @@
 /*************************************************************************************************/
 /*!
 \file   InteractableOBJs.h
-\author Donovan Sim Yew Wee
-\par    email:donovandenzel@gmail.com
 \brief
     Header File for the InteractableOBJs Class with parent class CollisionOBJs, used for collision detection with objects that require collisions and interactions
 */

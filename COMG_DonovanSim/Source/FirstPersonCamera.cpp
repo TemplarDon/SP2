@@ -1,15 +1,46 @@
+/*************************************************************************************************/
+/*!
+\file   FirstPersonCamera.cpp
+\brief
+    Contains code for FirstPersonCamera class
+*/
+/*************************************************************************************************/
 #include "FirstPersonCamera.h"
 #include "Application.h"
 #include "Mtx44.h"
 
+/******************************************************************************/
+/*!
+\brief
+    FirstPersonCamera Default Constructor
+*/
+/******************************************************************************/
 FirstPersonCamera::FirstPersonCamera()
 {
 }
 
+/******************************************************************************/
+/*!
+\brief
+    FirstPersonCamera Default Deconstructor
+*/
+/******************************************************************************/
 FirstPersonCamera::~FirstPersonCamera()
 {
 }
 
+/******************************************************************************/
+/*!
+\brief
+    FirstPersonCamera Initiliase
+\param  pos
+    camera position
+\param  target
+    camera's target vector, where its pointing towards
+\param up
+    camera's up vector
+*/
+/******************************************************************************/
 void FirstPersonCamera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 {
     this->position = defaultPosition = pos;
@@ -23,6 +54,20 @@ void FirstPersonCamera::Init(const Vector3& pos, const Vector3& target, const Ve
     canMoveInteractable = true;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    FirstPersonCamera Update Function, contains movement of the camera
+\param  dt
+    delta time
+\param  InteractablesList
+    Vector of interactbleOBJs that is used to check for collision
+\param  BuildingsList
+    Vector of Building that is used to check for collision
+\param somPlayer
+    A player class object
+*/
+/******************************************************************************/
 void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
 {
     Vector3 boundary(1000, 1000, 1000);
@@ -155,6 +200,22 @@ void FirstPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Checks if there will be collision
+\param  InteractablesList
+    Vector of interactbleOBJs that is used to check for collision
+\param  BuildingsList
+    Vector of Building that is used to check for collision
+\param  somePlayer
+    a player class object
+\param  camPos
+    position, of camera, to check collision with
+\returns
+    returns a bool, true if can pass thru, false if can't
+*/
+/******************************************************************************/
 bool FirstPersonCamera::createBoundary(std::vector<InteractableOBJs>&InteractablesList, std::vector<Building>&BuildingsList, Player &somePlayer, Position camPos)
 {
     Position maxPos;
@@ -313,6 +374,12 @@ bool FirstPersonCamera::createBoundary(std::vector<InteractableOBJs>&Interactabl
     }
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Resets camera to original position, target and up
+*/
+/******************************************************************************/
 void FirstPersonCamera::Reset()
 {
     position = defaultPosition;

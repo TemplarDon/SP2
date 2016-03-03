@@ -1,8 +1,6 @@
 /*************************************************************************************************/
 /*!
 \file   InteractableOBJs.cpp
-\author Donovan Sim Yew Wee
-\par    email:donovandenzel@gmail.com
 \brief
     Contains code for InteractableOBJs class
 */
@@ -79,22 +77,57 @@ bool InteractableOBJs::isInView(const Position &charPos, const Vector3 &viewDire
 	
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to set the distance and focus required for isInView() function
+\param  distance
+    distance / range for isInView() function 
+\param  focus
+    focus for isInView() function
+*/
+/******************************************************************************/
 void InteractableOBJs::setRequirements(const float distance, const float focus)
 {
 	requiredFocusSquared = focus * focus;
 	requiredDistanceSquared = distance* distance;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to get the focus required for isInView() function
+\return
+    Returns a float, the required focus
+*/
+/******************************************************************************/
 float InteractableOBJs::getRequiredFocus()
 {
 	return sqrt(requiredFocusSquared);
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Sets the object's bool 
+\param  someBool
+    The bool to be set to (true/false)
+*/
+/******************************************************************************/
 void InteractableOBJs::setEffectOverBool(bool someBool)
 {
     this->effectOver = someBool;
 }
 
+
+/******************************************************************************/
+/*!
+\brief
+    Gets the object's bool (true/false)
+\return  
+    Returns the bool of the object
+*/
+/******************************************************************************/
 bool InteractableOBJs::getEffectOverBool()
 {
     return this->effectOver;

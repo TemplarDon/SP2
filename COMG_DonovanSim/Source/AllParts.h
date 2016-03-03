@@ -107,8 +107,8 @@ public:
 
 /*************************************************************************************************/
 /*!
-Class Heavy_Hull : public Hull
-\brief  Class Heavy_Hull, with parent class Hull, contains the partsEffect() function that returns a int to use for increasing the ship's stats
+Class Large_Hull : public Hull
+\brief  Class Large_Hull, with parent class Hull, contains the partsEffect() function that returns a int to use for increasing the ship's stats
 */
 /*************************************************************************************************/
 class Large_Hull : public Hull

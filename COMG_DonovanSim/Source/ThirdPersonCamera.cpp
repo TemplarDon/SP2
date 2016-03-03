@@ -1,18 +1,51 @@
+/*************************************************************************************************/
+/*!
+\file   ThirdPersonCamera.cpp
+\brief
+    Contains code for ThirdPersonCamera class
+*/
+/*************************************************************************************************/
 #include "ThirdPersonCamera.h"
 #include "Application.h"
 #include "Vertex.h"
 #include "Mtx44.h"
 
+/******************************************************************************/
+/*!
+\brief
+    ThirdPersonCamera Default Constructor
+*/
+/******************************************************************************/
 ThirdPersonCamera::ThirdPersonCamera()
 {
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    ThirdPersonCamera Default Deconstructor
+*/
+/******************************************************************************/
 ThirdPersonCamera::~ThirdPersonCamera()
 {
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+ThirdPersonCamera Initiliase
+\param  position
+    camera position vector
+\param  up
+    camera's up vector
+\param  focus
+    camera's focus position, the position it rotates about
+\param camDistance
+    Distance between cameara and focus
+*/
+/******************************************************************************/
 void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position *focus, const float camDistance)
 {
 	Vector3 F(focus->x, focus->y, focus->z);
@@ -38,6 +71,20 @@ void ThirdPersonCamera::Init(const Vector3 position, const Vector3 up, Position 
 	SetCameraDistanceBounds(10, 100);
 }
 
+/******************************************************************************/
+/*!
+\brief
+    ThirdPersonCamera Update Function, contains movement of the camera
+\param  dt
+    delta time
+\param  InteractablesList
+    Vector of interactbleOBJs that is used to check for collision
+\param  BuildingsList
+    Vector of Building that is used to check for collision
+\param somPlayer
+    A player class object
+*/
+/******************************************************************************/
 void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&InteractablesList, vector<Building>&BuildingsList, Player &somePlayer)
 {
 	float mouseSpeed = 5;
@@ -59,11 +106,27 @@ void ThirdPersonCamera::Update(double dt, vector<InteractableOBJs>&Interactables
 	Refocus();
 }
 
+/******************************************************************************/
+/*!
+\brief
+
+\param  toggle
+
+*/
+/******************************************************************************/
 void ThirdPersonCamera::SetMouseEnabled(const bool &toggle)
 {
 	mouseEnabled = toggle;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Yaws the camera
+\param  degrees
+    Angle to yaw by
+*/
+/******************************************************************************/
 void ThirdPersonCamera::YawCamera(float degrees)
 {
 	Mtx44 rotationMatrix;
@@ -107,6 +170,14 @@ void ThirdPersonCamera::YawCamera(float degrees)
 	Refocus();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Pitches the camera
+\param  degrees
+    Angle to pitch by
+*/
+/******************************************************************************/
 void ThirdPersonCamera::PitchCamera(float degrees)
 {
 	Vector3 right = camDirection.Cross(up);
@@ -125,6 +196,16 @@ void ThirdPersonCamera::PitchCamera(float degrees)
 	Refocus();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Sets the bounds for pitching the camera
+\param  min
+    minimum angle
+\param  max
+    maximum angle
+*/
+/******************************************************************************/
 void ThirdPersonCamera::SetCameraPitchBounds(float min, float max)
 {
 	this->minPitch = min;
@@ -132,6 +213,16 @@ void ThirdPersonCamera::SetCameraPitchBounds(float min, float max)
 }
 
 //Taking in a vector direction on the xz plane and bounding angle.
+/******************************************************************************/
+/*!
+\brief
+Sets the bounds for yawing the camera
+\param  direction
+    vector direction on the xz plane
+\param  range
+     bounding angle range
+*/
+/******************************************************************************/
 void ThirdPersonCamera::SetCameraYawBounds(Vector3 direction, float range)
 {
 	direction.y = 0;
@@ -141,7 +232,18 @@ void ThirdPersonCamera::SetCameraYawBounds(Vector3 direction, float range)
 	yawBoundsRange = range;
 }
 
-//Taking in left and right bounds in degrees (CCW-based).
+
+/******************************************************************************/
+/*!
+\brief
+    Taking in left and right bounds in degrees (Counter Clock Wised-based).
+\param  boundsLeft
+    Leftwards bounding angle on the xz-plane in degrees.
+\param  boundsRight
+    Rightwards bounding angle on the xz-plane in degrees.
+
+*/
+/******************************************************************************/
 void ThirdPersonCamera::SetCameraYawBounds(float boundsLeft, float boundsRight)
 {
 	if (boundsLeft < boundsRight) boundsLeft += 360;
@@ -153,7 +255,15 @@ void ThirdPersonCamera::SetCameraYawBounds(float boundsLeft, float boundsRight)
 	yawBoundsRange = boundsLeft / 2 - boundsRight / 2;
 }
 
-//Rotates CCW the direction for Yaw bounding along the y-axis.
+//
+/******************************************************************************/
+/*!
+\brief
+    Rotates Counter-Clock Wise the direction for Yaw bounding along the y-axis.
+\param  degrees
+    Degrees to rotate by
+*/
+/******************************************************************************/
 void ThirdPersonCamera::RotateYawBoundsDirection(float degrees)
 {
 	Mtx44 rotationMatrix;
@@ -162,6 +272,12 @@ void ThirdPersonCamera::RotateYawBoundsDirection(float degrees)
 	yawBoundsDirection = rotationMatrix * yawBoundsDirection;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Refocuses the camera's focus point
+*/
+/******************************************************************************/
 void ThirdPersonCamera::Refocus()
 {
 	Vector3 F(focus->x, focus->y, focus->z);
@@ -170,11 +286,27 @@ void ThirdPersonCamera::Refocus()
 	this->position = F - camDirection * camDistance;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to get camera distance
+\return
+    returns camera distance (float)
+*/
+/******************************************************************************/
 float ThirdPersonCamera::GetCameraDistance()
 {
 	return camDistance;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Sets the current distance between the camera and the focus
+\param  distance
+    The distance to be set
+*/
+/******************************************************************************/
 void ThirdPersonCamera::SetCameraDistanceAbsolute(float distance)
 {
 	camDistance = distance;
@@ -183,6 +315,14 @@ void ThirdPersonCamera::SetCameraDistanceAbsolute(float distance)
 	if (camDistance < minDistance) camDistance = minDistance;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Adds to the current distance between the camera and the focus
+\param  distance
+    The distance to be added
+*/
+/******************************************************************************/
 void ThirdPersonCamera::SetCameraDistanceRelative(float distance)
 {
 	camDistance += distance;
@@ -191,24 +331,57 @@ void ThirdPersonCamera::SetCameraDistanceRelative(float distance)
 	if (camDistance < minDistance) camDistance = minDistance;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Sets camera distance bounds
+\param  min
+    minimum distance
+\param max
+    maximum distance
+*/
+/******************************************************************************/
 void ThirdPersonCamera::SetCameraDistanceBounds(float min, float max)
 {
 	this->minDistance = min;
 	this->maxDistance = max;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Gets camera pitch 
+\return
+    returns a float, the camera's pitch angle
+*/
+/******************************************************************************/
 float ThirdPersonCamera::GetCameraPitch()
 {
 	return Math::RadianToDegree(asin(camDirection.y));
 }
 
 
-
+/******************************************************************************/
+/*!
+\brief
+    Gets camera's focus point
+\return
+    returns the focus
+*/
+/******************************************************************************/
 Position* ThirdPersonCamera::GetFocusPoint()
 {
 	return focus;
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Sets the camera's focus
+\param  focus
+    focus to be set to this value
+*/
+/******************************************************************************/
 void ThirdPersonCamera::SetFocusPoint(Position *focus)
 {
 	this->focus = focus;
@@ -403,6 +576,16 @@ void ThirdPersonCamera::SetFocusPoint(Position *focus)
 }
 */
 
+/******************************************************************************/
+/*!
+\brief
+    Function to check which direction the ship is turning in
+\param  yaw
+    the horizontal mouse pos
+\param  pitch
+    the vertical mouse pos
+*/
+/******************************************************************************/
 void ThirdPersonCamera::shipTurningAnimation(float yaw, float pitch)
 {
     if (pitch > 0 && pitch < 540) { pitchingUp = true; }
@@ -418,6 +601,22 @@ void ThirdPersonCamera::shipTurningAnimation(float yaw, float pitch)
     else { yawingRight = false; }
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Checks if there will be collision
+\param  InteractablesList
+    Vector of interactbleOBJs that is used to check for collision
+\param  BuildingsList
+    Vector of Building that is used to check for collision
+\param  somePlayer
+    a player class object
+\param  camPos
+    position, of camera, to check collision with
+\returns
+    returns a bool, true if can pass thru, false if can't
+*/
+/******************************************************************************/
 bool ThirdPersonCamera::createBoundary(std::vector<InteractableOBJs>&InteractablesList, std::vector<Building>&BuildingsList, Player &somePlayer, Position camPos)
 {
     Position maxPos;

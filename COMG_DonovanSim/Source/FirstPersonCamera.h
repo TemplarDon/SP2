@@ -1,3 +1,10 @@
+/*************************************************************************************************/
+/*!
+\file   FirstPersonCamera.h
+\brief
+Header File for the FirstPersonCamera Class, with parent class Camera
+*/
+/*************************************************************************************************/
 #ifndef CAMERA_5_H
 #define CAMERA_5_H
 
@@ -7,6 +14,13 @@
 #include "InteractableOBJs.h"
 #include "Player.h"
 
+/*************************************************************************************************/
+/*!
+Class FirstPersonCamera : public Camera
+\brief
+    Class FirstPersonCamera, with parent class Camera. Contains Constructor/ Destructor for FirstPersonCamera and functions for collision detection
+*/
+/*************************************************************************************************/
 class FirstPersonCamera : public Camera
 {
 public:

@@ -1,3 +1,10 @@
+/*************************************************************************************************/
+/*!
+\file   ThirdPersonCamera.h
+\brief
+    Header File for the ThirdPersonCamera Class, with parent class Camera
+*/
+/*************************************************************************************************/
 #ifndef _THIRDPERSONCAMERA_H_
 #define _THIRDPERSONCAMERA_H_
 
@@ -10,6 +17,13 @@
 #include "Building.h"
 #include "Ship.h"
 
+/*************************************************************************************************/
+/*!
+Class ThirdPersonCamera : public Camera
+\brief
+    Class ThirdPersonCamera, with parent class Camera. Contains Constructor/ Destructor for ThirdPersonCamera and functions for collision detection and movement
+*/
+/*************************************************************************************************/
 class ThirdPersonCamera : public Camera
 {
 private:
