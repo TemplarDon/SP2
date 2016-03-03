@@ -178,6 +178,17 @@ void SP2::LoadLights()
 		1.0f,
 		{ 0, 1.0f, 0 }
 	);
+
+	setLightData(7,
+		Light::LIGHT_DIRECTIONAL,
+		{ 5, 4, 0 },
+		{ 1, 1, 1 },
+		1.2f,
+		1.0f, 0.01f, 0.001f,
+		89.55f, 64.1f,
+		1.0f,
+		{ 0, 1.0f, 0 }
+	);
 }
 
 //Mesh data information.
@@ -759,6 +770,22 @@ void SP2::rotateSpotlight(const size_t &index, const float &degrees, const Vecto
 	d = rotation * d;
 }
 
+void SP2::rotateDirectionalLight(const size_t &index, const float &degrees, const Vector3 &axis)
+{
+	if (index >= numLights) return;
+	if (light[index].type != Light::LIGHT_DIRECTIONAL) return;
+
+	Vector3 R = { light[index].position.x, light[index].position.y, light[index].position.z };
+	Mtx44 rotationMatrix;
+
+	rotationMatrix.SetToRotation(degrees, axis.x, axis.y, axis.z);
+	R = rotationMatrix * R;
+
+	light[index].position.x = R.x;
+	light[index].position.y = R.y;
+	light[index].position.z = R.z;
+}
+
 //Shortcut function for loading meshes, textures, and materials.
 void SP2::MeshInit(GEOMETRY_TYPE G,
 	Mesh *mesh,
@@ -1204,7 +1231,7 @@ void SP2::RenderCode()
 
 
 	//CROSS HAIR
-	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 20, 17);
+	RenderTextOnScreen(meshList[GEO_TEXT], "+", Color(0, 1, 0), 2, 19.71f, 14.515f);
 
 	//NPC DIALOGUES
 	RenderNPCDialogues();

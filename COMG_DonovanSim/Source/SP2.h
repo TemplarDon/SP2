@@ -266,7 +266,7 @@ class SP2 : public Scene
 	};
 
 	//Light data. Variable numLights is used to define the number of lights this scene has.
-	static const size_t numLights = 7; Light light[numLights];
+	static const size_t numLights = 8; Light light[numLights];
 	unsigned m_parameters[U_TOTAL];
 	unsigned lightUniforms[numLights][UL_TOTAL];
 
@@ -290,6 +290,7 @@ class SP2 : public Scene
 	void setLightInner(const size_t &index, const float &D);
 	void moveLightPosition(const size_t &index, const Vector3 &M, const bool &absolute);
 	void rotateSpotlight(const size_t &index, const float &degrees, const Vector3 &axis);
+	void rotateDirectionalLight(const size_t &index, const float &degrees, const Vector3 &axis);
 
 	unsigned m_vertexArrayID;
 	unsigned m_vertexBuffer[NUM_GEOMETRY];
