@@ -661,19 +661,19 @@ void SP2::LoadMeshes()
 	// Base
 	meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
 	meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga");
-	InteractableOBJs base1 = InteractableOBJs("base1", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	InteractableOBJs base1 = InteractableOBJs("base1", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 64, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
 	base1.setRequirements(25, 15);
 	InteractablesList.push_back(base1);
 
-	InteractableOBJs base2 = InteractableOBJs("base2", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	InteractableOBJs base2 = InteractableOBJs("base2", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 64, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
 	base2.setRequirements(25, 15);
 	InteractablesList.push_back(base2);
 
-	InteractableOBJs base3 = InteractableOBJs("base3", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	InteractableOBJs base3 = InteractableOBJs("base3", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 64, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
 	base3.setRequirements(25, 15);
 	InteractablesList.push_back(base3);
 
-	InteractableOBJs base4 = InteractableOBJs("base4", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	InteractableOBJs base4 = InteractableOBJs("base4", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 64, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
 	base4.setRequirements(25, 15);
 	InteractablesList.push_back(base4);
 
@@ -852,7 +852,7 @@ void SP2::RenderCode()
 			modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
 			float s = i->getRequiredFocus();
 			modelStack.Scale(s, s, s);
-			RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+			//RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 			modelStack.PopMatrix();
 		}
 	}
@@ -911,7 +911,7 @@ void SP2::RenderCode()
 		modelStack.PushMatrix();
 		modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
 		modelStack.Scale(6, 6, 6);
-		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+		//RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 		modelStack.PopMatrix();
 	}
 
@@ -947,14 +947,14 @@ void SP2::RenderCode()
 
 	// Base Top
 	modelStack.PushMatrix();
-	modelStack.Translate(250, 63, -80);
+	modelStack.Translate(250, 64, -80);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
 	modelStack.PopMatrix();
 
 	// Sciene Lab
 	modelStack.PushMatrix();
-	modelStack.Translate(120, 63, -80);
+	modelStack.Translate(120, 64, -80);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
@@ -962,7 +962,7 @@ void SP2::RenderCode()
 
 	// Rec Room & Shop
 	modelStack.PushMatrix();
-	modelStack.Translate(120, 63, 120);
+	modelStack.Translate(120, 64, 120);
 	modelStack.Rotate(0, 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
@@ -970,7 +970,7 @@ void SP2::RenderCode()
 
 	// Bunks & Cafe
 	modelStack.PushMatrix();
-	modelStack.Translate(250, 63, 120);
+	modelStack.Translate(250, 64, 120);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
@@ -1570,17 +1570,17 @@ void SP2::ReadKeyPresses()
 		glDisable(GL_CULL_FACE);
 	}
 
-	if (Application::IsKeyPressed('B'))
-	{
-		if (toggleLight == true)
-		{
-			toggleLight = false;
-		}
-		else
-		{
-			toggleLight = true;
-		}
-	}
+	//if (Application::IsKeyPressed('B'))
+	//{
+	//	if (toggleLight == true)
+	//	{
+	//		toggleLight = false;
+	//	}
+	//	else
+	//	{
+	//		toggleLight = true;
+	//	}
+	//}
 
 	if (Application::IsKeyPressed('C'))
 	{

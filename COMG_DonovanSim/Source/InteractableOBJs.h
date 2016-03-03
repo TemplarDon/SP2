@@ -21,9 +21,28 @@ class InteractableOBJs : public CollisionOBJs
 {
 private:
     // Bool to check if interaction for object is over
+    /******************************************************************************/
+    /*!
+    \brief
+        Bool to check if interaction for object is over
+    */
+    /******************************************************************************/
     bool effectOver;
 
+    /******************************************************************************/
+    /*!
+    \brief
+        Squared value of focus
+    */
+    /******************************************************************************/
 	float requiredFocusSquared;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        Squared value of distance
+    */
+    /******************************************************************************/
 	float requiredDistanceSquared;
 
 public:

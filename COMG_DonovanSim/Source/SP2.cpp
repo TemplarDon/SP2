@@ -138,16 +138,11 @@ void SP2::Init()
 	MenuBool = false;
 	toggleLight = true;
 	AsteroidCollision = false;
-	askedEngine = false;
-	askedHull = false;
-	askedWings = false;
-	askedShipBuild = false;
 	shipBuilt = false;
 	noMoney = false;
 	hullFound = false;
 	wingsFound = false;
 	engineFound = false;
-	gateOpening = false;
 	frontGateOpening = false;
 	backGateOpening = false;
 	leftGateOpening = false;
@@ -200,7 +195,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { -350, 17, 370 };
+    startingCharPos = charPos = { 300, 17, 300 };
 	//300 , 17, 300
 	//125, 120 
 	//250, 40
@@ -730,7 +725,7 @@ Function for switching the position of the shop's pointer and then change the re
 void SP2::ShopMenuPointerInteraction()
 {
 	//EXIT THE LIST
-	if (Application::IsKeyPressed('I') && CoolDownTime2 == 1)
+	if (Application::IsKeyPressed('B') && CoolDownTime2 == 1)
 	{
 		DisplayShopList = false;
 		DisplayShopList2 = false;
