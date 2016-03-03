@@ -1,14 +1,32 @@
+/*************************************************************************************************/
+/*!
+\file   SP2.cpp
+\brief
+    Contains code for SP2 Project
+*/
+/*************************************************************************************************/
 #include "SP2.h"
 #include <fstream>
 
 using std::cout;
 using std::cin;
 using std::endl;
-
+/******************************************************************************/
+/*!
+\brief
+    SP2 Default Constructor
+*/
+/******************************************************************************/
 SP2::SP2()
 {
 }
 
+/******************************************************************************/
+/*!
+\brief
+    SP2 Default Destructor
+*/
+/******************************************************************************/
 SP2::~SP2()
 {
 
@@ -18,6 +36,12 @@ static float ROT_LIMIT = 45.f;
 static float SCALE_LIMIT = 5.f;
 float FramesPerSecond = 0;
 
+/******************************************************************************/
+/*!
+\brief
+    SP2 Initialise
+*/
+/******************************************************************************/
 void SP2::Init()
 {
 	S = CAFENOMENU;
@@ -407,21 +431,17 @@ void SP2::Init()
 	MenuBool = false;
 	toggleLight = true;
 	AsteroidCollision = false;
-	askedEngine = false;
-	askedHull = false;
-	askedWings = false;
-	askedShipBuild = false;
 	shipBuilt = false;
 	noMoney = false;
 	hullFound = false;
 	wingsFound = false;
 	engineFound = false;
-	gateOpening = false;
 	frontGateOpening = false;
 	backGateOpening = false;
 	leftGateOpening = false;
 	rightGateOpening = false;
 	isSafeOpen = false;
+	holdgun = false;
 
 	// Assign Pointers for Ship Building
 	LightHull = new Light_Hull;
@@ -468,7 +488,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 250, 17, 40 };
+    startingCharPos = charPos = { 300, 17, 300 };
 	//300 , 17, 300
 	//125, 120 
 	//250, 40
@@ -505,6 +525,14 @@ void SP2::Init()
 	InitSafe();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    SP2 Update Function
+\param  dt
+    Delta Time to make animations frame-dependent
+*/
+/******************************************************************************/
 void SP2::Update(double dt)
 {
 	//PlaySound(TEXT("Music//space.wav"), NULL, SND_SYNC);
@@ -600,7 +628,7 @@ void SP2::Update(double dt)
 				if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
 				{
 					NearVendingText = true;
-					if (Application::IsKeyPressed('Q'))
+					if (Application::IsKeyPressed('Q') && (TokenOnScreen == true))
 					{
 						TextTranslate = 100;
 						TokenOnScreen = false;
@@ -835,7 +863,7 @@ void SP2::Update(double dt)
 			{
 				if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
 				{
-					if (Application::IsKeyPressed(VK_LBUTTON) && somePlayer.checkWeapon() == true)
+					if (Application::IsKeyPressed(VK_LBUTTON) &&  (holdgun == true))
 					{
 						somePlayer.addCrystals(1);
 					}
@@ -990,7 +1018,7 @@ Function for switching the position of the shop's pointer and then change the re
 void SP2::ShopMenuPointerInteraction()
 {
 	//EXIT THE LIST
-	if (Application::IsKeyPressed('I') && CoolDownTime2 == 1)
+	if (Application::IsKeyPressed('B') && CoolDownTime2 == 1)
 	{
 		DisplayShopList = false;
 		DisplayShopList2 = false;
@@ -1116,20 +1144,6 @@ void SP2::ShopMenuPointerInteraction()
 		break;
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	if (CoolDownTime3 > 2)
 	{
@@ -1507,6 +1521,7 @@ void SP2::EquippingWeapons()
 	{
 		if (somePlayer.checkWeapon())
 		{
+			holdgun = true;
 			equipGun = true;
 			translatePointer = 127;
 			HandDisappear = true;
@@ -1519,11 +1534,13 @@ void SP2::EquippingWeapons()
 		equipPickaxe = true;
 		translatePointer = 141;
 		HandDisappear = true;
+		holdgun = false;
 	}
 
 	//F3 TO MAKE INVENTORY AND HAND APPEAR
-	if (Application::IsKeyPressed(VK_F3))
+	if (Application::IsKeyPressed(VK_F3) && (wearSuit == false))
 	{
+		holdgun = false;
 		equipGun = false;
 		equipPickaxe = false;
 		translatePointer = -10;
@@ -1543,6 +1560,14 @@ void SP2::EquippingWeapons()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for moving the player while flying the spaceship
+\param  dt
+    delta time, used to make animations frame-dependent
+*/
+/******************************************************************************/
 void SP2::shipFlying(double dt)
 {
 	for (vector<Ship>::iterator i = ShipList.begin(); i != ShipList.end(); ++i)
@@ -1624,6 +1649,16 @@ void SP2::shipFlying(double dt)
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for rotating the ship while player is flying the ship
+\param  dt
+    delta time, used to make animations frame-dependent
+\param  i
+    vector<Ship> iterator used to access ship class' variables
+*/
+/******************************************************************************/
 void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
 {
 	// Ship Animation
@@ -1683,6 +1718,15 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
 	if (shipHorizontalRotateAngle >= 360 || shipHorizontalRotateAngle <= -360) { shipHorizontalRotateAngle = 0; }
 }
 
+
+/******************************************************************************/
+/*!
+\brief
+    Function for moving lava pools in the maze
+\param  dt
+    delta time, used to make animations frame-dependent
+*/
+/******************************************************************************/
 void SP2::mazeTranslate(double dt)
 {
 	// Lava Movement
@@ -1715,6 +1759,21 @@ void SP2::mazeTranslate(double dt)
 	}
 }
 
+
+/******************************************************************************/
+/*!
+\brief
+    Function for opening the doors
+\param  dt
+    delta time, used to make animations frame-dependent
+\param  it
+    vector<InteractableOBJs> iterator used to access InteractablesList (vector)
+\param  gateOffset
+    amount to move the door by
+\param gateOpening
+    bool to check if door is opening (true) or not (false)
+*/
+/******************************************************************************/
 void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
 {
 	if (gateOffset < 30)
@@ -1733,6 +1792,20 @@ void SP2::doorInteractions(double dt, vector<InteractableOBJs>::iterator it, flo
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for closing the doors
+\param  dt
+    delta time, used to make animations frame-dependent
+\param  it
+    vector<InteractableOBJs> iterator used to access InteractablesList (vector)
+\param  gateOffset
+    amount to move the door by
+\param gateOpening
+    bool to check if door is opening (true) or not (false)
+*/
+/******************************************************************************/
 void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& gateOffset, bool &gateOpening)
 {
 	if (gateOffset > 0)
@@ -1746,6 +1819,12 @@ void SP2::doorClosing(double dt, vector<InteractableOBJs>::iterator it, float& g
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for shipCreation, loads meshes and creates a ship
+*/
+/******************************************************************************/
 void SP2::shipCreation()
 {
 	// Space Ship Template
@@ -1861,6 +1940,18 @@ void SP2::shipCreation()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for ging in and out of the ship
+\param  dt
+    delta time, used to make animations frame-dependent
+\param  InteractablesList
+    vector<InteractableOBJs> InteractablesList used to access InteractablesList (vector)
+\param  somePlayer
+    object of player class, used to access player's pos etc.
+*/
+/******************************************************************************/
 void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Player &somePlayer)
 {
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -2097,6 +2188,18 @@ void SP2::readInstructions()
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for rendering a mesh
+\param  mesh
+    Mesh to be loaded
+\param  enableLight
+    bool to check if light will apply to mesh
+\param  toggleLight
+    bool to toggle light on/off
+*/
+/******************************************************************************/
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
@@ -2145,6 +2248,12 @@ void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for rendering scene
+*/
+/******************************************************************************/
 void SP2::Render()
 {
 	// Render VBO here
@@ -2187,6 +2296,12 @@ void SP2::Render()
 	RenderCode();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function for cleaning up the scene
+*/
+/******************************************************************************/
 void SP2::Exit()
 {
 	// Cleanup VBO here
@@ -2207,6 +2322,10 @@ void SP2::Exit()
 /*!
 \brief
 Function to check for each individual crystal's position    
+
+\param posxcheck , poszcheck , i    
+posxcheck and poszcheck checks the current position of where the player is 
+looking at, i is the position of the crystal's xcoord,zcoord in the array    
 
 \return
 returns bool, true if there is a crystal at that position, false if not 
@@ -2347,4 +2466,4 @@ void SP2::asteroidgen()
 		InteractablesList.push_back(asteroid);
 	}
 
-}  
+} 

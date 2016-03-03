@@ -1,3 +1,11 @@
+/*************************************************************************************************/
+/*!
+\file   SP2.h
+\brief
+    Header File for the SP2 Class with parent class Scene, contains all functions and code for SP2
+*/
+/*************************************************************************************************/
+
 #ifndef SP_2_H
 #define SP_2_H
 
@@ -34,6 +42,13 @@
 #include <time.h>
 
 
+/*************************************************************************************************/
+/*!
+Class SP2 : public Scene
+\brief
+    Class SP2, with parent class Scene. Contains Constructor/ Destructor for SP2 and contains enums, functions and variables for SP2
+*/
+/*************************************************************************************************/
 
 class SP2 : public Scene
 {
@@ -347,18 +362,77 @@ private:
 	void RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight);
 
 	//SHIP BUILDER & SHIP POINTER
+    /******************************************************************************/
+    /*!
+    \brief
+        ShipBuilder Object, used to create the ship
+    */
+    /******************************************************************************/
 	ShipBuilder ShipBuilder;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        Ship Template that is used to build ship
+    */
+    /******************************************************************************/
 	Ship* shipTemplatePtr;
 
 	//SHIP PARTS
+    /******************************************************************************/
+    /*!
+    \brief
+        Light_Hull class object used for shipBuilding
+    */
+    /******************************************************************************/
 	Light_Hull* LightHull;
 
+    /******************************************************************************/
+    /*!
+    \brief
+        Medium_Hull class object for shipBuilding
+    */
+    /******************************************************************************/
 	Medium_Hull* MediumHull;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        Large_Hull class object for shipBuilding
+    */
+    /******************************************************************************/
 	Large_Hull* LargeHull;
 
+    /******************************************************************************/
+    /*!
+    \brief
+        G1_Engine class object for shipBuilding
+    */
+    /******************************************************************************/
 	G1_Engine* G1Engine;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        G2_Engine class object for shipBuilding
+    */
+    /******************************************************************************/
 	G2_Engine* G2Engine;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        Dual_Wings class object for shipBuilding
+    */
+    /******************************************************************************/
 	Dual_Wings* DualWings;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        Quad_Wings class object for shipBuilding
+    */
+    /******************************************************************************/
 	Quad_Wings* QuadWings;
 
 
@@ -403,23 +477,125 @@ private:
 	bool NPCInRecMazeTask;
 
 	//DOOR (DONOVAN'S)
+    /******************************************************************************/
+    /*!
+    \brief
+        value to move the left gate of the room
+    */
+    /******************************************************************************/
 	float leftGateOffset;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        value to move the right gate of the room
+    */
+    /******************************************************************************/
 	float rightGateOffset;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        value to move the front gate of the room
+    */
+    /******************************************************************************/
 	float frontGateOffset;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        value to move the back gate of the room
+    */
+    /******************************************************************************/
 	float backGateOffset;
-	bool gateOpening;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        bool to know if front gate of the room is opening
+    */
+    /******************************************************************************/
 	bool frontGateOpening;
+
+    /******************************************************************************/
+    /*!
+    \brief
+    bool to know if back gate of the room is opening
+    */
+    /******************************************************************************/
 	bool backGateOpening;
+
+    /******************************************************************************/
+    /*!
+    \brief
+    bool to know if left gate of the room is opening
+    */
+    /******************************************************************************/
 	bool leftGateOpening;
+
+    /******************************************************************************/
+    /*!
+    \brief
+    bool to know if right gate of the room is opening
+    */
+    /******************************************************************************/
 	bool rightGateOpening;
 
 	// Maze
+    /******************************************************************************/
+    /*!
+    \brief
+        value of translation to move maze wall
+    */
+    /******************************************************************************/
 	float mazeTranslateValue;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        random value to move maze wall
+    */
+    /******************************************************************************/
 	float mazeRandomTranslate;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        value to move the lava by
+    */
+    /******************************************************************************/
 	float lavaTranslation;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        vector to hold randomMazeTranslateValues
+    */
+    /******************************************************************************/
 	vector<float>mazeRandomTranslateVec;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        bool to show if players' dead
+    */
+    /******************************************************************************/
 	bool deadText;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        bool to show text when near treasure
+    */
+    /******************************************************************************/
 	bool treasureText;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        bool to know that treasure has been taken
+    */
+    /******************************************************************************/
 	bool treasureTaken;
 
 	//JUMP (BECKHAM'S)
@@ -433,7 +609,6 @@ private:
 	bool onGround;
 
 	//Booleans by Gary Goh.
-
 	bool isInViewSpheres;
 
 
@@ -590,6 +765,7 @@ private:
 	void shipCreation();
 	void mazeTranslate(double dt);
 	void EquippingWeapons();
+	bool holdgun;
 
 	//FUNCTION TO CREATE A ROOM. initRoomTempalte TO MAKE COLLISION, RenderRoomTemplate TO RENDER ROOM
 	void initRoomTemplate(Position pos, Vector3 size = { 1, 1, 1 }, float groundMeshSize = 100);
@@ -608,16 +784,48 @@ private:
 	void renderMountains();
 
 	// TEMP BOOLS FOR SHIP BUILDING
-	bool askedHull;
-	bool askedWings;
-	bool askedEngine;
-	bool askedShipBuild;
+    /******************************************************************************/
+    /*!
+    \brief
+        bool to check if a ship has been built
+    */
+    /******************************************************************************/
 	bool shipBuilt;
+
+    /******************************************************************************/
+    /*!
+    \brief
+        bool to check if player tries to buy without enought money
+    */
+    /******************************************************************************/
 	bool noMoney;
 
+    /******************************************************************************/
+    /*!
+    \brief
+        bool to check if hull obj exists in the players' partsVector
+    */
+    /******************************************************************************/
 	bool hullFound;
+
+
+    /******************************************************************************/
+    /*!
+    \brief
+        bool to check if wings obj exists in the players' partsVector
+    */
+    /******************************************************************************/
 	bool wingsFound;
+
+
+    /******************************************************************************/
+    /*!
+    \brief
+    bool to check if engine obj exists in the players' partsVector
+    */
+    /******************************************************************************/
 	bool engineFound;
+
 	//CRYSTAL RELATED STUFF   
 	bool checkCrystalPos(float xcoord, float zcoord, int i);
 

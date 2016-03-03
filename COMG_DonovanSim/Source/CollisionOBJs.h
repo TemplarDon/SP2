@@ -27,16 +27,39 @@ protected:
 
 public:
     // Bool to check if player can move thru this object
+    /******************************************************************************/
+    /*!
+    \brief
+        Bool to check if player can't move or not
+    */
+    /******************************************************************************/
     bool canMove;
     ~CollisionOBJs() = 0;
 
     // Max Position of this object, used to create a collision box
+    /******************************************************************************/
+    /*!
+    \brief
+        Max Position of this object, used to create a collision box
+    */
+    /******************************************************************************/
     Position maxPos;
 
     // Min Position of this object, used to create a collision box
+    /******************************************************************************/
+    /*!
+    \brief
+        Min Position of this object, used to create a collision box
+    */
+    /******************************************************************************/
     Position minPos;
 
-    // Position offSet;
+    /******************************************************************************/
+    /*!
+    \brief
+        Offset to scale collision box by
+    */
+    /******************************************************************************/
     float scaleOffSet;
 
     // Rotate Angle, used to rotate collision box

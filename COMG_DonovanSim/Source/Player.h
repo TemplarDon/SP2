@@ -69,20 +69,56 @@ public:
 private:
 
     // Race of player Eg. Human / Alien
+    /******************************************************************************/
+    /*!
+    \brief
+        Race of player Eg. Human / Alien
+    */
+    /******************************************************************************/
     string race;
 
     // Inventory of Player
+    /******************************************************************************/
+    /*!
+    \brief
+        Inventory class obj, inventory of player
+    */
+    /******************************************************************************/
     Inventory playerInventory;
 
     // Health of Player
+    /******************************************************************************/
+    /*!
+    \brief
+        Health of player
+    */
+    /******************************************************************************/
     int health;
 
     // String containing either "first" or "third", where "first" refers to first person camera and "third" refers to third person camera
+    /******************************************************************************/
+    /*!
+    \brief
+        String containing either "first" or "third", where "first" refers to first person camera and "third" refers to third person camera
+    */
+    /******************************************************************************/
     string cameraType;
 
     // Camera Pointer to access Camera values
+    /******************************************************************************/
+    /*!
+    \brief
+        Camera Pointer to access Camera values
+    */
+    /******************************************************************************/
     Camera* cameraPtr;
 
+    /******************************************************************************/
+    /*!
+    \brief
+        bool to check if weapon is equipped
+    */
+    /******************************************************************************/
     bool weaponEquipped;
 };
 
