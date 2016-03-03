@@ -673,7 +673,7 @@ void SP2::initSpaceShip()
 	shipTemplatePtr = &someShip;
 }
 
-//MAIN RENDER CODE
+//Main rendering code
 void SP2::RenderCode()
 {
 
@@ -1079,13 +1079,6 @@ void SP2::RenderCode()
 	//os << "Collision with asteroids :" << AsteroidCollision;
 	//RenderTextOnScreen(meshList[GEO_TEXT], os.str(), Color(0, 1, 0), 1.2f, 5, 5);
 
-	////Weapon 
-	//std::ostringstream weapon;
-	//weapon.str("");
-	//if (somePlayer.checkWeapon()) { weapon << "true"; }
-	//else { weapon << "false"; }
-	//RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(0, 1, 0), 1.5, 16.2, 8);
-
 
 	//INSTRUCTIONS
 	RenderInstructions();
@@ -1172,6 +1165,7 @@ void SP2::RenderCode()
 	else { RenderHealthBarOnScreen(meshList[GEO_ALIVEHEALTHBAR], 2.6, 2.5, 21); }
 }
 
+//Initialise maze mesh, position and collision.
 void SP2::initMaze()
 {
 	meshList[GEO_MAZE_SIDE_WALL] = MeshBuilder::GenerateOBJ("mazeSideWall", "OBJ//Maze//mazeSideWalls.obj");
@@ -1231,6 +1225,7 @@ void SP2::initMaze()
 
 }
 
+//Initialise safe
 void SP2::InitSafe()
 {
 	InteractableOBJs keypadOBJ =
@@ -1329,6 +1324,7 @@ void SP2::InitSafe()
 	InteractablesList.push_back(keypadOBJ);
 }
 
+//Initialise mountains mesh, position and collision.
 void SP2::initMountains()
 {
 	meshList[GEO_MOUNTAIN] = MeshBuilder::GenerateOBJ("moutain", "OBJ//Mountain.obj");
@@ -1443,6 +1439,7 @@ void SP2::renderMaze()
     modelStack.PopMatrix();
 }
 
+//Room template
 void SP2::initRoomTemplate(Position pos, Vector3 size, int groundMeshSize)
 {
 	Building floor1 = Building("floor1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
@@ -1654,6 +1651,7 @@ void SP2::RenderNPCDialogues()
 		RenderNPCTextBoxOnScreen(meshList[GEO_NPCDIALOGUEBOX], 5, 8, 2.8);
 		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[5], Color(1, 0, 0), 1.7, 5, 10);
 		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[7], Color(1, 1, 1), 1.7, 5, 8);
+		RenderTextOnScreen(meshList[GEO_TEXT], dialogue_vec[13], Color(1, 1, 1), 1.7, 5, 6);
 	}
 
 	if (NPCInCafeTokenTask == true)
