@@ -35,7 +35,7 @@ public:
 
     // Functions for adding and getting Ship Parts from players inventory
     void addPart(ShipParts* partsName);
-    list<ShipParts*> getParts();
+    list<ShipParts*>& getParts();
 
     // Function for adding and getting Crystals to player
     void addCrystals(int crystalAmount);

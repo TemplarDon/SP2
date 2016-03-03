@@ -1,0 +1,13 @@
+Requires token. 
+Press F2 to equip your pickaxe!
+Press E to mine the crystals.
+You found a token on the table! 
+Press Q to pick up the token.
+You have bought a coke.
+Press U to drink the coke.
+Press T to put on the spacesuit.
+Press G to take out the spacesuit.
+Press Q to insert token.
+Here is the treasure!
+Press E to get the treasure.
+end

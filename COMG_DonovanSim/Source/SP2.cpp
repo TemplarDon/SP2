@@ -102,6 +102,9 @@ void SP2::Init()
 	List2Appear = false;
 	CafeStuff = false;
 	ShopStuff = false;
+	NPCInCafeTokenTask = false;
+	NPCInRecMazeTask = false; 
+	HelipadInstructions = false;
 
 	askedEngine = false;
 	askedHull = false;
@@ -109,6 +112,11 @@ void SP2::Init()
 	askedShipBuild = false;
 	shipBuilt = false;
 	noMoney = false;
+
+    hullFound = false;
+    wingsFound = false;
+    engineFound = false;
+
 
 	gateOpening = false;
 	frontGateOpening = false;
@@ -129,7 +137,7 @@ void SP2::Init()
 	DualWings = new Dual_Wings;
 	QuadWings = new Quad_Wings;
 
-	//JUmp
+	//Jump
 	acceleration = -1;
 	firstvelo = 0;
 	secondvelo = 0;
@@ -151,6 +159,8 @@ void SP2::Init()
         mazeRandomTranslateVec.push_back((float)((rand() % 80 - 40)));    
     }
     deadText = false;
+    treasureTaken = false;
+    treasureText = false;
 
 	//FIRST PERSON CAMERA
 	firstPersonCamera.Reset();
@@ -164,10 +174,11 @@ void SP2::Init()
 	camPointer = &firstPersonCamera;
 
 	//STARTING POSITION OF PLAYER
-	//startingCharPos = charPos = { -350, 17, -370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { 125, 17, 120 };
+	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
+	startingCharPos = charPos = { 300, 17, 300 };
 	//125, 120 
 	//250, 40
+	//-350, 17, -270
 
 	//Initialize camera settings (Don's)
 	shipStartingPos = shipPos = { 375, 18, -105 };
@@ -177,9 +188,6 @@ void SP2::Init()
 	//Initialize camera settings (Don's)
 	firstPersonCamera.Init(Vector3(charPos.x, charPos.y, charPos.z), Vector3(1, 1, 1), Vector3(0, 1, 0));
 	thirdPersonCamera.Init(Vector3(10, 8, -5), Vector3(0, 1, 0), &shipPos, 20);
-
-	// Init Cam Pointer
-	camPointer = &firstPersonCamera;
 
 	//Init Player + Stats
 	somePlayer.setPlayerStats("TestMan", "Human", 100, charPos, firstPersonCamera); // Name, Race, Money, Pos, camera
@@ -239,6 +247,7 @@ void SP2::Init()
 		movex[i] = coord1;
 		movez[i] = coord2;
 	}
+
 	for (int i = 0; i < AsteroidNo; i++)
 	{
 		InteractableOBJs asteroid = InteractableOBJs("asteroid", meshList[GEO_ASTEROID]->maxPos, meshList[GEO_ASTEROID]->minPos, Position(asteroidx[i], asteroidy[i], asteroidz[i]), 1, 0, Vector3(0, 0, 0));
@@ -252,6 +261,9 @@ void SP2::Init()
 
 void SP2::Update(double dt)
 {
+    //PlaySound(TEXT("Music//space.wav"), NULL, SND_SYNC);
+    //system("pause");
+
 	//Dont touch this code 
 	CrystalText = false;
 	AsteroidCollision = false;
@@ -320,6 +332,14 @@ void SP2::Update(double dt)
 		}
 	}
 
+    if (CoolDownTime > 0)
+    {
+        CoolDownTime--;
+    }
+    else
+    {
+        CoolDownTime = 0;
+    }
 
 	static unsigned firstFrames = 2;
 	if (firstFrames > 0)
@@ -328,12 +348,14 @@ void SP2::Update(double dt)
 		firstFrames--;
 	}
 
-	if (Application::IsKeyPressed('R'))
-	{
-		somePlayer.pos = startingCharPos;
-		firstPersonCamera.Reset();
-	}
 
+    if (Application::IsKeyPressed('R'))
+    {
+		reset();
+    }
+
+	//INSTRUCTIONS
+	readInstructions();
 
 	//DIALOGUE DO NOT DELETE THIS 
 	DialoguesWithNPCs();
@@ -341,14 +363,8 @@ void SP2::Update(double dt)
 	//DO NOT DELETE EQUIP WEAPON STUFF
 	EquippingWeapons();
 
-	//DO NOT DELETE CAFE MENU STUFF 
 	//CAFE MENU
-
-	//if (CafeStuff == true)
-	//{
-	//ShopStuff = false;
 	CafeMenuPointerInteraction();
-	//}
 
 	if (Application::IsKeyPressed('U'))
 	{
@@ -357,50 +373,9 @@ void SP2::Update(double dt)
 		BreadAppear = false;
 	}
 
-
-	//if (DisplayCafeMenu == false)
-	//{
-	//	S = CAFENOMENU;
-	//}
-
-	//if (DisplayShopList == false)
-	//{
-	//	L = SHOPNOMENU;
-	//}
-
 	//SHOP LIST
-	//ShopMenuPointerInteraction();
-	//DO NOT DELETE SHOP MENU STUFF
-	//ShopMenuPointerInteraction();
-
-	//if (Application::IsKeyPressed(VK_DOWN))
-	//{
-	//	shopListPointer -= 12;
-	//}
-
-	//if (Application::IsKeyPressed(VK_UP))
-	//{
-	//	shopListPointer += 12;
-	//}
-
-	//if (ShopStuff == true)
-	//{
-	//CafeStuff = false;
 	ShopMenuPointerInteraction();
-	//}
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
 
 	//Safe + keypad stuff (Gary's)
 	if (isSafeOpen)
@@ -415,53 +390,55 @@ void SP2::Update(double dt)
 
 	for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
 	{
-		//VENDING MACHINE
-		if (it->name == "vending")
-		{
-			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-			{
-				NearVendingText = true;
-				if (Application::IsKeyPressed('Q'))
-				{
-					TextTranslate = 100;
-					TokenOnScreen = false;
-					RenderCoke = true;
-					ConsumeCokeText = true;
-				}
+        if (it->name != "asteroid" || it->name != "crystal")
+        {
+            //VENDING MACHINE
+            if (it->name == "vending")
+            {
+                if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+                {
+                    NearVendingText = true;
+                    if (Application::IsKeyPressed('Q'))
+                    {
+                        TextTranslate = 100;
+                        TokenOnScreen = false;
+                        RenderCoke = true;
+                        ConsumeCokeText = true;
+                    }
 
-				if (Application::IsKeyPressed('U'))
-				{
-					ConsumeCokeText = false;
-					RenderCoke = false;
-				}
-			}
-			else
-			{
-				NearVendingText = false;
-				ConsumeCokeText = false;
-				RenderCoke = false;
-			}
-		}
+                    if (Application::IsKeyPressed('U'))
+                    {
+                        ConsumeCokeText = false;
+                        RenderCoke = false;
+                    }
+                }
+                else
+                {
+                    NearVendingText = false;
+                    ConsumeCokeText = false;
+                    RenderCoke = false;
+                }
+            }
 
 
-		//TOKEN
-		if (it->name == "token")
-		{
-			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-			{
-				PickUpTokenText = true;
+            //TOKEN
+            if (it->name == "token")
+            {
+                if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+                {
+                    PickUpTokenText = true;
 
-				if (Application::IsKeyPressed('Q'))
-				{
-					TokenOnScreen = true;
-					TokenTranslate = 10.5;
-				}
-			}
-			else
-			{
-				PickUpTokenText = false;
-			}
-		}
+                    if (Application::IsKeyPressed('Q'))
+                    {
+                        TokenOnScreen = true;
+                        TokenTranslate = 10.5;
+                    }
+                }
+                else
+                {
+                    PickUpTokenText = false;
+                }
+            }
 
 		//COUNTER
 		if (it->name == "counter")
@@ -474,245 +451,227 @@ void SP2::Update(double dt)
 					testText = false;
 					chefText = false;
 					YesShowCafeMenu = true;
-					S = PLACE1;
+					S = OPTION_APPLE;
 				}
 
-				if (YesShowCafeMenu == true)
-				{
-					testText = false;
-					chefText = false;
-					DisplayCafeMenu = true;
-				}
-				else
-				{
-					testText = true;
-					chefText = true;
-					DisplayCafeMenu = false;
-					S = CAFENOMENU;
-				}
-			}
-			else
-			{
-				testText = false;
-				DisplayCafeMenu = false;
-				YesShowCafeMenu = false;
-				S = CAFENOMENU;
-			}
-		}
+                    if (YesShowCafeMenu == true)
+                    {
+                        testText = false;
+                        chefText = false;
+                        DisplayCafeMenu = true;
+                    }
+                    else
+                    {
+                        testText = true;
+                        chefText = true;
+                        DisplayCafeMenu = false;
+                        S = CAFENOMENU;
+                    }
+                }
+                else
+                {
+                    testText = false;
+                    DisplayCafeMenu = false;
+                    YesShowCafeMenu = false;
+                    S = CAFENOMENU;
+                }
+            }
 
-		//SPACESUIT
-		if (it->name == "spacesuit")
-		{
-			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
-			{
-				wearSuitText = true;
+            //SPACESUIT
+            if (it->name == "spacesuit")
+            {
+                if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+                {
+                    wearSuitText = true;
 
 				if (Application::IsKeyPressed('T'))
 				{
 					//SuitTranslate = -50;
 					wearSuit = true;
 					DisplayInventory = true;
+					HandDisappear = true;
 				}
 
-				if (Application::IsKeyPressed('G'))
-				{
-					wearSuit = false;
-					DisplayInventory = false;
-				}
-			}
-			else
-			{
-				wearSuitText = false;
+                    if (Application::IsKeyPressed('G'))
+                    {
+                        wearSuit = false;
+                        DisplayInventory = false;
+                    }
+                }
+                else
+                {
+                    wearSuitText = false;
 
-				if (Application::IsKeyPressed('G'))
-				{
-					wearSuit = false;
-					DisplayInventory = false;
-				}
-			}
-		}
+                    if (Application::IsKeyPressed('G'))
+                    {
+                        wearSuit = false;
+                        DisplayInventory = false;
+                    }
+                }
+            }
 
 		//SHOP LIST
 		if (it->name == "trader")
 		{
 			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
 			{
-				//if (Application::IsKeyPressed('Y'))
-				//{
-				//	traderText = false;
-				//	YesShowShopList = true;
-				//}
-				//else
-				//{
-				//	traderText = true;
-				//	YesShowShopList = false;
-				//}
-
-
-				//if (YesShowShopList == true)
-				//{
-				//	traderText = false;
-				//	DisplayShopList = true;
-				//}
-				//else
-				//{
-				//	traderText = true;
-				//	DisplayShopList = false;
-				//}
 				traderText = true;
 				if (Application::IsKeyPressed('Y'))
 				{
 					traderText = false;
 					YesShowShopList = true;
-					L = POSITION1;
+					L = OPTION_HULL;
 				}
 
-				if (YesShowShopList == true)
-				{
-					traderText = false;
-					DisplayShopList = true;
-				}
-				else
-				{
-					traderText = true;
-					DisplayShopList = false;
-					//L = SHOPNOMENU;
-				}
+                    if (YesShowShopList == true)
+                    {
+                        traderText = false;
+                        DisplayShopList = true;
+                    }
+                    else
+                    {
+                        traderText = true;
+                        DisplayShopList = false;
+                        //L = SHOPNOMENU;
+                    }
 
 
-				if (DisplayShopList == true || DisplayShopList2 == true || DisplayShopList3 == true || DisplayShopList4 == true)
-				{
-					traderText = false;
-				}
-				else
-				{
-					traderText = true;
-				}
-			}
-			else
-			{
-				traderText = false;
-				DisplayShopList = false;
-				YesShowShopList = false;
-				//L = SHOPNOMENU;
-				//DisplayShopList2 = false;
-				//DisplayShopList3 = false
-			}
-		}
-
-
-
+                    if (DisplayShopList == true || DisplayShopList2 == true || DisplayShopList3 == true || DisplayShopList4 == true)
+                    {
+                        traderText = false;
+                    }
+                    else
+                    {
+                        traderText = true;
+                    }
+                }
+                else
+                {
+                    traderText = false;
+                    DisplayShopList = false;
+                    YesShowShopList = false;
+                    //L = SHOPNOMENU;
+                    //DisplayShopList2 = false;
+                    //DisplayShopList3 = false
+                }
+            }
 
 
 
+            
 
-		// Door Opening & Closing
-		if (it->name.find("frontGate") != string::npos)
-		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF FRONTGATE IS IN VIEW
-			{
-				if (Application::IsKeyPressed('E'))
-				{
-					frontGateOpening = true;
-				}
-				if (frontGateOpening) { doorInteractions(dt, it, frontGateOffset, frontGateOpening); }
-				if (!frontGateOpening) { doorClosing(dt, it, frontGateOffset, frontGateOpening); }
-			}
-		}
 
-		if (it->name.find("rightGate") != string::npos)
-		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF rightGATE IS IN VIEW
-			{
-				if (Application::IsKeyPressed('E'))
-				{
-					rightGateOpening = true;
-				}
-				if (rightGateOpening) { doorInteractions(dt, it, rightGateOffset, rightGateOpening); }
-				if (!rightGateOpening) { doorClosing(dt, it, rightGateOffset, rightGateOpening); }
-			}
-		}
 
-		if (it->name.find("backGate") != string::npos)
-		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF backGATE IS IN VIEW
-			{
-				if (Application::IsKeyPressed('E'))
-				{
-					backGateOpening = true;
-				}
-				if (backGateOpening) { doorInteractions(dt, it, backGateOffset, backGateOpening); }
-				if (!backGateOpening) { doorClosing(dt, it, backGateOffset, backGateOpening); }
-			}
-		}
+            // Door Opening & Closing
+            if (it->name.find("frontGate") != string::npos)
+            {
+                if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF FRONTGATE IS IN VIEW
+                {
+                    if (Application::IsKeyPressed('E'))
+                    {
+                        frontGateOpening = true;
+                    }
+                    if (frontGateOpening) { doorInteractions(dt, it, frontGateOffset, frontGateOpening); }
+                    if (!frontGateOpening) { doorClosing(dt, it, frontGateOffset, frontGateOpening); }
+                }
+            }
 
-		if (it->name.find("leftGate") != string::npos)
-		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF leftGATE IS IN VIEW
-			{
-				if (Application::IsKeyPressed('E'))
-				{
-					leftGateOpening = true;
-				}
-				if (leftGateOpening) { doorInteractions(dt, it, leftGateOffset, leftGateOpening); }
-				if (!leftGateOpening) { doorClosing(dt, it, leftGateOffset, leftGateOpening); }
-			}
-		}
+            if (it->name.find("rightGate") != string::npos)
+            {
+                if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF rightGATE IS IN VIEW
+                {
+                    if (Application::IsKeyPressed('E'))
+                    {
+                        rightGateOpening = true;
+                    }
+                    if (rightGateOpening) { doorInteractions(dt, it, rightGateOffset, rightGateOpening); }
+                    if (!rightGateOpening) { doorClosing(dt, it, rightGateOffset, rightGateOpening); }
+                }
+            }
 
-		// Shop
-		if (it->name == "shop")
-		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-			{
-				if (Application::IsKeyPressed('E'))
-				{
-					askedShipBuild = true;
-					askedHull = true;
-				}
-			}
-			else
-			{
-				askedShipBuild = false;
-			}
-		}
+            if (it->name.find("backGate") != string::npos)
+            {
+                if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF backGATE IS IN VIEW
+                {
+                    if (Application::IsKeyPressed('E'))
+                    {
+                        backGateOpening = true;
+                    }
+                    if (backGateOpening) { doorInteractions(dt, it, backGateOffset, backGateOpening); }
+                    if (!backGateOpening) { doorClosing(dt, it, backGateOffset, backGateOpening); }
+                }
+            }
 
-		// Weapon
-		if (it->name == "gun rack")
-		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-			{
-				if (Application::IsKeyPressed('E'))
-				{
-					somePlayer.setWeapon();
-				}
-			}
+            if (it->name.find("leftGate") != string::npos)
+            {
+                if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view)) //IF leftGATE IS IN VIEW
+                {
+                    if (Application::IsKeyPressed('E'))
+                    {
+                        leftGateOpening = true;
+                    }
+                    if (leftGateOpening) { doorInteractions(dt, it, leftGateOffset, leftGateOpening); }
+                    if (!leftGateOpening) { doorClosing(dt, it, leftGateOffset, leftGateOpening); }
+                }
+            }
 
-		}
+            // Weapon
+            if (it->name == "gun rack")
+            {
+                if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+                {
+                    if (Application::IsKeyPressed('E') && CoolDownTime == 0)
+                    {
+                        somePlayer.setWeapon();
+                        CoolDownTime = 20;
+                    }
+                }
 
-		// Target
-		if (it->name == "target dummy")
-		{
-			if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-			{
-				if (Application::IsKeyPressed('E') && somePlayer.checkWeapon() == true)
-				{
-					somePlayer.addCrystals(1);
-				}
-			}
-		}
+            }
 
-		static bool isHeld = false;
+            // Target
+            if (it->name == "target dummy")
+            {
+                if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+                {
+                    if (Application::IsKeyPressed(VK_LBUTTON) && somePlayer.checkWeapon() == true)
+                    {
+                        somePlayer.addCrystals(1);
+                    }
+                }
+            }
 
-		if (Application::IsKeyPressed('H'))
-		{
-			if (it->isInView({ firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z }, view))
-			{
-				if (it->name == "keypadButton1")
-				{
-					keypad.targetBool.setTargetValue(true);
-				}
-			}
-		}
+            static bool isHeld = false;
+
+            if (Application::IsKeyPressed('H'))
+            {
+                if (it->isInView({ firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z }, view))
+                {
+                    if (it->name == "keypadButton1")
+                    {
+                        keypad.targetBool.setTargetValue(true);
+                    }
+                }
+            }
+
+            // Treasure
+            if (it->name == "mazeTreasure")
+            {
+                if (it->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
+                {
+                    treasureText = true;
+                    if(Application::IsKeyPressed('E') && !treasureTaken)
+                    {
+                        treasureTaken = true;
+                        somePlayer.addCrystals(9001);
+                    }
+                }
+                else
+                {
+                    treasureText = false;
+                }
+            }
+        }
 	}
 
 
@@ -722,18 +681,6 @@ void SP2::Update(double dt)
 		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
 		for (vector<InteractableOBJs>::iterator i = InteractablesList.begin(); i < InteractablesList.end(); i++)
 		{
-
-			// Target
-			if (i->name == "target dummy")
-			{
-				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
-				{
-					if (Application::IsKeyPressed(VK_LEFT) && somePlayer.checkWeapon() == true)
-					{
-						somePlayer.addCrystals(1);
-					}
-				}
-			}
 			if (i->name == "crystal")
 			{
 				if (i->isInView(Position(somePlayer.pos.x, somePlayer.pos.y, somePlayer.pos.z), view))
@@ -759,21 +706,6 @@ void SP2::Update(double dt)
 						}
 					}
 
-				}
-			}
-			if (i->name == "asteroid")
-			{
-				posxcheck = i->pos.x;
-				poszcheck = i->pos.z;
-				posycheck = i->pos.y;
-				posxcheck = (posxcheck - somePlayer.pos.x) * (posxcheck - somePlayer.pos.x);
-				posycheck = (posycheck - somePlayer.pos.y) * (posycheck - somePlayer.pos.y);
-				poszcheck = (poszcheck - somePlayer.pos.z) * (poszcheck - somePlayer.pos.z);
-				between = posxcheck + posycheck + poszcheck;
-				between = sqrt(between);
-				if (between <= 30)
-				{
-					AsteroidCollision = true;
 				}
 			}
 		}
@@ -804,21 +736,13 @@ void SP2::Update(double dt)
 		onGround = true;
 	}
 
-	//INTERACTIONS WITH OBJS (BECKHAM'S & DONOVAN'S)
-	if (camPointer == &firstPersonCamera)
-	{
-		Vector3 viewDirection = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
-
-		if (askedShipBuild)
-		{
-			shopInteractions();
-		}
-	}
-
+	//ASTEROID MOVEMENT    
 	for (int i = 0; i < AsteroidNo; i++)
 	{
 		asteroidx[i] += movex[i] + 0.05 * dt;
 		asteroidz[i] += movez[i] + 0.5 * dt;
+		rotatex[i] += (movex[i] ) + 1 * dt;
+		rotatez[i] += (movez[i] ) + 1 * dt;
 		if (asteroidx[i] > 1000 || asteroidx[i] < -1000)
 		{
 			asteroidx[i] *= -1;
@@ -828,6 +752,28 @@ void SP2::Update(double dt)
 			asteroidz[i] *= -1;
 		}
 	}
+
+	//ASTEROID COLLISION CHECK      
+	for (int i = 0; i < AsteroidNo; i++)
+	{
+		posxcheck = asteroidx[i];
+		poszcheck = asteroidz[i];
+		posycheck = asteroidy[i];
+		posxcheck = (posxcheck - somePlayer.pos.x) * (posxcheck - somePlayer.pos.x);
+		posycheck = (posycheck - somePlayer.pos.y) * (posycheck - somePlayer.pos.y);
+		poszcheck = (poszcheck - somePlayer.pos.z) * (poszcheck - somePlayer.pos.z);
+		between = posxcheck + posycheck + poszcheck;
+		between = sqrt(between);
+		if (between <= 30)
+		{
+			AsteroidCollision = true;
+		}
+	}
+	if (AsteroidCollision == true)
+	{
+		reset();
+	}
+
 
 	//Entering / Exiting Ship
 	shipToggle(dt, InteractablesList, somePlayer);
@@ -839,8 +785,12 @@ void SP2::Update(double dt)
 	mazeTranslate(dt);
 }
 
-//NEW CODE
-//PLEASE DO NOT DELETE THIS!!!!
+/******************************************************************************/
+/*!
+\brief
+Function for switching the position of the shop's pointer and then change the render on screen obj.
+*/
+/******************************************************************************/
 void SP2::ShopMenuPointerInteraction()
 {
 	//EXIT THE LIST
@@ -866,17 +816,17 @@ void SP2::ShopMenuPointerInteraction()
 	//FIRST LIST
 	switch (L)
 	{
-	case POSITION1:   //HULL                                           //Position 1 HULL
+	case OPTION_HULL:   //HULL                                           //Position 1 HULL
 		shopListPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime2 == 1)    //press up to position 3
 		{
 			CoolDownTime2 = 15;
-			L = POSITION11;
+			L = OPTION_CREATESHIP;
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime2 == 1)   //press down to position 2
 		{
 			CoolDownTime2 = 15;
-			L = POSITION2;
+			L = OPTION_WINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)        //press Enter will close the list
@@ -885,24 +835,24 @@ void SP2::ShopMenuPointerInteraction()
 			YesShowShopList = false;
 			DisplayShopList = false;
 			DisplayShopList2 = true;                                    //SHOW NEW HULL LIST
-			L = POSITION4;
+			L = OPTION_LIGHTHULL;
 		}
 
 
 		break;
 
-	case POSITION2:     //WINGS                                        //Position 2  WINGS
+	case OPTION_WINGS:     //WINGS                                        //Position 2  WINGS
 		shopListPointer = 50;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime2 == 1)    //press up to position 1
 		{
 			CoolDownTime2 = 15;
-			L = POSITION1;
+			L = OPTION_HULL;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime2 == 1)   //press down to position 3
 		{
 			CoolDownTime2 = 15;
-			L = POSITION3;
+			L = OPTION_ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)                       //press Enter will close the list
@@ -911,22 +861,22 @@ void SP2::ShopMenuPointerInteraction()
 			YesShowShopList = false;
 			DisplayShopList = false;
 			DisplayShopList3 = true;                                    //SHOW NEW WINGS LIST
-			L = POSITION7;
+			L = OPTION_DUALWINGS;
 		}
 
 		break;
 
-	case POSITION3:           //ENGINE                                 //Position 3  ENGINE
+	case OPTION_ENGINE:           //ENGINE                                 //Position 3  ENGINE
 		shopListPointer = 38;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime2 == 1)    //press up to Position 2
 		{
 			CoolDownTime2 = 15;
-			L = POSITION2;
+			L = OPTION_WINGS;
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime2 == 1)   //press down to Position 1
 		{
 			CoolDownTime2 = 15;
-			L = POSITION11;
+			L = OPTION_CREATESHIP;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)                       //press Enter will close the list
@@ -935,22 +885,22 @@ void SP2::ShopMenuPointerInteraction()
 			YesShowShopList = false;
 			DisplayShopList = false;
 			DisplayShopList4 = true;
-			L = POSITION9;
+			L = OPTION_G1ENGINE;
 		}
 		break;
 
-	case POSITION11:                                                                    //Create ship
+	case OPTION_CREATESHIP:                                                                    //Create ship
 		shopListPointer = 26;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime2 == 1)
 		{
 			CoolDownTime2 = 15;
-			L = POSITION3;
+			L = OPTION_ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime2 == 1)
 		{
 			CoolDownTime2 = 15;
-			L = POSITION1;
+			L = OPTION_HULL;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)                       //press Enter will close the list
@@ -958,13 +908,18 @@ void SP2::ShopMenuPointerInteraction()
 			CoolDownTime2 = 15;
 			YesShowShopList = false;
 			DisplayShopList = false;
-			shipCreation();
-			shipBuilt = true;
+
+            if (somePlayer.getParts().size() >= 3)
+            {
+                shipCreation();
+                shipBuilt = true;
+            }
+            
 		}
 
 		break;
-	}
 
+	}
 
 
 
@@ -993,18 +948,18 @@ void SP2::ShopMenuPointerInteraction()
 	//SECOND LIST
 	switch (L)
 	{
-	case POSITION4:                                                                //SMALL HULL
+	case OPTION_LIGHTHULL:                                                                //SMALL HULL
 		shopListPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION6;
+			L = OPTION_LARGEHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION5;
+			L = OPTION_MEDIUMHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1015,7 +970,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CYRSTAL
-			if (somePlayer.removeCrystals(10))
+			if (somePlayer.getCrystals() >= 10)
 			{
 				somePlayer.removeCrystals(10);
 				somePlayer.addPart(LightHull);
@@ -1025,18 +980,18 @@ void SP2::ShopMenuPointerInteraction()
 		}
 		break;
 
-	case POSITION5:                                                          //MEDIUM HULL
+	case OPTION_MEDIUMHULL:                                                          //MEDIUM HULL
 		shopListPointer = 50;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION4;
+			L = OPTION_LIGHTHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION6;
+			L = OPTION_LARGEHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1047,7 +1002,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(20))
+            if (somePlayer.getCrystals() >= 20)
 			{
 				somePlayer.removeCrystals(20);
 				somePlayer.addPart(MediumHull);
@@ -1057,18 +1012,18 @@ void SP2::ShopMenuPointerInteraction()
 		break;
 
 
-	case POSITION6:                                                             //LARGE HULL
+	case OPTION_LARGEHULL:                                                             //LARGE HULL
 		shopListPointer = 38;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION5;
+			L = OPTION_MEDIUMHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime3 == 2)
 		{
 			CoolDownTime3 = 16;
-			L = POSITION4;
+			L = OPTION_LIGHTHULL;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1079,7 +1034,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(30))
+            if (somePlayer.getCrystals() >= 30)
 			{
 				somePlayer.removeCrystals(30);
 				somePlayer.addPart(LargeHull);
@@ -1105,18 +1060,18 @@ void SP2::ShopMenuPointerInteraction()
 	//THIRD LIST
 	switch (L)
 	{
-	case POSITION7:                                                         //DUAL WINGS
+	case OPTION_DUALWINGS:                                                         //DUAL WINGS
 		shopListPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime4 == 3)
 		{
 			CoolDownTime4 = 17;
-			L = POSITION8;
+			L = OPTION_QUADWINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime4 == 3)
 		{
 			CoolDownTime4 = 17;
-			L = POSITION8;
+			L = OPTION_QUADWINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1127,7 +1082,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(20))
+            if (somePlayer.getCrystals() >= 20)
 			{
 				somePlayer.removeCrystals(20);
 				somePlayer.addPart(DualWings);
@@ -1137,18 +1092,18 @@ void SP2::ShopMenuPointerInteraction()
 
 		break;
 
-	case POSITION8:                                                                 //QUAD WINGS
+	case OPTION_QUADWINGS:                                                                 //QUAD WINGS
 		shopListPointer = 50;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime4 == 3)
 		{
 			CoolDownTime4 = 17;
-			L = POSITION7;
+			L = OPTION_DUALWINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime4 == 3)
 		{
 			CoolDownTime4 = 17;
-			L = POSITION7;
+			L =OPTION_DUALWINGS;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1159,7 +1114,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(30))
+            if (somePlayer.getCrystals() >= 30)
 			{
 				somePlayer.removeCrystals(30);
 				somePlayer.addPart(QuadWings);
@@ -1185,18 +1140,18 @@ void SP2::ShopMenuPointerInteraction()
 	//FOURTH LIST
 	switch (L)
 	{
-	case POSITION9:                                                                     //G1 ENGINE
+	case OPTION_G1ENGINE:                                                                     //G1 ENGINE
 		shopListPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime5 == 4)
 		{
 			CoolDownTime5 = 18;
-			L = POSITION10;
+			L = OPTION_G2ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime5 == 4)
 		{
 			CoolDownTime5 = 18;
-			L = POSITION10;
+			L = OPTION_G2ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1207,7 +1162,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(20))
+            if (somePlayer.getCrystals() >= 20)
 			{
 				somePlayer.removeCrystals(20);
 				somePlayer.addPart(G1Engine);
@@ -1217,18 +1172,18 @@ void SP2::ShopMenuPointerInteraction()
 
 		break;
 
-	case POSITION10:
+	case OPTION_G2ENGINE:
 		shopListPointer = 50;                                                         //G2 ENGINE
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime5 == 4)
 		{
 			CoolDownTime5 = 18;
-			L = POSITION9;
+			L = OPTION_G1ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime5 == 4)
 		{
 			CoolDownTime5 = 18;
-			L = POSITION9;
+			L = OPTION_G1ENGINE;
 		}
 
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime2 == 1)
@@ -1239,7 +1194,7 @@ void SP2::ShopMenuPointerInteraction()
 
 
 			//REMOVE CRYSTAL
-			if (somePlayer.removeCrystals(30))
+            if (somePlayer.getCrystals() >= 30)
 			{
 				somePlayer.removeCrystals(30);
 				somePlayer.addPart(G2Engine);
@@ -1252,7 +1207,12 @@ void SP2::ShopMenuPointerInteraction()
 
 }
 
-//PLEASE DO NOT DELETE THIS !!!! 
+/******************************************************************************/
+/*!
+\brief
+Function for switching the position of the cafe's pointer and then render the ojb of the chosen option.
+*/
+/******************************************************************************/
 void SP2::CafeMenuPointerInteraction()
 {
 	if (CoolDownTime > 0)
@@ -1263,10 +1223,19 @@ void SP2::CafeMenuPointerInteraction()
 	{
 		CoolDownTime = 0;
 	}
+    // Moved to Update - Don
+	//if (CoolDownTime > 0)
+	//{
+	//	CoolDownTime--;
+	//}
+	//else
+	//{
+	//	CoolDownTime == 0;
+	//}
 
 	switch (S)
 	{
-	case PLACE1:
+	case OPTION_APPLE:
 		cafeMenuPointer = 62;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
 		{
@@ -1276,7 +1245,7 @@ void SP2::CafeMenuPointerInteraction()
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
 		{
 			CoolDownTime = 20;
-			S = PLACE2;
+			S = OPTION_COFFEE;
 		}
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
 		{
@@ -1284,12 +1253,12 @@ void SP2::CafeMenuPointerInteraction()
 			AppleAppear = true;
 		}
 		break;
-	case PLACE2:
+	case OPTION_COFFEE:
 		cafeMenuPointer = 50;
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
 		{
 			CoolDownTime = 20;
-			S = PLACE1;
+			S = OPTION_APPLE;
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
 		{
@@ -1307,12 +1276,12 @@ void SP2::CafeMenuPointerInteraction()
 		if (Application::IsKeyPressed(VK_UP) && CoolDownTime == 0)
 		{
 			CoolDownTime = 20;
-			S = PLACE2;
+			S = OPTION_COFFEE;
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && CoolDownTime == 0)
 		{
 			CoolDownTime = 20;
-			S = PLACE1;
+			S = OPTION_APPLE;
 		}
 		if (Application::IsKeyPressed(VK_RETURN) && CoolDownTime == 0)
 		{
@@ -1329,7 +1298,12 @@ void SP2::CafeMenuPointerInteraction()
 	}
 }
 
-//PLEASE DO NOT DELETE THIS TOO !!!!
+/******************************************************************************/
+/*!
+\brief
+Function to lock the weapon when equipped. Cannot equip two weapon at one time.
+*/
+/******************************************************************************/
 void SP2::EquippingWeapons()
 {
 	//EQUIP GUN, HAND DISAPPEAR
@@ -1387,10 +1361,7 @@ void SP2::shipFlying(double dt)
             if (!i->shipTakeoff) 
             {
                 i->setDirectionalVectors(view.Normalized()); 
-                //if (i->hullType == "LightHull") { shipHorizontalRotateAngle = 90; }
-                //if (i->hullType == "MediumHull" || i->hullType == "LargeHull") { shipHorizontalRotateAngle = 180; }
             } 
-            //if (!i->shipTakeoff) { view = i->shipDirection; } // Sets Camera direction to be the same as ship
 
             if (Application::IsKeyPressed(VK_SPACE) && i->shipTakeoff == false) { i->shipTakeoff = true; } /// Press 'SpaceBar' to take off
 
@@ -1418,6 +1389,7 @@ void SP2::shipFlying(double dt)
                     shipPos.x = shipPos.x - ( i->shipDirection.x + (float)(i->shipSpeed * dt) );
                     shipPos.y = shipPos.y - ( i->shipDirection.y + (float)(i->shipSpeed * dt) );
                     shipPos.z = shipPos.z - ( i->shipDirection.z + (float)(i->shipSpeed * dt) );
+                    //reset();
                 }
 
                 // Check to stop Ship from going into the ground
@@ -1463,7 +1435,7 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
 	Vector3 up = camPointer->up;
 	Vector3 right = view.Cross(up);
 
-    Vector3 defaultHorizontalPlane = { i->defaultShipDirection.x, 0, i->defaultShipDirection.z };
+    Vector3 defaultHorizontalPlane = { -i->defaultShipDirection.x, 0, -i->defaultShipDirection.z };
     Vector3 horizontalPlane = { i->shipDirection.x, 0, i->shipDirection.z };
 
     // Find angle to pitch
@@ -1486,16 +1458,20 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
     //    shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
     //}
 
-    if (thirdPersonCamera.yawingRight && shipHorizontalRotateAngle >= -yawAngleDiff)
+    if (thirdPersonCamera.yawingRight && shipHorizontalRotateAngle >= -yawAngleDiff && shipHorizontalRotateAngle >= -180)
     {
         shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
     }
-    else if (shipHorizontalRotateAngle <= -yawAngleDiff)
+    else if (thirdPersonCamera.yawingLeft && shipHorizontalRotateAngle >= -(360 + -yawAngleDiff) && shipHorizontalRotateAngle < -180)
     {
-        shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
+        shipHorizontalRotateAngle -= (float)(i->turningSpeed * dt);
     }
+    //else if (shipHorizontalRotateAngle <= -yawAngleDiff)
+    //{
+    //    shipHorizontalRotateAngle += (float)(i->turningSpeed * dt);
+    //}
 
-    cout << "yawAngleDiff: " << yawAngleDiff << " shipHorizontalRotateAngle: " << shipHorizontalRotateAngle << endl;
+    //cout << "yawAngleDiff: " << yawAngleDiff << " shipHorizontalRotateAngle: " << shipHorizontalRotateAngle << endl;
 
 	if (thirdPersonCamera.pitchingDown && shipVerticalRotateAngle <= pitchAngleDiff)
 	{
@@ -1513,48 +1489,6 @@ void SP2::shipAnimation(double dt, vector<Ship>::iterator i)
 
 void SP2::mazeTranslate(double dt)
 {
-	//float randomScale = (float)((rand() % 10 + 1));
-	//for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
-	//{
-	//    if (it->name == "leftObstacle" || it->name == "rightObstacle")
-	//    {
-	//        if (mazeTranslateValue <= 10 && !mazeOpening)
-	//        {
-	//            mazeTranslateValue += (float)(randomScale * dt);
-	//            it->pos.z += (float)(randomScale * dt);
-	//            if (mazeTranslateValue >= 10)
-	//            {
-	//                mazeOpening = true;
-	//            }
-	//        }
-	//        else
-	//        {
-	//            mazeTranslateValue -= (float)(randomScale * dt);
-	//            it->pos.z -= (float)(randomScale * dt);
-	//            if (mazeTranslateValue <= 0)
-	//            {
-	//                mazeOpening = false;
-	//            }
-	//        }
-
-	//        //if ((somePlayer.pos.x < it->maxPos.x * it->scaleOffSet + it->pos.x && somePlayer.pos.x > it->minPos.x * it->scaleOffSet + it->pos.x) && (somePlayer.pos.z < it->maxPos.z * it->scaleOffSet + it->pos.z && somePlayer.pos.z > it->minPos.z * it->scaleOffSet + it->pos.z))
-	//        //{
-	//        //    firstPersonCamera.Reset();
-	//        //}
-
-	//        for (int zAxis = 300; zAxis >= -300; zAxis -= 100)
-	//        {
-	//            //-330 to -350
-	//            if (somePlayer.pos.x >= -350 && somePlayer.pos.x <= -330 && somePlayer.pos.z >= zAxis - 3 && somePlayer.pos.z <= zAxis + 3)
-	//            {
-	//                if (!mazeOpening)
-	//                firstPersonCamera.Reset();
-	//            }
-	//        }
-
-	//    }
-	//}
-
     // Lava Movement
     if (lavaTranslation <= 140)
     {
@@ -1574,6 +1508,7 @@ void SP2::mazeTranslate(double dt)
                 if ((somePlayer.pos.x <= -420 + lavaTranslation + 5 && somePlayer.pos.x >= -420 + lavaTranslation - 5) || ((somePlayer.pos.x <= -280 - lavaTranslation + 5 && somePlayer.pos.x >= -280 - lavaTranslation - 5)))
                 {
                     deadText = true;
+                    reset();
                 }
                 else
                 {
@@ -1621,16 +1556,18 @@ void SP2::shipCreation()
 	//WHY SHOULD YOU LOAD A MESH IN THE MIDDLE OF THE PROGRAM? WHO WAS DOING IT? (comment by Gary Goh)
 	//meshList[GEO_SHIP] = MeshBuilder::GenerateOBJ("ship", "OBJ//V_Art Spaceship.obj");
 
-    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0), camPointer->target);
+    Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
+    Vector3 up = thirdPersonCamera.up;
+    Vector3 right = view.Cross(up);
+
+    Ship someShip = Ship("ship", meshList[GEO_SHIP]->maxPos, meshList[GEO_SHIP]->minPos, shipStartingPos, 4, 0, Vector3(0, 0, 0), view);
+
     someShip.setRequirements(50, 500);
 
 	shipTemplatePtr = &someShip;
 
 	ShipList.push_back(ShipBuilder.createShip(shipTemplatePtr, somePlayer.getParts()));
 
-	Vector3 view = (thirdPersonCamera.target - thirdPersonCamera.position).Normalized();
-	Vector3 up = thirdPersonCamera.up;
-	Vector3 right = view.Cross(up);
 	for (vector<Ship>::iterator i = ShipList.begin(); i < ShipList.end(); ++i)
 	{
 		i->setDirectionalVectors(view, right);
@@ -1743,6 +1680,8 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
                     camPointer = &thirdPersonCamera;
                     somePlayer.setCameraType("third");
                     CoolDownTime = 20;
+                    DisplayInventory = true;
+                    HandDisappear = true;
                 }
             }
         }
@@ -1752,7 +1691,7 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
         {
             if (Application::IsKeyPressed('F') && CoolDownTime == 0)
             {
-                if (somePlayer.pos.y <= 20 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
+                if (somePlayer.pos.y <= 30 && shipIt->shipSpeed <= shipIt->shipLandingSpeed)
                 {
                     camPointer = &firstPersonCamera;
                     somePlayer.setCameraType("first");
@@ -1762,7 +1701,7 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
 
                     // Sets 1st person camera new position to the player's position
                     camPointer->position.x = somePlayer.pos.x;
-                    camPointer->position.y = somePlayer.pos.y;
+					camPointer->position.y = somePlayer.pos.y;
                     camPointer->position.z = somePlayer.pos.z;
 
                     // Set Ship To 'Straight' Orientation
@@ -1771,115 +1710,21 @@ void SP2::shipToggle(double dt, vector<InteractableOBJs>&InteractablesList, Play
                     shipIt->shipTakeoff = false;
 
                     CoolDownTime = 20;
+
+                    DisplayInventory = false;
+                    HandDisappear = false;
                 }
             }
         }
     }
 }
 
-void SP2::shopInteractions()
-{
-	if (askedHull)
-	{
-		if (Application::IsKeyPressed('1'))
-		{
-			if (somePlayer.removeCrystals(10))
-			{
-				somePlayer.removeCrystals(10);
-				somePlayer.addPart(LightHull);
-				askedHull = false;
-				askedWings = true;
-			}
-			else { noMoney = true; }
-
-		}
-		else if (Application::IsKeyPressed('2'))
-		{
-			if (somePlayer.removeCrystals(20))
-			{
-				somePlayer.removeCrystals(20);
-				somePlayer.addPart(MediumHull);
-				askedHull = false;
-				askedWings = true;
-			}
-			else { noMoney = true; }
-
-		}
-		else if (Application::IsKeyPressed('3'))
-		{
-			if (somePlayer.removeCrystals(30))
-			{
-				somePlayer.removeCrystals(30);
-				somePlayer.addPart(LargeHull);
-				askedHull = false;
-				askedWings = true;
-			}
-			else { noMoney = true; }
-		}
-	}
-
-	if (askedWings)
-	{
-		if (Application::IsKeyPressed('4'))
-		{
-			if (somePlayer.removeCrystals(20))
-			{
-				somePlayer.removeCrystals(20);
-				somePlayer.addPart(DualWings);
-				askedWings = false;
-				askedEngine = true;
-			}
-			else { noMoney = true; }
-		}
-		else if (Application::IsKeyPressed('5'))
-		{
-			if (somePlayer.removeCrystals(30))
-			{
-				somePlayer.removeCrystals(30);
-				somePlayer.addPart(QuadWings);
-				askedWings = false;
-				askedEngine = true;
-			}
-			else { noMoney = true; }
-
-		}
-	}
-
-	if (askedEngine)
-	{
-		if (Application::IsKeyPressed('6'))
-		{
-
-			if (somePlayer.removeCrystals(20))
-			{
-				somePlayer.removeCrystals(20);
-				somePlayer.addPart(G1Engine);
-				askedEngine = false;
-				shipCreation();
-				askedShipBuild = false;
-				shipBuilt = true;
-			}
-			else { noMoney = true; }
-
-		}
-		else if (Application::IsKeyPressed('7'))
-		{
-			if (somePlayer.removeCrystals(30))
-			{
-				somePlayer.removeCrystals(30);
-				somePlayer.addPart(G2Engine);
-				askedEngine = false;
-				shipCreation();
-				askedShipBuild = false;
-				shipBuilt = true;
-			}
-			else { noMoney = true; }
-		}
-	}
-
-
-}
-
+/******************************************************************************/
+/*!
+\brief
+Function to read the NPCDialogues text file and store the lines in a vector.
+*/
+/******************************************************************************/
 void SP2::Dialogues()
 {
 	std::ifstream file("TextFiles//NPCDialogues.txt");
@@ -1890,7 +1735,7 @@ void SP2::Dialogues()
 		if (str != "end")
 		{
 			dialogue_vec.push_back(file_contents);
-			cout << file_contents << endl;
+			//cout << file_contents << endl;
 		}
 		else
 		{
@@ -1900,6 +1745,12 @@ void SP2::Dialogues()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+Function to detect the NPCs position and use booleans to render out the line read from the dialogue file.
+*/
+/******************************************************************************/
 void SP2::DialoguesWithNPCs()
 {
 	Vector3 view = (firstPersonCamera.target - firstPersonCamera.position).Normalized();
@@ -1997,7 +1848,70 @@ void SP2::DialoguesWithNPCs()
 				spaceguyText = false;
 			}
 		}
+
+		//NPC IN CAFE
+		if (it->name == "shopkeeper")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				NPCInCafeTokenTask = true;
+
+			}
+			else
+			{
+
+				NPCInCafeTokenTask = false;
+			}
+		}
+
+
+		//NPC IN REC ROOM
+		if (it->name == "spaceguy2")
+		{
+			if (it->isInView(Position(firstPersonCamera.position.x, firstPersonCamera.position.y, firstPersonCamera.position.z), view))
+			{
+				NPCInRecMazeTask = true;
+
+			}
+			else
+			{
+
+				NPCInRecMazeTask = false;
+			}
+		}
+
+
+
+		
 	}
+}
+
+
+/******************************************************************************/
+/*!
+\brief
+Function to read the Instructions text file and store the lines in a vector.
+*/
+/******************************************************************************/
+void SP2::readInstructions()
+{
+	std::ifstream file("TextFiles//Instructions.txt");
+	std::string str;
+	while (std::getline(file, str))
+	{
+		file_contents2 = str;
+		if (str != "end")
+		{
+			instruct_vec.push_back(file_contents2);
+			//cout << file_contents2 << endl;
+		}
+		else
+		{
+			break;
+		}
+
+	}
+
 }
 
 void SP2::RenderMesh(Mesh *mesh, bool enableLight, bool toggleLight)
@@ -2090,12 +2004,21 @@ void SP2::Render()
 	RenderCode();
 }
 
-
 void SP2::Exit()
 {
 	// Cleanup VBO here
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
+
+    delete LightHull;
+    delete MediumHull;
+    delete LargeHull;
+
+    delete DualWings;
+    delete QuadWings;
+
+    delete G1Engine;
+    delete G2Engine;
 }
 
 bool SP2::checkCrystalPos(int posxcheck, int poszcheck, int i)
@@ -2108,6 +2031,62 @@ bool SP2::checkCrystalPos(int posxcheck, int poszcheck, int i)
 	{
 		return false;
 	}
+}
+
+void SP2::reset()
+{
+		somePlayer.removeCrystals(somePlayer.getCrystals()); //sets amount of crystals to 0;    
+		somePlayer.addCrystals(50); 
+		//removes ship obj and collision  
+		shipBuilt = false; //doesnt render ship obj collision is still there 
+		if (somePlayer.getCameraType() != "first")
+		{
+			camPointer = &firstPersonCamera;
+			somePlayer.setCameraType("first");
+            DisplayInventory = false; 
+            HandDisappear = false;
+		}
+		somePlayer.pos = startingCharPos;
+		firstPersonCamera.Reset();
+		//resets third person camera      
+		thirdPersonCamera.Reset();
+		if (ShipList.size() > 0)
+		{
+			ShipList.pop_back();
+		}
+		//render space suit    
+		wearSuit = false;  
+		//render crystals    
+		
+		for (vector<InteractableOBJs>::iterator it = InteractablesList.begin(); it != InteractablesList.end(); ++it)
+		{
+			if (it->name == "crystal")
+			{
+				it = this->InteractablesList.erase(it);
+				it = InteractablesList.begin();
+			}
+		}
+		for (int i = 0; i < CrystalNo; i++) //create collision for all crystal again 
+		{
+			InteractableOBJs crystal = InteractableOBJs("crystal", meshList[GEO_CRYSTAL]->maxPos, meshList[GEO_CRYSTAL]->minPos, Position(xcoords[i], 0, zcoords[i]), 5, 0, Vector3(0, 0, 0));
+			crystal.setRequirements(30, 5);
+			InteractablesList.push_back(crystal);
+		}
+		for (int a = 0; a < CrystalNo; a++)
+		{
+			rendercrystal[a] = 1;  //set all crystal to render    
+		}
+		
+        // Removes ShipParts
+        for (list<ShipParts*>::iterator it = somePlayer.getParts().begin(); it != somePlayer.getParts().end(); ++it)
+        {
+            it = this->somePlayer.getParts().erase(it);
+            it = somePlayer.getParts().begin();
+        }
+        if (somePlayer.getParts().size() == 1)
+        {
+            somePlayer.getParts().pop_back();
+        }
 }
 
 
