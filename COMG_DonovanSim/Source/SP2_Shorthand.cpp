@@ -1,6 +1,19 @@
+/*************************************************************************************************/
+/*!
+\file   SP2_Shorthand.cpp
+\brief
+    Contains code for SP2 Project, to make SP2.cpp more organised
+*/
+/*************************************************************************************************/
 #include "SP2.h"
 
 //Shader information.
+/******************************************************************************/
+/*!
+\brief
+    Function to load shader files
+*/
+/******************************************************************************/
 void SP2::LoadShaderCodes()
 {
 	//Set background color to dark blue
@@ -85,6 +98,12 @@ void SP2::LoadShaderCodes()
 }
 
 //Light data information.
+/******************************************************************************/
+/*!
+\brief
+    Function to load lights
+*/
+/******************************************************************************/
 void SP2::LoadLights()
 { 
 	/* Sample code below.
@@ -192,6 +211,12 @@ void SP2::LoadLights()
 }
 
 //Mesh data information.
+/******************************************************************************/
+/*!
+\brief
+    Function to load Meshes for SP2.cpp
+*/
+/******************************************************************************/
 void SP2::LoadMeshes()
 {
 	//Text
@@ -636,19 +661,19 @@ void SP2::LoadMeshes()
 	// Base
 	meshList[GEO_BASE] = MeshBuilder::GenerateOBJ("base", "OBJ//base.obj");
 	meshList[GEO_BASE]->textureID = LoadTGA("Image//baseUV.tga");
-	InteractableOBJs base1 = InteractableOBJs("base1", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	InteractableOBJs base1 = InteractableOBJs("base1", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 64, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
 	base1.setRequirements(25, 15);
 	InteractablesList.push_back(base1);
 
-	InteractableOBJs base2 = InteractableOBJs("base2", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	InteractableOBJs base2 = InteractableOBJs("base2", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 64, -80), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
 	base2.setRequirements(25, 15);
 	InteractablesList.push_back(base2);
 
-	InteractableOBJs base3 = InteractableOBJs("base3", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	InteractableOBJs base3 = InteractableOBJs("base3", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(120, 64, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
 	base3.setRequirements(25, 15);
 	InteractablesList.push_back(base3);
 
-	InteractableOBJs base4 = InteractableOBJs("base4", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 62, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
+	InteractableOBJs base4 = InteractableOBJs("base4", meshList[GEO_BASE]->maxPos, meshList[GEO_BASE]->minPos, Position(250, 64, 120), 40, 0, Vector3(0, 0, 0)); //83, 25, 82
 	base4.setRequirements(25, 15);
 	InteractablesList.push_back(base4);
 
@@ -807,6 +832,12 @@ void SP2::MeshInit(GEOMETRY_TYPE G,
 #pragma endregion
 
 //Main rendering code
+/******************************************************************************/
+/*!
+\brief
+    Main function where code is rendered 
+*/
+/******************************************************************************/
 void SP2::RenderCode()
 {
 	if (isInViewSpheres)
@@ -821,7 +852,7 @@ void SP2::RenderCode()
 			modelStack.Translate(i->pos.x, i->pos.y, i->pos.z);
 			float s = i->getRequiredFocus();
 			modelStack.Scale(s, s, s);
-			RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+			//RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 			modelStack.PopMatrix();
 		}
 	}
@@ -880,7 +911,7 @@ void SP2::RenderCode()
 		modelStack.PushMatrix();
 		modelStack.Translate(shipPos.x, shipPos.y, shipPos.z);
 		modelStack.Scale(6, 6, 6);
-		RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
+		//RenderMesh(meshList[GEO_LIGHTBALL], false, toggleLight);
 		modelStack.PopMatrix();
 	}
 
@@ -916,14 +947,14 @@ void SP2::RenderCode()
 
 	// Base Top
 	modelStack.PushMatrix();
-	modelStack.Translate(250, 63, -80);
+	modelStack.Translate(250, 64, -80);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
 	modelStack.PopMatrix();
 
 	// Sciene Lab
 	modelStack.PushMatrix();
-	modelStack.Translate(120, 63, -80);
+	modelStack.Translate(120, 64, -80);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
@@ -931,7 +962,7 @@ void SP2::RenderCode()
 
 	// Rec Room & Shop
 	modelStack.PushMatrix();
-	modelStack.Translate(120, 63, 120);
+	modelStack.Translate(120, 64, 120);
 	modelStack.Rotate(0, 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
@@ -939,7 +970,7 @@ void SP2::RenderCode()
 
 	// Bunks & Cafe
 	modelStack.PushMatrix();
-	modelStack.Translate(250, 63, 120);
+	modelStack.Translate(250, 64, 120);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(40, 40, 40);
 	RenderMesh(meshList[GEO_BASE], false, toggleLight);
@@ -1116,6 +1147,12 @@ void SP2::RenderCode()
 	else { RenderHealthBarOnScreen(meshList[GEO_ALIVEHEALTHBAR], 2.6f, 2.5f, 21); }
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to load spaceship's mesh and hitbox
+*/
+/******************************************************************************/
 void SP2::initSpaceShip()
 {
 	// Space Ship
@@ -1127,6 +1164,12 @@ void SP2::initSpaceShip()
 }
 
 //Initialise maze mesh, position and collision.
+/******************************************************************************/
+/*!
+\brief
+    Function to load maze's mesh and hitbox
+*/
+/******************************************************************************/
 void SP2::initMaze()
 {
 	meshList[GEO_MAZE_SIDE_WALL] = MeshBuilder::GenerateOBJ("mazeSideWall", "OBJ//Maze//mazeSideWalls.obj");
@@ -1187,6 +1230,12 @@ void SP2::initMaze()
 }
 
 //Initialise safe
+/******************************************************************************/
+/*!
+\brief
+    Function to load safe's mesh and hitbox
+*/
+/******************************************************************************/
 void SP2::InitSafe()
 {
 	InteractableOBJs keypadOBJ =
@@ -1286,6 +1335,12 @@ void SP2::InitSafe()
 }
 
 //Initialise mountains mesh, position and collision.
+/******************************************************************************/
+/*!
+\brief
+    Function to load mountain's mesh and hitbox
+*/
+/******************************************************************************/
 void SP2::initMountains()
 {
 	meshList[GEO_MOUNTAIN] = MeshBuilder::GenerateOBJ("moutain", "OBJ//Mountain.obj");
@@ -1313,6 +1368,12 @@ void SP2::initMountains()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render the maze
+*/
+/******************************************************************************/
 void SP2::renderMaze()
 {
 	Vector3 mazeScale(30, 35, 30);
@@ -1402,6 +1463,18 @@ void SP2::renderMaze()
 }
 
 //Room template
+/******************************************************************************/
+/*!
+\brief
+    Function to load generic room's mesh and hitbox
+\param  pos
+    position where the room is placed
+\param  size
+    size of room
+\param groundMeshSize
+    lenght and width of room
+*/
+/******************************************************************************/
 void SP2::initRoomTemplate(Position pos, Vector3 size, float groundMeshSize)
 {
 	Building floor1 = Building("floor1", meshList[GEO_GROUND]->maxPos, meshList[GEO_GROUND]->minPos, Position(pos.x, pos.y, pos.z - 20), groundMeshSize, 0, Vector3(0, 0, 0));
@@ -1480,6 +1553,12 @@ void SP2::initRoomTemplate(Position pos, Vector3 size, float groundMeshSize)
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to read key presses
+*/
+/******************************************************************************/
 void SP2::ReadKeyPresses()
 {
 	if (Application::IsKeyPressed('1'))
@@ -1491,17 +1570,17 @@ void SP2::ReadKeyPresses()
 		glDisable(GL_CULL_FACE);
 	}
 
-	if (Application::IsKeyPressed('B'))
-	{
-		if (toggleLight == true)
-		{
-			toggleLight = false;
-		}
-		else
-		{
-			toggleLight = true;
-		}
-	}
+	//if (Application::IsKeyPressed('B'))
+	//{
+	//	if (toggleLight == true)
+	//	{
+	//		toggleLight = false;
+	//	}
+	//	else
+	//	{
+	//		toggleLight = true;
+	//	}
+	//}
 
 	if (Application::IsKeyPressed('C'))
 	{
@@ -1514,6 +1593,12 @@ void SP2::ReadKeyPresses()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render instructions
+*/
+/******************************************************************************/
 void SP2::RenderInstructions()
 {
 	//VENDING TEXT
@@ -1573,6 +1658,12 @@ void SP2::RenderInstructions()
     }
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render NPC dialouges
+*/
+/******************************************************************************/
 void SP2::RenderNPCDialogues()
 {
 	if (chefText == true)  //true
@@ -1633,6 +1724,18 @@ void SP2::RenderNPCDialogues()
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render generic room
+\param  pos
+    position where the room is placed
+\param  size
+    size of room
+\param groundMeshSize
+    lenght and width of room
+*/
+/******************************************************************************/
 void SP2::RenderRoomTemplate(Position pos, Vector3 size, float groundMeshSize)
 {
 	groundMeshSize = 100;
@@ -1771,6 +1874,12 @@ void SP2::RenderRoomTemplate(Position pos, Vector3 size, float groundMeshSize)
 }
 
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render skybox
+*/
+/******************************************************************************/
 void SP2::RenderSkybox()
 {
 	// FRONT
@@ -1884,6 +1993,12 @@ void SP2::RenderSkybox()
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render Bunk Room Objs
+*/
+/******************************************************************************/
 void SP2::RenderBunkRoom()
 {
 	//BUNK 1 
@@ -1979,6 +2094,12 @@ void SP2::RenderBunkRoom()
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render Cafe Room Objs
+*/
+/******************************************************************************/
 void SP2::RenderCafeRoom()
 {
 	//COUNTER
@@ -2048,6 +2169,12 @@ void SP2::RenderCafeRoom()
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render crystals
+*/
+/******************************************************************************/
 void SP2::RenderCrystals()
 {
 	for (int i = 0; i < CrystalNo; i++)
@@ -2069,6 +2196,12 @@ void SP2::RenderCrystals()
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render all food objs
+*/
+/******************************************************************************/
 void SP2::RenderFood()
 {
 	//APPLE
@@ -2090,6 +2223,12 @@ void SP2::RenderFood()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render apple obj
+*/
+/******************************************************************************/
 void SP2::RenderApple()
 {
 	modelStack.PushMatrix();
@@ -2101,6 +2240,12 @@ void SP2::RenderApple()
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render coffee obj
+*/
+/******************************************************************************/
 void SP2::RenderCoffee()
 {
 	modelStack.PushMatrix();
@@ -2112,6 +2257,12 @@ void SP2::RenderCoffee()
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render bread obj
+*/
+/******************************************************************************/
 void SP2::RenderBread()
 {
 	modelStack.PushMatrix();
@@ -2123,6 +2274,12 @@ void SP2::RenderBread()
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render weapons
+*/
+/******************************************************************************/
 void SP2::RenderWeaponsWhenSelected()
 {
 	//PICKAXE
@@ -2138,6 +2295,12 @@ void SP2::RenderWeaponsWhenSelected()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render shop menus
+*/
+/******************************************************************************/
 void SP2::RenderShopLists()
 {
 	//DO NOT DELETE SHOP LIST STUFF
@@ -2167,6 +2330,12 @@ void SP2::RenderShopLists()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render cafe interactions
+*/
+/******************************************************************************/
 void SP2::RenderCafeInteractions()
 {
 	if (TokenOnScreen == true)
@@ -2191,6 +2360,12 @@ void SP2::RenderCafeInteractions()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render hand and inventory objs
+*/
+/******************************************************************************/
 void SP2::RenderHandAndInventory()
 {
 	//INVENTORY & HANDS
@@ -2266,6 +2441,20 @@ void SP2::RenderHandAndInventory()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a text box for instructions text
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderInstructionBoxOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2285,6 +2474,20 @@ void SP2::RenderInstructionBoxOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a text box for NPC dialouge text
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderNPCTextBoxOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2305,6 +2508,20 @@ void SP2::RenderNPCTextBoxOnScreen(Mesh* mesh, float size, float x, float y)
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a gun on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderGunOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2326,6 +2543,20 @@ void SP2::RenderGunOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a pickaxe on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2348,6 +2579,20 @@ void SP2::RenderPickaxeOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a cafe pointer on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2369,6 +2614,20 @@ void SP2::RenderCafePointerOnScreen(Mesh* mesh, float size, float x, float y)
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a shop pointer on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderShopPointerOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2389,6 +2648,20 @@ void SP2::RenderShopPointerOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a pointer (arrow) on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderPointerOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2410,6 +2683,20 @@ void SP2::RenderPointerOnScreen(Mesh* mesh, float size, float x, float y)
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a weapon on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderWeaponOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2432,6 +2719,12 @@ void SP2::RenderWeaponOnScreen(Mesh* mesh, float size, float x, float y)
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render asteroids
+*/
+/******************************************************************************/
 void SP2::RenderAsteroids()
 {
 	for (int i = 0; i < AsteroidNo; i++)
@@ -2446,6 +2739,20 @@ void SP2::RenderAsteroids()
 	}
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a health bar on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderHealthBarOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2465,6 +2772,20 @@ void SP2::RenderHealthBarOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a token on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2485,6 +2806,20 @@ void SP2::RenderTokenOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a coke on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderCokeOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2505,6 +2840,20 @@ void SP2::RenderCokeOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a textbox for shop on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderShopTextboxOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2525,6 +2874,20 @@ void SP2::RenderShopTextboxOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a textbox for cafe on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2545,6 +2908,20 @@ void SP2::RenderCafeTextboxOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a hand on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderHandOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2570,6 +2947,20 @@ void SP2::RenderHandOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render another hand on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderHandOnScreen2(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2595,6 +2986,20 @@ void SP2::RenderHandOnScreen2(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a space-mask
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2609,13 +3014,27 @@ void SP2::RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.Translate(x, y, 0);
 	//modelStack.Rotate(-20, 0, 1, 0);
 	//modelStack.Rotate(90, 1, 0, 0);
-	RenderMesh(mesh, true, toggleLight);
+    RenderMesh(mesh, false , toggleLight);
 
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render inventory on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderInventoryOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2635,6 +3054,20 @@ void SP2::RenderInventoryOnScreen(Mesh* mesh, float size, float x, float y)
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render recreational room objs
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderRecRoom()
 {
 	//SOFA
@@ -2731,6 +3164,20 @@ void SP2::RenderRecRoom()
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render science lab objs
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderScienceLab()
 {
 	MS *m = &modelStack;
@@ -2791,6 +3238,20 @@ void SP2::RenderScienceLab()
 	m->PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a crystal on screen
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y)
 {
 	Mtx44 ortho;
@@ -2811,6 +3272,20 @@ void SP2::RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y)
 
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render armoury and shop objs
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderArmouryAndShop()
 {
 	// Gun Rack + Gun
@@ -2877,6 +3352,20 @@ void SP2::RenderArmouryAndShop()
 	modelStack.PopMatrix();
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render infirmary objs
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderInfirmary()
 {
 	modelStack.PushMatrix();
@@ -2941,16 +3430,20 @@ void SP2::RenderInfirmary()
 	modelStack.PopMatrix();
 }
 
-void SP2::RenderTradingStation()
-{
-	//TRADING STATION
-	modelStack.PushMatrix();
-	modelStack.Translate(-5, 0, 5);
-	modelStack.Scale(2, 2, 2);
-	RenderMesh(meshList[GEO_TRADEPOST], true, toggleLight);
-	modelStack.PopMatrix();
-}
-
+/******************************************************************************/
+/*!
+\brief
+    Function to render a space ship
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::RenderSpaceShip()
 {
 	// Start of SpaceShip
@@ -2973,6 +3466,20 @@ void SP2::RenderSpaceShip()
 	// End of Ship
 }
 
+/******************************************************************************/
+/*!
+\brief
+    Function to render a mountain
+\param  mesh
+    mesh to be loaded
+\param  size
+    size of mesh to be laoded
+\param  x
+    x-coord of the mesh
+\param  y
+    y-coord of the mesh
+*/
+/******************************************************************************/
 void SP2::renderMountains()
 {
 

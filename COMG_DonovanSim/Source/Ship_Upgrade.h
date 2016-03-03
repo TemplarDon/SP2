@@ -25,7 +25,12 @@ class Ship_Upgrade
 protected:
     Ship_Upgrade(string name);
     
-    // Ship's name
+    /******************************************************************************/
+    /*!
+    \brief
+        name of shipUpgrade Object
+    */
+    /******************************************************************************/
     string name;
 
     // Virtual function for using upgrade's effect

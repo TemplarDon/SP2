@@ -38,7 +38,20 @@ public:
 	float mouseSpeed;
 	float speed;
 
+    /******************************************************************************/
+    /*!
+    \brief
+        Bool to check if collsion with Building Obj
+    */
+    /******************************************************************************/
     bool canMoveBuilding;       // bool to check if camera can move through every obj in BuildingList vector
+
+    /******************************************************************************/
+    /*!
+    \brief
+        Bool to check if collsiion with InteractableOBJ
+    */
+    /******************************************************************************/
     bool canMoveInteractable;   // bool to check if camera can move through every obj in InteractableList vector
 
     bool createBoundary(std::vector<InteractableOBJs>&InteractablesList, std::vector<Building>&BuildingsList, Player &somePlayer, Position camPos);
