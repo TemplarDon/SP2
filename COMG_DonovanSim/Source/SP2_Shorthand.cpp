@@ -1014,15 +1014,6 @@ void SP2::RenderCode()
         std::ostringstream engineText;
         engineText.str("");
 
-
-
-		//Weapon 
-		std::ostringstream weapon;
-		weapon.str("");
-		if (somePlayer.checkWeapon()) { weapon << "Equipped"; }
-		else { weapon << "Unequipped"; }
-		RenderTextOnScreen(meshList[GEO_TEXT], weapon.str(), Color(1, 0, 0), 1.3, 36, 4);
-
 	}
 
 	if (HandDisappear == false)  //false
