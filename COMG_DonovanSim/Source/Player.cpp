@@ -102,6 +102,7 @@ void Player::addPart(ShipParts* partsName)
         }
 
         this->playerInventory.shipPartsList.push_back(partsName); // If none of above conditions met, push back to vector
+        break;
     }
 
     if (playerInventory.shipPartsList.size() == 0)
