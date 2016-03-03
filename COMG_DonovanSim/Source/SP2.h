@@ -423,13 +423,61 @@ private:
 	bool treasureTaken;
 
 	//JUMP (BECKHAM'S)
+	/******************************************************************************/
+	/*!
+	\brief
+	float to determine jump speed 
+	*/
+	/******************************************************************************/
 	float acceleration;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to determine jump speed    
+	*/
+	/******************************************************************************/
 	float t;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to take in initial velocity  
+	*/
+	/******************************************************************************/
 	float firstvelo;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to take in final velocity    
+	*/
+	/******************************************************************************/
 	float secondvelo;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to determine how high up the player is during the jump animation  
+	*/
+	/******************************************************************************/
 	float distance;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to bring the player position down while he's in the air 
+	*/
+	/******************************************************************************/
 	float gravity;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to take in player's ycoord before jumping   
+	*/
+	/******************************************************************************/
 	float firstpos;
+	/******************************************************************************/
+	/*!
+	\brief
+	bool to determine if player is currently on the ground or not   
+	*/
+	/******************************************************************************/
 	bool onGround;
 
 	//Booleans by Gary Goh.
@@ -438,30 +486,163 @@ private:
 
 
 	//MINING INTERACTIONS (BECKHAM'S)    
+	/******************************************************************************/
+	/*!
+	\brief
+	bool to determine if within range to show text on how to mine crystal   
+	*/
+	/******************************************************************************/
 	bool CrystalText;
+	/******************************************************************************/
+	/*!
+	\brief
+	int to take in how many crystals should be rendered on the map  
+	*/
+	/******************************************************************************/
 	int CrystalNo;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to take in current x coord the player is at  
+	*/
+	/******************************************************************************/
 	float posxcheck;
-	float poszcheck;
-	int crystalcount;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to take in current z coord the player is at 
+	*/
+	/******************************************************************************/
+	float poszcheck;    
+	/******************************************************************************/
+	/*!
+	\brief
+	array to take in xcoord of all crystals  
+	*/
+	/******************************************************************************/
 	float xcoords[100];
+	/******************************************************************************/
+	/*!
+	\brief
+	array to take in zcoord of all crystals  
+	*/
+	/******************************************************************************/
 	float zcoords[100];
-	bool rendercrystal[100];
+	/******************************************************************************/
+	/*!
+	\brief
+	array to determine if the crystal at that position should be rendered  
+	*/
+	/******************************************************************************/
+	bool rendercrystal[100];    
+	/******************************************************************************/
+	/*!
+	\brief
+	float to hold value while calculating movement of asteroids   
+	*/
+	/******************************************************************************/
 	float coord1;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to hold value while calculating movement of asteroids    
+	*/
+	/******************************************************************************/
 	float coord2;
 
 	//ASTEROID RELATED    
+	/******************************************************************************/
+	/*!
+	\brief
+	int to determined how many asteroids should be rendered    
+	*/
+	/******************************************************************************/
 	int AsteroidNo;
+	/******************************************************************************/
+	/*!
+	\brief
+	array to take in x coord of all asteroids  
+	*/
+	/******************************************************************************/
 	float asteroidx[50];
+	/******************************************************************************/
+	/*!
+	\brief
+	array to take in movement along xcoord of all asteroids  
+	*/
+	/******************************************************************************/
 	float movex[50];
+	/******************************************************************************/
+	/*!
+	\brief
+	array to take in rotation along xcoord of all asteroids  
+	*/
+	/******************************************************************************/
 	float rotatex[50];
+	/******************************************************************************/
+	/*!
+	\brief
+	array to take in z coord of all asteroids   
+	*/
+	/******************************************************************************/
 	float asteroidz[50];
+	/******************************************************************************/
+	/*!
+	\brief
+	array to take in movement along z coord of all asteroids   
+	*/
+	/******************************************************************************/
 	float movez[50];
+	/******************************************************************************/
+	/*!
+	\brief
+	float to take in rotation along z coord of all asteroids   
+	*/
+	/******************************************************************************/
 	float rotatez[50];
+	/******************************************************************************/
+	/*!
+	\brief
+	float to take in y coord of all asteroids  
+	*/
+	/******************************************************************************/
 	float asteroidy[50];
-	float renderasteroid[50];
-	float coord3;
-	float posycheck;
-	double between;
+	/******************************************************************************/
+	/*!
+	\brief
+	float to determine if the asteroid in that position of the array should be rendered   
+	*/
+	/******************************************************************************/
+	float renderasteroid[50];   
+	/******************************************************************************/
+	/*!
+	\brief
+	float to hold a value while calculating asteroid movement  
+	*/
+	/******************************************************************************/
+	float coord3;   
+	/******************************************************************************/
+	/*!
+	\brief
+	float to check current y position of the player   
+	*/
+	/******************************************************************************/
+	float posycheck;   
+	/******************************************************************************/
+	/*!
+	\brief
+	double to check distance between player and all asteroids   
+	*/
+	/******************************************************************************/
+	double between;  
+	/******************************************************************************/
+	/*!
+	\brief
+	bool to check if player has collided with an asteroid    
+	\return   
+	return true if player collided with an asteroid , else return false  
+	*/
+	/******************************************************************************/
 	bool AsteroidCollision;
 
 
@@ -490,18 +671,43 @@ private:
 	void RenderSpaceShip();
 
 	//RENDERING FUNCTION (IN SHORTHAND.CPP)
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to render skybox, and make it center around the player 
+	*/
+	/******************************************************************************/
 	void RenderSkybox();
 	void RenderTradingStation();
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to render obj inside the recreational room    
+	*/
+	/******************************************************************************/
 	void RenderRecRoom();
 	void RenderCafeRoom();
 	void RenderBunkRoom();
 	void RenderScienceLab();
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to render crystals on the map     
+	*/
+	/******************************************************************************/
 	void RenderCrystals();
 	void RenderArmouryAndShop();
 	void RenderInfirmary();
 	void RenderBread();
 	void RenderCoffee();
 	void RenderApple();
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to render asteroids on the map   
+	*/
+	/******************************************************************************/
 	void RenderAsteroids();
 	void RenderWeaponsWhenSelected();
 	void RenderShopLists();
@@ -566,6 +772,12 @@ private:
 	void RenderCokeOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderHandOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderHandOnScreen2(Mesh* mesh, float size, float x, float y);
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to render crystal in the inventory box on screen    
+	*/
+	/******************************************************************************/
 	void RenderCrystalOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderSpacemaskOnScreen(Mesh* mesh, float size, float x, float y);
 	void RenderInventoryOnScreen(Mesh* mesh, float size, float x, float y);
@@ -596,8 +808,12 @@ private:
 	void initRoomTemplate(Position pos, Vector3 size = { 1, 1, 1 }, float groundMeshSize = 100);
 	void RenderRoomTemplate(Position pos, Vector3 size = { 1, 1, 1 }, float groundMeshSize = 100);
 
-
-	//Reset function    
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to reset the game      
+	*/
+	/******************************************************************************/
 	void reset();
 
 	//Functions to init & render Maze
@@ -620,11 +836,38 @@ private:
 	bool wingsFound;
 	bool engineFound;
 	//CRYSTAL RELATED STUFF   
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to check position of crystals on the map    
+	\param xcoord, zcoord, i 
+	xcoord and zcoord take in the current position the player is looking at, while i
+	is the position of the crystal coords in the array 
+	\return    
+	bool to return true if there is a crystal on the position the player is looking at, else false    
+	*/
+	/******************************************************************************/
 	bool checkCrystalPos(float xcoord, float zcoord, int i);
-
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to randomly generate crystals on the map 
+	*/
+	/******************************************************************************/
 	void crystalgen();
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to randomly generate asteroids on the map   
+	*/
+	/******************************************************************************/
 	void asteroidgen();
-
+	/******************************************************************************/
+	/*!
+	\brief
+	Function to allow player to jump  
+	*/
+	/******************************************************************************/
 	void jump();
 };
 

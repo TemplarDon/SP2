@@ -1770,6 +1770,7 @@ void SP2::RenderRoomTemplate(Position pos, Vector3 size, float groundMeshSize)
 
 }
 
+
 void SP2::RenderSkybox()
 {
 	// FRONT
