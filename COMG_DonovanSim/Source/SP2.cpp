@@ -35,8 +35,28 @@ void SP2::Init()
 
 	//FLOATS
 	rotateAngle = 0;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Float to init the Y axis of the token and then translate when 
+	the required button is pressed.
+	*/
+	/******************************************************************************/
 	TokenTranslate = 11;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Float to init the Y axis of the text and then translate when the 
+	required button is pressed.
+	the required button is pressed.
+	*/
+	/******************************************************************************/
 	TextTranslate = 20;
+
+
+
 	leftGateOffset = 0;
 	rightGateOffset = 0;
 	frontGateOffset = 0;
@@ -53,60 +73,333 @@ void SP2::Init()
 	safeDoorRotation = 0;
 	cafeMenuPointer = 62;
 	shopListPointer = 62;
-	BounceTime = 0;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Float to init the cool down timer for the cafe menu pointer.
+	*/
+	/******************************************************************************/
 	CoolDownTime = 0;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Float to init the cool down timer for the shop list pointer.
+	*/
+	/******************************************************************************/
 	CoolDownTime2 = 0;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Float to init the cool down timer for the shop list, Hull options pointer.
+	*/
+	/******************************************************************************/
 	CoolDownTime3 = 0;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Float to init the cool down timer for the shop list, Wings options pointer.
+	*/
+	/******************************************************************************/
 	CoolDownTime4 = 0;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Float to init the cool down timer for the shop list, Engine options pointer.
+	*/
+	/******************************************************************************/
 	CoolDownTime5 = 0;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Float to init the rotation of the cafe food and rotate about the Y axis when
+	the OBJ of the food is rendered.
+	*/
+	/******************************************************************************/
 	SpinTheFood = -90;
 
 
 	//BOOLEANS
 
 	//Instructions booleans
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the vending machine.
+	*/
+	/******************************************************************************/
 	NearVendingText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the token is only rendered on screen when the player 
+	pressed the required key to pick up the token..
+	*/
+	/******************************************************************************/
 	TokenOnScreen = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the coke is only rendered on screen when the player
+	pressed the required key to get the coke..
+	*/
+	/******************************************************************************/
 	RenderCoke = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the vending machine and has not gotten any coke yet.
+	*/
+	/******************************************************************************/
 	ConsumeCokeText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the counter.
+	*/
+	/******************************************************************************/
 	testText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the table.
+	*/
+	/******************************************************************************/
 	PickUpTokenText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the spacesuit.
+	*/
+	/******************************************************************************/
 	wearSuitText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the player is required to press certain key and then
+	wear the spacesuit.
+	*/
+	/******************************************************************************/
 	wearSuit = false;
 
-	//NPCs booleans
+
+	//NPCs Dialogue booleans
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the NPC Chef.
+	*/
+	/******************************************************************************/
 	chefText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the NPC Spaceguy.
+	*/
+	/******************************************************************************/
 	spaceguyText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the NPC Nurse.
+	*/
+	/******************************************************************************/
 	nurseText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the NPC Doctor.
+	*/
+	/******************************************************************************/
 	doctorText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the NPC Trader.
+	*/
+	/******************************************************************************/
 	traderText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the NPC Soldier.
+	*/
+	/******************************************************************************/
 	soldierText = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the NPC in the cafe.
+	*/
+	/******************************************************************************/
 	NPCInCafeTokenTask = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the text is only to be shown when the player is near
+	the NPC in the rec room.
+	*/
+	/******************************************************************************/
 	NPCInRecMazeTask = false;
 
 
 	//Equip weapon booleans
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the pickaxe is only to be shown when the player pressed
+	the required key to equip it.
+	*/
+	/******************************************************************************/
 	equipPickaxe = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the gun is only to be shown when the player pressed
+	the required key to equip it.
+	*/
+	/******************************************************************************/
 	equipGun = false;
 
 	//UI booleans
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the hand only disappear when the boolean turn true.
+	*/
+	/******************************************************************************/
 	HandDisappear = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the inventory only disappear when the boolean turn true.
+	*/
+	/******************************************************************************/
 	DisplayInventory = false;
 	
 	//Cafe menu booleans
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the cafe menu will only appear when the player is near.
+	*/
+	/******************************************************************************/
 	DisplayCafeMenu = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the cafe menu will only appear when the player is near.
+	*/
+	/******************************************************************************/
 	YesShowCafeMenu = false;
 
 	//Cafe food booleans
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the food will only render when the player chose 
+	the option to choose an apple.
+	*/
+	/******************************************************************************/
 	AppleAppear = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the food will only render when the player chose
+	the option to choose a bread.
+	*/
+	/******************************************************************************/
 	BreadAppear = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the food will only render when the player chose
+	the option to choose a coffee.
+	*/
+	/******************************************************************************/
 	CoffeeAppear = false;
 
+
 	//Shop list booleans
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the shop list will only render when the player press
+	the required key to look at the shop list.
+	*/
+	/******************************************************************************/
 	YesShowShopList = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the shop list will only render when the player chose
+	the option to choose to look at the next list.
+	*/
+	/******************************************************************************/
 	DisplayShopList = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the shop list will only render when the player chose
+	the option to choose to look at the next list.
+	*/
+	/******************************************************************************/
 	DisplayShopList2 = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the shop list will only render when the player chose
+	the option to choose to look at the next list.
+	*/
+	/******************************************************************************/
 	DisplayShopList3 = false;
+
+	/******************************************************************************/
+	/*!
+	\brief
+	Boolean init to false as the shop list will only render when the player chose
+	the option to choose to look at the next list.
+	*/
+	/******************************************************************************/
 	DisplayShopList4 = false;
 
 
@@ -175,7 +468,7 @@ void SP2::Init()
 
 	//STARTING POSITION OF PLAYER
 	//startingCharPos = charPos = { -350, 17, 370 }; // STARTING POS OF MAZERUNNER
-	startingCharPos = charPos = { -350, 17, 370 };
+	startingCharPos = charPos = { 250, 17, 40 };
 	//300 , 17, 300
 	//125, 120 
 	//250, 40
